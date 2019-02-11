@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 
 // Colors
-final primaryColor = Color(0xFFFABF40);
-final accentColor = Color(0xFFFF4546);
-final grayColor = Color(0xFF626262);
-final snowColor = Color(0xFFE5E5E5);
-final blueGreenColor = Color(0xFF00FFD8);
-final blueColor = Color(0xFFDBF3FF);
-final lightBlueColor = Color(0xFFEDFAFF);
-final whiteColor = Color(0xFFFFFFFF);
+const primaryColor = Color(0xFFFABF40);
+const accentColor = Color(0xFFFF4546);
+const grayColor = Color(0xFF626262);
+const snowColor = Color(0xFFE5E5E5);
+const blueGreenColor = Color(0xFF00FFD8);
+const blueColor = Color(0xFFDBF3FF);
+const lightBlueColor = Color(0xFFEDFAFF);
+const whiteColor = Color(0xFFFFFFFF);
+
+// Spacing
+final screenPadding = 28.0;
 
 // Kulitan Fonts
 final kulitanHome = TextStyle(
   fontFamily: 'Baybayin Pamagkulit',
   fontSize: 30.0,
   color: grayColor,
+  height: 0.68,
 );
 final kulitanQuiz = TextStyle(
   fontFamily: 'Baybayin Pamagkulit',
@@ -43,12 +47,18 @@ final textHomeTitle = TextStyle(
   fontSize: 75.0,
   fontWeight: FontWeight.bold,
   color: whiteColor,
+  shadows: <Shadow>[
+    Shadow(color: accentColor, offset: Offset(5.0, 7.0))
+  ]
 );
 final textHomeSubtitle = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 50.0,
   fontWeight: FontWeight.bold,
   color: whiteColor,
+  shadows: <Shadow>[
+    Shadow(color: accentColor, offset: Offset(4.0, 4.0))
+  ]
 );
 final textHomeButton = TextStyle(
   fontFamily: 'Barlow',
@@ -62,6 +72,9 @@ final textPageTitle = TextStyle(
   fontWeight: FontWeight.bold,
   fontStyle: FontStyle.italic,
   color: whiteColor,
+  shadows: <Shadow>[
+    Shadow(color: accentColor, offset: Offset(4.0, 4.0))
+  ]
 );
 final textQuizHeader = TextStyle(
   fontFamily: 'Barlow',
@@ -116,7 +129,7 @@ final appTheme = ThemeData(
   primaryColorBrightness: Brightness.light,
   accentColor: accentColor,
   accentColorBrightness: Brightness.dark,
-  backgroundColor: primaryColor,
-  buttonColor: whiteColor,
+  backgroundColor: accentColor,
+  buttonColor: accentColor,
   cardColor: whiteColor,
 );
