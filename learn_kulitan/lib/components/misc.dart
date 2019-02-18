@@ -48,6 +48,7 @@ class _ProgressBarState extends State<ProgressBar>
   Animation<double> animation;
   AnimationController controller;
   Animation curve;
+  bool animationDone = false;
 
   final int _initDuration = 1000;
   final int _changeDuration = 1000;
@@ -59,8 +60,10 @@ class _ProgressBarState extends State<ProgressBar>
     controller = AnimationController(duration: Duration(milliseconds: _initDuration), vsync: this);
     curve = CurvedAnimation(parent: controller, curve: _curve);
     animation = Tween<double>(begin: 0, end: widget.progress).animate(curve)
-      ..addListener(() {
-        setState(() => {});
+      ..addStatusListener((status) {
+        if(status == AnimationStatus.completed) {
+          setState(() => animationDone = true);
+        }
       });
     controller.forward();
   }
@@ -82,7 +85,7 @@ class _ProgressBarState extends State<ProgressBar>
           child: AnimatedContainer(
             duration: Duration(milliseconds: _changeDuration),
             curve: _curve,
-            width: (MediaQuery.of(context).size.width - widget.offset) * animation.value,
+            width: (MediaQuery.of(context).size.width - widget.offset) * (animationDone? widget.progress : animation.value),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100.0),
               color: accentColor,
