@@ -35,7 +35,7 @@ class HomeButton extends StatelessWidget {
                 type: ProgressBar.linear,
                 height: 15.0,
                 progress: this.progress,
-                offset: 137.0)
+                offset: 157.0)
           ])
         : Container(
             alignment: Alignment.centerLeft,
