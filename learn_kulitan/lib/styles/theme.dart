@@ -10,8 +10,12 @@ const blueColor = Color(0xFFDBF3FF);
 const lightBlueColor = Color(0xFFEDFAFF);
 const whiteColor = Color(0xFFFFFFFF);
 
-// Spacing
+// Spacings
 final screenPadding = 28.0;
+final headerPadding = 14.0;
+
+// Sizes
+final headerIconSize = 32.0;
 
 // Kulitan Fonts
 final kulitanHome = TextStyle(
