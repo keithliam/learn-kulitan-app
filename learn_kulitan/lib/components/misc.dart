@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
 import '../styles/theme.dart';
 
 class SlideLeftRoute extends PageRouteBuilder {
@@ -21,12 +22,13 @@ class SlideLeftRoute extends PageRouteBuilder {
         });
 }
 
-class ProgressBar extends StatelessWidget {
+class ProgressBar extends StatefulWidget {
   ProgressBar({
+    Key key,
     @required this.type,
-    @required this.height,
     @required this.progress,
     @required this.offset,
+    this.height = 15.0,
   });
 
   static const int linear = 0;
@@ -38,16 +40,49 @@ class ProgressBar extends StatelessWidget {
   final double offset;
 
   @override
+  _ProgressBarState createState() => _ProgressBarState();
+}
+
+class _ProgressBarState extends State<ProgressBar>
+    with SingleTickerProviderStateMixin {
+  Animation<double> animation;
+  AnimationController controller;
+  Animation curve;
+
+  final int _initDuration = 1000;
+  final int _changeDuration = 1000;
+  final Curve _curve = Curves.fastOutSlowIn;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(duration: Duration(milliseconds: _initDuration), vsync: this);
+    curve = CurvedAnimation(parent: controller, curve: _curve);
+    animation = Tween<double>(begin: 0, end: widget.progress).animate(curve)
+      ..addListener(() {
+        setState(() => {});
+      });
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(100.0),
       child: Container(
-          height: this.height,
+          height: widget.height,
           alignment: Alignment.centerLeft,
           color: snowColor,
-          child: Container(
-            width: (MediaQuery.of(context).size.width - this.offset) *
-                this.progress,
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: _changeDuration),
+            curve: _curve,
+            width: (MediaQuery.of(context).size.width - widget.offset) * animation.value,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100.0),
               color: accentColor,
