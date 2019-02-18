@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
+import 'dart:math';
 import '../styles/theme.dart';
 
 class SlideLeftRoute extends PageRouteBuilder {
@@ -22,6 +23,66 @@ class SlideLeftRoute extends PageRouteBuilder {
         });
 }
 
+class _CircularProgressBarPainter extends CustomPainter {
+  _CircularProgressBarPainter({
+    @required this.progress,
+  });
+
+  final double progress;
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint area = Paint()
+      ..color = whiteColor
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 10.0;
+    Paint bar = Paint()
+      ..color = accentColor
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 10.0;
+
+    Offset center = new Offset(size.width / 2, size.height / 2);
+    double radius = min((size.width / 2) - 5.0, (size.height / 2) - 5.0);
+    double progressPercent = progress <= 0.995? (0.975 * progress) : ((((progress - 0.995) / 0.005) * 0.025) + 0.975);
+    double progressAngle = 2 * pi * progressPercent;
+
+    canvas.drawCircle(center, radius, area);
+
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -pi / 2,
+        progressAngle, false, bar);
+  }
+}
+
+class Divider extends StatelessWidget {
+  Divider({
+    @required this.height,
+    @required this.color,
+    this.width: -1,
+  });
+
+  final double width;
+  final double height;
+  final Color color;
+
+  Widget build(BuildContext context) {
+    return Container(
+      height: this.height,
+      width: this.width < 0? MediaQuery.of(context).size.width : this.width,
+      decoration: BoxDecoration(
+        color: this.color,
+        borderRadius: BorderRadius.circular(100.0),
+      ),
+    );
+  }
+}
+
 class ProgressBar extends StatefulWidget {
   ProgressBar({
     Key key,
@@ -29,7 +90,9 @@ class ProgressBar extends StatefulWidget {
     @required this.progress,
     @required this.offset,
     this.height = 15.0,
-  });
+    this.numerator,
+    this.denominator,
+  }) : super(key: key);
 
   static const int linear = 0;
   static const int circular = 1;
@@ -38,6 +101,8 @@ class ProgressBar extends StatefulWidget {
   final double height;
   final double progress;
   final double offset;
+  final int numerator;
+  final int denominator;
 
   @override
   _ProgressBarState createState() => _ProgressBarState();
@@ -45,52 +110,107 @@ class ProgressBar extends StatefulWidget {
 
 class _ProgressBarState extends State<ProgressBar>
     with SingleTickerProviderStateMixin {
-  Animation<double> animation;
-  AnimationController controller;
-  Animation curve;
-  bool animationDone = false;
+  Animation<double> _animation;
+  AnimationController _controller;
+  Tween<double> _tween;
+  Animation _curveAnimation;
 
   final int _initDuration = 1000;
-  final int _changeDuration = 1000;
   final Curve _curve = Curves.fastOutSlowIn;
 
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(duration: Duration(milliseconds: _initDuration), vsync: this);
-    curve = CurvedAnimation(parent: controller, curve: _curve);
-    animation = Tween<double>(begin: 0, end: widget.progress).animate(curve)
-      ..addStatusListener((status) {
-        if(status == AnimationStatus.completed) {
-          setState(() => animationDone = true);
-        }
+
+    _controller = AnimationController(duration: Duration(milliseconds: _initDuration), vsync: this);
+    _curveAnimation = CurvedAnimation(parent: _controller, curve: _curve);
+    _tween = Tween<double>(begin: 0.0, end: widget.progress);
+    _animation = _tween.animate(_curveAnimation)
+      ..addListener(() {
+        setState(() {});
       });
-    controller.forward();
+    _controller.forward();
+  }
+  
+
+  @override
+  void didUpdateWidget(ProgressBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print(_tween.evaluate(_animation));
+    _tween
+      ..begin = _tween.evaluate(_curveAnimation)
+      ..end = widget.progress;
+    _controller
+      ..value = 0.0
+      ..forward();
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(100.0),
-      child: Container(
+    if (widget.type == ProgressBar.linear) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(100.0),
+        child: Container(
           height: widget.height,
           alignment: Alignment.centerLeft,
           color: snowColor,
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: _changeDuration),
-            curve: _curve,
-            width: (MediaQuery.of(context).size.width - widget.offset) * (animationDone? widget.progress : animation.value),
+          child: Container(
+            width: (MediaQuery.of(context).size.width - widget.offset) * _animation.value,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100.0),
               color: accentColor,
             ),
-          )),
-    );
+          )
+        ),
+      );
+    } else {
+      return FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Container(
+          width: MediaQuery.of(context).size.width - (screenPadding * 2),
+          height: 124.0,
+          child: CustomPaint(
+            painter: _CircularProgressBarPainter(
+              progress: _animation.value,
+            ),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(bottom: 45.0),
+                  child: Text(
+                    '${widget.numerator}',
+                    style: textQuizHeader,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Center(
+                  child: Divider(
+                    height: 5.0,
+                    width: 64.0,
+                    color: whiteColor,
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(top: 40.0),
+                  child: Text(
+                    '${widget.denominator}',
+                    style: textQuizHeader,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
 }
