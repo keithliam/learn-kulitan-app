@@ -136,7 +136,6 @@ class _ProgressBarState extends State<ProgressBar>
   @override
   void didUpdateWidget(ProgressBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print(_tween.evaluate(_animation));
     _tween
       ..begin = _tween.evaluate(_curveAnimation)
       ..end = widget.progress;

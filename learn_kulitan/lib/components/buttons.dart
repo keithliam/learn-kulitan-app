@@ -10,8 +10,9 @@ class CustomButton extends StatefulWidget {
       this.color: whiteColor,
       this.borderRadius: 0.0,
       this.elevation: 0.0,
-      this.padding,
-      this.marginTop: 0.0})
+      this.padding: const EdgeInsets.all(0.0),
+      this.marginTop: 0.0,
+      this.pressDelay: 250})
       : super(key: key);
 
   final VoidCallback onPressed;
@@ -22,6 +23,7 @@ class CustomButton extends StatefulWidget {
   final double elevation;
   final EdgeInsetsGeometry padding;
   final double marginTop;
+  final int pressDelay;
 
   @override
   CustomButtonState createState() => CustomButtonState();
@@ -33,13 +35,13 @@ class CustomButtonState extends State<CustomButton> {
 
   @override
   void initState() {
-    _initElevation = widget.elevation;
     super.initState();
+    _initElevation = widget.elevation;
   }
 
   void buttonPressed(func) async {
     setState(() => _elevation = _initElevation);
-    await Future.delayed(const Duration(milliseconds: 250));
+    await Future.delayed(Duration(milliseconds: widget.pressDelay));
     setState(() => _elevation = 0);
   }
 
@@ -49,7 +51,7 @@ class CustomButtonState extends State<CustomButton> {
 
   void buttonHoldUp(func) async {
     setState(() => _elevation = 0);
-    await Future.delayed(const Duration(milliseconds: 250));
+    await Future.delayed(Duration(milliseconds: widget.pressDelay));
     func();
   }
 
@@ -79,16 +81,16 @@ class CustomButtonState extends State<CustomButton> {
           ),
           AnimatedPositioned(
             duration: Duration(
-              milliseconds: 250,
+              milliseconds: widget.pressDelay,
             ),
             curve: Curves.easeInOut,
             top: _elevation,
             left: 0,
             right: 0,
             child: GestureDetector(
-              onTap: () => buttonPressed(widget.onPressed),
-              onTapDown: (_) => buttonHoldDown(),
-              onTapUp: (_) => buttonHoldUp(widget.onPressed),
+              onTap: () => widget.onPressed != null? buttonPressed(widget.onPressed) : null,
+              onTapDown: (_) => widget.onPressed != null? buttonHoldDown() : null,
+              onTapUp: (_) => widget.onPressed != null? buttonHoldUp(widget.onPressed) : null,
               onTapCancel: buttonCancel,
               child: Container(
                 height: widget.height,
