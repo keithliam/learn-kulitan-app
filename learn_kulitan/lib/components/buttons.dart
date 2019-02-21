@@ -131,7 +131,7 @@ class _IconButtonNewState extends State<IconButtonNew> {
   double _opacity = 1.0;
 
   void _pressDown(details) {
-    setState(() => _opacity = 0.75);
+    setState(() => _opacity = 0.6);
   }
 
   void _pressUp(details) {
@@ -151,9 +151,11 @@ class _IconButtonNewState extends State<IconButtonNew> {
       onTapCancel: _cancel,
       child: ConstrainedBox(
         constraints: const BoxConstraints(minWidth: 48.0, minHeight: 48.0),
-        child: Opacity(
+        child: AnimatedOpacity(
           opacity: _opacity,
-            child: Container(
+          curve: Curves.fastOutSlowIn,
+          duration: Duration(milliseconds: 250),
+          child: Container(
             color: Colors.transparent,
             child:SizedBox(
               height: widget.iconSize,
