@@ -244,47 +244,128 @@ class _ReadingPageState extends State<ReadingPage> {
 
   @override
   Widget build(BuildContext context) {
+    Widget _header = Padding(
+      padding: EdgeInsets.fromLTRB(headerPadding, headerPadding, headerPadding, 0.0),
+      child: StaticHeader(
+        left: IconButtonNew(
+          icon: Icons.arrow_back_ios,
+          iconSize: headerIconSize,
+          color: whiteColor,
+          onPressed: () => Navigator.pushNamed(context, '/'),
+        ),
+        middle: Text(
+          'Characters\nLearned',
+          style: textQuizHeader,
+          textAlign: TextAlign.center,
+        ),
+        right: IconButtonNew(
+          icon: Icons.settings,
+          iconSize: headerIconSize,
+          color: whiteColor,
+          onPressed: null,
+        ),
+      ),
+    );
+    
+    Widget _progressBar = Expanded(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: screenPadding,
+          vertical: 15.0,
+        ),
+        child: ProgressBar(
+          type: ProgressBar.circular,
+          offset: 150.0,
+          progress: _overallProgress,
+          numerator: _progressNumerator,
+          denominator: _progressDenominator,
+        ),
+      ),
+    );
+
+    Widget _buttonChoices = Padding(
+      padding: EdgeInsets.fromLTRB(screenPadding, 0.0, screenPadding, screenPadding),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: ChoiceButton(
+                  text: _choice1,
+                  type: _choice1 == _answer? ChoiceButton.right : ChoiceButton.wrong,
+                  onTap: _choice1 == _answer? correctAnswer : wrongAnswer,
+                  showAnswer: _showAnswer,
+                  disable: _disableChoices,
+                  reset: _resetChoices,
+                  resetDone: resetDone,
+                  resetDuration: _resetDuration,
+                  showAnswerDuration: _showAnswerDuration,
+                ),
+              ),
+              Container(
+                width: choiceSpacing,
+              ),
+              Expanded(
+                child: ChoiceButton(
+                  text: _choice2,
+                  type:  _choice2 == _answer? ChoiceButton.right : ChoiceButton.wrong,
+                  onTap: _choice2 == _answer? correctAnswer : wrongAnswer,
+                  showAnswer: _showAnswer,
+                  disable: _disableChoices,
+                  reset: _resetChoices,
+                  resetDone: resetDone,
+                  resetDuration: _resetDuration,
+                  showAnswerDuration: _showAnswerDuration,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            height: choiceSpacing,
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: ChoiceButton(
+                  text: _choice3,
+                  type:  _choice3 == _answer? ChoiceButton.right : ChoiceButton.wrong,
+                  onTap: _choice3 == _answer? correctAnswer : wrongAnswer,
+                  showAnswer: _showAnswer,
+                  disable: _disableChoices,
+                  reset: _resetChoices,
+                  resetDone: resetDone,
+                  resetDuration: _resetDuration,
+                  showAnswerDuration: _showAnswerDuration,
+                ),
+              ),
+              Container(
+                width: choiceSpacing,
+              ),
+              Expanded(
+                child: ChoiceButton(
+                  text: _choice4,
+                  type:  _choice4 == _answer? ChoiceButton.right : ChoiceButton.wrong,
+                  onTap: _choice4 == _answer? correctAnswer : wrongAnswer,
+                  showAnswer: _showAnswer,
+                  disable: _disableChoices,
+                  reset: _resetChoices,
+                  resetDone: resetDone,
+                  resetDuration: _resetDuration,
+                  showAnswerDuration: _showAnswerDuration,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+
     return Material(
       color: primaryColor,
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.fromLTRB(headerPadding, headerPadding, headerPadding, 0.0),
-            child: StaticHeader(
-              left: IconButtonNew(
-                icon: Icons.arrow_back_ios,
-                iconSize: headerIconSize,
-                color: whiteColor,
-                onPressed: () => Navigator.pushNamed(context, '/'),
-              ),
-              middle: Text(
-                'Characters\nLearned',
-                style: textQuizHeader,
-                textAlign: TextAlign.center,
-              ),
-              right: IconButtonNew(
-                icon: Icons.settings,
-                iconSize: headerIconSize,
-                color: whiteColor,
-                onPressed: null,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: screenPadding,
-                vertical: 15.0,
-              ),
-              child: ProgressBar(
-                type: ProgressBar.circular,
-                offset: 150.0,
-                progress: _overallProgress,
-                numerator: _progressNumerator,
-                denominator: _progressDenominator,
-              ),
-            ),
-          ),
+          _header,
+          _progressBar,
           Padding(
             padding: EdgeInsets.fromLTRB(screenPadding, 0.0, screenPadding, screenPadding),
             child: Container(
@@ -292,82 +373,7 @@ class _ReadingPageState extends State<ReadingPage> {
               color: Colors.grey,
             )
           ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(screenPadding, 0.0, screenPadding, screenPadding),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: ChoiceButton(
-                        text: _choice1,
-                        type: _choice1 == _answer? ChoiceButton.right : ChoiceButton.wrong,
-                        onTap: _choice1 == _answer? correctAnswer : wrongAnswer,
-                        showAnswer: _showAnswer,
-                        disable: _disableChoices,
-                        reset: _resetChoices,
-                        resetDone: resetDone,
-                        resetDuration: _resetDuration,
-                        showAnswerDuration: _showAnswerDuration,
-                      ),
-                    ),
-                    Container(
-                      width: choiceSpacing,
-                    ),
-                    Expanded(
-                      child: ChoiceButton(
-                        text: _choice2,
-                        type:  _choice2 == _answer? ChoiceButton.right : ChoiceButton.wrong,
-                        onTap: _choice2 == _answer? correctAnswer : wrongAnswer,
-                        showAnswer: _showAnswer,
-                        disable: _disableChoices,
-                        reset: _resetChoices,
-                        resetDone: resetDone,
-                        resetDuration: _resetDuration,
-                        showAnswerDuration: _showAnswerDuration,
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  height: choiceSpacing,
-                ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: ChoiceButton(
-                        text: _choice3,
-                        type:  _choice3 == _answer? ChoiceButton.right : ChoiceButton.wrong,
-                        onTap: _choice3 == _answer? correctAnswer : wrongAnswer,
-                        showAnswer: _showAnswer,
-                        disable: _disableChoices,
-                        reset: _resetChoices,
-                        resetDone: resetDone,
-                        resetDuration: _resetDuration,
-                        showAnswerDuration: _showAnswerDuration,
-                      ),
-                    ),
-                    Container(
-                      width: choiceSpacing,
-                    ),
-                    Expanded(
-                      child: ChoiceButton(
-                        text: _choice4,
-                        type:  _choice4 == _answer? ChoiceButton.right : ChoiceButton.wrong,
-                        onTap: _choice4 == _answer? correctAnswer : wrongAnswer,
-                        showAnswer: _showAnswer,
-                        disable: _disableChoices,
-                        reset: _resetChoices,
-                        resetDone: resetDone,
-                        resetDuration: _resetDuration,
-                        showAnswerDuration: _showAnswerDuration,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            )
-          ),
+          _buttonChoices,
         ],
       ),
     );

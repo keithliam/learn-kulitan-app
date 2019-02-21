@@ -61,48 +61,52 @@ class CustomButtonState extends State<CustomButton> {
 
   @override
   Widget build(BuildContext context) {
+    Widget _button = AnimatedPositioned(
+      duration: Duration(
+        milliseconds: widget.pressDelay,
+      ),
+      curve: Curves.easeInOut,
+      top: _elevation,
+      left: 0,
+      right: 0,
+      child: GestureDetector(
+        onTap: () => widget.onPressed != null? buttonPressed(widget.onPressed) : null,
+        onTapDown: (_) => widget.onPressed != null? buttonHoldDown() : null,
+        onTapUp: (_) => widget.onPressed != null? buttonHoldUp(widget.onPressed) : null,
+        onTapCancel: buttonCancel,
+        child: Container(
+          height: widget.height,
+          padding: widget.padding,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(widget.borderRadius),
+            color: widget.color,
+          ),
+          child: widget.child,
+        ),
+      ),
+    );
+
+    Widget _buttonShadow = Positioned(
+      top: widget.elevation,
+      left: 0,
+      right: 0,
+      child: Container(
+        height: widget.height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(widget.borderRadius),
+          color: Color(0x22000000),
+        ),
+      ),
+    );
+
     return Container(
       padding: EdgeInsets.only(top: widget.marginTop),
       height: widget.height + widget.elevation + widget.marginTop,
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Positioned(
-            top: widget.elevation,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: widget.height,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(widget.borderRadius),
-                color: Color(0x22000000),
-              ),
-            ),
-          ),
-          AnimatedPositioned(
-            duration: Duration(
-              milliseconds: widget.pressDelay,
-            ),
-            curve: Curves.easeInOut,
-            top: _elevation,
-            left: 0,
-            right: 0,
-            child: GestureDetector(
-              onTap: () => widget.onPressed != null? buttonPressed(widget.onPressed) : null,
-              onTapDown: (_) => widget.onPressed != null? buttonHoldDown() : null,
-              onTapUp: (_) => widget.onPressed != null? buttonHoldUp(widget.onPressed) : null,
-              onTapCancel: buttonCancel,
-              child: Container(
-                height: widget.height,
-                padding: widget.padding,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(widget.borderRadius),
-                  color: widget.color,
-                ),
-                child: widget.child,
-              ),
-            ),
-          ),
+          _buttonShadow,
+          _button,
         ],
       ),
     );

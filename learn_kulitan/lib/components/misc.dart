@@ -152,64 +152,68 @@ class _ProgressBarState extends State<ProgressBar>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.type == ProgressBar.linear) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(100.0),
+    Widget _linearProgressBar = ClipRRect(
+      borderRadius: BorderRadius.circular(100.0),
+      child: Container(
+        height: widget.height,
+        alignment: Alignment.centerLeft,
+        color: snowColor,
         child: Container(
-          height: widget.height,
-          alignment: Alignment.centerLeft,
-          color: snowColor,
-          child: Container(
-            width: (MediaQuery.of(context).size.width - widget.offset) * _animation.value,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100.0),
-              color: accentColor,
-            ),
-          )
-        ),
-      );
-    } else {
-      return FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Container(
-          width: MediaQuery.of(context).size.width - (screenPadding * 2),
-          height: 124.0,
-          child: CustomPaint(
-            painter: _CircularProgressBarPainter(
-              progress: _animation.value,
-            ),
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(bottom: 45.0),
-                  child: Text(
-                    '${widget.numerator}',
-                    style: textQuizHeader,
-                    textAlign: TextAlign.center,
-                  ),
+          width: (MediaQuery.of(context).size.width - widget.offset) * _animation.value,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100.0),
+            color: accentColor,
+          ),
+        )
+      ),
+    );
+
+    Widget _circularProgressBar = FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Container(
+        width: MediaQuery.of(context).size.width - (screenPadding * 2),
+        height: 124.0,
+        child: CustomPaint(
+          painter: _CircularProgressBarPainter(
+            progress: _animation.value,
+          ),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(bottom: 45.0),
+                child: Text(
+                  '${widget.numerator}',
+                  style: textQuizHeader,
+                  textAlign: TextAlign.center,
                 ),
-                Center(
-                  child: Divider(
-                    height: 5.0,
-                    width: 64.0,
-                    color: whiteColor,
-                  ),
+              ),
+              Center(
+                child: Divider(
+                  height: 5.0,
+                  width: 64.0,
+                  color: whiteColor,
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(top: 40.0),
-                  child: Text(
-                    '${widget.denominator}',
-                    style: textQuizHeader,
-                    textAlign: TextAlign.center,
-                  ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(top: 40.0),
+                child: Text(
+                  '${widget.denominator}',
+                  style: textQuizHeader,
+                  textAlign: TextAlign.center,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+
+    if (widget.type == ProgressBar.linear) {
+      return _linearProgressBar;
+    } else {
+      return _circularProgressBar;
     }
   }
 }
