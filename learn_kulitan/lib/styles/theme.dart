@@ -21,38 +21,38 @@ const headerPadding = 14.0;
 const choiceSpacing = 14.0;
 
 // Sizes
-final headerIconSize = 32.0;
+const headerIconSize = 32.0;
 
 // Kulitan Fonts
-final kulitanHome = TextStyle(
+const kulitanHome = TextStyle(
   fontFamily: 'Baybayin Pamagkulit',
   fontSize: 30.0,
   color: grayColor,
   height: 0.68,
 );
-final kulitanQuiz = TextStyle(
+const kulitanQuiz = TextStyle(
   fontFamily: 'Baybayin Pamagkulit',
   fontSize: 110.0,
   color: grayColor,
 );
-final kulitanWriting = TextStyle(
+const kulitanWriting = TextStyle(
   fontFamily: 'Baybayin Pamagkulit',
   fontSize: 200.0,
   color: snowColor,
 );
-final kulitanInfo = TextStyle(
+const kulitanInfo = TextStyle(
   fontFamily: 'Baybayin Pamagkulit',
   fontSize: 45.0,
   color: whiteColor,
 );
-final kulitanTranslate = TextStyle(
+const kulitanTranslate = TextStyle(
   fontFamily: 'Baybayin Pamagkulit',
   fontSize: 60.0,
   color: grayColor,
 );
 
 // Barlow Fonts
-final textHomeTitle = TextStyle(
+const textHomeTitle = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 75.0,
   fontWeight: FontWeight.bold,
@@ -61,7 +61,7 @@ final textHomeTitle = TextStyle(
     Shadow(color: accentColor, offset: Offset(5.0, 7.0))
   ]
 );
-final textHomeSubtitle = TextStyle(
+const textHomeSubtitle = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 50.0,
   fontWeight: FontWeight.bold,
@@ -70,13 +70,13 @@ final textHomeSubtitle = TextStyle(
     Shadow(color: accentColor, offset: Offset(4.0, 4.0))
   ]
 );
-final textHomeButton = TextStyle(
+const textHomeButton = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 40.0,
   fontWeight: FontWeight.w600,
   color: grayColor,
 );
-final textPageTitle = TextStyle(
+const textPageTitle = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 50.0,
   fontWeight: FontWeight.bold,
@@ -86,55 +86,55 @@ final textPageTitle = TextStyle(
     Shadow(color: accentColor, offset: Offset(4.0, 4.0))
   ]
 );
-final textQuizHeader = TextStyle(
+const textQuizHeader = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 25.0,
   fontWeight: FontWeight.bold,
   color: whiteColor,
 );
-final textQuizAnswer = TextStyle(
+const textQuizAnswer = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 110.0,
   color: grayColor,
 );
-final textQuizChoice = TextStyle(
+const textQuizChoice = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 30.0,
   fontWeight: FontWeight.w600,
   color: grayColor,
 );
-final textQuizChoiceWrong = TextStyle(
+const textQuizChoiceWrong = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 30.0,
   fontWeight: FontWeight.w600,
   color: whiteColor,
 );
-final textWriting = TextStyle(
+const textWriting = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 100.0,
   fontWeight: FontWeight.bold,
   color: whiteColor,
 );
-final textWritingGuide = TextStyle(
+const textWritingGuide = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 15.0,
   fontWeight: FontWeight.bold,
   color: accentColor,
 );
-final textInfoCaption = TextStyle(
+const textInfoCaption = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 20.0,
   fontWeight: FontWeight.bold,
   color: grayColor,
 );
-final textTranslate = TextStyle(
+const textTranslate = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 40.0,
   fontWeight: FontWeight.bold,
   color: grayColor,
 );
 
-final appTheme = ThemeData(
+const appTheme = ThemeData(
   primaryColor: primaryColor,
   primaryColorBrightness: Brightness.light,
   accentColor: accentColor,
