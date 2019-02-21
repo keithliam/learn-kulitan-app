@@ -251,8 +251,8 @@ class _ReadingPageState extends State<ReadingPage> {
           Padding(
             padding: EdgeInsets.fromLTRB(headerPadding, headerPadding, headerPadding, 0.0),
             child: StaticHeader(
-              left: IconButton(
-                icon: Icon(Icons.arrow_back_ios),
+              left: IconButtonNew(
+                icon: Icons.arrow_back_ios,
                 iconSize: headerIconSize,
                 color: whiteColor,
                 onPressed: () => Navigator.pushNamed(context, '/'),
@@ -262,8 +262,8 @@ class _ReadingPageState extends State<ReadingPage> {
                 style: textQuizHeader,
                 textAlign: TextAlign.center,
               ),
-              right: IconButton(
-                icon: Icon(Icons.settings),
+              right: IconButtonNew(
+                icon: Icons.settings,
                 iconSize: headerIconSize,
                 color: whiteColor,
                 onPressed: null,
@@ -289,6 +289,7 @@ class _ReadingPageState extends State<ReadingPage> {
             padding: EdgeInsets.fromLTRB(screenPadding, 0.0, screenPadding, screenPadding),
             child: Container(
               height: 300.0,
+              color: Colors.grey,
             )
           ),
           Padding(
