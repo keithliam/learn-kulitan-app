@@ -229,7 +229,7 @@ class HomePage extends StatelessWidget {
       child: Container(
         color: primaryColor,
         child: ListView(
-          padding: EdgeInsets.all(screenPadding),
+          padding: EdgeInsets.symmetric(horizontal: horizontalScreenPadding, vertical: verticalScreenPadding),
           children: <Widget>[
             _appTitle,
             _readingButton,

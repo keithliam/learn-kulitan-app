@@ -171,7 +171,7 @@ class _ProgressBarState extends State<ProgressBar>
     Widget _circularProgressBar = FittedBox(
       fit: BoxFit.scaleDown,
       child: Container(
-        width: MediaQuery.of(context).size.width - (screenPadding * 2),
+        width: MediaQuery.of(context).size.width - (horizontalScreenPadding * 2),
         height: 124.0,
         child: CustomPaint(
           painter: _CircularProgressBarPainter(

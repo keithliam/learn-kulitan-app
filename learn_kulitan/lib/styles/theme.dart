@@ -15,9 +15,10 @@ const cardChoicesRightColor = blueGreenColor;
 const cardChoicesWrongColor = accentColor;
 
 // Spacings
-final screenPadding = 28.0;
-final headerPadding = 14.0;
-final choiceSpacing = 14.0;
+const horizontalScreenPadding = 38.0;
+const verticalScreenPadding = 28.0;
+const headerPadding = 14.0;
+const choiceSpacing = 14.0;
 
 // Sizes
 final headerIconSize = 32.0;

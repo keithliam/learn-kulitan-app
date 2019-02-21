@@ -270,7 +270,7 @@ class _ReadingPageState extends State<ReadingPage> {
     Widget _progressBar = Expanded(
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: screenPadding,
+          horizontal: horizontalScreenPadding,
           vertical: 15.0,
         ),
         child: ProgressBar(
@@ -284,7 +284,7 @@ class _ReadingPageState extends State<ReadingPage> {
     );
 
     Widget _buttonChoices = Padding(
-      padding: EdgeInsets.fromLTRB(screenPadding, 0.0, screenPadding, screenPadding),
+      padding: EdgeInsets.fromLTRB(horizontalScreenPadding, 0.0, horizontalScreenPadding, verticalScreenPadding),
       child: Column(
         children: <Widget>[
           Row(
@@ -367,7 +367,7 @@ class _ReadingPageState extends State<ReadingPage> {
           _header,
           _progressBar,
           Padding(
-            padding: EdgeInsets.fromLTRB(screenPadding, 0.0, screenPadding, screenPadding),
+            padding: EdgeInsets.fromLTRB(horizontalScreenPadding, 0.0, horizontalScreenPadding, verticalScreenPadding),
             child: Container(
               height: 300.0,
               color: Colors.grey,
@@ -379,3 +379,4 @@ class _ReadingPageState extends State<ReadingPage> {
     );
   }
 }
+
