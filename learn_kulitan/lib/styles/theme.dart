@@ -133,13 +133,3 @@ const textTranslate = TextStyle(
   fontWeight: FontWeight.bold,
   color: grayColor,
 );
-
-const appTheme = ThemeData(
-  primaryColor: primaryColor,
-  primaryColorBrightness: Brightness.light,
-  accentColor: accentColor,
-  accentColorBrightness: Brightness.dark,
-  backgroundColor: accentColor,
-  buttonColor: accentColor,
-  cardColor: whiteColor,
-);
