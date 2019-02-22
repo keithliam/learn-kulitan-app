@@ -145,6 +145,62 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
   }
 }
 
+class QuizCard extends StatefulWidget {
+  QuizCard({
+    @required this.kulitan,
+    @required this.answer,
+    @required this.progress,
+    @required this.stackNumber,
+    @required this.isSwipable,
+  });
+
+  final String kulitan;
+  final String answer;
+  final double progress;
+  final int stackNumber;
+  final bool isSwipable;
+
+  @override
+  _QuizCardState createState() => _QuizCardState();
+}
+
+class _QuizCardState extends State<QuizCard> {
+  @override
+  Widget build(BuildContext context) {
+    Widget _kulitan = Expanded(
+      child: Center(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            widget.kulitan,
+            style: kulitanQuiz,
+          ),
+        ),
+      ),
+    );
+
+    Widget _progressBar = Padding(
+      padding: EdgeInsets.only(top: 10.0),
+      child: ProgressBar(
+        type: ProgressBar.linear,
+        offset: 128.0,
+        progress: widget.progress,
+      ),
+    );
+
+    return CustomCard(
+      hasShadow: widget.stackNumber != 1? true : false,
+      color: widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 :cardQuizColor3,
+      child: Column(
+        children: <Widget>[
+          _kulitan,
+          _progressBar,
+        ],
+      ),
+    );
+  }
+}
+
 class ReadingPage extends StatefulWidget {
   @override
   _ReadingPageState createState() => _ReadingPageState();
@@ -368,9 +424,18 @@ class _ReadingPageState extends State<ReadingPage> {
           _progressBar,
           Padding(
             padding: EdgeInsets.fromLTRB(horizontalScreenPadding, 0.0, horizontalScreenPadding, verticalScreenPadding),
-            child: Container(
-              height: 300.0,
-              color: Colors.grey,
+            child: Stack(
+              children: <Widget>[
+                Container(),
+                Container(),
+                QuizCard(
+                  kulitan: 'pieN',
+                  answer: 'píng',
+                  progress: 0.9,
+                  stackNumber: 1,
+                  isSwipable: true,
+                ),
+              ],
             )
           ),
           _buttonChoices,
@@ -379,4 +444,3 @@ class _ReadingPageState extends State<ReadingPage> {
     );
   }
 }
-

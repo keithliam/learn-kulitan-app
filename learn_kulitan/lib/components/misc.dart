@@ -247,3 +247,42 @@ class _StaticHeader extends State<StaticHeader> {
     );
   }
 }
+
+class CustomCard extends StatefulWidget {
+  CustomCard({
+    @required this.color,
+    @required this.child,
+    @required this.hasShadow,
+  });
+
+  final Color color;
+  final Widget child;
+  final bool hasShadow;
+
+  @override
+  _CustomCardState createState() => _CustomCardState();
+}
+
+class _CustomCardState extends State<CustomCard> {
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1.0,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 26.0, vertical: 20.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30.0),
+          boxShadow: widget.hasShadow? [
+            BoxShadow(
+              color: Color(0x21000000),
+              blurRadius: 30.0,
+              offset: Offset(0.0, 20.0),
+            ),
+          ] : null,
+          color: widget.color,
+        ),
+        child: widget.child,
+      ),
+    );
+  }
+}
