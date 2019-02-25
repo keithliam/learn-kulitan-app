@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import '../styles/theme.dart';
 import '../components/buttons.dart';
 import '../components/misc.dart';
@@ -145,13 +146,15 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
   }
 }
 
-class QuizCard extends StatefulWidget {
-  QuizCard({
+class _QuizCardSingle extends StatefulWidget {
+  _QuizCardSingle({
     @required this.kulitan,
     @required this.answer,
     @required this.progress,
     @required this.stackNumber,
     @required this.isSwipable,
+    @required this.width,
+    @required this.originalWidth,
   });
 
   final String kulitan;
@@ -159,12 +162,14 @@ class QuizCard extends StatefulWidget {
   final double progress;
   final int stackNumber;
   final bool isSwipable;
+  final double width;
+  final double originalWidth;
 
   @override
-  _QuizCardState createState() => _QuizCardState();
+  _QuizCardSingleState createState() => _QuizCardSingleState();
 }
 
-class _QuizCardState extends State<QuizCard> {
+class _QuizCardSingleState extends State<_QuizCardSingle> {
   @override
   Widget build(BuildContext context) {
     Widget _kulitan = Expanded(
@@ -189,13 +194,23 @@ class _QuizCardState extends State<QuizCard> {
     );
 
     return CustomCard(
-      hasShadow: widget.stackNumber != 1? true : false,
+      hasShadow: widget.stackNumber == 1? false : true,
       color: widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 :cardQuizColor3,
-      child: Column(
-        children: <Widget>[
-          _kulitan,
-          _progressBar,
-        ],
+      height: widget.width,
+      width: widget.width,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: cardQuizHorizontalPadding, vertical: cardQuizVerticalPadding),
+          height: widget.originalWidth,
+          width: widget.originalWidth,
+          child: Column(
+            children: <Widget>[
+              _kulitan,
+              _progressBar,
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -222,6 +237,10 @@ class _ReadingPageState extends State<ReadingPage> {
   bool _choseAnswer = false;
   int _resetDuration = 500;
   int _showAnswerDuration = 250;
+
+  GlobalKey _quizCardsKey = GlobalKey();
+  Size _quizCardSize = Size(100.0, 100.0);
+  double _quizCardTopSpace = 30.0;
 
   void correctAnswer() async {
     setState(() => _disableChoices = true);
@@ -259,6 +278,16 @@ class _ReadingPageState extends State<ReadingPage> {
       _choice2 = _choices[1];
       _choice3 = _choices[2];
       _choice4 = _choices[3];
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => _getQuizCardsSize()); 
+  }
+
+  void _getQuizCardsSize() {
+    final RenderBox box = _quizCardsKey.currentContext.findRenderObject();
+    setState(() {
+      _quizCardSize = box.size;
+      _quizCardTopSpace = box.size.height - box.size.width;
     });
   }
 
@@ -416,28 +445,64 @@ class _ReadingPageState extends State<ReadingPage> {
       ),
     );
 
+    Widget _quizCards = Padding(
+      padding: EdgeInsets.fromLTRB(horizontalScreenPadding, 0.0, horizontalScreenPadding, verticalScreenPadding),
+      child: AspectRatio(
+        aspectRatio: 0.9,
+        child: Stack(
+          key: _quizCardsKey,
+          children: <Widget>[
+            Positioned(
+              top: 0.0,
+              left: _quizCardSize.width * 0.1,
+              child: _QuizCardSingle(
+                kulitan: 'pieN',
+                answer: 'píng',
+                progress: 0.9,
+                stackNumber: 3,
+                isSwipable: false,
+                width: _quizCardSize.width * 0.8,
+                originalWidth: _quizCardSize.width,
+              ),
+            ),
+            Positioned(
+              top: _quizCardTopSpace / 2,
+              left: _quizCardSize.width * 0.05,
+              child: _QuizCardSingle(
+                kulitan: 'pieN',
+                answer: 'píng',
+                progress: 0.9,
+                stackNumber: 2,
+                isSwipable: false,
+                width: _quizCardSize.width * 0.9,
+                originalWidth: _quizCardSize.width,
+              ),
+            ),
+            Positioned(
+              top: _quizCardTopSpace,
+              left: 0.0,
+              child: _QuizCardSingle(
+                kulitan: 'pieN',
+                answer: 'píng',
+                progress: 0.9,
+                stackNumber: 1,
+                isSwipable: true,
+                width: _quizCardSize.width * 1,
+                originalWidth: _quizCardSize.width,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
     return Material(
       color: primaryColor,
       child: Column(
         children: <Widget>[
           _header,
           _progressBar,
-          Padding(
-            padding: EdgeInsets.fromLTRB(horizontalScreenPadding, 0.0, horizontalScreenPadding, verticalScreenPadding),
-            child: Stack(
-              children: <Widget>[
-                Container(),
-                Container(),
-                QuizCard(
-                  kulitan: 'pieN',
-                  answer: 'píng',
-                  progress: 0.9,
-                  stackNumber: 1,
-                  isSwipable: true,
-                ),
-              ],
-            )
-          ),
+          _quizCards,
           _buttonChoices,
         ],
       ),

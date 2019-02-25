@@ -250,14 +250,21 @@ class _StaticHeader extends State<StaticHeader> {
 
 class CustomCard extends StatefulWidget {
   CustomCard({
+    Key key,
     @required this.color,
     @required this.child,
     @required this.hasShadow,
-  });
+    this.padding,
+    this.height,
+    this.width,
+  }) : super(key: key);
 
   final Color color;
   final Widget child;
+  final EdgeInsetsGeometry padding;
   final bool hasShadow;
+  final double height;
+  final double width;
 
   @override
   _CustomCardState createState() => _CustomCardState();
@@ -266,23 +273,22 @@ class CustomCard extends StatefulWidget {
 class _CustomCardState extends State<CustomCard> {
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.0,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 26.0, vertical: 20.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30.0),
-          boxShadow: widget.hasShadow? [
-            BoxShadow(
-              color: Color(0x21000000),
-              blurRadius: 30.0,
-              offset: Offset(0.0, 20.0),
-            ),
-          ] : null,
-          color: widget.color,
-        ),
-        child: widget.child,
+    return Container(
+      height: widget.height != null? widget.height : null,
+      width: widget.width != null? widget.height : null,
+      padding: widget.padding != null? widget.padding : null,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30.0),
+        boxShadow: widget.hasShadow? [
+          BoxShadow(
+            color: Color(0x21000000),
+            blurRadius: 30.0,
+            offset: Offset(0.0, 20.0),
+          ),
+        ] : null,
+        color: widget.color,
       ),
+      child: widget.child,
     );
   }
 }

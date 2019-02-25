@@ -11,8 +11,8 @@ const lightBlueColor = Color(0xFFEDFAFF);
 const whiteColor = Color(0xFFFFFFFF);
 
 const cardQuizColor1 = whiteColor;
-const cardQuizColor2 = blueColor;
-const cardQuizColor3 = lightBlueColor;
+const cardQuizColor2 = lightBlueColor;
+const cardQuizColor3 = blueColor;
 const cardChoicesColor = whiteColor;
 const cardChoicesRightColor = blueGreenColor;
 const cardChoicesWrongColor = accentColor;
@@ -21,6 +21,8 @@ const cardChoicesWrongColor = accentColor;
 const horizontalScreenPadding = 38.0;
 const verticalScreenPadding = 28.0;
 const headerPadding = 14.0;
+const cardQuizHorizontalPadding = 26.0;
+const cardQuizVerticalPadding = 20.0;
 const choiceSpacing = 14.0;
 
 // Sizes
