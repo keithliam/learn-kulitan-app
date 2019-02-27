@@ -109,6 +109,7 @@ const textQuizAnswer = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 110.0,
   color: grayColor,
+  height: 0.8,
 );
 const textQuizChoice = TextStyle(
   fontFamily: 'Barlow',

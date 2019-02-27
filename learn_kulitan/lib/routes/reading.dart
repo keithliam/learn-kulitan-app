@@ -153,6 +153,7 @@ class _QuizCardSingle extends StatefulWidget {
     @required this.progress,
     @required this.stackNumber,
     @required this.isSwipable,
+    @required this.showAnswer,
     @required this.width,
     @required this.originalWidth,
   });
@@ -162,6 +163,7 @@ class _QuizCardSingle extends StatefulWidget {
   final double progress;
   final int stackNumber;
   final bool isSwipable;
+  final bool showAnswer;
   final double width;
   final double originalWidth;
 
@@ -193,6 +195,26 @@ class _QuizCardSingleState extends State<_QuizCardSingle> {
       ),
     );
 
+    List _cardContents = <Widget>[
+      _kulitan,
+      _progressBar,
+    ];
+
+    if(widget.showAnswer)
+      _cardContents.insert(1,
+        Center(
+          child: Padding(
+            padding:EdgeInsets.only(bottom: 15.0),
+            child: Text(
+              widget.answer,
+              style: textQuizAnswer,
+            ),
+          ),
+        )
+      );
+    else if(_cardContents.length == 3)
+      _cardContents.removeAt(1);
+
     return CustomCard(
       hasShadow: widget.stackNumber == 1? false : true,
       color: widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 :cardQuizColor3,
@@ -205,10 +227,7 @@ class _QuizCardSingleState extends State<_QuizCardSingle> {
           height: widget.originalWidth,
           width: widget.originalWidth,
           child: Column(
-            children: <Widget>[
-              _kulitan,
-              _progressBar,
-            ],
+            children: _cardContents,
           ),
         ),
       ),
@@ -249,6 +268,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
   double _quizCardRotationX = 0.0;
   bool _isSwipeSnapping = false;
   bool _isFlipped = false;
+  bool _showBackCard = false;
 
   void _animateSwipeDown(double fromValue, double toValue) async {
     bool _isAuto = fromValue == 0.0 && toValue == math.pi;
@@ -370,14 +390,17 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
       double _rotationValue = _quizCardRotationX + (details.delta.dy * swipeDownSensitivity);
       if(-math.pi < _rotationValue && _rotationValue < math.pi) {
         setState(() => _quizCardRotationX = _rotationValue);
-      } else if(_rotationValue < 0) {
-        setState(() => _quizCardRotationX = -math.pi);
-        _revealedAnswer();
-        setState(() => _isFlipped = true);
+        if(_showBackCard && (-math.pi / 2 < _rotationValue && _rotationValue < math.pi / 2))
+          setState(() => _showBackCard = false);
+        else if(!_showBackCard && ((-math.pi < _rotationValue && _rotationValue < -math.pi / 2) || (math.pi / 2 <  _rotationValue && _rotationValue < math.pi)))
+          setState(() => _showBackCard = true);
       } else {
-        setState(() => _quizCardRotationX = math.pi); 
         _revealedAnswer();
         setState(() => _isFlipped = true);   
+        if(_rotationValue < 0)
+          setState(() => _quizCardRotationX = -math.pi);
+        else
+          setState(() => _quizCardRotationX = math.pi); 
       }
     }
   }
@@ -526,6 +549,10 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
       ),
     );
 
+    Matrix4 _matrix = Matrix4.identity()
+      ..setEntry(3, 2, 0.001)
+      ..rotateX(_isSwipeSnapping? _swipeUpAnimation.value : _quizCardRotationX);
+
     Widget _quizCards = Padding(
       padding: EdgeInsets.fromLTRB(horizontalScreenPadding, 0.0, horizontalScreenPadding, verticalScreenPadding),
       child: AspectRatio(
@@ -542,6 +569,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
                 progress: 0.9,
                 stackNumber: 3,
                 isSwipable: false,
+                showAnswer: false,
                 width: _quizCardSize.width * 0.8,
                 originalWidth: _quizCardSize.width,
               ),
@@ -555,6 +583,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
                 progress: 0.9,
                 stackNumber: 2,
                 isSwipable: false,
+                showAnswer: false,
                 width: _quizCardSize.width * 0.9,
                 originalWidth: _quizCardSize.width,
               ),
@@ -563,24 +592,27 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
               top: _quizCardTopSpace,
               left: 0.0,
               child: Transform(
-                transform: Matrix4.identity()
-                  ..setEntry(3, 2, 0.001)
-                  ..rotateX(_isSwipeSnapping? _swipeUpAnimation.value : _quizCardRotationX),
+                transform: _matrix,
                 alignment:FractionalOffset.center,
                 child: GestureDetector(
                   onPanUpdate: _swipeUpDown,
                   onPanCancel: _swipeUpDownCancel,
                   onPanEnd: (_) => _swipeUpDownCancel(),
-                  child: _QuizCardSingle(
-                    kulitan: 'pieN',
-                    answer: 'píng',
-                    progress: 0.9,
-                    stackNumber: 1,
-                    isSwipable: true,
-                    width: _quizCardSize.width * 1,
-                    originalWidth: _quizCardSize.width,
+                  child: Transform(
+                    transform: _showBackCard? Matrix4.inverted(_matrix) : Matrix4.identity(),
+                    alignment: FractionalOffset.center,
+                    child: _QuizCardSingle(
+                      kulitan: 'pieN',
+                      answer: 'píng',
+                      progress: 0.9,
+                      stackNumber: 1,
+                      isSwipable: true,
+                      showAnswer: _showBackCard,
+                      width: _quizCardSize.width * 1,
+                      originalWidth: _quizCardSize.width,
+                    ), 
                   ),
-                )
+                ),
               ),
             ),
           ],
