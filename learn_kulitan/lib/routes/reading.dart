@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:math' as math;
 import '../styles/theme.dart';
 import '../components/buttons.dart';
 import '../components/misc.dart';
@@ -221,7 +222,7 @@ class ReadingPage extends StatefulWidget {
   _ReadingPageState createState() => _ReadingPageState();
 }
 
-class _ReadingPageState extends State<ReadingPage> {
+class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStateMixin {
   int _progressNumerator;
   int _progressDenominator;
   double _overallProgress;
@@ -234,7 +235,7 @@ class _ReadingPageState extends State<ReadingPage> {
   bool _showAnswer = false;
   bool _disableChoices = false;
   bool _resetChoices = false;
-  bool _choseAnswer = false;
+  bool _isSwipable = true;
   int _resetDuration = 500;
   int _showAnswerDuration = 250;
 
@@ -242,21 +243,60 @@ class _ReadingPageState extends State<ReadingPage> {
   Size _quizCardSize = Size(100.0, 100.0);
   double _quizCardTopSpace = 30.0;
 
-  void correctAnswer() async {
-    setState(() => _disableChoices = true);
-    await Future.delayed(Duration(milliseconds: _showAnswerDuration));
-    setState(() {
-      _disableChoices = true;
-      _choseAnswer = true;
-      _showAnswer = true;
-    });
+  Animation<double> _swipeUpAnimation;
+  AnimationController _swipeUpController;
+  Tween<double> _swipeUpTween;
+  Animation _swipeUpCurveAnimation;
+  double _quizCardRotationX = 0.0;
+  bool _isSwipeSnapping = false;
+  bool _isFlipped = false;
+
+  void _animateSwipeDown(double fromValue, double toValue) async {
+    bool _isAuto = fromValue == 0.0 && toValue == math.pi;
+    Duration _duration = Duration(milliseconds: _isAuto? autoSwipeUpDuration : swipeUpSnapDuration);
+    if(toValue == math.pi || toValue == -math.pi)
+      setState(() {
+        _disableChoices = true;
+        _isFlipped = true;
+        _quizCardRotationX = toValue;
+      });
+    setState(() => _isSwipeSnapping = true);
+    _swipeUpTween
+      ..begin = fromValue
+      ..end = toValue;
+    _swipeUpController
+      ..value = 0.0
+      ..duration = _duration
+      ..forward();
+    await Future.delayed(_duration);
+    setState(() => _isSwipeSnapping = false);
+    if(toValue == 0.0)
+      setState(() => _disableChoices = false);
   }
-  void wrongAnswer() async {
+
+  void _correctAnswer() async {
     setState(() {
       _disableChoices = true;
-      _choseAnswer = true;
+      _isSwipable = false;
     });
-    await Future.delayed(Duration(milliseconds: _showAnswerDuration));
+    await Future.delayed(Duration(milliseconds: _showAnswerDuration + revealAnswerOffset));
+    _animateSwipeDown(_quizCardRotationX, math.pi);
+    await Future.delayed(Duration(milliseconds: swipeUpSnapDuration));
+    setState(() => _showAnswer = true);
+  }
+  void _wrongAnswer() async {
+    setState(() {
+      _disableChoices = true;
+      _isSwipable = false;
+    });
+    await Future.delayed(Duration(milliseconds: _showAnswerDuration + revealAnswerOffset));
+    _animateSwipeDown(_quizCardRotationX, math.pi);
+    await Future.delayed(Duration(milliseconds: swipeUpSnapDuration));
+    setState(() => _showAnswer = true);
+  }
+  void _revealedAnswer() async {
+    setState(() => _disableChoices = true);
+    await Future.delayed(Duration(milliseconds: revealAnswerOffset));
     setState(() => _showAnswer = true);
   }
 
@@ -279,7 +319,13 @@ class _ReadingPageState extends State<ReadingPage> {
       _choice3 = _choices[2];
       _choice4 = _choices[3];
     });
-
+    _swipeUpController = AnimationController(duration: Duration(milliseconds: swipeUpSnapDuration), vsync: this);
+    _swipeUpCurveAnimation = CurvedAnimation(parent: _swipeUpController, curve: Curves.decelerate);
+    _swipeUpTween = Tween<double>(begin: 0.0, end: 1.0);
+    _swipeUpAnimation = _swipeUpTween.animate(_swipeUpCurveAnimation)
+      ..addListener(() {
+        setState(() {});
+      });
     WidgetsBinding.instance.addPostFrameCallback((_) => _getQuizCardsSize()); 
   }
 
@@ -297,13 +343,6 @@ class _ReadingPageState extends State<ReadingPage> {
       setState(() {
         _showAnswer = false;
         _resetChoices = true;
-        _choseAnswer = false;
-      });
-    // swipe up with no answer (reveal)
-    } else if(!_showAnswer && !_resetChoices && !_choseAnswer) {
-      setState(() {
-        _disableChoices = true;
-        _showAnswer = true;
       });
     }
   }
@@ -325,6 +364,49 @@ class _ReadingPageState extends State<ReadingPage> {
       _choice3 = _choices[2];
       _choice4 = _choices[3];
     });
+  }
+
+  void _swipeUpDown(details) {
+    if(!_isFlipped && _isSwipable) {
+      double _rotationValue = _quizCardRotationX + (details.delta.dy * swipeDownSensitivity);
+      if(-math.pi < _rotationValue && _rotationValue < math.pi) {
+        setState(() => _quizCardRotationX = _rotationValue);
+      } else if(_rotationValue < 0) {
+        setState(() => _quizCardRotationX = -math.pi);
+        _revealedAnswer();
+        setState(() => _isFlipped = true);
+      } else {
+        setState(() => _quizCardRotationX = math.pi); 
+        _revealedAnswer();
+        setState(() => _isFlipped = true);   
+      }
+    }
+  }
+
+  void _swipeUpDownCancel() {
+    if(!_isFlipped && _isSwipable) {
+      double _halfPi = math.pi / 2;
+      if(-_halfPi <= _quizCardRotationX && _quizCardRotationX <= _halfPi) {
+        _animateSwipeDown(_quizCardRotationX, 0.0);
+        setState(() => _quizCardRotationX = 0.0);
+      } else {
+        if(_quizCardRotationX < 0) {
+          _animateSwipeDown(_quizCardRotationX, -math.pi);
+          setState(() => _quizCardRotationX = -math.pi);
+        } else {
+          _animateSwipeDown(_quizCardRotationX, math.pi);
+          setState(() => _quizCardRotationX = math.pi);
+        }
+        _revealedAnswer();
+        setState(() => _isFlipped = true);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _swipeUpController.dispose();
+    super.dispose();
   }
 
   @override
@@ -378,7 +460,7 @@ class _ReadingPageState extends State<ReadingPage> {
                 child: ChoiceButton(
                   text: _choice1,
                   type: _choice1 == _answer? ChoiceButton.right : ChoiceButton.wrong,
-                  onTap: _choice1 == _answer? correctAnswer : wrongAnswer,
+                  onTap: _choice1 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
                   disable: _disableChoices,
                   reset: _resetChoices,
@@ -394,7 +476,7 @@ class _ReadingPageState extends State<ReadingPage> {
                 child: ChoiceButton(
                   text: _choice2,
                   type:  _choice2 == _answer? ChoiceButton.right : ChoiceButton.wrong,
-                  onTap: _choice2 == _answer? correctAnswer : wrongAnswer,
+                  onTap: _choice2 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
                   disable: _disableChoices,
                   reset: _resetChoices,
@@ -414,7 +496,7 @@ class _ReadingPageState extends State<ReadingPage> {
                 child: ChoiceButton(
                   text: _choice3,
                   type:  _choice3 == _answer? ChoiceButton.right : ChoiceButton.wrong,
-                  onTap: _choice3 == _answer? correctAnswer : wrongAnswer,
+                  onTap: _choice3 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
                   disable: _disableChoices,
                   reset: _resetChoices,
@@ -430,7 +512,7 @@ class _ReadingPageState extends State<ReadingPage> {
                 child: ChoiceButton(
                   text: _choice4,
                   type:  _choice4 == _answer? ChoiceButton.right : ChoiceButton.wrong,
-                  onTap: _choice4 == _answer? correctAnswer : wrongAnswer,
+                  onTap: _choice4 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
                   disable: _disableChoices,
                   reset: _resetChoices,
@@ -481,14 +563,25 @@ class _ReadingPageState extends State<ReadingPage> {
             Positioned(
               top: _quizCardTopSpace,
               left: 0.0,
-              child: _QuizCardSingle(
-                kulitan: 'pieN',
-                answer: 'píng',
-                progress: 0.9,
-                stackNumber: 1,
-                isSwipable: true,
-                width: _quizCardSize.width * 1,
-                originalWidth: _quizCardSize.width,
+              child: Transform(
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.001)
+                  ..rotateX(_isSwipeSnapping? _swipeUpAnimation.value : _quizCardRotationX),
+                alignment:FractionalOffset.center,
+                child: GestureDetector(
+                  onPanUpdate: _swipeUpDown,
+                  onPanCancel: _swipeUpDownCancel,
+                  onPanEnd: (_) => _swipeUpDownCancel(),
+                  child: _QuizCardSingle(
+                    kulitan: 'pieN',
+                    answer: 'píng',
+                    progress: 0.9,
+                    stackNumber: 1,
+                    isSwipable: true,
+                    width: _quizCardSize.width * 1,
+                    originalWidth: _quizCardSize.width,
+                  ),
+                )
               ),
             ),
           ],

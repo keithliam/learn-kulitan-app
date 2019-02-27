@@ -28,6 +28,14 @@ const choiceSpacing = 14.0;
 // Sizes
 const headerIconSize = 32.0;
 
+// Sensitivity
+const swipeDownSensitivity = 0.01;
+
+// Durations
+const swipeUpSnapDuration = 500;
+const autoSwipeUpDuration = 750;
+const revealAnswerOffset = 250;
+
 // Kulitan Fonts
 const kulitanHome = TextStyle(
   fontFamily: 'Baybayin Pamagkulit',
