@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 import 'dart:math' as math;
 import '../styles/theme.dart';
 import '../components/buttons.dart';
