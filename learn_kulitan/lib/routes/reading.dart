@@ -301,11 +301,10 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
 
   void _animateSwipe(double fromValue, double toValue, {bool isSwipeDown: true}) async {
     Duration _duration;
-    Animation _animation;
     if(isSwipeDown) {
       bool _isAuto = fromValue == 0.5 && toValue == 1.0;
       _duration = Duration(milliseconds: _isAuto? autoSwipeUpDuration : swipeUpSnapDuration);
-      _animation = _swipeTween.animate(
+      _swipeTween.animate(
         CurvedAnimation(
           parent: _swipeController,
           curve: _autoSwipeUpCurve,
@@ -318,7 +317,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
         });
     } else {
       _duration = Duration(milliseconds: swipeLeftSnapDuration);
-      _animation = _swipeTween.animate(
+      _swipeTween.animate(
         CurvedAnimation(
           parent: _swipeController,
           curve: quizCardSwipeLeftCurve,
