@@ -179,7 +179,7 @@ class _ProgressBarState extends State<ProgressBar>
             children: <Widget>[
               Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.only(bottom: 45.0),
+                padding: const EdgeInsets.only(bottom: 45.0),
                 child: Text(
                   '${widget.numerator}',
                   style: textQuizHeader,
@@ -195,7 +195,7 @@ class _ProgressBarState extends State<ProgressBar>
               ),
               Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.only(top: 40.0),
+                padding: const EdgeInsets.only(top: 40.0),
                 child: Text(
                   '${widget.denominator}',
                   style: textQuizHeader,

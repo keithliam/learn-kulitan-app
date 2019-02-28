@@ -27,7 +27,7 @@ class _HomeButton extends StatelessWidget {
             Expanded(
               child: Container(
                 alignment: Alignment.topLeft,
-                margin: EdgeInsets.only(top: 5.0),
+                margin: const EdgeInsets.only(top: 5.0),
                 child: Text(this.title, style: textHomeButton),
               ),
             ),
@@ -50,7 +50,7 @@ class _HomeButton extends StatelessWidget {
       onPressed: () => Navigator.pushNamed(context, this.route),
       elevation: 10.0,
       borderRadius: 30.0,
-      padding: EdgeInsets.fromLTRB(14.0, 14.0, 20.0, 14.0),
+      padding: const EdgeInsets.fromLTRB(14.0, 14.0, 20.0, 14.0),
       marginTop: 7.0,
       child: Row(
         children: <Widget>[
@@ -84,13 +84,13 @@ class HomePage extends StatelessWidget {
         Text('Learn', style: textHomeSubtitle),
         Container(
           child: Text('Kulitan', style: textHomeTitle),
-          padding: EdgeInsets.only(top: 45.0),
+          padding: const EdgeInsets.only(top: 45.0),
         ),
       ],
     );
 
     Widget _readingButton = Padding(
-      padding: EdgeInsets.only(top: 26.0),
+      padding: const EdgeInsets.only(top: 26.0),
       child: _HomeButton(
         kulitanText: 'p\nm\nma\ns',
         kulitanTextOffset: 12.0,

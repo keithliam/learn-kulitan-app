@@ -140,7 +140,7 @@ class _ChoiceButtonState extends State<_ChoiceButton> with TickerProviderStateMi
       onPressed: widget.disable? null : tapped,
       elevation: quizChoiceButtonElevation,
       borderRadius: 15.0,
-      padding: EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(12.0),
       pressDelay: widget.showAnswerDuration,
       justPressed: widget.justPressed,
       child: Center(
@@ -201,7 +201,7 @@ class _QuizCardSingleState extends State<_QuizCardSingle> {
     );
 
     Widget _progressBar = Padding(
-      padding: EdgeInsets.only(top: 10.0),
+      padding: const EdgeInsets.only(top: 10.0),
       child: ProgressBar(
         type: ProgressBar.linear,
         offset: 128.0,
@@ -218,7 +218,7 @@ class _QuizCardSingleState extends State<_QuizCardSingle> {
       _cardContents.insert(1,
         Center(
           child: Padding(
-            padding:EdgeInsets.only(bottom: 15.0),
+            padding: const EdgeInsets.only(bottom: 15.0),
             child: Text(
               widget.answer,
               style: textQuizAnswer,
