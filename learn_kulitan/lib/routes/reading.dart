@@ -4,13 +4,13 @@ import '../styles/theme.dart';
 import '../components/buttons.dart';
 import '../components/misc.dart';
 
-class ChoiceButton extends StatefulWidget {
-  ChoiceButton({
+class _ChoiceButton extends StatefulWidget {
+  _ChoiceButton({
     @required this.text,
     @required this.onTap,
     @required this.justPressed,
     @required this.disable,
-    this.type = ChoiceButton.wrong,
+    this.type = _ChoiceButton.wrong,
     this.showAnswer = false,
     this.reset = false,
     this.resetDone,
@@ -36,7 +36,7 @@ class ChoiceButton extends StatefulWidget {
   _ChoiceButtonState createState() => _ChoiceButtonState();
 }
 
-class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMixin {
+class _ChoiceButtonState extends State<_ChoiceButton> with TickerProviderStateMixin {
   Animation<Color> _animation;
   AnimationController _controller;
   ColorTween _tween;
@@ -53,7 +53,7 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
     super.initState();
     _textStyle = textQuizChoice;
     _controller = AnimationController(duration: Duration(milliseconds: widget.showAnswerDuration), vsync: this);
-    _tween = ColorTween(begin: cardChoicesColor, end: widget.type == ChoiceButton.right? cardChoicesRightColor : cardChoicesWrongColor);
+    _tween = ColorTween(begin: cardChoicesColor, end: widget.type == _ChoiceButton.right? cardChoicesRightColor : cardChoicesWrongColor);
     _animation = _tween.animate(_controller)
       ..addListener(() {
         setState(() {});
@@ -98,16 +98,16 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
   }
 
   @override
-  void didUpdateWidget(ChoiceButton oldWidget) {
+  void didUpdateWidget(_ChoiceButton oldWidget) {
     super.didUpdateWidget(oldWidget);
     if(widget.text != oldWidget.text || widget.type != oldWidget.type || widget.onTap != oldWidget.onTap || widget.justPressed != oldWidget.justPressed || widget.showAnswer != oldWidget.showAnswer || widget.disable != oldWidget.disable || widget.reset != oldWidget.reset || widget.resetDone != oldWidget.resetDone || widget.resetDuration != oldWidget.resetDuration || widget.showAnswerDuration != oldWidget.showAnswerDuration) {
-      if(widget.showAnswer && widget.type == ChoiceButton.right && !_isTapped) {
+      if(widget.showAnswer && widget.type == _ChoiceButton.right && !_isTapped) {
         _animateColor(cardChoicesColor, cardChoicesRightColor);
         _delayColorReset();
       }
       if(widget.reset && ((_tween.begin == whiteColor && _controller.value != 0.0) || (_tween.begin == cardChoicesRightColor && _controller.value == 0.0))) {
         _isTapped = false;
-        final Color _fromColor = widget.type == ChoiceButton.right? cardChoicesRightColor : cardChoicesWrongColor;
+        final Color _fromColor = widget.type == _ChoiceButton.right? cardChoicesRightColor : cardChoicesWrongColor;
         _animateColor(_fromColor, cardChoicesColor, isReset: true);
         widget.resetDone();
       }
@@ -126,7 +126,7 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
       setState(() {
         _isTapped = true;
       });
-      Color _toColor = widget.type == ChoiceButton.wrong? cardChoicesWrongColor : cardChoicesRightColor;
+      Color _toColor = widget.type == _ChoiceButton.wrong? cardChoicesWrongColor : cardChoicesRightColor;
       _animateColor(cardChoicesColor, _toColor);
       widget.onTap();
     }
@@ -151,7 +151,7 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
           child: Text(
             '${widget.text}',
             style: _textStyle.copyWith(
-              color: widget.type == ChoiceButton.wrong? _animationText.value : textQuizChoice.color
+              color: widget.type == _ChoiceButton.wrong? _animationText.value : textQuizChoice.color
             ),
           ),
         ),
@@ -582,9 +582,9 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
           Row(
             children: <Widget>[
               Expanded(
-                child: ChoiceButton(
+                child: _ChoiceButton(
                   text: _choice1,
-                  type: _choice1 == _answer? ChoiceButton.right : ChoiceButton.wrong,
+                  type: _choice1 == _answer? _ChoiceButton.right : _ChoiceButton.wrong,
                   onTap: _choice1 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
                   justPressed: _justPressed,
@@ -599,9 +599,9 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
                 width: choiceSpacing,
               ),
               Expanded(
-                child: ChoiceButton(
+                child: _ChoiceButton(
                   text: _choice2,
-                  type:  _choice2 == _answer? ChoiceButton.right : ChoiceButton.wrong,
+                  type:  _choice2 == _answer? _ChoiceButton.right : _ChoiceButton.wrong,
                   onTap: _choice2 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
                   justPressed: _justPressed,
@@ -620,9 +620,9 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
           Row(
             children: <Widget>[
               Expanded(
-                child: ChoiceButton(
+                child: _ChoiceButton(
                   text: _choice3,
-                  type:  _choice3 == _answer? ChoiceButton.right : ChoiceButton.wrong,
+                  type:  _choice3 == _answer? _ChoiceButton.right : _ChoiceButton.wrong,
                   onTap: _choice3 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
                   justPressed: _justPressed,
@@ -637,9 +637,9 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
                 width: choiceSpacing,
               ),
               Expanded(
-                child: ChoiceButton(
+                child: _ChoiceButton(
                   text: _choice4,
-                  type:  _choice4 == _answer? ChoiceButton.right : ChoiceButton.wrong,
+                  type:  _choice4 == _answer? _ChoiceButton.right : _ChoiceButton.wrong,
                   onTap: _choice4 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
                   justPressed: _justPressed,

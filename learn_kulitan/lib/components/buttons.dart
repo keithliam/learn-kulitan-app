@@ -27,10 +27,10 @@ class CustomButton extends StatefulWidget {
   final int pressDelay;
 
   @override
-  CustomButtonState createState() => CustomButtonState();
+  _CustomButtonState createState() => _CustomButtonState();
 }
 
-class CustomButtonState extends State<CustomButton> {
+class _CustomButtonState extends State<CustomButton> {
   double _initElevation;
   double _elevation = 0;
 

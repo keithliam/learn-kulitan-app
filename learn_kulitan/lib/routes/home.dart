@@ -3,8 +3,8 @@ import '../styles/theme.dart';
 import '../components/buttons.dart';
 import '../components/misc.dart';
 
-class HomeButton extends StatelessWidget {
-  HomeButton({
+class _HomeButton extends StatelessWidget {
+  _HomeButton({
     @required this.kulitanTextOffset,
     @required this.title,
     @required this.route,
@@ -91,7 +91,7 @@ class HomePage extends StatelessWidget {
 
     Widget _readingButton = Padding(
       padding: EdgeInsets.only(top: 26.0),
-      child: HomeButton(
+      child: _HomeButton(
         kulitanText: 'p\nm\nma\ns',
         kulitanTextOffset: 12.0,
         title: 'Reading',
@@ -100,7 +100,7 @@ class HomePage extends StatelessWidget {
       ),
     );
 
-    Widget _writingButton = HomeButton(
+    Widget _writingButton = _HomeButton(
       kulitanText: 'p\nmn\neo\nlt',
       kulitanTextOffset: 12.0,
       title: 'Writing',
@@ -108,7 +108,7 @@ class HomePage extends StatelessWidget {
       progress: 0.1,
     );
 
-    Widget _infoButton = HomeButton(
+    Widget _infoButton = _HomeButton(
       kulitanTextCustom: Container(
         height: 115.0,
         width: 38.0,
@@ -150,7 +150,7 @@ class HomePage extends StatelessWidget {
       route: '/',
     );
 
-    Widget _translateButton = HomeButton(
+    Widget _translateButton = _HomeButton(
       kulitanTextCustom: Container(
         height: 115.0,
         width: 40.0,
@@ -187,7 +187,7 @@ class HomePage extends StatelessWidget {
       route: '/',
     );
 
-    Widget _aboutButton = HomeButton(
+    Widget _aboutButton = _HomeButton(
       kulitanTextCustom: Container(
         height: 115.0,
         width: 40.0,
