@@ -279,10 +279,10 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
   AnimationController _swipeController;
   Tween<double> _swipeTween;
   Animation _swipeCurveAnimation;
-  Curve _autoSwipeUpCurve = quizCardAutoSwipeUpCurve;
-  Curve _swipeUpCurve = quizCardSwipeUpCurve;
+  Curve _autoSwipeDownCurve = quizCardAutoSwipeDownCurve;
+  Curve _swipeDownCurve = quizCardSwipeDownCurve;
   Curve _swipeLeftCurve = quizCardSwipeLeftCurve;
-  double _quizCardSwipeUpY = 0.5;
+  double _quizCardSwipeDownY = 0.5;
   double _quizCardRotate = 0.5;
   double _quizCardSwipeLeftX = 0.0;
   double _quizCardTransform = 0.0;
@@ -294,7 +294,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
 
   void _noneListener() => setState(() {});
 
-  void _swipeUpDownListener() {
+  void _swipeDownListener() {
     if(_swipeAnimation.value < 0.25 || 0.75 < _swipeAnimation.value)
       setState(() => _showBackCard = true);
   }
@@ -303,13 +303,13 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
     Duration _duration;
     if(isSwipeDown) {
       bool _isAuto = fromValue == 0.5 && toValue == 1.0;
-      _duration = Duration(milliseconds: _isAuto? autoSwipeUpDuration : swipeUpSnapDuration);
+      _duration = Duration(milliseconds: _isAuto? autoSwipeDownDuration : swipeDownSnapDuration);
       _swipeTween.animate(
         CurvedAnimation(
           parent: _swipeController,
-          curve: _autoSwipeUpCurve,
+          curve: _autoSwipeDownCurve,
         )
-      )..addListener(_swipeUpDownListener);
+      )..addListener(_swipeDownListener);
       if(toValue == 0.0 || toValue == 1.0)
         setState(() {
           _isFlipped = true;
@@ -352,7 +352,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
   void _correctAnswer() async {
     await Future.delayed(Duration(milliseconds: _showAnswerDuration + revealAnswerOffset));
     _animateSwipe(_quizCardRotate, 1.0);
-    await Future.delayed(Duration(milliseconds: autoSwipeUpDuration));
+    await Future.delayed(Duration(milliseconds: autoSwipeDownDuration));
     setState(() => _showAnswer = true);
     await Future.delayed(Duration(milliseconds: updateQuizCardProgressOffset));
     setState(() => _currentProgress = _currentProgress < maxQuizCharacterProgress? _currentProgress + 1 : _currentProgress);
@@ -361,7 +361,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
   void _wrongAnswer() async {
     await Future.delayed(Duration(milliseconds: _showAnswerDuration + revealAnswerOffset));
     _animateSwipe(_quizCardRotate, 1.0);
-    await Future.delayed(Duration(milliseconds: autoSwipeUpDuration + revealAnswerOffset));
+    await Future.delayed(Duration(milliseconds: autoSwipeDownDuration + revealAnswerOffset));
     setState(() => _showAnswer = true);
     await Future.delayed(Duration(milliseconds: _showAnswerDuration));
     setState(() => _currentProgress = _currentProgress > 0? _currentProgress - 1 : _currentProgress);
@@ -397,8 +397,8 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
       _choice4 = _choices[3];
       _currentProgress = 8;
     });
-    _swipeController = AnimationController(duration: Duration(milliseconds: swipeUpSnapDuration), vsync: this);
-    _swipeCurveAnimation = CurvedAnimation(parent: _swipeController, curve: _swipeUpCurve);
+    _swipeController = AnimationController(duration: Duration(milliseconds: swipeDownSnapDuration), vsync: this);
+    _swipeCurveAnimation = CurvedAnimation(parent: _swipeController, curve: _swipeDownCurve);
     _swipeTween = Tween<double>(begin: 0.0, end: 1.0);
     _swipeAnimation = _swipeTween.animate(_swipeCurveAnimation)
       ..addListener(_noneListener);
@@ -438,11 +438,11 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
 
   void _swipeAction(details) {
     if(!_isFlipped && _isSwipable) {
-      double _swipeValue = _quizCardSwipeUpY + (details.delta.dy * swipeDownSensitivity * 0.002);
+      double _swipeValue = _quizCardSwipeDownY + (details.delta.dy * swipeDownSensitivity * 0.002);
       if(0.0 < _swipeValue && _swipeValue < 1.0) {
-        double _rotationValue = _swipeUpCurve.transform(_swipeValue);
+        double _rotationValue = _swipeDownCurve.transform(_swipeValue);
         setState(() {
-          _quizCardSwipeUpY = _swipeValue;
+          _quizCardSwipeDownY = _swipeValue;
           _quizCardRotate = _rotationValue;
         });
         if(_showBackCard && (0.25 < _rotationValue && _rotationValue < 0.75))
@@ -487,17 +487,17 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
           setState(() => _quizCardRotate = _quizCardRotate < 0.01? 0.0 : 1.0);
           _revealedAnswer();
         } else {
-          _revealedAnswer(delay: swipeUpSnapDuration);
+          _revealedAnswer(delay: swipeDownSnapDuration);
           if(_quizCardRotate < 0.5) {
             _animateSwipe(_quizCardRotate, 0.0);
             setState(() {
-              _quizCardSwipeUpY = 0.0;
+              _quizCardSwipeDownY = 0.0;
               _quizCardRotate = 0.0;
             });
           } else {
             _animateSwipe(_quizCardRotate, 1.0);
             setState(() {
-              _quizCardSwipeUpY = 1.0;
+              _quizCardSwipeDownY = 1.0;
               _quizCardRotate = 1.0;
             });
           }
@@ -505,7 +505,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
       } else if(0.25 <= _quizCardRotate && _quizCardRotate <= 0.75) {
         _animateSwipe(_quizCardRotate, 0.5);
         setState(() {
-          _quizCardSwipeUpY = 0.5;
+          _quizCardSwipeDownY = 0.5;
           _quizCardRotate = 0.5;
         });
       }

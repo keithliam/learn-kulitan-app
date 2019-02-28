@@ -59,13 +59,13 @@ const quizCardRotateVelocity = 1.0;
 // Curves
 const customButtonPressCurve = Curves.easeOutQuart;
 const progressBarCurve = Curves.fastOutSlowIn;
-const quizCardSwipeUpCurve = Curves.easeInOut;  // 0.5 -> 0.5 curves only
-const quizCardAutoSwipeUpCurve = Curves.decelerate;
+const quizCardSwipeDownCurve = Curves.easeInOut;  // 0.5 -> 0.5 curves only
+const quizCardAutoSwipeDownCurve = Curves.decelerate;
 const quizCardSwipeLeftCurve = Curves.fastOutSlowIn;
 
 // Durations
-const swipeUpSnapDuration = 250;
-const autoSwipeUpDuration = 500;
+const swipeDownSnapDuration = 250;
+const autoSwipeDownDuration = 500;
 const revealAnswerOffset = 250;
 const swipeLeftSnapDuration = 250;
 const updateQuizCardProgressOffset = 250;
