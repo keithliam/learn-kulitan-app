@@ -85,14 +85,13 @@ class Divider extends StatelessWidget {
 
 class ProgressBar extends StatefulWidget {
   ProgressBar({
-    Key key,
     @required this.type,
     @required this.progress,
     @required this.offset,
     this.height = 15.0,
     this.numerator,
     this.denominator,
-  }) : super(key: key);
+  });
 
   static const int linear = 0;
   static const int circular = 1;
@@ -249,14 +248,13 @@ class _StaticHeader extends State<StaticHeader> {
 
 class CustomCard extends StatefulWidget {
   CustomCard({
-    Key key,
     @required this.color,
     @required this.child,
     this.hasShadow: false,
     this.padding,
     this.height,
     this.width,
-  }) : super(key: key);
+  });
 
   final Color color;
   final Widget child;

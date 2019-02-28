@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import '../styles/theme.dart';
 
 class CustomButton extends StatefulWidget {
-  CustomButton(
-      {Key key,
-      @required this.onPressed,
-      @required this.child,
-      @required this.height,
-      this.color: whiteColor,
-      this.borderRadius: 0.0,
-      this.elevation: 0.0,
-      this.padding: const EdgeInsets.all(0.0),
-      this.marginTop: 0.0,
-      this.pressDelay: 250,
-      this.justPressed})
-      : super(key: key);
+  CustomButton({
+    @required this.onPressed,
+    @required this.child,
+    @required this.height,
+    this.color: whiteColor,
+    this.borderRadius: 0.0,
+    this.elevation: 0.0,
+    this.padding: const EdgeInsets.all(0.0),
+    this.marginTop: 0.0,
+    this.pressDelay: 250,
+    this.justPressed
+  });
 
   final VoidCallback onPressed;
   final VoidCallback justPressed;
@@ -119,12 +118,11 @@ class CustomButtonState extends State<CustomButton> {
 
 class IconButtonNew extends StatefulWidget {
   IconButtonNew({
-    Key key,
     @required this.icon,
     @required this.onPressed,
     @required this.iconSize,
     this.color: whiteColor,
-  }) : super(key: key);
+  });
 
   final IconData icon;
   final VoidCallback onPressed;
