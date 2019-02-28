@@ -23,18 +23,38 @@ const verticalScreenPadding = 28.0;
 const headerPadding = 14.0;
 const cardQuizHorizontalPadding = 26.0;
 const cardQuizVerticalPadding = 20.0;
+const cardQuizStackBottomPadding = verticalScreenPadding;
 const choiceSpacing = 14.0;
+const quizChoiceButtonElevation = 10.0;
 
 // Sizes
 const headerIconSize = 32.0;
+const quizChoiceButtonHeight = 62.0;
+const quizCardStackTopSpace = 32.0;
 
 // Sensitivity
 const swipeDownSensitivity = 0.01;
+const swipeLeftSensitivity = 1.0;
+const swipeLeftThreshold = 0.20;
+const swipeLeftMax = 350.0;
+
+// Velocities
+const quizCardMoveUpVelocity = 1.0;
+const quizCardMoveLeftVelocity = 1.0;
+const quizCardRotateVelocity = 1.0;
+
+// Curves
+const quizCardSwipeUpCurve = Curves.decelerate;
+const quizCardSwipeLeftCurve = Curves.fastOutSlowIn;
 
 // Durations
 const swipeUpSnapDuration = 500;
 const autoSwipeUpDuration = 750;
 const revealAnswerOffset = 250;
+const swipeLeftSnapDuration = 250;
+
+// Progress Totals
+const maxQuizCharacterProgress = 10;
 
 // Kulitan Fonts
 const kulitanHome = TextStyle(

@@ -253,7 +253,7 @@ class CustomCard extends StatefulWidget {
     Key key,
     @required this.color,
     @required this.child,
-    @required this.hasShadow,
+    this.hasShadow: false,
     this.padding,
     this.height,
     this.width,
