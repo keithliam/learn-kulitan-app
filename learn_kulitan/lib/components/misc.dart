@@ -116,14 +116,13 @@ class _ProgressBarState extends State<ProgressBar>
   Animation _curveAnimation;
 
   final int _initDuration = 1000;
-  final Curve _curve = Curves.fastOutSlowIn;
 
   @override
   void initState() {
     super.initState();
 
     _controller = AnimationController(duration: Duration(milliseconds: _initDuration), vsync: this);
-    _curveAnimation = CurvedAnimation(parent: _controller, curve: _curve);
+    _curveAnimation = CurvedAnimation(parent: _controller, curve: progressBarCurve);
     _tween = Tween<double>(begin: 0.0, end: widget.progress);
     _animation = _tween.animate(_curveAnimation)
       ..addListener(() {
@@ -143,7 +142,7 @@ class _ProgressBarState extends State<ProgressBar>
       ..value = 0.0
       ..forward();
   }
-
+  
   @override
   void dispose() {
     _controller.dispose();

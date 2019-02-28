@@ -69,7 +69,7 @@ class CustomButtonState extends State<CustomButton> {
       duration: Duration(
         milliseconds: widget.pressDelay,
       ),
-      curve: Curves.easeInOut,
+      curve: customButtonPressCurve,
       top: _elevation,
       left: 0,
       right: 0,

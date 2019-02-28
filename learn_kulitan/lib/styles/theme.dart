@@ -44,6 +44,8 @@ const quizCardMoveLeftVelocity = 1.0;
 const quizCardRotateVelocity = 1.0;
 
 // Curves
+const customButtonPressCurve = Curves.easeOutQuart;
+const progressBarCurve = Curves.fastOutSlowIn;
 const quizCardSwipeUpCurve = Curves.easeInOut;  // 0.5 -> 0.5 curves only
 const quizCardAutoSwipeUpCurve = Curves.decelerate;
 const quizCardSwipeLeftCurve = Curves.fastOutSlowIn;
