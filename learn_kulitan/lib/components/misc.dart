@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
-import 'dart:math';
+import 'dart:math' as math;
 import '../styles/theme.dart';
 
 class SlideLeftRoute extends PageRouteBuilder {
@@ -49,13 +49,13 @@ class _CircularProgressBarPainter extends CustomPainter {
       ..strokeWidth = 10.0;
 
     Offset center = new Offset(size.width / 2, size.height / 2);
-    double radius = min((size.width / 2) - 5.0, (size.height / 2) - 5.0);
+    double radius = math.min((size.width / 2) - 5.0, (size.height / 2) - 5.0);
     double progressPercent = progress <= 0.995? (0.975 * progress) : ((((progress - 0.995) / 0.005) * 0.025) + 0.975);
-    double progressAngle = 2 * pi * progressPercent;
+    double progressAngle = 2 * math.pi * progressPercent;
 
     canvas.drawCircle(center, radius, area);
 
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -pi / 2,
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -math.pi / 2,
         progressAngle, false, bar);
   }
 }

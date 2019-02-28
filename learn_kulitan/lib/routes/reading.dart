@@ -147,7 +147,7 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
         child: AnimatedOpacity(
           opacity: widget.reset? 0.0 : 1.0,
           duration: Duration(milliseconds: widget.resetDuration),
-          curve: Curves.easeInOut,
+          curve: customButtonPressCurve,
           child: Text(
             '${widget.text}',
             style: _textStyle.copyWith(
