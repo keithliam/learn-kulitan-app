@@ -12,10 +12,12 @@ class CustomButton extends StatefulWidget {
       this.elevation: 0.0,
       this.padding: const EdgeInsets.all(0.0),
       this.marginTop: 0.0,
-      this.pressDelay: 250})
+      this.pressDelay: 250,
+      this.justPressed})
       : super(key: key);
 
   final VoidCallback onPressed;
+  final VoidCallback justPressed;
   final Widget child;
   final double height;
   final Color color;
@@ -50,6 +52,8 @@ class CustomButtonState extends State<CustomButton> {
   }
 
   void buttonHoldUp(func) async {
+    if(widget.justPressed != null)
+      widget.justPressed();
     setState(() => _elevation = 0);
     await Future.delayed(Duration(milliseconds: widget.pressDelay));
     func();

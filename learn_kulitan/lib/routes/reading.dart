@@ -8,6 +8,7 @@ class ChoiceButton extends StatefulWidget {
   ChoiceButton({
     @required this.text,
     @required this.onTap,
+    @required this.justPressed,
     @required this.disable,
     this.type: ChoiceButton.wrong,
     this.showAnswer: false,
@@ -15,7 +16,6 @@ class ChoiceButton extends StatefulWidget {
     this.resetDone,
     this.resetDuration,
     this.showAnswerDuration,
-    this.isSwiping: false,
   });
 
   static const int right = 0;
@@ -23,6 +23,7 @@ class ChoiceButton extends StatefulWidget {
 
   final String text;
   final VoidCallback onTap;
+  final VoidCallback justPressed;
   final bool disable;
   final int type;
   final bool showAnswer;
@@ -30,7 +31,6 @@ class ChoiceButton extends StatefulWidget {
   final VoidCallback resetDone;
   final int resetDuration;
   final int showAnswerDuration;
-  final bool isSwiping;
 
   @override
   _ChoiceButtonState createState() => _ChoiceButtonState();
@@ -89,21 +89,28 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
     }
   }
 
+  void _delayColorReset() async {
+    await Future.delayed(Duration(milliseconds: widget.showAnswerDuration));
+    _tween
+      ..begin = cardChoicesRightColor;
+    _controller
+      ..reset();
+  }
+
   @override
   void didUpdateWidget(ChoiceButton oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(widget.showAnswer && widget.type == ChoiceButton.right && !_isTapped && !widget.isSwiping) {
-      _animateColor(cardChoicesColor, cardChoicesRightColor);
-      _controller
-        ..reset();
-      _tween
-        ..begin = cardChoicesRightColor;
-    }
-    if(widget.reset && ((_tween.begin == whiteColor && _controller.value != 0.0) || (_tween.begin == cardChoicesRightColor && _controller.value == 0.0))) {
-      _isTapped = false;
-      final Color _fromColor = widget.type == ChoiceButton.right? cardChoicesRightColor : cardChoicesWrongColor;
-      _animateColor(_fromColor, cardChoicesColor, isReset: true);
-      widget.resetDone();
+    if(widget.text != oldWidget.text || widget.type != oldWidget.type || widget.onTap != oldWidget.onTap || widget.justPressed != oldWidget.justPressed || widget.showAnswer != oldWidget.showAnswer || widget.disable != oldWidget.disable || widget.reset != oldWidget.reset || widget.resetDone != oldWidget.resetDone || widget.resetDuration != oldWidget.resetDuration || widget.showAnswerDuration != oldWidget.showAnswerDuration) {
+      if(widget.showAnswer && widget.type == ChoiceButton.right && !_isTapped) {
+        _animateColor(cardChoicesColor, cardChoicesRightColor);
+        _delayColorReset();
+      }
+      if(widget.reset && ((_tween.begin == whiteColor && _controller.value != 0.0) || (_tween.begin == cardChoicesRightColor && _controller.value == 0.0))) {
+        _isTapped = false;
+        final Color _fromColor = widget.type == ChoiceButton.right? cardChoicesRightColor : cardChoicesWrongColor;
+        _animateColor(_fromColor, cardChoicesColor, isReset: true);
+        widget.resetDone();
+      }
     }
   }
 
@@ -135,6 +142,7 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
       borderRadius: 15.0,
       padding: EdgeInsets.all(12.0),
       pressDelay: widget.showAnswerDuration,
+      justPressed: widget.justPressed,
       child: Center(
         child: AnimatedOpacity(
           opacity: widget.reset? 0.0 : 1.0,
@@ -271,33 +279,52 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
   AnimationController _swipeController;
   Tween<double> _swipeTween;
   Animation _swipeCurveAnimation;
+  Curve _autoSwipeUpCurve = quizCardAutoSwipeUpCurve;
+  Curve _swipeUpCurve = quizCardSwipeUpCurve;
   Curve _swipeLeftCurve = quizCardSwipeLeftCurve;
-  double _quizCardRotationX = 0.0;
+  double _quizCardSwipeUpY = 0.5;
+  double _quizCardRotate = 0.5;
   double _quizCardSwipeLeftX = 0.0;
   double _quizCardTransform = 0.0;
   bool _isSwipeDownSnapping = false;
   bool _isSwipeLeftSnapping = false;
   bool _isFlipped = false;
   bool _showBackCard = false;
-  bool _isSwiping = false;
+  bool _hasSeenAnswer = false;
+
+  void _noneListener() => setState(() {});
+
+  void _swipeUpDownListener() {
+    if(_swipeAnimation.value < 0.25 || 0.75 < _swipeAnimation.value)
+      setState(() => _showBackCard = true);
+  }
 
   void _animateSwipe(double fromValue, double toValue, {bool isSwipeDown: true}) async {
     Duration _duration;
-    Curve _curve;
+    Animation _animation;
     if(isSwipeDown) {
-      bool _isAuto = fromValue == 0.0 && toValue == math.pi;
+      bool _isAuto = fromValue == 0.5 && toValue == 1.0;
       _duration = Duration(milliseconds: _isAuto? autoSwipeUpDuration : swipeUpSnapDuration);
-      _curve = quizCardSwipeUpCurve;
+      _animation = _swipeTween.animate(
+        CurvedAnimation(
+          parent: _swipeController,
+          curve: _autoSwipeUpCurve,
+        )
+      )..addListener(_swipeUpDownListener);
+      if(toValue == 0.0 || toValue == 1.0)
+        setState(() {
+          _isFlipped = true;
+          _quizCardRotate = toValue;
+        });
     } else {
       _duration = Duration(milliseconds: swipeLeftSnapDuration);
-      _curve = quizCardSwipeLeftCurve;
+      _animation = _swipeTween.animate(
+        CurvedAnimation(
+          parent: _swipeController,
+          curve: quizCardSwipeLeftCurve,
+        )
+      )..addListener(_noneListener);
     }
-    if(toValue == math.pi || toValue == -math.pi)
-      setState(() {
-        _disableChoices = true;
-        _isFlipped = true;
-        _quizCardRotationX = toValue;
-      });
     if(isSwipeDown)
       setState(() => _isSwipeDownSnapping = true);
     else
@@ -305,12 +332,6 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
     _swipeTween
       ..begin = fromValue
       ..end = toValue;
-    _swipeAnimation = _swipeTween.animate(
-      CurvedAnimation(
-        parent: _swipeController,
-        curve: _curve,
-      )
-    );
     _swipeController
       ..value = 0.0
       ..duration = _duration
@@ -320,34 +341,40 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
       setState(() => _isSwipeDownSnapping = false);
     else
       setState(() => _isSwipeLeftSnapping = false);
-    if(toValue == 0.0)
-      setState(() => _disableChoices = false);
-    setState(() => _isSwiping = false);
   }
 
-  void _correctAnswer() async {
+
+  void _justPressed() {
     setState(() {
-      _disableChoices = true;
       _isSwipable = false;
+      _disableChoices = true;
     });
+  }
+  void _correctAnswer() async {
     await Future.delayed(Duration(milliseconds: _showAnswerDuration + revealAnswerOffset));
-    _animateSwipe(_quizCardRotationX, math.pi);
-    await Future.delayed(Duration(milliseconds: swipeUpSnapDuration));
+    _animateSwipe(_quizCardRotate, 1.0);
+    await Future.delayed(Duration(milliseconds: autoSwipeUpDuration));
     setState(() => _showAnswer = true);
+    await Future.delayed(Duration(milliseconds: updateQuizCardProgressOffset));
+    setState(() => _currentProgress = _currentProgress < maxQuizCharacterProgress? _currentProgress + 1 : _currentProgress);
+    // TODO : reset()
   }
   void _wrongAnswer() async {
-    setState(() {
-      _disableChoices = true;
-      _isSwipable = false;
-    });
     await Future.delayed(Duration(milliseconds: _showAnswerDuration + revealAnswerOffset));
-    _animateSwipe(_quizCardRotationX, math.pi);
-    await Future.delayed(Duration(milliseconds: swipeUpSnapDuration));
+    _animateSwipe(_quizCardRotate, 1.0);
+    await Future.delayed(Duration(milliseconds: autoSwipeUpDuration + revealAnswerOffset));
     setState(() => _showAnswer = true);
+    await Future.delayed(Duration(milliseconds: _showAnswerDuration));
+    setState(() => _currentProgress = _currentProgress > 0? _currentProgress - 1 : _currentProgress);
+    // TODO : reset()
   }
-  void _revealedAnswer() async {
-    setState(() => _disableChoices = true);
-    await Future.delayed(Duration(milliseconds: revealAnswerOffset));
+  void _revealedAnswer({int delay: 0}) async {
+    // TODO : reset()
+    setState(() {
+      _isFlipped = true;
+      _disableChoices = true;
+    });
+    await Future.delayed(Duration(milliseconds: delay + revealAnswerOffset));
     setState(() => _showAnswer = true);
   }
 
@@ -369,14 +396,13 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
       _choice2 = _choices[1];
       _choice3 = _choices[2];
       _choice4 = _choices[3];
+      _currentProgress = 8;
     });
     _swipeController = AnimationController(duration: Duration(milliseconds: swipeUpSnapDuration), vsync: this);
-    _swipeCurveAnimation = CurvedAnimation(parent: _swipeController, curve: quizCardSwipeUpCurve);
+    _swipeCurveAnimation = CurvedAnimation(parent: _swipeController, curve: _swipeUpCurve);
     _swipeTween = Tween<double>(begin: 0.0, end: 1.0);
     _swipeAnimation = _swipeTween.animate(_swipeCurveAnimation)
-      ..addListener(() {
-        setState(() {});
-      });
+      ..addListener(_noneListener);
     WidgetsBinding.instance.addPostFrameCallback((_) => _getQuizCardsSize()); 
   }
 
@@ -407,25 +433,28 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
     });
   }
 
+  double _getRotation(double x) {
+    return (2 * x * math.pi)  - math.pi;
+  }
+
   void _swipeAction(details) {
     if(!_isFlipped && _isSwipable) {
-      double _rotationValue = _quizCardRotationX + (details.delta.dy * swipeDownSensitivity);
-      if(-math.pi < _rotationValue && _rotationValue < math.pi) {
-        setState(() => _quizCardRotationX = _rotationValue);
-        if(_showBackCard && (-math.pi / 2 < _rotationValue && _rotationValue < math.pi / 2))
+      double _swipeValue = _quizCardSwipeUpY + (details.delta.dy * swipeDownSensitivity * 0.002);
+      if(0.0 < _swipeValue && _swipeValue < 1.0) {
+        double _rotationValue = _swipeUpCurve.transform(_swipeValue);
+        setState(() {
+          _quizCardSwipeUpY = _swipeValue;
+          _quizCardRotate = _rotationValue;
+        });
+        if(_showBackCard && (0.25 < _rotationValue && _rotationValue < 0.75))
           setState(() => _showBackCard = false);
-        else if(!_showBackCard && ((-math.pi < _rotationValue && _rotationValue < -math.pi / 2) || (math.pi / 2 <  _rotationValue && _rotationValue < math.pi)))
-          setState(() => _showBackCard = true);
-      } else {
-        _revealedAnswer();
-        setState(() => _isFlipped = true);   
-        if(_rotationValue < 0)
-          setState(() => _quizCardRotationX = -math.pi);
-        else
-          setState(() => _quizCardRotationX = math.pi); 
+        else if(!_showBackCard && ((0.0 < _rotationValue && _rotationValue < 0.25) || (0.75 < _rotationValue && _rotationValue < 1.0)))
+          setState(() {
+            _showBackCard = true;
+            _hasSeenAnswer = true;
+          });
       }
     } else if(_showAnswer && !_resetChoices ) {
-      setState(() => _isSwiping = true);
       double _slideValue = _quizCardSwipeLeftX + ((-details.delta.dx * swipeLeftSensitivity) / swipeLeftMax);
       if(_slideValue > 1.0) {
         setState(() {
@@ -433,13 +462,11 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
           _quizCardTransform = 1.0;
           _showAnswer = false;
           _resetChoices = true;
-          _isSwiping = false;
         });
       } else if(_slideValue < 0) {
         setState(() {
           _quizCardSwipeLeftX = 0.0;
           _quizCardTransform = 0.0;
-          _isSwiping = false;
         });
       } else {
         setState(() {
@@ -450,22 +477,38 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
     }
   }
 
-  void _swipeActionCancel() {
+  void _swipeActionCancel() async {
     if(!_isFlipped && _isSwipable) {
-      double _halfPi = math.pi / 2;
-      if(-_halfPi <= _quizCardRotationX && _quizCardRotationX <= _halfPi) {
-        _animateSwipe(_quizCardRotationX, 0.0);
-        setState(() => _quizCardRotationX = 0.0);
-      } else {
-        if(_quizCardRotationX < 0) {
-          _animateSwipe(_quizCardRotationX, -math.pi);
-          setState(() => _quizCardRotationX = -math.pi);
+      if(_hasSeenAnswer) {
+        setState(() {
+          _hasSeenAnswer = false;
+          _disableChoices = true;
+        });
+        if(_quizCardRotate < 0.01 || _quizCardRotate > 0.99) {
+          setState(() => _quizCardRotate = _quizCardRotate < 0.01? 0.0 : 1.0);
+          _revealedAnswer();
         } else {
-          _animateSwipe(_quizCardRotationX, math.pi);
-          setState(() => _quizCardRotationX = math.pi);
+          _revealedAnswer(delay: swipeUpSnapDuration);
+          if(_quizCardRotate < 0.5) {
+            _animateSwipe(_quizCardRotate, 0.0);
+            setState(() {
+              _quizCardSwipeUpY = 0.0;
+              _quizCardRotate = 0.0;
+            });
+          } else {
+            _animateSwipe(_quizCardRotate, 1.0);
+            setState(() {
+              _quizCardSwipeUpY = 1.0;
+              _quizCardRotate = 1.0;
+            });
+          }
         }
-        _revealedAnswer();
-        setState(() => _isFlipped = true);
+      } else if(0.25 <= _quizCardRotate && _quizCardRotate <= 0.75) {
+        _animateSwipe(_quizCardRotate, 0.5);
+        setState(() {
+          _quizCardSwipeUpY = 0.5;
+          _quizCardRotate = 0.5;
+        });
       }
     } else if(_showAnswer && !_resetChoices ) {
       if(_quizCardSwipeLeftX <= swipeLeftThreshold) {
@@ -545,12 +588,12 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
                   type: _choice1 == _answer? ChoiceButton.right : ChoiceButton.wrong,
                   onTap: _choice1 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
+                  justPressed: _justPressed,
                   disable: _disableChoices,
                   reset: _resetChoices,
                   resetDone: resetDone,
                   resetDuration: _resetDuration,
                   showAnswerDuration: _showAnswerDuration,
-                  isSwiping: _isSwiping,
                 ),
               ),
               Container(
@@ -562,12 +605,12 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
                   type:  _choice2 == _answer? ChoiceButton.right : ChoiceButton.wrong,
                   onTap: _choice2 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
+                  justPressed: _justPressed,
                   disable: _disableChoices,
                   reset: _resetChoices,
                   resetDone: resetDone,
                   resetDuration: _resetDuration,
                   showAnswerDuration: _showAnswerDuration,
-                  isSwiping: _isSwiping,
                 ),
               ),
             ],
@@ -583,12 +626,12 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
                   type:  _choice3 == _answer? ChoiceButton.right : ChoiceButton.wrong,
                   onTap: _choice3 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
+                  justPressed: _justPressed,
                   disable: _disableChoices,
                   reset: _resetChoices,
                   resetDone: resetDone,
                   resetDuration: _resetDuration,
                   showAnswerDuration: _showAnswerDuration,
-                  isSwiping: _isSwiping,
                 ),
               ),
               Container(
@@ -600,12 +643,12 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
                   type:  _choice4 == _answer? ChoiceButton.right : ChoiceButton.wrong,
                   onTap: _choice4 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
+                  justPressed: _justPressed,
                   disable: _disableChoices,
                   reset: _resetChoices,
                   resetDone: resetDone,
                   resetDuration: _resetDuration,
                   showAnswerDuration: _showAnswerDuration,
-                  isSwiping: _isSwiping,
                 ),
               ),
             ],
@@ -616,7 +659,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
 
     Matrix4 _matrix = Matrix4.identity()
       ..setEntry(3, 2, 0.001)
-      ..rotateX(_isSwipeDownSnapping? _swipeAnimation.value : _quizCardRotationX);
+      ..rotateX(_getRotation(_isSwipeDownSnapping? _swipeAnimation.value : _quizCardRotate));
 
     double _heightToCardStackBottom = MediaQuery.of(context).size.height - verticalScreenPadding - ((quizChoiceButtonHeight + quizChoiceButtonElevation) * 2) - choiceSpacing - cardQuizStackBottomPadding;
     double _heightToCardStackTop = _heightToCardStackBottom - _quizCardWidth - quizCardStackTopSpace;
@@ -675,7 +718,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
                     child: _QuizCardSingle(
                       kulitan: 'pieN',
                       answer: 'píng',
-                      progress: 0.9,
+                      progress: _currentProgress / maxQuizCharacterProgress,
                       stackNumber: 1,
                       isSwipable: true,
                       showAnswer: _showBackCard,

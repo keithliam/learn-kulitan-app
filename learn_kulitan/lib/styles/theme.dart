@@ -33,9 +33,9 @@ const quizChoiceButtonHeight = 62.0;
 const quizCardStackTopSpace = 32.0;
 
 // Sensitivity
-const swipeDownSensitivity = 0.01;
+const swipeDownSensitivity = 1.0;
 const swipeLeftSensitivity = 1.0;
-const swipeLeftThreshold = 0.20;
+const swipeLeftThreshold = 0.25;
 const swipeLeftMax = 350.0;
 
 // Velocities
@@ -44,14 +44,16 @@ const quizCardMoveLeftVelocity = 1.0;
 const quizCardRotateVelocity = 1.0;
 
 // Curves
-const quizCardSwipeUpCurve = Curves.decelerate;
+const quizCardSwipeUpCurve = Curves.easeInOut;  // 0.5 -> 0.5 curves only
+const quizCardAutoSwipeUpCurve = Curves.decelerate;
 const quizCardSwipeLeftCurve = Curves.fastOutSlowIn;
 
 // Durations
-const swipeUpSnapDuration = 500;
-const autoSwipeUpDuration = 750;
+const swipeUpSnapDuration = 250;
+const autoSwipeUpDuration = 500;
 const revealAnswerOffset = 250;
 const swipeLeftSnapDuration = 250;
+const updateQuizCardProgressOffset = 250;
 
 // Progress Totals
 const maxQuizCharacterProgress = 10;
