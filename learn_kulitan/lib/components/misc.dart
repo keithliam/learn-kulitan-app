@@ -38,12 +38,12 @@ class _CircularProgressBarPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint area = Paint()
-      ..color = whiteColor
+      ..color = circularProgressBackgroundColor
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..strokeWidth = 10.0;
     Paint bar = Paint()
-      ..color = accentColor
+      ..color = circularProgressForegroundColor
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..strokeWidth = 10.0;
@@ -155,12 +155,12 @@ class _ProgressBarState extends State<ProgressBar>
       child: Container(
         height: widget.height,
         alignment: Alignment.centerLeft,
-        color: snowColor,
+        color: linearProgressBackgroundColor,
         child: Container(
           width: (MediaQuery.of(context).size.width - widget.offset) * _animation.value,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100.0),
-            color: accentColor,
+            color: linearProgressBackgroundColor,
           ),
         )
       ),
@@ -190,7 +190,7 @@ class _ProgressBarState extends State<ProgressBar>
                 child: Divider(
                   height: 5.0,
                   width: 64.0,
-                  color: whiteColor,
+                  color: circularProgressTextColor,
                 ),
               ),
               Container(
@@ -278,7 +278,7 @@ class _CustomCardState extends State<CustomCard> {
         borderRadius: BorderRadius.circular(30.0),
         boxShadow: widget.hasShadow? [
           BoxShadow(
-            color: Color(0x21000000),
+            color: customCardShadowColor,
             blurRadius: 30.0,
             offset: Offset(0.0, 20.0),
           ),

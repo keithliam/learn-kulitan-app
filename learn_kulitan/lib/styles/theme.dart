@@ -10,6 +10,19 @@ const blueColor = Color(0xFFDBF3FF);
 const lightBlueColor = Color(0xFFEDFAFF);
 const whiteColor = Color(0xFFFFFFFF);
 
+const backgroundColor = primaryColor;
+const headerNavigationColor = whiteColor;
+const circularProgressTextColor = whiteColor;
+const circularProgressForegroundColor = accentColor;
+const circularProgressBackgroundColor = whiteColor;
+const linearProgressForegroundColor = accentColor;
+const linearProgressBackgroundColor = snowColor;
+
+const customCardShadowColor = Color(0x21000000);
+const customButtonDefaultColor = whiteColor;
+const customButtonShadowColor = Color(0x22000000);
+const iconButtonDefaultColor = whiteColor;
+
 const cardQuizColor1 = whiteColor;
 const cardQuizColor2 = lightBlueColor;
 const cardQuizColor3 = blueColor;

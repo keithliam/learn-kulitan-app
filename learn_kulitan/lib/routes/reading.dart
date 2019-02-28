@@ -542,7 +542,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
         left: IconButtonNew(
           icon: Icons.arrow_back_ios,
           iconSize: headerIconSize,
-          color: whiteColor,
+          color: headerNavigationColor,
           onPressed: () => Navigator.pushNamed(context, '/'),
         ),
         middle: Text(
@@ -553,7 +553,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
         right: IconButtonNew(
           icon: Icons.settings,
           iconSize: headerIconSize,
-          color: whiteColor,
+          color: headerNavigationColor,
           onPressed: null,
         ),
       ),
@@ -734,7 +734,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
     );
 
     return Material(
-      color: primaryColor,
+      color: backgroundColor,
       child: Stack(
         children: <Widget>[
           Column(
