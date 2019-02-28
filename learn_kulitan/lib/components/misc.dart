@@ -64,7 +64,7 @@ class Divider extends StatelessWidget {
   Divider({
     @required this.height,
     @required this.color,
-    this.width: -1,
+    this.width = -1,
   });
 
   final double width;
@@ -219,8 +219,8 @@ class _ProgressBarState extends State<ProgressBar>
 class StaticHeader extends StatefulWidget {
   StaticHeader({
     this.left,
-    this.middle: const Spacer(),
-    this.right: const Spacer(),
+    this.middle = const Spacer(),
+    this.right = const Spacer(),
   });
 
   final Widget left;
@@ -250,7 +250,7 @@ class CustomCard extends StatefulWidget {
   CustomCard({
     @required this.color,
     @required this.child,
-    this.hasShadow: false,
+    this.hasShadow = false,
     this.padding,
     this.height,
     this.width,

@@ -10,7 +10,7 @@ class HomeButton extends StatelessWidget {
     @required this.route,
     this.kulitanText,
     this.kulitanTextCustom,
-    this.progress: -1,
+    this.progress = -1,
   }) : assert(kulitanText != null || kulitanTextCustom != null,
             'Must provide either kultianText or kulitanTextCustom');
 

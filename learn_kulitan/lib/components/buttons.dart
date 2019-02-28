@@ -6,12 +6,12 @@ class CustomButton extends StatefulWidget {
     @required this.onPressed,
     @required this.child,
     @required this.height,
-    this.color: whiteColor,
-    this.borderRadius: 0.0,
-    this.elevation: 0.0,
-    this.padding: const EdgeInsets.all(0.0),
-    this.marginTop: 0.0,
-    this.pressDelay: 250,
+    this.color = whiteColor,
+    this.borderRadius = 0.0,
+    this.elevation = 0.0,
+    this.padding = const EdgeInsets.all(0.0),
+    this.marginTop = 0.0,
+    this.pressDelay = 250,
     this.justPressed
   });
 
@@ -121,7 +121,7 @@ class IconButtonNew extends StatefulWidget {
     @required this.icon,
     @required this.onPressed,
     @required this.iconSize,
-    this.color: whiteColor,
+    this.color = whiteColor,
   });
 
   final IconData icon;
