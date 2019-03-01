@@ -462,7 +462,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
           _showAnswer = false;
           _resetChoices = true;
         });
-      } else if(_slideValue < 0) {
+      } else if(_slideValue < 0.0) {
         setState(() {
           _quizCardSwipeLeftX = 0.0;
           _quizCardTransform = 0.0;
@@ -721,7 +721,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
                       stackNumber: 1,
                       isSwipable: true,
                       showAnswer: _showBackCard,
-                      width: _quizCardWidth * 1,
+                      width: _quizCardWidth * 1.0,
                       originalWidth: _quizCardWidth,
                     ), 
                   ),
