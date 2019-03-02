@@ -72,6 +72,7 @@ const updateQuizCardProgressOffset = 250;
 
 // Progress Totals
 const maxQuizCharacterProgress = 10;
+const totalCharacterCount = 107;
 
 // Kulitan Fonts
 const kulitanHome = TextStyle(

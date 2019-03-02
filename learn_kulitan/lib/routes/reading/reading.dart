@@ -12,16 +12,14 @@ class ReadingPage extends StatefulWidget {
 }
 
 class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStateMixin {
-  int _progressNumerator;
-  int _progressDenominator;
-  double _overallProgress;
-
+  int _overallProgressCount;
+  double _currentProgress;
   String _answer;
   String _choice1;
   String _choice2;
   String _choice3;
   String _choice4;
-  double _currentProgress;
+
   bool _showAnswer = false;
   bool _disableChoices = false;
   bool _resetChoices = false;
@@ -139,9 +137,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
   void initState() {
     super.initState();
     setState(() {
-      _progressNumerator = 78;
-      _progressDenominator = 107;
-      _overallProgress = _progressNumerator / _progressDenominator;
+      _overallProgressCount = 78;
       _answer = 'píng';
       List<String> _choices = [
         'píng',
@@ -322,8 +318,8 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
           vertical: 15.0,
         ),
         child: CircularProgressBar(
-          numerator: _progressNumerator,
-          denominator: _progressDenominator,
+          numerator: _overallProgressCount,
+          denominator: totalCharacterCount,
         ),
       ),
     );
