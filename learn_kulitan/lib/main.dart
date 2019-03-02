@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import './components/misc.dart';
-import './routes/home.dart';
-import './routes/reading.dart';
+import './components/misc/SlideLeftRoute.dart';
+import './routes/home/home.dart';
+import './routes/reading/reading.dart';
 
 void main() => runApp(MyApp());
 

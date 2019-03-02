@@ -1,252 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import '../styles/theme.dart';
-import '../components/buttons.dart';
-import '../components/misc.dart';
-
-class _ChoiceButton extends StatefulWidget {
-  _ChoiceButton({
-    @required this.text,
-    @required this.onTap,
-    @required this.justPressed,
-    @required this.disable,
-    this.type = _ChoiceButton.wrong,
-    this.showAnswer = false,
-    this.reset = false,
-    this.resetDone,
-    this.resetDuration,
-    this.showAnswerDuration,
-  });
-
-  static const int right = 0;
-  static const int wrong = 1;
-
-  final String text;
-  final VoidCallback onTap;
-  final VoidCallback justPressed;
-  final bool disable;
-  final int type;
-  final bool showAnswer;
-  final bool reset;
-  final VoidCallback resetDone;
-  final int resetDuration;
-  final int showAnswerDuration;
-
-  @override
-  _ChoiceButtonState createState() => _ChoiceButtonState();
-}
-
-class _ChoiceButtonState extends State<_ChoiceButton> with TickerProviderStateMixin {
-  Animation<Color> _animation;
-  AnimationController _controller;
-  ColorTween _tween;
-
-  Animation<Color> _animationText;
-  AnimationController _controllerText;
-  ColorTween _tweenText;
-  
-  TextStyle _textStyle;
-  bool _isTapped = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _textStyle = textQuizChoice;
-    _controller = AnimationController(duration: Duration(milliseconds: widget.showAnswerDuration), vsync: this);
-    _tween = ColorTween(begin: cardChoicesColor, end: widget.type == _ChoiceButton.right? cardChoicesRightColor : cardChoicesWrongColor);
-    _animation = _tween.animate(_controller)
-      ..addListener(() {
-        setState(() {});
-      });
-
-    _controllerText = AnimationController(duration: Duration(milliseconds: widget.showAnswerDuration), vsync: this);
-    _tweenText = ColorTween(begin: textQuizChoice.color, end: textQuizChoiceWrong.color);
-    _animationText = _tweenText.animate(_controllerText)
-      ..addListener(() {
-        setState(() {});
-      });
-  }
-
-  void _animateColor(Color fromColor, Color toColor, {bool isReset: false}) {
-    final int _delay = isReset? widget.resetDuration : widget.showAnswerDuration;
-    _tween
-      ..begin = fromColor
-      ..end = toColor;
-    _controller
-      ..value = 0.0
-      ..duration = Duration(milliseconds: _delay)
-      ..forward();
-    if(fromColor == cardChoicesWrongColor || toColor == cardChoicesWrongColor) {
-      fromColor = fromColor == cardChoicesWrongColor? textQuizChoiceWrong.color : textQuizChoice.color;
-      toColor = toColor == cardChoicesWrongColor? textQuizChoiceWrong.color : textQuizChoice.color;
-      _tweenText
-        ..begin = fromColor
-        ..end = toColor;
-      _controllerText
-        ..value = 0.0
-        ..duration = Duration(milliseconds: _delay)
-        ..forward();
-    }
-  }
-
-  void _delayColorReset() async {
-    await Future.delayed(Duration(milliseconds: widget.showAnswerDuration));
-    _tween
-      ..begin = cardChoicesRightColor;
-    _controller
-      ..reset();
-  }
-
-  @override
-  void didUpdateWidget(_ChoiceButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if(widget.text != oldWidget.text || widget.type != oldWidget.type || widget.onTap != oldWidget.onTap || widget.justPressed != oldWidget.justPressed || widget.showAnswer != oldWidget.showAnswer || widget.disable != oldWidget.disable || widget.reset != oldWidget.reset || widget.resetDone != oldWidget.resetDone || widget.resetDuration != oldWidget.resetDuration || widget.showAnswerDuration != oldWidget.showAnswerDuration) {
-      if(widget.showAnswer && widget.type == _ChoiceButton.right && !_isTapped) {
-        _animateColor(cardChoicesColor, cardChoicesRightColor);
-        _delayColorReset();
-      }
-      if(widget.reset && ((_tween.begin == whiteColor && _controller.value != 0.0) || (_tween.begin == cardChoicesRightColor && _controller.value == 0.0))) {
-        _isTapped = false;
-        final Color _fromColor = widget.type == _ChoiceButton.right? cardChoicesRightColor : cardChoicesWrongColor;
-        _animateColor(_fromColor, cardChoicesColor, isReset: true);
-        widget.resetDone();
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    _controllerText.dispose();
-    super.dispose();
-  }
-
-  void tapped() {
-    if(!_isTapped) {
-      setState(() {
-        _isTapped = true;
-      });
-      Color _toColor = widget.type == _ChoiceButton.wrong? cardChoicesWrongColor : cardChoicesRightColor;
-      _animateColor(cardChoicesColor, _toColor);
-      widget.onTap();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomButton(
-      height: quizChoiceButtonHeight,
-      color: _animation.value,
-      onPressed: widget.disable? null : tapped,
-      elevation: quizChoiceButtonElevation,
-      borderRadius: 15.0,
-      padding: const EdgeInsets.all(12.0),
-      pressDelay: widget.showAnswerDuration,
-      justPressed: widget.justPressed,
-      child: Center(
-        child: AnimatedOpacity(
-          opacity: widget.reset? 0.0 : 1.0,
-          duration: Duration(milliseconds: widget.resetDuration),
-          curve: customButtonPressCurve,
-          child: Text(
-            '${widget.text}',
-            style: _textStyle.copyWith(
-              color: widget.type == _ChoiceButton.wrong? _animationText.value : textQuizChoice.color
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _QuizCardSingle extends StatefulWidget {
-  _QuizCardSingle({
-    @required this.kulitan,
-    @required this.answer,
-    @required this.progress,
-    @required this.stackNumber,
-    @required this.isSwipable,
-    @required this.showAnswer,
-    @required this.width,
-    @required this.originalWidth,
-  });
-
-  final String kulitan;
-  final String answer;
-  final double progress;
-  final int stackNumber;
-  final bool isSwipable;
-  final bool showAnswer;
-  final double width;
-  final double originalWidth;
-
-  @override
-  _QuizCardSingleState createState() => _QuizCardSingleState();
-}
-
-class _QuizCardSingleState extends State<_QuizCardSingle> {
-  @override
-  Widget build(BuildContext context) {
-    Widget _kulitan = Expanded(
-      child: Center(
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            widget.kulitan,
-            style: kulitanQuiz,
-          ),
-        ),
-      ),
-    );
-
-    Widget _progressBar = Padding(
-      padding: const EdgeInsets.only(top: 10.0),
-      child: ProgressBar(
-        type: ProgressBar.linear,
-        offset: 128.0,
-        progress: widget.progress,
-      ),
-    );
-
-    List _cardContents = <Widget>[
-      _kulitan,
-      _progressBar,
-    ];
-
-    if(widget.showAnswer)
-      _cardContents.insert(1,
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 15.0),
-            child: Text(
-              widget.answer,
-              style: textQuizAnswer,
-            ),
-          ),
-        )
-      );
-    else if(_cardContents.length == 3)
-      _cardContents.removeAt(1);
-
-    return CustomCard(
-      color: widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 :cardQuizColor3,
-      height: widget.width,
-      width: widget.width,
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: cardQuizHorizontalPadding, vertical: cardQuizVerticalPadding),
-          height: widget.originalWidth,
-          width: widget.originalWidth,
-          child: Column(
-            children: _cardContents,
-          ),
-        ),
-      ),
-    );
-  }
-}
+import '../../styles/theme.dart';
+import '../../components/buttons/IconButtonNew.dart';
+import '../../components/misc/StaticHeader.dart';
+import '../../components/misc/CircularProgressBar.dart';
+import './components.dart';
 
 class ReadingPage extends StatefulWidget {
   @override
@@ -408,9 +166,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
   void _getQuizCardsSize() {
     final RenderBox _box = _quizCardsKey.currentContext.findRenderObject();
     double _width = _box.size.width - (horizontalScreenPadding * 2);
-    setState(() {
-      _quizCardWidth = _width;
-    });
+    setState(() => _quizCardWidth = _width);
   }
 
   void resetDone() async {
@@ -565,10 +321,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
           horizontal: horizontalScreenPadding,
           vertical: 15.0,
         ),
-        child: ProgressBar(
-          type: ProgressBar.circular,
-          offset: 150.0,
-          progress: _overallProgress,
+        child: CircularProgressBar(
           numerator: _progressNumerator,
           denominator: _progressDenominator,
         ),
@@ -582,9 +335,9 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
           Row(
             children: <Widget>[
               Expanded(
-                child: _ChoiceButton(
+                child: ChoiceButton(
                   text: _choice1,
-                  type: _choice1 == _answer? _ChoiceButton.right : _ChoiceButton.wrong,
+                  type: _choice1 == _answer? ChoiceButton.right : ChoiceButton.wrong,
                   onTap: _choice1 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
                   justPressed: _justPressed,
@@ -599,9 +352,9 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
                 width: choiceSpacing,
               ),
               Expanded(
-                child: _ChoiceButton(
+                child: ChoiceButton(
                   text: _choice2,
-                  type:  _choice2 == _answer? _ChoiceButton.right : _ChoiceButton.wrong,
+                  type:  _choice2 == _answer? ChoiceButton.right : ChoiceButton.wrong,
                   onTap: _choice2 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
                   justPressed: _justPressed,
@@ -620,9 +373,9 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
           Row(
             children: <Widget>[
               Expanded(
-                child: _ChoiceButton(
+                child: ChoiceButton(
                   text: _choice3,
-                  type:  _choice3 == _answer? _ChoiceButton.right : _ChoiceButton.wrong,
+                  type:  _choice3 == _answer? ChoiceButton.right : ChoiceButton.wrong,
                   onTap: _choice3 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
                   justPressed: _justPressed,
@@ -637,9 +390,9 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
                 width: choiceSpacing,
               ),
               Expanded(
-                child: _ChoiceButton(
+                child: ChoiceButton(
                   text: _choice4,
-                  type:  _choice4 == _answer? _ChoiceButton.right : _ChoiceButton.wrong,
+                  type:  _choice4 == _answer? ChoiceButton.right : ChoiceButton.wrong,
                   onTap: _choice4 == _answer? _correctAnswer : _wrongAnswer,
                   showAnswer: _showAnswer,
                   justPressed: _justPressed,
@@ -673,7 +426,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
           Positioned(
             top: _heightToCardStackTop + 0.0,
             left: horizontalScreenPadding + (_quizCardWidth * 0.1),
-            child: _QuizCardSingle(
+            child: QuizCard(
               kulitan: 'pieN',
               answer: 'píng',
               progress: 0.9,
@@ -687,7 +440,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
           Positioned(
             top: _heightToCardStackTop + (quizCardStackTopSpace / 2),
             left: horizontalScreenPadding + (_quizCardWidth * 0.05),
-            child: _QuizCardSingle(
+            child: QuizCard(
               kulitan: 'pieN',
               answer: 'píng',
               progress: 0.9,
@@ -714,7 +467,7 @@ class _ReadingPageState extends State<ReadingPage> with SingleTickerProviderStat
                   child: Transform(
                     transform: _showBackCard? Matrix4.inverted(_matrix) : Matrix4.identity(),
                     alignment: FractionalOffset.center,
-                    child: _QuizCardSingle(
+                    child: QuizCard(
                       kulitan: 'pieN',
                       answer: 'píng',
                       progress: _currentProgress / maxQuizCharacterProgress,
