@@ -160,7 +160,7 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
   }
 }
 
-class QuizCard extends StatefulWidget {
+class QuizCard extends StatelessWidget {
   QuizCard({
     @required this.kulitan,
     @required this.answer,
@@ -182,18 +182,13 @@ class QuizCard extends StatefulWidget {
   final double originalWidth;
 
   @override
-  _QuizCardState createState() => _QuizCardState();
-}
-
-class _QuizCardState extends State<QuizCard> {
-  @override
   Widget build(BuildContext context) {
     Widget _kulitan = Expanded(
       child: Center(
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            widget.kulitan,
+            this.kulitan,
             style: kulitanQuiz,
           ),
         ),
@@ -203,7 +198,7 @@ class _QuizCardState extends State<QuizCard> {
     Widget _progressBar = Padding(
       padding: const EdgeInsets.only(top: 10.0),
       child: LinearProgressBar(
-        progress: widget.progress,
+        progress: this.progress,
       ),
     );
 
@@ -212,13 +207,13 @@ class _QuizCardState extends State<QuizCard> {
       _progressBar,
     ];
 
-    if(widget.showAnswer)
+    if(this.showAnswer)
       _cardContents.insert(1,
         Center(
           child: Padding(
             padding: const EdgeInsets.only(bottom: 15.0),
             child: Text(
-              widget.answer,
+              this.answer,
               style: textQuizAnswer,
             ),
           ),
@@ -228,15 +223,15 @@ class _QuizCardState extends State<QuizCard> {
       _cardContents.removeAt(1);
 
     return CustomCard(
-      color: widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 :cardQuizColor3,
-      height: widget.width,
-      width: widget.width,
+      color: this.stackNumber == 1? cardQuizColor1 : this.stackNumber == 2? cardQuizColor2 :cardQuizColor3,
+      height: this.width,
+      width: this.width,
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: cardQuizHorizontalPadding, vertical: cardQuizVerticalPadding),
-          height: widget.originalWidth,
-          width: widget.originalWidth,
+          height: this.originalWidth,
+          width: this.originalWidth,
           child: Column(
             children: _cardContents,
           ),
