@@ -22,14 +22,13 @@ class _LinearProgressBarState extends State<LinearProgressBar>
   Tween<double> _tween;
   Animation _curveAnimation;
 
-  final int _initDuration = 1000;
   double _backgroundWidth = 10.0;
   GlobalKey _progressBackgroundKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(duration: Duration(milliseconds: _initDuration), vsync: this);
+    _controller = AnimationController(duration: Duration(milliseconds: linearProgressBarChangeDuration), vsync: this);
     _curveAnimation = CurvedAnimation(parent: _controller, curve: progressBarCurve);
     _tween = Tween<double>(begin: 0.0, end: widget.progress);
     _animation = _tween.animate(_curveAnimation)

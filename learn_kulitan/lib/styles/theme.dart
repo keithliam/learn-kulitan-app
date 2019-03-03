@@ -64,10 +64,12 @@ const quizCardAutoSwipeDownCurve = Curves.decelerate;
 const quizCardSwipeLeftCurve = Curves.fastOutSlowIn;
 
 // Durations
+const linearProgressBarChangeDuration = 1000;
 const swipeDownSnapDuration = 250;
 const autoSwipeDownDuration = 500;
 const revealAnswerOffset = 250;
 const swipeLeftSnapDuration = 250;
+const forwardQuizCardsDuration = 500;
 const updateQuizCardProgressOffset = 250;
 
 // Progress Totals
