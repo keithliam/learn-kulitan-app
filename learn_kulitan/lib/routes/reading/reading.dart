@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:math';
 import '../../styles/theme.dart';
 import '../../components/buttons/IconButtonNew.dart';
 import '../../components/misc/StaticHeader.dart';
@@ -19,12 +20,48 @@ class ReadingPage extends StatefulWidget {
 
 class _ReadingPageState extends State<ReadingPage> {
   int _overallProgressCount;
-  double _currentProgress;
-  String _answer;
-  String _choice1;
-  String _choice2;
-  String _choice3;
-  String _choice4;
+  List<Map<String, dynamic>> _cards = [
+    {
+      'kulitan': 'pieN',
+      'answer': 'píng',
+      'progress': 8,
+      'stackNumber': 1,
+    },
+    {
+      'kulitan': 'du',
+      'answer': 'du',
+      'progress': 4,
+      'stackNumber': 2,
+    },
+    {
+      'kulitan': 'pieN',
+      'answer': 'píng',
+      'progress': 5,
+      'stackNumber': 3,
+    }
+  ];
+  List<Map<String, dynamic>> _choices = [
+    {
+      'text': 'píng',
+      'type': ChoiceButton.right,
+      'onTap': null,
+    },
+    {
+      'text': 'dang',
+      'type': ChoiceButton.wrong,
+      'onTap': null,
+    },
+    {
+      'text': 'rong',
+      'type': ChoiceButton.wrong,
+      'onTap': null,
+    },
+    {
+      'text': 'sung',
+      'type': ChoiceButton.wrong,
+      'onTap': null,
+    },
+  ];
 
   bool _showAnswer = false;
   bool _disableChoices = false;
@@ -40,12 +77,13 @@ class _ReadingPageState extends State<ReadingPage> {
  
 
   void _justPressed() {
-    _disableSwipeController.sink.add(true);
+    _disableSwipeStreamController.sink.add(true);
     setState(() => _disableChoices = true);
   }
 
   final _flipStreamController = StreamController.broadcast();
-  final _disableSwipeController = StreamController.broadcast();
+  final _disableSwipeStreamController = StreamController.broadcast();
+  final _forwardCardStreamController = StreamController.broadcast();
   
   void _correctAnswer() async {
     await Future.delayed(Duration(milliseconds: _showAnswerDuration + revealAnswerOffset));
@@ -53,10 +91,10 @@ class _ReadingPageState extends State<ReadingPage> {
     await Future.delayed(Duration(milliseconds: autoSwipeDownDuration));
     setState(() => _showAnswer = true);
     await Future.delayed(Duration(milliseconds: updateQuizCardProgressOffset));
-    setState(() => _currentProgress = _currentProgress < maxQuizCharacterProgress? _currentProgress + 1 : _currentProgress);
+    setState(() => _cards[0]['progress'] = _cards[0]['progress'] < maxQuizCharacterProgress? _cards[0]['progress'] + 1 : _cards[0]['progress']);
     await Future.delayed(Duration(milliseconds: linearProgressBarChangeDuration));
-    _disableSwipeController.sink.add(false);
-    // TODO : reset()
+    _disableSwipeStreamController.sink.add(false);
+    // TODO : updateDatabase();
   }
   void _wrongAnswer() async {
     await Future.delayed(Duration(milliseconds: _showAnswerDuration + revealAnswerOffset));
@@ -64,22 +102,62 @@ class _ReadingPageState extends State<ReadingPage> {
     await Future.delayed(Duration(milliseconds: autoSwipeDownDuration + revealAnswerOffset));
     setState(() => _showAnswer = true);
     await Future.delayed(Duration(milliseconds: _showAnswerDuration));
-    setState(() => _currentProgress = _currentProgress > 0? _currentProgress - 1 : _currentProgress);
+    setState(() => _cards[0]['progress'] = _cards[0]['progress'] > 0? _cards[0]['progress'] - 1 : _cards[0]['progress']);
     await Future.delayed(Duration(milliseconds: linearProgressBarChangeDuration));
-    _disableSwipeController.sink.add(false);
-    // TODO : reset()
+    _disableSwipeStreamController.sink.add(false);
+    // TODO : updateDatabase();
   }
   void _revealAnswer({int delay: 0}) async {
-    // TODO : reset()
     setState(() => _disableChoices = true);
     await Future.delayed(Duration(milliseconds: delay + revealAnswerOffset));
     setState(() => _showAnswer = true);
   }
   void _swipedLeft() {
+    _forwardCardStreamController.sink.add(null);
     setState(() {
       _showAnswer = false;
       _resetChoices = true;
+      _cards[0] = _cards[1];
+      _cards[1] = _cards[2];
+      _cards[2] = {
+        'kulitan': 'pieN',
+        'answer': 'píng',
+        'progress': 9,
+        'stackNumber': 4,
+      };
     });
+    _getNewChoices();
+    setState(() {
+      _cards[0]['stackNumber'] = 1;
+      _cards[1]['stackNumber'] = 2;
+      _cards[2]['stackNumber'] = 3;
+    });
+  }
+  
+  void _getNewChoices() {
+    setState(() => _choices[0] = {
+      'text': _cards[0]['answer'],
+      'type': ChoiceButton.right,
+      'onTap': _correctAnswer,
+    });
+    final List<String> _kulitanKeys = kulitanSyllables.keys.toList();
+    final int _listLength = _kulitanKeys.length;
+    String _roman = '';
+    String _lastChar = '';
+    Random _random = Random();
+    int _count = 0;
+    while(_count < 3) {
+      _roman = _kulitanKeys[_random.nextInt(_listLength) - 1];
+      _lastChar = _roman.substring(_roman.length - 1, _roman.length);
+      if(_lastChar == 'â' || _lastChar == 'î' || _lastChar == 'û' || _roman == _choices[0]['text'] || (_count > 0 && _roman == _choices[1]['text']) || (_count > 1 && _roman == _choices[2]['text']))
+        continue;  
+      _choices[++_count] = {
+        'text': _roman,
+        'type': ChoiceButton.wrong,
+        'onTap': _wrongAnswer,
+      };
+    }
+    _choices.shuffle();
   }
 
   @override
@@ -87,18 +165,12 @@ class _ReadingPageState extends State<ReadingPage> {
     super.initState();
     setState(() {
       _overallProgressCount = 78;
-      _answer = 'píng';
-      List<String> _choices = [
-        'píng',
-        'pong',
-        'ka',
-        'ku',
-      ]..shuffle();
-      _choice1 = _choices[0];
-      _choice2 = _choices[1];
-      _choice3 = _choices[2];
-      _choice4 = _choices[3];
-      _currentProgress = 8;
+      // TODO: add saved choices
+      _choices[0]['onTap'] = _correctAnswer;  // remove
+      _choices[1]['onTap'] = _wrongAnswer;    // remove
+      _choices[2]['onTap'] = _wrongAnswer;    // remove
+      _choices[3]['onTap'] = _wrongAnswer;    // remove
+      _choices.shuffle();
     });
     WidgetsBinding.instance.addPostFrameCallback((_) => _getQuizCardsSize()); 
   }
@@ -106,7 +178,8 @@ class _ReadingPageState extends State<ReadingPage> {
   @override
   void dispose() {
     _flipStreamController.close();
-    _disableSwipeController.close();
+    _disableSwipeStreamController.close();
+    _forwardCardStreamController.close();
     super.dispose();
   }
 
@@ -123,21 +196,10 @@ class _ReadingPageState extends State<ReadingPage> {
 
   void resetDone() async {
     await Future.delayed(Duration(milliseconds: _resetDuration));
-    _disableSwipeController.sink.add(false);
+    _disableSwipeStreamController.sink.add(false);
     setState(() {
       _resetChoices = false;
       _disableChoices = false;
-      _answer = 'du';
-      List<String> _choices = [
-        'ru',
-        'du',
-        'pí',
-        'mu',
-      ]..shuffle();
-      _choice1 = _choices[0];
-      _choice2 = _choices[1];
-      _choice3 = _choices[2];
-      _choice4 = _choices[3];
     });
   }
 
@@ -187,9 +249,9 @@ class _ReadingPageState extends State<ReadingPage> {
             children: <Widget>[
               Expanded(
                 child: ChoiceButton(
-                  text: _choice1,
-                  type: _choice1 == _answer? ChoiceButton.right : ChoiceButton.wrong,
-                  onTap: _choice1 == _answer? _correctAnswer : _wrongAnswer,
+                  text: _choices[0]['text'],
+                  type: _choices[0]['type'],
+                  onTap: _choices[0]['onTap'],
                   showAnswer: _showAnswer,
                   justPressed: _justPressed,
                   disable: _disableChoices,
@@ -204,9 +266,9 @@ class _ReadingPageState extends State<ReadingPage> {
               ),
               Expanded(
                 child: ChoiceButton(
-                  text: _choice2,
-                  type:  _choice2 == _answer? ChoiceButton.right : ChoiceButton.wrong,
-                  onTap: _choice2 == _answer? _correctAnswer : _wrongAnswer,
+                  text: _choices[1]['text'],
+                  type: _choices[1]['type'],
+                  onTap: _choices[1]['onTap'],
                   showAnswer: _showAnswer,
                   justPressed: _justPressed,
                   disable: _disableChoices,
@@ -225,9 +287,9 @@ class _ReadingPageState extends State<ReadingPage> {
             children: <Widget>[
               Expanded(
                 child: ChoiceButton(
-                  text: _choice3,
-                  type:  _choice3 == _answer? ChoiceButton.right : ChoiceButton.wrong,
-                  onTap: _choice3 == _answer? _correctAnswer : _wrongAnswer,
+                  text: _choices[2]['text'],
+                  type: _choices[2]['type'],
+                  onTap: _choices[2]['onTap'],
                   showAnswer: _showAnswer,
                   justPressed: _justPressed,
                   disable: _disableChoices,
@@ -242,9 +304,9 @@ class _ReadingPageState extends State<ReadingPage> {
               ),
               Expanded(
                 child: ChoiceButton(
-                  text: _choice4,
-                  type:  _choice4 == _answer? ChoiceButton.right : ChoiceButton.wrong,
-                  onTap: _choice4 == _answer? _correctAnswer : _wrongAnswer,
+                  text: _choices[3]['text'],
+                  type: _choices[3]['type'],
+                  onTap: _choices[3]['onTap'],
                   showAnswer: _showAnswer,
                   justPressed: _justPressed,
                   disable: _disableChoices,
@@ -266,38 +328,41 @@ class _ReadingPageState extends State<ReadingPage> {
         key: _quizCardsKey,
         children: <Widget>[
           AnimatedQuizCard(
-            kulitan: 'pieN',
-            answer: 'píng',
-            progress: 0.67,
-            stackNumber: 3,
+            kulitan: _cards[2]['kulitan'],
+            answer: _cards[2]['answer'],
+            progress: _cards[2]['progress'] / maxQuizCharacterProgress,
+            stackNumber: _cards[2]['stackNumber'],
             stackWidth: _quizCardWidth,
             heightToStackTop: _heightToQuizCardTop,
             flipStream: _flipStreamController.stream,
-            disableSwipeStream: _disableSwipeController.stream,
+            disableSwipeStream: _disableSwipeStreamController.stream,
+            forwardCardStream:_forwardCardStreamController.stream,
             revealAnswer: _revealAnswer,
             swipedLeft: _swipedLeft,
           ),
           AnimatedQuizCard(
-            kulitan: 'pieN',
-            answer: 'píng',
-            progress: 0.35,
-            stackNumber: 2,
+            kulitan: _cards[1]['kulitan'],
+            answer: _cards[1]['answer'],
+            progress: _cards[1]['progress'] / maxQuizCharacterProgress,
+            stackNumber: _cards[1]['stackNumber'],
             stackWidth: _quizCardWidth,
             heightToStackTop: _heightToQuizCardTop,
             flipStream: _flipStreamController.stream,
-            disableSwipeStream: _disableSwipeController.stream,
+            disableSwipeStream: _disableSwipeStreamController.stream,
+            forwardCardStream:_forwardCardStreamController.stream,
             revealAnswer: _revealAnswer,
             swipedLeft: _swipedLeft,
           ),
           AnimatedQuizCard(
-            kulitan: 'pieN',
-            answer: 'píng',
-            progress: _currentProgress / maxQuizCharacterProgress,
-            stackNumber: 1,
+            kulitan: _cards[0]['kulitan'],
+            answer: _cards[0]['answer'],
+            progress: _cards[0]['progress'] / maxQuizCharacterProgress,
+            stackNumber: _cards[0]['stackNumber'],
             stackWidth: _quizCardWidth,
             heightToStackTop: _heightToQuizCardTop,
             flipStream: _flipStreamController.stream,
-            disableSwipeStream: _disableSwipeController.stream,
+            disableSwipeStream: _disableSwipeStreamController.stream,
+            forwardCardStream:_forwardCardStreamController.stream,
             revealAnswer: _revealAnswer,
             swipedLeft: _swipedLeft,
           ),

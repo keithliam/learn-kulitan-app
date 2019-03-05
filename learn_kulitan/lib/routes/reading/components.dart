@@ -251,6 +251,7 @@ class AnimatedQuizCard extends StatefulWidget {
     @required this.heightToStackTop,
     @required this.flipStream,
     @required this.disableSwipeStream,
+    @required this.forwardCardStream,
     @required this.revealAnswer,
     @required this.swipedLeft,
   });
@@ -263,6 +264,7 @@ class AnimatedQuizCard extends StatefulWidget {
   final double heightToStackTop;
   final Stream flipStream;
   final Stream disableSwipeStream;
+  final Stream forwardCardStream;
   final Function revealAnswer;
   final VoidCallback swipedLeft;
 
@@ -273,17 +275,22 @@ class AnimatedQuizCard extends StatefulWidget {
 class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProviderStateMixin {
   StreamSubscription _flipStreamSubscription;
   StreamSubscription _disableSwipeStreamSubscription;
-  Animation<double> _swipeAnimation;
-  AnimationController _swipeController;
-  Tween<double> _swipeTween;
-  Animation _swipeCurveAnimation;
+  StreamSubscription _forwardCardStreamSubscription;
+  Animation<double> _animation;
+  AnimationController _controller;
+  Tween<double> _tween;
+  ColorTween _colorTween;
+  Animation _colorAnimation;
+  Animation _curveAnimation;
   Curve _autoSwipeDownCurve = quizCardAutoSwipeDownCurve;
   Curve _swipeDownCurve = quizCardSwipeDownCurve;
   Curve _swipeLeftCurve = quizCardSwipeLeftCurve;
-  double _quizCardSwipeDownY = 0.5;
-  double _quizCardRotate = 0.5;
-  double _quizCardSwipeLeftX = 0.0;
-  double _quizCardTransform = 0.0;
+  Curve _forwardCurve = quizCardForwardCurve;
+  double _cardSwipeDownY = 0.5;
+  double _cardRotate = 0.5;
+  double _cardSwipeLeftX = 0.0;
+  double _cardTransform = 0.0;
+  double _cardWidth = 50.0;
 
   double _topOffset = 0.0;
   double _leftOffset = horizontalScreenPadding;
@@ -291,6 +298,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   bool _disableSwipe = true;
   bool _isSwipeDownSnapping = false;
   bool _isSwipeLeftSnapping = false;
+  bool _isColorTweening = false;
   bool _isFlipped = false;
   bool _showBackCard = false;
   bool _hasSeenAnswer = false;
@@ -298,18 +306,24 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   @override
   void initState() {
     super.initState();
-    _swipeController = AnimationController(duration: Duration(milliseconds: swipeDownSnapDuration), vsync: this);
-    _swipeCurveAnimation = CurvedAnimation(parent: _swipeController, curve: _swipeDownCurve);
-    _swipeTween = Tween<double>(begin: 0.0, end: 1.0);
-    _swipeAnimation = _swipeTween.animate(_swipeCurveAnimation)
+    _controller = AnimationController(duration: Duration(milliseconds: swipeDownSnapDuration), vsync: this);
+    _curveAnimation = CurvedAnimation(parent: _controller, curve: _swipeDownCurve);
+    _tween = Tween<double>(begin: 0.0, end: 1.0);
+    _colorTween = ColorTween(
+      begin: widget.stackNumber == 1? cardQuizColor2 : cardQuizColor3,
+      end: widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 : cardQuizColor3
+    );
+    _colorAnimation = _colorTween.animate(_curveAnimation);
+    _animation = _tween.animate(_curveAnimation)
       ..addListener(_noneListener);
     _flipStreamSubscription = widget.flipStream.listen((_) {
       if(widget.stackNumber == 1)
-        _animateSwipe(_quizCardRotate, 1.0);
+        _animateSwipe(_cardRotate, 1.0);
     });
     if(widget.stackNumber == 1)
       setState(() => _disableSwipe = false);
     _disableSwipeStreamSubscription = widget.disableSwipeStream.listen((disableSwipe) => _toggleDisableIfTopCard(disableSwipe));
+    _forwardCardStreamSubscription = widget.forwardCardStream.listen((_) => _updatedStackNumber());
   }
 
   void _toggleDisableIfTopCard(bool toggle) {
@@ -318,25 +332,41 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   }
 
   _updatedStackNumber() async {
+    if(widget.stackNumber == 1)
+      setState(() {
+        _isColorTweening = true;
+        _cardSwipeDownY = 0.5;
+        _cardRotate = 0.5;
+        _cardSwipeLeftX = 0.0;
+        _cardTransform = 0.0;
+        _isFlipped = false;
+        _showBackCard = false;
+        _hasSeenAnswer = false;
+      });
+    _animateSwipe(0.0, 1.0, isSwipeDown: false, isForward: true);
     await Future.delayed(Duration(milliseconds: forwardQuizCardsDuration));
-    setState(() => _disableSwipe = false);
+    setState(() => _isColorTweening = false);
+    if(widget.stackNumber == 1)
+      _disableSwipe = false;
   }
 
   @override
   void didUpdateWidget(AnimatedQuizCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(widget.stackNumber != oldWidget.stackNumber)
-      _updatedStackNumber();
     if(widget.flipStream != oldWidget.flipStream) {
       _flipStreamSubscription.cancel();
       _flipStreamSubscription = widget.flipStream.listen((_) {
         if(widget.stackNumber == 1)
-          _animateSwipe(_quizCardRotate, 1.0);
+          _animateSwipe(_cardRotate, 1.0);
       });
     }
     if(widget.disableSwipeStream != oldWidget.disableSwipeStream) {
       _disableSwipeStreamSubscription.cancel();
       _disableSwipeStreamSubscription = widget.disableSwipeStream.listen((disableSwipe) => _toggleDisableIfTopCard(disableSwipe));
+    }
+    if(widget.disableSwipeStream != oldWidget.disableSwipeStream) {
+      _disableSwipeStreamSubscription.cancel();
+      _disableSwipeStreamSubscription = widget.disableSwipeStream.listen((_) => _updatedStackNumber());
     }
     if(widget.heightToStackTop != oldWidget.heightToStackTop) {
       if(widget.stackNumber == 1)
@@ -347,80 +377,116 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
         setState(() => _topOffset = widget.heightToStackTop);
     }
     if(widget.stackWidth != oldWidget.stackWidth) {
-      if(widget.stackNumber == 2)
-        setState(() => _leftOffset += widget.stackWidth * 0.05);
+      if(widget.stackNumber == 1) {
+        setState(() => _cardWidth = widget.stackWidth);
+      } else if(widget.stackNumber == 2)
+        setState(() {
+          _leftOffset += widget.stackWidth * 0.05;
+          _cardWidth = widget.stackWidth * 0.9;
+        });
       else if(widget.stackNumber == 3)
-        setState(() => _leftOffset += widget.stackWidth * 0.1);
+        setState(() {
+          _leftOffset += widget.stackWidth * 0.1;
+          _cardWidth = widget.stackWidth * 0.8;
+        });
     }
   }
   
   @override
   void dispose() {
-    _swipeController.dispose();
+    _controller.dispose();
     _flipStreamSubscription.cancel();
     _disableSwipeStreamSubscription.cancel();
+    _forwardCardStreamSubscription.cancel();
     super.dispose();
   }
 
   void _noneListener() => setState(() {});
 
   void _swipeDownListener() {
-    if(_swipeAnimation.value < 0.25 || 0.75 < _swipeAnimation.value)
+    if(_animation.value < 0.25 || 0.75 < _animation.value)
       setState(() => _showBackCard = true);
   }
 
-  void _animateSwipe(double fromValue, double toValue, {bool isSwipeDown: true}) async {
+  void _forwardCardListener() {
+    double _topStart = widget.stackNumber == 2? 0.0 : quizCardStackTopSpace / 2;
+    double _topFin = widget.stackNumber == 3? -quizCardStackTopSpace / 2 : quizCardStackTopSpace / 2;
+    double _leftStart = widget.stackNumber == 1? 0.05 : widget.stackNumber == 1? 0.05 : widget.stackNumber == 2? 0.1 : 0.15;
+    double _leftFinDiff = 0.05;
+    double _widthStart = widget.stackNumber == 1? 0.9 : widget.stackNumber == 2? 0.8 : 0.7;
+    double _widthFinDiff = 0.1;
+    setState(() {
+      _topOffset = widget.heightToStackTop + _topStart + (_animation.value * _topFin);
+      _leftOffset = horizontalScreenPadding + (widget.stackWidth * _leftStart - (widget.stackWidth * _animation.value * _leftFinDiff));
+      _cardWidth = widget.stackWidth * _widthStart + (widget.stackWidth * _animation.value * _widthFinDiff);
+    });
+  }
+
+  void _animateSwipe(double fromValue, double toValue, {bool isSwipeDown: true, bool isForward: false}) async {
     Duration _duration;
     if(isSwipeDown) {
       bool _isAuto = fromValue == 0.5 && toValue == 1.0;
       _duration = Duration(milliseconds: _isAuto? autoSwipeDownDuration : swipeDownSnapDuration);
-      _swipeTween.animate(
+      _tween.animate(
         CurvedAnimation(
-          parent: _swipeController,
+          parent: _controller,
           curve: _autoSwipeDownCurve,
         )
-      )..addListener(_swipeDownListener);
+      )..removeListener(_swipeDownListener)..removeListener(_forwardCardListener)..addListener(_swipeDownListener);
       if(toValue == 0.0 || toValue == 1.0)
         setState(() {
           _isFlipped = true;
-          _quizCardRotate = toValue;
+          _cardRotate = toValue;
         });
-    } else {
+    } else if(!isForward) {
       _duration = Duration(milliseconds: swipeLeftSnapDuration);
-      _swipeTween.animate(
+      _tween.animate(
         CurvedAnimation(
-          parent: _swipeController,
+          parent: _controller,
           curve: quizCardSwipeLeftCurve,
         )
-      )..addListener(_noneListener);
+      )..removeListener(_swipeDownListener)..removeListener(_forwardCardListener);
+    } else {
+      _duration = Duration(milliseconds: quizCardsForwardDuration);
+      _tween.animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: _forwardCurve,
+        )
+      )..removeListener(_swipeDownListener)..removeListener(_forwardCardListener)..addListener(_forwardCardListener);
     }
-    if(isSwipeDown)
+    if(isSwipeDown) {
       setState(() => _isSwipeDownSnapping = true);
-    else
+    } else if(!isForward) {
       setState(() => _isSwipeLeftSnapping = true);
-    _swipeTween
+      if(toValue == 1.0)
+        setState(() => _disableSwipe = true);
+    } else {
+      setState(() => _disableSwipe = true);
+    }
+    _tween
       ..begin = fromValue
       ..end = toValue;
-    _swipeController
+    _controller
       ..value = 0.0
       ..duration = _duration
       ..forward();
     await Future.delayed(_duration);
     if(isSwipeDown)
       setState(() => _isSwipeDownSnapping = false);
-    else
+    else if(!isForward)
       setState(() => _isSwipeLeftSnapping = false);
   }
 
   void _swipeAction(details) {
     if(!_disableSwipe) {
       if(!_isFlipped) {
-        double _swipeValue = _quizCardSwipeDownY + (details.delta.dy * swipeDownSensitivity * 0.002);
+        double _swipeValue = _cardSwipeDownY + (details.delta.dy * swipeDownSensitivity * 0.002);
         if(0.0 < _swipeValue && _swipeValue < 1.0) {
           double _rotationValue = _swipeDownCurve.transform(_swipeValue);
           setState(() {
-            _quizCardSwipeDownY = _swipeValue;
-            _quizCardRotate = _rotationValue;
+            _cardSwipeDownY = _swipeValue;
+            _cardRotate = _rotationValue;
           });
           if(_showBackCard && (0.25 < _rotationValue && _rotationValue < 0.75))
             setState(() => _showBackCard = false);
@@ -431,23 +497,23 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
             });
         }
       } else {
-        double _slideValue = _quizCardSwipeLeftX + ((-details.delta.dx * swipeLeftSensitivity) / swipeLeftMax);
+        double _slideValue = _cardSwipeLeftX + ((-details.delta.dx * swipeLeftSensitivity) / swipeLeftMax);
         if(_slideValue > 1.0) {
           setState(() {
-            _quizCardSwipeLeftX = 1.0;
-            _quizCardTransform = 1.0;
+            _cardSwipeLeftX = 1.0;
+            _cardTransform = 1.0;
             _disableSwipe = true;
           });
           widget.swipedLeft();
         } else if(_slideValue < 0.0) {
           setState(() {
-            _quizCardSwipeLeftX = 0.0;
-            _quizCardTransform = 0.0;
+            _cardSwipeLeftX = 0.0;
+            _cardTransform = 0.0;
           });
         } else {
           setState(() {
-            _quizCardSwipeLeftX = _slideValue;
-            _quizCardTransform = _swipeLeftCurve.transform(_slideValue);
+            _cardSwipeLeftX = _slideValue;
+            _cardTransform = _swipeLeftCurve.transform(_slideValue);
           });
         }
       }
@@ -462,46 +528,47 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
             _hasSeenAnswer = false;
             _isFlipped = true;
           });
-          if(_quizCardRotate < 0.01 || _quizCardRotate > 0.99) {
-            setState(() => _quizCardRotate = _quizCardRotate < 0.01? 0.0 : 1.0);
+          if(_cardRotate < 0.01 || _cardRotate > 0.99) {
+            setState(() => _cardRotate = _cardRotate < 0.01? 0.0 : 1.0);
             widget.revealAnswer();
           } else {
             widget.revealAnswer(delay: swipeDownSnapDuration);
-            if(_quizCardRotate < 0.5) {
-              _animateSwipe(_quizCardRotate, 0.0);
+            if(_cardRotate < 0.5) {
+              _animateSwipe(_cardRotate, 0.0);
               setState(() {
-                _quizCardSwipeDownY = 0.0;
-                _quizCardRotate = 0.0;
+                _cardSwipeDownY = 0.0;
+                _cardRotate = 0.0;
               });
             } else {
-              _animateSwipe(_quizCardRotate, 1.0);
+              _animateSwipe(_cardRotate, 1.0);
               setState(() {
-                _quizCardSwipeDownY = 1.0;
-                _quizCardRotate = 1.0;
+                _cardSwipeDownY = 1.0;
+                _cardRotate = 1.0;
               });
             }
           }
-        } else if(0.25 <= _quizCardRotate && _quizCardRotate <= 0.75) {
-          _animateSwipe(_quizCardRotate, 0.5);
+        } else if(0.25 <= _cardRotate && _cardRotate <= 0.75) {
+          _animateSwipe(_cardRotate, 0.5);
           setState(() {
-            _quizCardSwipeDownY = 0.5;
-            _quizCardRotate = 0.5;
+            _cardSwipeDownY = 0.5;
+            _cardRotate = 0.5;
           });
         }
       } else {
-        if(_quizCardSwipeLeftX <= swipeLeftThreshold) {
-          _animateSwipe(_quizCardTransform, 0.0, isSwipeDown: false);
+        if(_cardSwipeLeftX <= swipeLeftThreshold) {
+          _animateSwipe(_cardTransform, 0.0, isSwipeDown: false);
           setState(() {
-            _quizCardSwipeLeftX = 0.0;
-            _quizCardTransform = 0.0;
+            _cardSwipeLeftX = 0.0;
+            _cardTransform = 0.0;
           });
         } else {
-          _animateSwipe(_quizCardTransform, 1.0, isSwipeDown: false);
+          _animateSwipe(_cardTransform, 1.0, isSwipeDown: false);
           setState(() {
-            _quizCardSwipeLeftX = 1.0;
-            _quizCardTransform = 1.0;
+            _cardSwipeLeftX = 1.0;
+            _cardTransform = 1.0;
             _disableSwipe = true;
           });      
+          await Future.delayed(Duration(milliseconds: swipeLeftSnapDuration));
           widget.swipedLeft();
         }  
       }
@@ -516,9 +583,8 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   Widget build(BuildContext context) {
     Matrix4 _matrix = Matrix4.identity()
       ..setEntry(3, 2, 0.001)
-      ..rotateX(_getRotation(_isSwipeDownSnapping? _swipeAnimation.value : _quizCardRotate));
-
-    double _swipeRatio = _isSwipeLeftSnapping? _swipeAnimation.value : _quizCardTransform;
+      ..rotateX(_getRotation(_isSwipeDownSnapping? _animation.value : _cardRotate));
+    double _swipeRatio = _isSwipeLeftSnapping? _animation.value : _cardTransform;
 
     return Positioned(
       top: _topOffset - (_swipeRatio * quizCardMoveUpVelocity * 150.0),
@@ -540,9 +606,9 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
                 kulitan: widget.kulitan,
                 answer: widget.answer,
                 progress: widget.progress,
-                color: widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 :cardQuizColor3,
+                color: _isColorTweening? _colorAnimation.value : widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 : cardQuizColor3,
                 showAnswer: _showBackCard,
-                width: widget.stackWidth * (widget.stackNumber == 1? 1.0 : widget.stackNumber == 2? 0.9 : 0.8),
+                width: _cardWidth,
                 originalWidth: widget.stackWidth,
               ), 
             ),
