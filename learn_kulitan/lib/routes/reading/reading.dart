@@ -94,10 +94,12 @@ class _ReadingPageState extends State<ReadingPage> {
     setState(() => _cards[0]['progress'] = _cards[0]['progress'] < maxQuizCharacterProgress? _cards[0]['progress'] + 1 : _cards[0]['progress']);
     if(_cards[0]['progress'] == maxQuizCharacterProgress)
       setState(() => _overallProgressCount++);
-      // TODO : updateDatabase();
+      // TODO : updateDatabase;
     await Future.delayed(Duration(milliseconds: linearProgressBarChangeDuration));
     _disableSwipeStreamController.sink.add(false);
-    // TODO : updateDatabase();
+    // TODO: updateDatabase;
+    // TODO: remove card from DB
+    // TODO: clear saved choices in DB
   }
   void _wrongAnswer() async {
     await Future.delayed(Duration(milliseconds: _showAnswerDuration + revealAnswerOffset));
@@ -107,16 +109,20 @@ class _ReadingPageState extends State<ReadingPage> {
     await Future.delayed(Duration(milliseconds: _showAnswerDuration));
     if(_cards[0]['progress'] == maxQuizCharacterProgress)
       setState(() => _overallProgressCount--);
-      // TODO : updateDatabase();
+      // TODO: updateDatabase;
     setState(() => _cards[0]['progress'] = _cards[0]['progress'] > 0? _cards[0]['progress'] - 1 : _cards[0]['progress']);
     await Future.delayed(Duration(milliseconds: linearProgressBarChangeDuration));
     _disableSwipeStreamController.sink.add(false);
-    // TODO : updateDatabase();
+    // TODO: updateDatabase;
+    // TODO: clear saved choices in DB
+    // TODO: remove card from DB
   }
   void _revealAnswer({int delay: 0}) async {
     setState(() => _disableChoices = true);
     await Future.delayed(Duration(milliseconds: delay + revealAnswerOffset));
     setState(() => _showAnswer = true);
+    // TODO: remove card from DB
+    // TODO: clear saved choices in DB
   }
   void _swipedLeft() {
     _forwardCardStreamController.sink.add(null);
@@ -138,6 +144,8 @@ class _ReadingPageState extends State<ReadingPage> {
       _cards[1]['stackNumber'] = 2;
       _cards[2]['stackNumber'] = 3;
     });
+    // TODO: add new card to DB
+    // TODO: save choices to DB
   }
   
   void _getNewChoices() {
@@ -171,7 +179,10 @@ class _ReadingPageState extends State<ReadingPage> {
     super.initState();
     setState(() {
       _overallProgressCount = 78; // TODO: get progressCount from DB
-      // TODO: add saved choices
+      // TODO: get cards from DB
+      // TODO: if DB has 2 cards only, get next
+      // TODO: get saved choices from DB
+      // TODO: if no saved choices, call _getNewChoices
       _choices[0]['onTap'] = _correctAnswer;  // remove
       _choices[1]['onTap'] = _wrongAnswer;    // remove
       _choices[2]['onTap'] = _wrongAnswer;    // remove
