@@ -69,7 +69,6 @@ class _CircularProgressBarState extends State<CircularProgressBar>
   @override
   void initState() {
     super.initState();
-    setState(() => _progress = widget.numerator / widget.denominator);
     _controller = AnimationController(duration: Duration(milliseconds: _initDuration), vsync: this);
     _curveAnimation = CurvedAnimation(parent: _controller, curve: progressBarCurve);
     _tween = Tween<double>(begin: 0.0, end: _progress);
@@ -83,6 +82,7 @@ class _CircularProgressBarState extends State<CircularProgressBar>
 
   @override
   void didUpdateWidget(CircularProgressBar oldWidget) {
+    setState(() => _progress = widget.numerator / widget.denominator);
     super.didUpdateWidget(oldWidget);
     _tween
       ..begin = _tween.evaluate(_curveAnimation)

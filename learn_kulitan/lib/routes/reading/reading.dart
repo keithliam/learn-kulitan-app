@@ -24,13 +24,13 @@ class _ReadingPageState extends State<ReadingPage> {
     {
       'kulitan': 'pieN',
       'answer': 'píng',
-      'progress': 8,
+      'progress': maxQuizCharacterProgress - 1,
       'stackNumber': 1,
     },
     {
       'kulitan': 'du',
       'answer': 'du',
-      'progress': 4,
+      'progress': maxQuizCharacterProgress,
       'stackNumber': 2,
     },
     {
@@ -92,6 +92,9 @@ class _ReadingPageState extends State<ReadingPage> {
     setState(() => _showAnswer = true);
     await Future.delayed(Duration(milliseconds: updateQuizCardProgressOffset));
     setState(() => _cards[0]['progress'] = _cards[0]['progress'] < maxQuizCharacterProgress? _cards[0]['progress'] + 1 : _cards[0]['progress']);
+    if(_cards[0]['progress'] == maxQuizCharacterProgress)
+      setState(() => _overallProgressCount++);
+      // TODO : updateDatabase();
     await Future.delayed(Duration(milliseconds: linearProgressBarChangeDuration));
     _disableSwipeStreamController.sink.add(false);
     // TODO : updateDatabase();
@@ -102,6 +105,9 @@ class _ReadingPageState extends State<ReadingPage> {
     await Future.delayed(Duration(milliseconds: autoSwipeDownDuration + revealAnswerOffset));
     setState(() => _showAnswer = true);
     await Future.delayed(Duration(milliseconds: _showAnswerDuration));
+    if(_cards[0]['progress'] == maxQuizCharacterProgress)
+      setState(() => _overallProgressCount--);
+      // TODO : updateDatabase();
     setState(() => _cards[0]['progress'] = _cards[0]['progress'] > 0? _cards[0]['progress'] - 1 : _cards[0]['progress']);
     await Future.delayed(Duration(milliseconds: linearProgressBarChangeDuration));
     _disableSwipeStreamController.sink.add(false);
@@ -164,7 +170,7 @@ class _ReadingPageState extends State<ReadingPage> {
   void initState() {
     super.initState();
     setState(() {
-      _overallProgressCount = 78;
+      _overallProgressCount = 78; // TODO: get progressCount from DB
       // TODO: add saved choices
       _choices[0]['onTap'] = _correctAnswer;  // remove
       _choices[1]['onTap'] = _wrongAnswer;    // remove
