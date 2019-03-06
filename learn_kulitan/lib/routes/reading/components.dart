@@ -9,36 +9,37 @@ import '../../styles/theme.dart';
 class ChoiceButton extends StatefulWidget {
   ChoiceButton({
     @required this.text,
+    @required this.type,
     @required this.onTap,
-    @required this.justPressed,
     @required this.disable,
-    this.type = ChoiceButton.wrong,
-    this.showAnswer = false,
-    this.reset = false,
-    this.resetDone,
-    this.resetDuration,
-    this.showAnswerDuration,
+    @required this.resetStream,
+    @required this.showAnswerStream,
+    @required this.presses,
+    @required this.pressAlert,
+    @required this.pressStopAlert,
   });
 
   static const int right = 0;
   static const int wrong = 1;
 
   final String text;
-  final VoidCallback onTap;
-  final VoidCallback justPressed;
-  final bool disable;
   final int type;
-  final bool showAnswer;
-  final bool reset;
-  final VoidCallback resetDone;
-  final int resetDuration;
-  final int showAnswerDuration;
+  final VoidCallback onTap;
+  final bool disable;
+  final Stream resetStream;
+  final Stream showAnswerStream;
+  final int presses;
+  final VoidCallback pressAlert;
+  final VoidCallback pressStopAlert;
 
   @override
   _ChoiceButtonState createState() => _ChoiceButtonState();
 }
 
 class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMixin {
+  StreamSubscription _resetStreamSubscription;
+  StreamSubscription _showAnswerStreamSubscription;
+
   Animation<Color> _animation;
   AnimationController _controller;
   ColorTween _tween;
@@ -49,87 +50,84 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
   
   TextStyle _textStyle;
   bool _isTapped = false;
+  bool _isColored = false;
+  double _opacity = 1.0;
 
   @override
   void initState() {
     super.initState();
     _textStyle = textQuizChoice;
-    _controller = AnimationController(duration: Duration(milliseconds: widget.showAnswerDuration), vsync: this);
+    _controller = AnimationController(duration: Duration(milliseconds: showAnswerChoiceDuration), vsync: this);
     _tween = ColorTween(begin: cardChoicesColor, end: widget.type == ChoiceButton.right? cardChoicesRightColor : cardChoicesWrongColor);
     _animation = _tween.animate(_controller)
       ..addListener(() {
         setState(() {});
       });
-
-    _controllerText = AnimationController(duration: Duration(milliseconds: widget.showAnswerDuration), vsync: this);
+    _controllerText = AnimationController(duration: Duration(milliseconds: showAnswerChoiceDuration), vsync: this);
     _tweenText = ColorTween(begin: textQuizChoice.color, end: textQuizChoiceWrong.color);
     _animationText = _tweenText.animate(_controllerText)
       ..addListener(() {
         setState(() {});
       });
+    _resetStreamSubscription = widget.resetStream.listen((_) => _reset());
+    _showAnswerStreamSubscription = widget.showAnswerStream.listen((_) => _showAnswer());
   }
 
-  void _animateColor(Color fromColor, Color toColor, {bool isReset: false}) {
-    final int _delay = isReset? widget.resetDuration : widget.showAnswerDuration;
-    _tween
-      ..begin = fromColor
-      ..end = toColor;
-    _controller
-      ..value = 0.0
-      ..duration = Duration(milliseconds: _delay)
-      ..forward();
-    if(fromColor == cardChoicesWrongColor || toColor == cardChoicesWrongColor) {
-      fromColor = fromColor == cardChoicesWrongColor? textQuizChoiceWrong.color : textQuizChoice.color;
-      toColor = toColor == cardChoicesWrongColor? textQuizChoiceWrong.color : textQuizChoice.color;
-      _tweenText
-        ..begin = fromColor
-        ..end = toColor;
-      _controllerText
-        ..value = 0.0
-        ..duration = Duration(milliseconds: _delay)
-        ..forward();
+  void _toggleColor({bool isReset = false}) {
+    final int _delay = isReset? (resetChoicesDuration) : showAnswerChoiceDuration;
+    _controller.duration = Duration(milliseconds: _delay);
+    if(_isColored)
+      _controller.reverse();
+    else
+      _controller.forward();
+    if(widget.type == ChoiceButton.wrong)
+      _controllerText.duration = Duration(milliseconds: _delay);
+      if(_isColored)
+        _controllerText.reverse();
+      else
+        _controllerText.forward();
+    setState(() => _isColored = !_isColored);
+  }
+
+  void _showAnswer() {
+    if(widget.type == ChoiceButton.right && !_isTapped)
+      _toggleColor();
+  }
+
+  void _reset() async {
+    if(_isTapped || widget.type == ChoiceButton.right) {
+      setState(() => _isTapped = false);
+      _toggleColor(isReset: true);
     }
-  }
-
-  void _delayColorReset() async {
-    await Future.delayed(Duration(milliseconds: widget.showAnswerDuration));
-    _tween
-      ..begin = cardChoicesRightColor;
-    _controller
-      ..reset();
+    setState(() => _opacity = 0.0);
+    await Future.delayed(const Duration(milliseconds: resetChoicesDuration));
+    setState(() => _opacity = 1.0);
   }
 
   @override
   void didUpdateWidget(ChoiceButton oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(widget.text != oldWidget.text || widget.type != oldWidget.type || widget.onTap != oldWidget.onTap || widget.justPressed != oldWidget.justPressed || widget.showAnswer != oldWidget.showAnswer || widget.disable != oldWidget.disable || widget.reset != oldWidget.reset || widget.resetDone != oldWidget.resetDone || widget.resetDuration != oldWidget.resetDuration || widget.showAnswerDuration != oldWidget.showAnswerDuration) {
-      if(widget.showAnswer && widget.type == ChoiceButton.right && !_isTapped) {
-        _animateColor(cardChoicesColor, cardChoicesRightColor);
-        _delayColorReset();
-      }
-      if(widget.reset && ((_tween.begin == whiteColor && _controller.value != 0.0) || (_tween.begin == cardChoicesRightColor && _controller.value == 0.0))) {
-        _isTapped = false;
-        final Color _fromColor = widget.type == ChoiceButton.right? cardChoicesRightColor : cardChoicesWrongColor;
-        _animateColor(_fromColor, cardChoicesColor, isReset: true);
-        widget.resetDone();
-      }
-    }
+    if(widget.type != oldWidget.type)
+      _tween.end = widget.type == ChoiceButton.right? cardChoicesRightColor : cardChoicesWrongColor;
+    if(widget.showAnswerStream != oldWidget.showAnswerStream)
+      _showAnswerStreamSubscription = widget.showAnswerStream.listen((_) => _showAnswer());
+    if(widget.resetStream != oldWidget.resetStream)
+      _resetStreamSubscription = widget.resetStream.listen((_) => _reset());
   }
 
   @override
   void dispose() {
     _controller.dispose();
     _controllerText.dispose();
+    _resetStreamSubscription.cancel();
+    _showAnswerStreamSubscription.cancel();
     super.dispose();
   }
 
   void tapped() {
     if(!_isTapped) {
-      setState(() {
-        _isTapped = true;
-      });
-      Color _toColor = widget.type == ChoiceButton.wrong? cardChoicesWrongColor : cardChoicesRightColor;
-      _animateColor(cardChoicesColor, _toColor);
+      setState(() => _isTapped = true);
+      _toggleColor();
       widget.onTap();
     }
   }
@@ -139,16 +137,19 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
     return CustomButton(
       height: quizChoiceButtonHeight,
       color: _animation.value,
-      onPressed: widget.disable? null : tapped,
+      onPressed: tapped,
+      disable:  widget.disable,
       elevation: quizChoiceButtonElevation,
       borderRadius: 15.0,
       padding: const EdgeInsets.all(12.0),
-      pressDelay: widget.showAnswerDuration,
-      justPressed: widget.justPressed,
+      pressDelay: quizChoicePressDuration,
+      presses: widget.presses,
+      pressAlert: widget.pressAlert,
+      pressStopAlert: widget.pressStopAlert,
       child: Center(
         child: AnimatedOpacity(
-          opacity: widget.reset? 0.0 : 1.0,
-          duration: Duration(milliseconds: widget.resetDuration),
+          opacity: _opacity,
+          duration: const Duration(milliseconds: resetChoicesDuration),
           curve: customButtonPressCurve,
           child: Text(
             '${widget.text}',
@@ -254,6 +255,8 @@ class AnimatedQuizCard extends StatefulWidget {
     @required this.forwardCardStream,
     @required this.revealAnswer,
     @required this.swipedLeft,
+    @required this.swipingCard,
+    @required this.swipingCardDone,
   });
 
   final String kulitan;
@@ -267,6 +270,8 @@ class AnimatedQuizCard extends StatefulWidget {
   final Stream forwardCardStream;
   final Function revealAnswer;
   final VoidCallback swipedLeft;
+  final VoidCallback swipingCard;
+  final VoidCallback swipingCardDone;
 
   @override
   _AnimatedQuizCard createState() => _AnimatedQuizCard();
@@ -480,6 +485,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
 
   void _swipeAction(details) {
     if(!_disableSwipe) {
+      widget.swipingCard();
       if(!_isFlipped) {
         double _swipeValue = _cardSwipeDownY + (details.delta.dy * swipeDownSensitivity * 0.002);
         if(0.0 < _swipeValue && _swipeValue < 1.0) {
@@ -554,6 +560,8 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
             _cardRotate = 0.5;
           });
         }
+        await Future.delayed(const Duration(milliseconds: swipeDownSnapDuration));
+        widget.swipingCardDone();
       } else {
         if(_cardSwipeLeftX <= swipeLeftThreshold) {
           _animateSwipe(_cardTransform, 0.0, isSwipeDown: false);
@@ -561,6 +569,8 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
             _cardSwipeLeftX = 0.0;
             _cardTransform = 0.0;
           });
+          await Future.delayed(const Duration(milliseconds: swipeDownSnapDuration));
+          widget.swipingCardDone();
         } else {
           _animateSwipe(_cardTransform, 1.0, isSwipeDown: false);
           setState(() {
@@ -569,6 +579,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
             _disableSwipe = true;
           });      
           await Future.delayed(Duration(milliseconds: swipeLeftSnapDuration));
+          widget.swipingCardDone();
           widget.swipedLeft();
         }  
       }

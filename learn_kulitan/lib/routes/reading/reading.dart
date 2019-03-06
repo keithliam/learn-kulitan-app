@@ -63,33 +63,46 @@ class _ReadingPageState extends State<ReadingPage> {
     },
   ];
 
-  bool _showAnswer = false;
   bool _disableChoices = false;
-  bool _resetChoices = false;
-  int _resetDuration = 500;
-  int _showAnswerDuration = 250;
+  int _presses = 0;
 
   GlobalKey _quizCardsKey = GlobalKey();
   double _quizCardWidth = 100.0;
   double _heightToQuizCardTop = 100.0;
   double _quizCardStackHeight = 100.0;
   double _heightToCardStackBottom = 200.0;
- 
 
-  void _justPressed() {
-    _disableSwipeStreamController.sink.add(true);
-    setState(() => _disableChoices = true);
-  }
-
+  final _resetChoicesController = StreamController.broadcast();
+  final _showAnswerChoiceController = StreamController.broadcast();
   final _flipStreamController = StreamController.broadcast();
   final _disableSwipeStreamController = StreamController.broadcast();
   final _forwardCardStreamController = StreamController.broadcast();
-  
+
+  void _pressAlert() {
+    _disableSwipeStreamController.sink.add(true);
+    setState(() => _presses++);
+  }
+
+  void _pressStopAlert() {
+    _disableSwipeStreamController.sink.add(false);
+    if(_presses > 0)
+      setState(() => _presses--);
+  }
+
+  void _swipingCard() {
+    setState(() => _disableChoices = true);
+  }
+
+  void _swipingCardDone() {
+    setState(() => _disableChoices = false);
+  }
+
   void _correctAnswer() async {
-    await Future.delayed(Duration(milliseconds: _showAnswerDuration + revealAnswerOffset));
+    setState(() => _disableChoices = true);
+    await Future.delayed(Duration(milliseconds: showAnswerChoiceDuration + revealAnswerOffset));
     _flipStreamController.sink.add(null);
     await Future.delayed(Duration(milliseconds: autoSwipeDownDuration));
-    setState(() => _showAnswer = true);
+    _showAnswerChoiceController.sink.add(null);
     await Future.delayed(Duration(milliseconds: updateQuizCardProgressOffset));
     setState(() => _cards[0]['progress'] = _cards[0]['progress'] < maxQuizCharacterProgress? _cards[0]['progress'] + 1 : _cards[0]['progress']);
     if(_cards[0]['progress'] == maxQuizCharacterProgress)
@@ -102,11 +115,12 @@ class _ReadingPageState extends State<ReadingPage> {
     // TODO: clear saved choices in DB
   }
   void _wrongAnswer() async {
-    await Future.delayed(Duration(milliseconds: _showAnswerDuration + revealAnswerOffset));
+    setState(() => _disableChoices = true);
+    await Future.delayed(Duration(milliseconds: showAnswerChoiceDuration + revealAnswerOffset));
     _flipStreamController.sink.add(null);
     await Future.delayed(Duration(milliseconds: autoSwipeDownDuration + revealAnswerOffset));
-    setState(() => _showAnswer = true);
-    await Future.delayed(Duration(milliseconds: _showAnswerDuration));
+    _showAnswerChoiceController.sink.add(null);
+    await Future.delayed(Duration(milliseconds: showAnswerChoiceDuration));
     if(_cards[0]['progress'] == maxQuizCharacterProgress)
       setState(() => _overallProgressCount--);
       // TODO: updateDatabase;
@@ -120,15 +134,13 @@ class _ReadingPageState extends State<ReadingPage> {
   void _revealAnswer({int delay: 0}) async {
     setState(() => _disableChoices = true);
     await Future.delayed(Duration(milliseconds: delay + revealAnswerOffset));
-    setState(() => _showAnswer = true);
+    _showAnswerChoiceController.sink.add(null);
     // TODO: remove card from DB
     // TODO: clear saved choices in DB
   }
-  void _swipedLeft() {
+  void _swipedLeft() async {
     _forwardCardStreamController.sink.add(null);
     setState(() {
-      _showAnswer = false;
-      _resetChoices = true;
       _cards[0] = _cards[1];
       _cards[1] = _cards[2];
       _cards[2] = {
@@ -138,14 +150,19 @@ class _ReadingPageState extends State<ReadingPage> {
         'stackNumber': 4,
       };
     });
-    _getNewChoices();
     setState(() {
       _cards[0]['stackNumber'] = 1;
       _cards[1]['stackNumber'] = 2;
       _cards[2]['stackNumber'] = 3;
     });
+    _resetChoicesController.sink.add(null);
+    await Future.delayed(Duration(milliseconds: resetChoicesDuration));
+    _getNewChoices();
     // TODO: add new card to DB
     // TODO: save choices to DB
+    await Future.delayed(Duration(milliseconds: resetChoicesDuration));
+    _disableSwipeStreamController.sink.add(false);
+    setState(() => _disableChoices = false);
   }
   
   void _getNewChoices() {
@@ -194,6 +211,8 @@ class _ReadingPageState extends State<ReadingPage> {
 
   @override
   void dispose() {
+    _resetChoicesController.close();
+    _showAnswerChoiceController.close();
     _flipStreamController.close();
     _disableSwipeStreamController.close();
     _forwardCardStreamController.close();
@@ -208,15 +227,6 @@ class _ReadingPageState extends State<ReadingPage> {
       _heightToCardStackBottom = widget.screenHeight - verticalScreenPadding - ((quizChoiceButtonHeight + quizChoiceButtonElevation) * 2) - choiceSpacing - cardQuizStackBottomPadding;
       _heightToQuizCardTop = _heightToCardStackBottom - _quizCardWidth - quizCardStackTopSpace;
       _quizCardStackHeight = _heightToCardStackBottom - _heightToQuizCardTop + cardQuizStackBottomPadding;
-    });
-  }
-
-  void resetDone() async {
-    await Future.delayed(Duration(milliseconds: _resetDuration));
-    _disableSwipeStreamController.sink.add(false);
-    setState(() {
-      _resetChoices = false;
-      _disableChoices = false;
     });
   }
 
@@ -269,13 +279,12 @@ class _ReadingPageState extends State<ReadingPage> {
                   text: _choices[0]['text'],
                   type: _choices[0]['type'],
                   onTap: _choices[0]['onTap'],
-                  showAnswer: _showAnswer,
-                  justPressed: _justPressed,
                   disable: _disableChoices,
-                  reset: _resetChoices,
-                  resetDone: resetDone,
-                  resetDuration: _resetDuration,
-                  showAnswerDuration: _showAnswerDuration,
+                  resetStream: _resetChoicesController.stream,
+                  showAnswerStream: _showAnswerChoiceController.stream,
+                  presses: _presses,
+                  pressAlert: _pressAlert,
+                  pressStopAlert: _pressStopAlert,
                 ),
               ),
               Container(
@@ -286,13 +295,12 @@ class _ReadingPageState extends State<ReadingPage> {
                   text: _choices[1]['text'],
                   type: _choices[1]['type'],
                   onTap: _choices[1]['onTap'],
-                  showAnswer: _showAnswer,
-                  justPressed: _justPressed,
                   disable: _disableChoices,
-                  reset: _resetChoices,
-                  resetDone: resetDone,
-                  resetDuration: _resetDuration,
-                  showAnswerDuration: _showAnswerDuration,
+                  resetStream: _resetChoicesController.stream,
+                  showAnswerStream: _showAnswerChoiceController.stream,
+                  presses: _presses,
+                  pressAlert: _pressAlert,
+                  pressStopAlert: _pressStopAlert,
                 ),
               ),
             ],
@@ -307,13 +315,12 @@ class _ReadingPageState extends State<ReadingPage> {
                   text: _choices[2]['text'],
                   type: _choices[2]['type'],
                   onTap: _choices[2]['onTap'],
-                  showAnswer: _showAnswer,
-                  justPressed: _justPressed,
                   disable: _disableChoices,
-                  reset: _resetChoices,
-                  resetDone: resetDone,
-                  resetDuration: _resetDuration,
-                  showAnswerDuration: _showAnswerDuration,
+                  resetStream: _resetChoicesController.stream,
+                  showAnswerStream: _showAnswerChoiceController.stream,
+                  presses: _presses,
+                  pressAlert: _pressAlert,
+                  pressStopAlert: _pressStopAlert,
                 ),
               ),
               Container(
@@ -324,13 +331,12 @@ class _ReadingPageState extends State<ReadingPage> {
                   text: _choices[3]['text'],
                   type: _choices[3]['type'],
                   onTap: _choices[3]['onTap'],
-                  showAnswer: _showAnswer,
-                  justPressed: _justPressed,
                   disable: _disableChoices,
-                  reset: _resetChoices,
-                  resetDone: resetDone,
-                  resetDuration: _resetDuration,
-                  showAnswerDuration: _showAnswerDuration,
+                  resetStream: _resetChoicesController.stream,
+                  showAnswerStream: _showAnswerChoiceController.stream,
+                  presses: _presses,
+                  pressAlert: _pressAlert,
+                  pressStopAlert: _pressStopAlert,
                 ),
               ),
             ],
@@ -338,7 +344,6 @@ class _ReadingPageState extends State<ReadingPage> {
         ],
       ),
     );
-   
     Widget _quizCards = Container(
       height: _heightToCardStackBottom,
       child: Stack(
@@ -356,6 +361,8 @@ class _ReadingPageState extends State<ReadingPage> {
             forwardCardStream:_forwardCardStreamController.stream,
             revealAnswer: _revealAnswer,
             swipedLeft: _swipedLeft,
+            swipingCard: _swipingCard,
+            swipingCardDone: _swipingCardDone,
           ),
           AnimatedQuizCard(
             kulitan: _cards[1]['kulitan'],
@@ -369,6 +376,8 @@ class _ReadingPageState extends State<ReadingPage> {
             forwardCardStream:_forwardCardStreamController.stream,
             revealAnswer: _revealAnswer,
             swipedLeft: _swipedLeft,
+            swipingCard: _swipingCard,
+            swipingCardDone: _swipingCardDone,
           ),
           AnimatedQuizCard(
             kulitan: _cards[0]['kulitan'],
@@ -382,6 +391,8 @@ class _ReadingPageState extends State<ReadingPage> {
             forwardCardStream:_forwardCardStreamController.stream,
             revealAnswer: _revealAnswer,
             swipedLeft: _swipedLeft,
+            swipingCard: _swipingCard,
+            swipingCardDone: _swipingCardDone,
           ),
         ],
       ),

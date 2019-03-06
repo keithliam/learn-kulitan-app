@@ -66,11 +66,15 @@ const quizCardForwardCurve = Curves.fastOutSlowIn;
 
 // Durations
 const linearProgressBarChangeDuration = 1000;
+const showAnswerChoiceDuration = 250;
+const resetQuizDuration = 750;
+const quizChoicePressDuration = 250;
+const resetChoicesDuration = resetQuizDuration ~/ 2;
 const swipeDownSnapDuration = 250;
 const autoSwipeDownDuration = 500;
 const revealAnswerOffset = 250;
 const swipeLeftSnapDuration = 250;
-const forwardQuizCardsDuration = 500;
+const forwardQuizCardsDuration = resetQuizDuration;
 const updateQuizCardProgressOffset = 250;
 const quizCardsForwardDuration = 500;
 

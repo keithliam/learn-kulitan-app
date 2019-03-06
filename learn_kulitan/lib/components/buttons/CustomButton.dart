@@ -11,12 +11,14 @@ class CustomButton extends StatefulWidget {
     this.elevation = 0.0,
     this.padding = const EdgeInsets.all(0.0),
     this.marginTop = 0.0,
+    this.disable = false,
     this.pressDelay = 250,
-    this.justPressed
+    this.presses,
+    this.pressAlert,
+    this.pressStopAlert,
   });
 
   final VoidCallback onPressed;
-  final VoidCallback justPressed;
   final Widget child;
   final double height;
   final Color color;
@@ -24,42 +26,67 @@ class CustomButton extends StatefulWidget {
   final double elevation;
   final EdgeInsetsGeometry padding;
   final double marginTop;
+  final bool disable;
+  final int presses;
   final int pressDelay;
+  final VoidCallback pressAlert;
+  final VoidCallback pressStopAlert;
 
   @override
   _CustomButtonState createState() => _CustomButtonState();
 }
 
 class _CustomButtonState extends State<CustomButton> {
-  double _initElevation;
   double _elevation = 0;
+  bool _doneTapping = true;
 
-  @override
-  void initState() {
-    super.initState();
-    _initElevation = widget.elevation;
+  bool _checkIfPressNum({int num = 0}) {
+    return (widget.presses != null && widget.presses == num) || widget.presses == null;
   }
 
-  void buttonPressed(func) async {
-    setState(() => _elevation = _initElevation);
-    await Future.delayed(Duration(milliseconds: widget.pressDelay));
-    setState(() => _elevation = 0);
+  void buttonPressed() {
+    if(!widget.disable)
+      setState(() => _elevation = widget.elevation);
+      if(_doneTapping)
+        setState(() => _elevation = 0.0);
   }
 
-  void buttonHoldDown() {
-    setState(() => _elevation = _initElevation);
+  void buttonHoldDown() async {
+    if(!widget.disable && _checkIfPressNum()) {
+      setState(() {
+        _elevation = widget.elevation;
+        _doneTapping = false;
+      });
+      if(widget.pressAlert != null) {
+        widget.pressAlert();
+      }
+      await Future.delayed(Duration(milliseconds: widget.pressDelay));
+      setState(() => _doneTapping = true);        
+    }
   }
 
-  void buttonHoldUp(func) async {
-    if(widget.justPressed != null)
-      widget.justPressed();
-    setState(() => _elevation = 0);
-    await Future.delayed(Duration(milliseconds: widget.pressDelay));
-    func();
+  void buttonHoldUp() async {
+    if(!widget.disable || _elevation == widget.elevation) {
+      double _elev = _elevation;
+      if(!_doneTapping)
+        await Future.delayed(Duration(milliseconds: widget.pressDelay));
+      setState(() => _elevation = 0);
+      await Future.delayed(Duration(milliseconds: widget.pressDelay));
+      if(_elev == widget.elevation && _checkIfPressNum(num: 1))
+        widget.onPressed();
+      if(widget.pressStopAlert != null && _elev == widget.elevation)
+        widget.pressStopAlert();
+    }
   }
 
-  void buttonCancel() {
-    setState(() => _elevation = 0);
+  void buttonCancel() async {
+    if(!widget.disable && _elevation == widget.elevation) {
+      setState(() => _elevation = 0);
+      if(widget.pressStopAlert != null) {
+        await Future.delayed(Duration(milliseconds: widget.pressDelay));
+        widget.pressStopAlert();
+      }
+    }
   }
 
   @override
@@ -73,9 +100,9 @@ class _CustomButtonState extends State<CustomButton> {
       left: 0,
       right: 0,
       child: GestureDetector(
-        onTap: () => widget.onPressed != null? buttonPressed(widget.onPressed) : null,
-        onTapDown: (_) => widget.onPressed != null? buttonHoldDown() : null,
-        onTapUp: (_) => widget.onPressed != null? buttonHoldUp(widget.onPressed) : null,
+        onTap: buttonPressed,
+        onTapDown: (_) => buttonHoldDown(),
+        onTapUp: (_) => buttonHoldUp(),
         onTapCancel: buttonCancel,
         child: Container(
           height: widget.height,
