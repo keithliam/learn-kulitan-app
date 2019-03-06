@@ -104,9 +104,9 @@ class _ReadingPageState extends State<ReadingPage> {
     await Future.delayed(Duration(milliseconds: autoSwipeDownDuration));
     _showAnswerChoiceController.sink.add(null);
     await Future.delayed(Duration(milliseconds: updateQuizCardProgressOffset));
-    setState(() => _cards[0]['progress'] = _cards[0]['progress'] < maxQuizCharacterProgress? _cards[0]['progress'] + 1 : _cards[0]['progress']);
-    if(_cards[0]['progress'] == maxQuizCharacterProgress)
+    if(_cards[0]['progress'] == maxQuizCharacterProgress - 1)
       setState(() => _overallProgressCount++);
+    setState(() => _cards[0]['progress'] = _cards[0]['progress'] < maxQuizCharacterProgress? _cards[0]['progress'] + 1 : _cards[0]['progress']);
       // TODO : updateDatabase;
     await Future.delayed(Duration(milliseconds: linearProgressBarChangeDuration));
     _disableSwipeStreamController.sink.add(false);
