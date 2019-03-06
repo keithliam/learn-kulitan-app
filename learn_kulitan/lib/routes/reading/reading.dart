@@ -178,7 +178,7 @@ class _ReadingPageState extends State<ReadingPage> {
     Random _random = Random();
     int _count = 0;
     while(_count < 3) {
-      _roman = _kulitanKeys[_random.nextInt(_listLength) - 1];
+      _roman = _kulitanKeys[_random.nextInt(_listLength - 1)];
       _lastChar = _roman.substring(_roman.length - 1, _roman.length);
       if(_lastChar == 'â' || _lastChar == 'î' || _lastChar == 'û' || _roman == _choices[0]['text'] || (_count > 0 && _roman == _choices[1]['text']) || (_count > 1 && _roman == _choices[2]['text']))
         continue;  
