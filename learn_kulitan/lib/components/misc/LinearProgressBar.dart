@@ -6,10 +6,12 @@ class LinearProgressBar extends StatefulWidget {
   LinearProgressBar({
     @required this.progress,
     this.height = 15.0,
+    this.animate = true,
   });
 
   final double height;
   final double progress;
+  final bool animate;
 
   @override
   _LinearProgressBarState createState() => _LinearProgressBarState();
@@ -48,12 +50,17 @@ class _LinearProgressBarState extends State<LinearProgressBar>
   @override
   void didUpdateWidget(LinearProgressBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _tween
-      ..begin = _tween.evaluate(_curveAnimation)
-      ..end = widget.progress;
-    _controller
-      ..value = 0.0
-      ..forward();
+    if(widget.animate) {
+      _tween
+        ..begin = _tween.evaluate(_curveAnimation)
+        ..end = widget.progress;
+      _controller
+        ..value = 0.0
+        ..forward();
+    } else {
+      _tween.end = widget.progress;
+      _controller.value = 1.0;
+    }
   }
   
   @override

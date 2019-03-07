@@ -172,6 +172,7 @@ class QuizCard extends StatelessWidget {
     @required this.showAnswer,
     @required this.width,
     @required this.originalWidth,
+    this.animateProgressBar = true,
   });
 
   final String kulitan;
@@ -181,6 +182,7 @@ class QuizCard extends StatelessWidget {
   final bool showAnswer;
   final double width;
   final double originalWidth;
+  final bool animateProgressBar;
 
   @override
   Widget build(BuildContext context) {
@@ -200,6 +202,7 @@ class QuizCard extends StatelessWidget {
       padding: const EdgeInsets.only(top: 10.0),
       child: LinearProgressBar(
         progress: this.progress,
+        animate: this.animateProgressBar,
       ),
     );
 
@@ -307,6 +310,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   bool _isFlipped = false;
   bool _showBackCard = false;
   bool _hasSeenAnswer = false;
+  bool _animateProgressBar = true;
 
   @override
   void initState() {
@@ -336,7 +340,8 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
       setState(() => _disableSwipe = toggle);
   }
 
-  _updatedStackNumber() async {
+  void _updatedStackNumber() async {
+    setState(() => _animateProgressBar = false);
     if(widget.stackNumber == 1)
       setState(() {
         _isColorTweening = true;
@@ -350,7 +355,10 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
       });
     _animateSwipe(0.0, 1.0, isSwipeDown: false, isForward: true);
     await Future.delayed(Duration(milliseconds: forwardQuizCardsDuration));
-    setState(() => _isColorTweening = false);
+    setState(() {
+      _isColorTweening = false;
+      _animateProgressBar = true;
+    });
     if(widget.stackNumber == 1)
       _disableSwipe = false;
   }
@@ -621,6 +629,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
                 showAnswer: _showBackCard,
                 width: _cardWidth,
                 originalWidth: widget.stackWidth,
+                animateProgressBar: _animateProgressBar,
               ), 
             ),
           ),
