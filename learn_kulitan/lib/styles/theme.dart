@@ -245,8 +245,8 @@ int _getSumOfLengths() {
 }
 
 // Limits
-const maxQuizCharacterProgress = 1;
-final totalCharacterCount = _getSumOfLengths();
+const maxQuizSyllableProgress = 1;
+final totalSyllableCount = _getSumOfLengths();
 const quizCardPoolMinCount = 5;
 
 
