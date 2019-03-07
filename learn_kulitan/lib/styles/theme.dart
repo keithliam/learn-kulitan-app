@@ -72,15 +72,12 @@ const quizChoicePressDuration = 250;
 const resetChoicesDuration = resetQuizDuration ~/ 2;
 const swipeDownSnapDuration = 250;
 const autoSwipeDownDuration = 500;
-const revealAnswerOffset = 250;
+const revealAnswerOffset = 0;
 const swipeLeftSnapDuration = 250;
 const forwardQuizCardsDuration = resetQuizDuration;
 const updateQuizCardProgressOffset = 250;
 const quizCardsForwardDuration = 500;
-
-// Progress Totals
-const maxQuizCharacterProgress = 10;
-const totalCharacterCount = 107;
+const showAnswerToEnableSwipeDuration = 0;  // linearProgressBarChangeDuration
 
 // Kulitan
 const Map<String, String> kulitanSyllables = {
@@ -228,6 +225,31 @@ const Map<String, String> kulitanSyllables = {
   'bang': 'bN',
   'ngang': 'NN',
 };
+const List<List<String>> kulitanBatches = [
+  ['ga', 'ka', 'ta', 'da', 'na', 'la', 'ma', 'pa', 'sa', 'ba', 'nga'],
+  ['a', 'i', 'u', 'e', 'o'],
+  ['gá', 'ká', 'tá', 'dá', 'ná', 'lá', 'má', 'pá', 'sá', 'bá', 'ngá'],
+  ['gi', 'ki', 'ti', 'di', 'ni', 'li', 'mi', 'pi', 'si', 'bi', 'ngi'],
+  ['gí', 'kí', 'tí', 'dí', 'ní', 'lí', 'mí', 'pí', 'sí', 'bí', 'ngí'],
+  ['gu', 'ku', 'tu', 'du', 'nu', 'lu', 'mu', 'pu', 'su', 'bu', 'ngu'],
+  ['gú', 'kú', 'tú', 'dú', 'nú', 'lú', 'mú', 'pú', 'sú', 'bú', 'ngú'],
+  ['go', 'ko', 'to', 'do', 'no', 'lo', 'mo', 'po', 'so', 'bo', 'ngo'],
+  ['gang', 'kang', 'tang', 'dang', 'nang', 'lang', 'mang', 'pang', 'sang', 'bang', 'ngang'],
+];
+
+int _getSumOfLengths() {
+  int sum = 0;
+  for(List<String> _arr in kulitanBatches)
+    sum += _arr.length;
+  return sum;
+}
+
+// Limits
+const maxQuizCharacterProgress = 1;
+final totalCharacterCount = _getSumOfLengths();
+const quizCardPoolMinCount = 5;
+
+
 
 // Kulitan Fonts
 const kulitanHome = TextStyle(
