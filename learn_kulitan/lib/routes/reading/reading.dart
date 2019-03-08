@@ -10,17 +10,11 @@ import '../../db/DatabaseHelper.dart';
 import './components.dart';
 
 class ReadingPage extends StatefulWidget {
-  ReadingPage({
-    @required this.screenHeight,
-  });
-
-  final double screenHeight;
-
   @override
   _ReadingPageState createState() => _ReadingPageState();
 }
 
-class _ReadingPageState extends State<ReadingPage> {
+class _ReadingPageState extends State<ReadingPage> { 
   Database _db;
   int _overallProgressCount = 0;
   int _batchNumber;
@@ -73,11 +67,12 @@ class _ReadingPageState extends State<ReadingPage> {
   bool _disableChoices = false;
   int _presses = 0;
 
+  GlobalKey _pageKey = GlobalKey();
   GlobalKey _quizCardsKey = GlobalKey();
   double _quizCardWidth = 100.0;
-  double _heightToQuizCardTop = 100.0;
+  double _heightToQuizCardTop = 200.0;
   double _quizCardStackHeight = 100.0;
-  double _heightToCardStackBottom = 200.0;
+  double _heightToCardStackBottom = 500.0;
 
   final _resetChoicesController = StreamController.broadcast();
   final _showAnswerChoiceController = StreamController.broadcast();
@@ -417,7 +412,7 @@ class _ReadingPageState extends State<ReadingPage> {
   @override
   void initState() {
     super.initState();
-    _pullData();
+    _pullData();     
     WidgetsBinding.instance.addPostFrameCallback((_) => _getQuizCardsSize()); 
   }
 
@@ -432,11 +427,12 @@ class _ReadingPageState extends State<ReadingPage> {
   }
 
   void _getQuizCardsSize() {
-    final RenderBox _box = _quizCardsKey.currentContext.findRenderObject();
-    double _width = _box.size.width - (horizontalScreenPadding * 2);
+    final RenderBox _screenBox = _pageKey.currentContext.findRenderObject();
+    final RenderBox _cardBox = _quizCardsKey.currentContext.findRenderObject();
+    double _cardWidth = _cardBox.size.width - (horizontalScreenPadding * 2);
     setState(() {
-      _quizCardWidth = _width;
-      _heightToCardStackBottom = widget.screenHeight - verticalScreenPadding - ((quizChoiceButtonHeight + quizChoiceButtonElevation) * 2) - choiceSpacing - cardQuizStackBottomPadding;
+      _quizCardWidth = _cardWidth;
+      _heightToCardStackBottom = _screenBox.size.height - verticalScreenPadding - ((quizChoiceButtonHeight + quizChoiceButtonElevation) * 2) - choiceSpacing - cardQuizStackBottomPadding;
       _heightToQuizCardTop = _heightToCardStackBottom - _quizCardWidth - quizCardStackTopSpace;
       _quizCardStackHeight = _heightToCardStackBottom - _heightToQuizCardTop + cardQuizStackBottomPadding;
     });
@@ -557,7 +553,7 @@ class _ReadingPageState extends State<ReadingPage> {
       ),
     );
     Widget _quizCards = Container(
-      height: _heightToCardStackBottom,
+      height: _heightToCardStackBottom, // TODO: Problem
       child: Stack(
         key: _quizCardsKey,
         children: <Widget>[
@@ -567,7 +563,7 @@ class _ReadingPageState extends State<ReadingPage> {
             progress: _cards[2]['progress'] / maxQuizSyllableProgress,
             stackNumber: _cards[2]['stackNumber'],
             stackWidth: _quizCardWidth,
-            heightToStackTop: _heightToQuizCardTop,
+            heightToStackTop: _heightToQuizCardTop, // TODO: Problem
             flipStream: _flipStreamController.stream,
             disableSwipeStream: _disableSwipeStreamController.stream,
             forwardCardStream:_forwardCardStreamController.stream,
@@ -611,6 +607,7 @@ class _ReadingPageState extends State<ReadingPage> {
     );
 
     return Material(
+      key: _pageKey,
       color: backgroundColor,
       child: Stack(
         children: <Widget>[

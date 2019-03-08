@@ -249,8 +249,6 @@ const maxQuizSyllableProgress = 1;
 final totalSyllableCount = _getSumOfLengths();
 const quizCardPoolMinCount = 5;
 
-
-
 // Kulitan Fonts
 const kulitanHome = TextStyle(
   fontFamily: 'Baybayin Pamagkulit',
