@@ -89,7 +89,7 @@ const quizCardsForwardDuration = 500;
 const showAnswerToEnableSwipeDuration = 0;  // linearProgressBarChangeDuration
 
 // Kulitan
-const Map<String, String> kulitanSyllables = {
+const Map<String, String> kulitanGlyphs = {
   'a': 'a',
   'i': 'e',
   'u': 'o',
@@ -254,9 +254,9 @@ int _getSumOfLengths() {
 }
 
 // Limits
-const maxQuizSyllableProgress = 10;
-const maxWritingSyllableProgress = 10;
-final totalSyllableCount = _getSumOfLengths();
+const maxQuizGlyphProgress = 10;
+const maxWritingGlyphProgress = 10;
+final totalGlyphCount = _getSumOfLengths();
 const quizCardPoolMinCount = 5;
 
 // Kulitan Fonts

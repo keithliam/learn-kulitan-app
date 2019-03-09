@@ -18,9 +18,9 @@ class _ReadingPageState extends State<ReadingPage> {
   Database _db;
   int _overallProgressCount = 0;
   int _batchNumber;
-  List<String> _syllaPool = [];
+  List<String> _glyphPool = [];
   List<String> _choicePool = [];
-  Map<String, int> _syllaProgresses = {};
+  Map<String, int> _glyphProgresses = {};
   List<Map<String, dynamic>> _cards = [
     {
       'kulitan': 'pie',
@@ -86,7 +86,7 @@ class _ReadingPageState extends State<ReadingPage> {
   }
 
   void _pressStopAlert() {
-    if(_cards[0]['progress'] != maxQuizSyllableProgress)
+    if(_cards[0]['progress'] != maxQuizGlyphProgress)
       _disableSwipeStreamController.sink.add(false);
     if(_presses > 0)
       setState(() => _presses--);
@@ -100,8 +100,8 @@ class _ReadingPageState extends State<ReadingPage> {
     setState(() => _disableChoices = false);
   }
 
-  void _pushSyllaProgress() async {
-    await _db.update('Syllable', {
+  void _pushGlyphProgress() async {
+    await _db.update('Glyph', {
       'progress_count_reading': _cards[0]['progress'],
     }, where: 'name = "${_cards[0]['answer']}"');
   }
@@ -127,12 +127,12 @@ class _ReadingPageState extends State<ReadingPage> {
     }, where: 'type = "choices"');
   }
 
-  void _addToSyllaPool() {
-    if(_syllaPool.indexOf(_cards[0]['answer']) < 0)
-      _syllaPool.add(_cards[0]['answer']);
+  void _addToGlyphPool() {
+    if(_glyphPool.indexOf(_cards[0]['answer']) < 0)
+      _glyphPool.add(_cards[0]['answer']);
   }
 
-  void _removeFromSyllaPool() => _syllaPool.remove(_cards[0]['answer']);
+  void _removeFromGlyphPool() => _glyphPool.remove(_cards[0]['answer']);
 
   void _pushBatchNumber() async {
     await _db.update('Page', {
@@ -144,15 +144,15 @@ class _ReadingPageState extends State<ReadingPage> {
     setState(() => _batchNumber++);
     setState(() {
       _choicePool.addAll(kulitanBatches[_batchNumber - 1]);
-      _syllaPool = kulitanBatches[_batchNumber - 1].toList();
+      _glyphPool = kulitanBatches[_batchNumber - 1].toList();
     });
   }
 
-  void _addNextBatchIfSyllasDone() {
-    if(_syllaPool.length < quizCardPoolMinCount && _overallProgressCount < totalSyllableCount) {
+  void _addNextBatchIfGlyphsDone() {
+    if(_glyphPool.length < quizCardPoolMinCount && _overallProgressCount < totalGlyphCount) {
       bool isDone = true;
-      for(String _syllable in _syllaPool)
-        if(_syllaProgresses[_syllable] < maxQuizSyllableProgress) {
+      for(String _glyph in _glyphPool)
+        if(_glyphProgresses[_glyph] < maxQuizGlyphProgress) {
           isDone = false;
           break;
         }
@@ -177,23 +177,23 @@ class _ReadingPageState extends State<ReadingPage> {
     _showAnswerChoiceController.sink.add(null);
     await Future.delayed(const Duration(milliseconds: updateQuizCardProgressOffset));
     bool _isFullProgress = false;
-    if(_cards[0]['progress'] == maxQuizSyllableProgress - 1) {
+    if(_cards[0]['progress'] == maxQuizGlyphProgress - 1) {
       setState(() => _overallProgressCount+= 1);
       _pushOverallProgress();
-      _removeFromSyllaPool();
+      _removeFromGlyphPool();
       _isFullProgress = true;
-    } else if(_cards[0]['progress'] == maxQuizSyllableProgress) {
-      _removeFromSyllaPool();
+    } else if(_cards[0]['progress'] == maxQuizGlyphProgress) {
+      _removeFromGlyphPool();
     }
-    if(_cards[0]['progress'] < maxQuizSyllableProgress) {
+    if(_cards[0]['progress'] < maxQuizGlyphProgress) {
       setState(() {
         _cards[0]['progress']++;
-        _syllaProgresses[_cards[0]['answer']]++;
+        _glyphProgresses[_cards[0]['answer']]++;
       });
-      _pushSyllaProgress();
+      _pushGlyphProgress();
     }
     if(_isFullProgress)
-      _addNextBatchIfSyllasDone();
+      _addNextBatchIfGlyphsDone();
     await Future.delayed(const Duration(milliseconds: showAnswerToEnableSwipeDuration));
     _disableSwipeStreamController.sink.add(false);
     _pushRemovedCardChoices();
@@ -210,17 +210,17 @@ class _ReadingPageState extends State<ReadingPage> {
     await Future.delayed(const Duration(milliseconds: autoSwipeDownDuration + revealAnswerOffset));
     _showAnswerChoiceController.sink.add(null);
     await Future.delayed(const Duration(milliseconds: showAnswerChoiceDuration));
-    if(_cards[0]['progress'] == maxQuizSyllableProgress) {
+    if(_cards[0]['progress'] == maxQuizGlyphProgress) {
       setState(() => _overallProgressCount--);
       _pushOverallProgress();
-      _addToSyllaPool();
+      _addToGlyphPool();
     }
     if(_cards[0]['progress'] > 0) {
       setState(() {
         _cards[0]['progress']--;
-        _syllaProgresses[_cards[0]['answer']]--;
+        _glyphProgresses[_cards[0]['answer']]--;
       });
-      _pushSyllaProgress();
+      _pushGlyphProgress();
     }
     await Future.delayed(const Duration(milliseconds: showAnswerToEnableSwipeDuration));
     _disableSwipeStreamController.sink.add(false);
@@ -249,7 +249,7 @@ class _ReadingPageState extends State<ReadingPage> {
     _getNewChoices();
     _pushCardsChoices();
     await Future.delayed(const Duration(milliseconds: resetChoicesDuration));
-    if(_cards[0]['progress'] < maxQuizSyllableProgress)
+    if(_cards[0]['progress'] < maxQuizGlyphProgress)
       _disableSwipeStreamController.sink.add(false);
     else
       _disableSwipeStreamController.sink.add(true);
@@ -282,23 +282,23 @@ class _ReadingPageState extends State<ReadingPage> {
 
   void _getNewCards({int count = 0}) {
     Random _random = Random();
-    String _randomSylla;
-    if(_syllaPool.length < quizCardPoolMinCount) {
-      final _keyList = _syllaProgresses.keys.toList();
+    String _randomGlyph;
+    if(_glyphPool.length < quizCardPoolMinCount) {
+      final _keyList = _glyphProgresses.keys.toList();
       do {
-        _randomSylla = _keyList[_random.nextInt(_keyList.length)];
-        if(_syllaProgresses[_randomSylla] == maxQuizSyllableProgress && _syllaPool.indexOf(_randomSylla) < 0)
-          _syllaPool.add(_randomSylla);
-      } while(_syllaPool.length < quizCardPoolMinCount);
+        _randomGlyph = _keyList[_random.nextInt(_keyList.length)];
+        if(_glyphProgresses[_randomGlyph] == maxQuizGlyphProgress && _glyphPool.indexOf(_randomGlyph) < 0)
+          _glyphPool.add(_randomGlyph);
+      } while(_glyphPool.length < quizCardPoolMinCount);
     }
     while(count < 3) {
-      _randomSylla = _syllaPool[_random.nextInt(_syllaPool.length)];
-      if((count >= 1 && _randomSylla == _cards[0]['answer']) || (count >= 2 && _randomSylla == _cards[1]['answer']) || (count == 3 && _randomSylla == _cards[2]['answer']))
+      _randomGlyph = _glyphPool[_random.nextInt(_glyphPool.length)];
+      if((count >= 1 && _randomGlyph == _cards[0]['answer']) || (count >= 2 && _randomGlyph == _cards[1]['answer']) || (count == 3 && _randomGlyph == _cards[2]['answer']))
         continue;
       setState(() => _cards[count] = {
-        'kulitan': kulitanSyllables[_randomSylla],
-        'answer': _randomSylla,
-        'progress': _syllaProgresses[_randomSylla],
+        'kulitan': kulitanGlyphs[_randomGlyph],
+        'answer': _randomGlyph,
+        'progress': _glyphProgresses[_randomGlyph],
         'stackNumber': count + 1,
       });
       count++;
@@ -306,16 +306,16 @@ class _ReadingPageState extends State<ReadingPage> {
   }
 
   Future<void> _fillUpPool() async {
-    final List<Map<String, dynamic>> _pulledProgressList = await _db.query('Syllable', columns: ['name', 'progress_count_reading']);
+    final List<Map<String, dynamic>> _pulledProgressList = await _db.query('Glyph', columns: ['name', 'progress_count_reading']);
     final int _actualBatch = _batchNumber == 0? 1 : _batchNumber;
-    for(Map<String, dynamic> _syllable in _pulledProgressList)
-      _syllaProgresses[_syllable['name']] = _syllable['progress_count_reading'];
+    for(Map<String, dynamic> _glyph in _pulledProgressList)
+      _glyphProgresses[_glyph['name']] = _glyph['progress_count_reading'];
     setState(() {
       for(int i = 0; i < _actualBatch; i++) {
         _choicePool.addAll(kulitanBatches[i]); 
         for(int j = 0; j < kulitanBatches[i].length; j++)
-          if(_syllaProgresses[kulitanBatches[i][j]] < maxQuizSyllableProgress)
-            _syllaPool.add(kulitanBatches[i][j]);
+          if(_glyphProgresses[kulitanBatches[i][j]] < maxQuizGlyphProgress)
+            _glyphPool.add(kulitanBatches[i][j]);
       }
     });
   }
@@ -340,29 +340,29 @@ class _ReadingPageState extends State<ReadingPage> {
     }, where: 'type = "choices"');
   }
 
-  Future<int> _getSyllaProgress(String syllable) async {
-    return (await _db.query('Syllable', where: 'name = "$syllable"'))[0]['progress_count_reading'];
+  Future<int> _getGlyphProgress(String glyph) async {
+    return (await _db.query('Glyph', where: 'name = "$glyph"'))[0]['progress_count_reading'];
   }
 
   Future<void> _pullCardsChoices() async {
     final Map<String, dynamic> _pulledCards = (await _db.query('CurrentQuiz', where: 'type = "cards"'))[0];
     final Map<String, dynamic> _pulledChoices = (await _db.query('CurrentQuiz', where: 'type = "choices"'))[0];
-    final int _cardOneProgress = await _getSyllaProgress(_pulledCards['one']);
-    final int _cardTwoProgress = await _getSyllaProgress(_pulledCards['two']);
+    final int _cardOneProgress = await _getGlyphProgress(_pulledCards['one']);
+    final int _cardTwoProgress = await _getGlyphProgress(_pulledCards['two']);
     setState(() {
-      _cards[0]['kulitan'] = kulitanSyllables[_pulledCards['one']];
+      _cards[0]['kulitan'] = kulitanGlyphs[_pulledCards['one']];
       _cards[0]['answer'] = _pulledCards['one'];
       _cards[0]['progress'] = _cardOneProgress;
       _cards[0]['stackNumber'] = 1;
-      _cards[1]['kulitan'] = kulitanSyllables[_pulledCards['two']];
+      _cards[1]['kulitan'] = kulitanGlyphs[_pulledCards['two']];
       _cards[1]['answer'] = _pulledCards['two'];
       _cards[1]['progress'] = _cardTwoProgress;
       _cards[1]['stackNumber'] = 2;
     });
     if(_pulledCards['three'] != null) {
-      final int _cardThreeProgress = await _getSyllaProgress(_pulledCards['three']);
+      final int _cardThreeProgress = await _getGlyphProgress(_pulledCards['three']);
       setState(() {
-        _cards[2]['kulitan'] = kulitanSyllables[_pulledCards['three']];
+        _cards[2]['kulitan'] = kulitanGlyphs[_pulledCards['three']];
         _cards[2]['answer'] = _pulledCards['three'];
         _cards[2]['progress'] = _cardThreeProgress;
         _cards[2]['stackNumber'] = 3;
@@ -387,9 +387,9 @@ class _ReadingPageState extends State<ReadingPage> {
       });
     else
       _getNewChoices();
-    if(_cards[0]['progress'] == maxQuizSyllableProgress)
+    if(_cards[0]['progress'] == maxQuizGlyphProgress)
       _disableSwipeStreamController.sink.add(true);
-    if(_syllaPool.length < quizCardPoolMinCount)
+    if(_glyphPool.length < quizCardPoolMinCount)
       _getNewCards(count: 3);
   }
 
@@ -450,7 +450,7 @@ class _ReadingPageState extends State<ReadingPage> {
           onPressed: () => Navigator.pushNamed(context, '/'),
         ),
         middle: Text(
-          'Syllables\nLearned',
+          'Glyphs\nLearned',
           style: textQuizHeader,
           textAlign: TextAlign.center,
         ),
@@ -471,7 +471,7 @@ class _ReadingPageState extends State<ReadingPage> {
         ),
         child: CircularProgressBar(
           numerator: _overallProgressCount,
-          denominator: totalSyllableCount,
+          denominator: totalGlyphCount,
         ),
       ),
     );
@@ -560,7 +560,7 @@ class _ReadingPageState extends State<ReadingPage> {
           AnimatedQuizCard(
             kulitan: _cards[2]['kulitan'],
             answer: _cards[2]['answer'],
-            progress: _cards[2]['progress'] / maxQuizSyllableProgress,
+            progress: _cards[2]['progress'] / maxQuizGlyphProgress,
             stackNumber: _cards[2]['stackNumber'],
             stackWidth: _quizCardWidth,
             heightToStackTop: _heightToQuizCardTop, // TODO: Problem
@@ -575,7 +575,7 @@ class _ReadingPageState extends State<ReadingPage> {
           AnimatedQuizCard(
             kulitan: _cards[1]['kulitan'],
             answer: _cards[1]['answer'],
-            progress: _cards[1]['progress'] / maxQuizSyllableProgress,
+            progress: _cards[1]['progress'] / maxQuizGlyphProgress,
             stackNumber: _cards[1]['stackNumber'],
             stackWidth: _quizCardWidth,
             heightToStackTop: _heightToQuizCardTop,
@@ -590,7 +590,7 @@ class _ReadingPageState extends State<ReadingPage> {
           AnimatedQuizCard(
             kulitan: _cards[0]['kulitan'],
             answer: _cards[0]['answer'],
-            progress: _cards[0]['progress'] / maxQuizSyllableProgress,
+            progress: _cards[0]['progress'] / maxQuizGlyphProgress,
             stackNumber: _cards[0]['stackNumber'],
             stackWidth: _quizCardWidth,
             heightToStackTop: _heightToQuizCardTop,

@@ -18,9 +18,9 @@ class _WritingPageState extends State<WritingPage> {
   int _overallProgressCount = 0;
   String _currentText = 'pí';
   int _batchNumber;
-  List<String> _syllaPool = [];
+  List<String> _glyphPool = [];
   List<String> _choicePool = [];
-  Map<String, int> _syllaProgresses = {};
+  Map<String, int> _glyphProgresses = {};
   List<Map<String, dynamic>> _cards = [
     {
       'kulitan': 'pie',
@@ -82,7 +82,7 @@ class _WritingPageState extends State<WritingPage> {
               ),
             ),
             Text(
-              'SYLLABLES LEARNED',
+              'GLYPHS LEARNED',
               style: textWritingProgressBar
             )
           ],
