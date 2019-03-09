@@ -262,7 +262,6 @@ const quizCardPoolMinCount = 5;
 // Kulitan Fonts
 const kulitanHome = TextStyle(
   fontFamily: 'Baybayin Pamagkulit',
-  fontSize: 30.0,
   color: grayColor,
   height: 0.68,
 );

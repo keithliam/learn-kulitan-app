@@ -19,8 +19,54 @@ class HomePage extends StatelessWidget {
     Widget _readingButton = Padding(
       padding: const EdgeInsets.only(top: 26.0),
       child: HomeButton(
-        kulitanText: 'p\nm\nma\ns',
-        kulitanTextOffset: 12.0,
+        kulitanTextCustom: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Container(
+            height: 100.0,
+            width: 40.0,
+            child: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                Text('k',
+                    style: kulitanHome.copyWith(fontSize: 38.0),
+                    textAlign: TextAlign.center),
+                Positioned(
+                  top: 20.0,
+                  left: 0.0,
+                  right: 8.0,
+                  child: Text('p',
+                      style: kulitanHome.copyWith(fontSize: 38.0),
+                      textAlign: TextAlign.center),
+                ),
+                Positioned(
+                  top: 40.0,
+                  left: 0.0,
+                  right: 8.0,
+                  child: Text('m',
+                      style: kulitanHome.copyWith(fontSize: 38.0),
+                      textAlign: TextAlign.center),
+                ),
+                Positioned(
+                  top: 63.0,
+                  left: 0.0,
+                  right: 0.0,
+                  child: Text('ma',
+                      style: kulitanHome.copyWith(fontSize: 25.0),
+                      textAlign: TextAlign.center),
+                ),
+                Positioned(
+                  top: 80.0,
+                  left: 0.0,
+                  right: 0.0,
+                  child: Text('sa',
+                      style: kulitanHome.copyWith(fontSize: 25.0),
+                      textAlign: TextAlign.center),
+                ),
+              ],
+            ),
+          ),
+        ),
+        kulitanTextOffset: 14.0,
         title: 'Reading',
         route: '/reading',
         progress: 0.80,
@@ -28,126 +74,219 @@ class HomePage extends StatelessWidget {
     );
 
     Widget _writingButton = HomeButton(
-      kulitanText: 'p\nmn\neo\nlt',
-      kulitanTextOffset: 12.0,
+      kulitanTextCustom: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Container(
+          height: 100.0,
+          width: 50.0,
+          child: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              Text('k',
+                  style: kulitanHome.copyWith(fontSize: 38.0),
+                  textAlign: TextAlign.center),
+              Positioned(
+                top: 20.0,
+                left: 0.0,
+                right: 8.0,
+                child: Text('p',
+                    style: kulitanHome.copyWith(fontSize: 38.0),
+                    textAlign: TextAlign.center),
+              ),
+              Positioned(
+                top: 42.0,
+                left: 0.0,
+                right: 0.0,
+                child: Text('mn',
+                    style: kulitanHome.copyWith(fontSize: 25.0),
+                    textAlign: TextAlign.center),
+              ),
+              Positioned(
+                top: 59.0,
+                left: 0.0,
+                right: 8.0,
+                child: Text('suo',
+                    style: kulitanHome.copyWith(fontSize: 25.0),
+                    textAlign: TextAlign.center),
+              ),
+              Positioned(
+                top: 80.0,
+                left: 0.0,
+                right: 0.0,
+                child: Text('lt',
+                    style: kulitanHome.copyWith(fontSize: 25.0),
+                    textAlign: TextAlign.center),
+              ),
+            ],
+          ),
+        ),
+      ),
+      kulitanTextOffset: 10.0,
       title: 'Writing',
       route: '/writing',
       progress: 0.1,
     );
 
     Widget _infoButton = HomeButton(
-      kulitanTextCustom: Container(
-        height: 115.0,
-        width: 38.0,
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Text('k',
-                style: kulitanHome.copyWith(fontSize: 25.0),
-                textAlign: TextAlign.center),
-            Positioned(
-              top: 14.0,
-              left: 0.0,
-              right: 0.0,
-              child: Text('p',
-                  style: kulitanHome.copyWith(fontSize: 25.0),
+      kulitanTextCustom: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Container(
+          height: 100.0,
+          width: 70.0,
+          child: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              Text('k',
+                  style: kulitanHome.copyWith(fontSize: 45.0),
                   textAlign: TextAlign.center),
-            ),
-            Positioned(
-              top: 31.0,
-              left: 0.0,
-              right: 0.0,
-              child: Text('b',
-                  style: kulitanHome.copyWith(fontSize: 25.0),
-                  textAlign: TextAlign.center),
-            ),
-            Positioned(
-              top: 49.0,
-              left: 0.0,
-              right: 0.0,
-              child: Text('lu\nan',
-                  style: kulitanHome.copyWith(fontSize: 25.0),
-                  textAlign: TextAlign.center),
-            ),
-          ],
+              Positioned(
+                top: 25.0,
+                left: 0.0,
+                right: 10.0,
+                child: Text('p',
+                    style: kulitanHome.copyWith(fontSize: 45.0),
+                    textAlign: TextAlign.center),
+              ),
+              Positioned(
+                top: 53.0,
+                left: 0.0,
+                right: 5.0,
+                child: Text('b',
+                    style: kulitanHome.copyWith(fontSize: 45.0),
+                    textAlign: TextAlign.center),
+              ),
+              Positioned(
+                top: 83.0,
+                left: 0.0,
+                right: 0.0,
+                child: Text('luan',
+                    style: kulitanHome.copyWith(fontSize: 20.0),
+                    textAlign: TextAlign.center),
+              ),
+            ],
+          ),
         ),
       ),
-      kulitanTextOffset: 11.0,
+      kulitanTextOffset: 2.0,
       title: 'Information',
       route: '/',
     );
 
     Widget _translateButton = HomeButton(
-      kulitanTextCustom: Container(
-        height: 115.0,
-        width: 40.0,
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Text('p', style: kulitanHome, textAlign: TextAlign.center),
-            Positioned(
-              top: 20.0,
-              left: 0.0,
-              right: 0.0,
-              child: Text('mg',
-                  style: kulitanHome, textAlign: TextAlign.center),
-            ),
-            Positioned(
-              top: 36.0,
-              left: 0.0,
-              right: 0.0,
-              child: Text('s',
-                  style: kulitanHome, textAlign: TextAlign.center),
-            ),
-            Positioned(
-              top: 64.0,
-              left: 0.0,
-              right: 0.0,
-              child: Text('lin',
-                  style: kulitanHome, textAlign: TextAlign.center),
-            ),
-          ],
+      kulitanTextCustom: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Container(
+          height: 100.0,
+          width: 50.0,
+          child: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              Text('k',
+                  style: kulitanHome.copyWith(fontSize: 38.0),
+                  textAlign: TextAlign.center),
+              Positioned(
+                top: 20.0,
+                left: 0.0,
+                right: 8.0,
+                child: Text('p',
+                    style: kulitanHome.copyWith(fontSize: 38.0),
+                    textAlign: TextAlign.center),
+              ),
+              Positioned(
+                top: 44.0,
+                left: 2.0,
+                right: 0.0,
+                child: Text('mn',
+                    style: kulitanHome.copyWith(fontSize: 25.0),
+                    textAlign: TextAlign.center),
+              ),
+              Positioned(
+                top: 68.0,
+                left: 0.0,
+                right: 15.0,
+                child: Text('lie',
+                    style: kulitanHome.copyWith(fontSize: 25.0),
+                    textAlign: TextAlign.center),
+              ),
+              Positioned(
+                top: 80.0,
+                left: 0.0,
+                right: 0.0,
+                child: Text('ks',
+                    style: kulitanHome.copyWith(fontSize: 25.0),
+                    textAlign: TextAlign.center),
+              ),
+            ],
+          ),
         ),
       ),
       kulitanTextOffset: 11.0,
-      title: 'Translate',
+      title: 'Transcribe',
       route: '/',
     );
 
     Widget _aboutButton = HomeButton(
-      kulitanTextCustom: Container(
-        height: 115.0,
-        width: 40.0,
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Positioned(
-              top: 5.0,
-              left: 0.0,
-              child: Text('ee',
-                  style: kulitanHome.copyWith(fontSize: 25.0),
-                  textAlign: TextAlign.center),
-            ),
-            Positioned(
-              top: 0.0,
-              left: 40.0,
-              right: 0.0,
-              child: Text('N',
-                  style: kulitanHome.copyWith(fontSize: 25.0),
-                  textAlign: TextAlign.center),
-            ),
-            Positioned(
-              top: 27.0,
-              left: 8.0,
-              right: 0.0,
-              child: Text('gi\nn\noa',
-                  style: kulitanHome.copyWith(fontSize: 25.0),
-                  textAlign: TextAlign.center),
-            ),
-          ],
+      kulitanTextCustom: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Container(
+          height: 100.0,
+          width: 70.0,
+          child: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              Positioned(
+                top: 3.0,
+                left: 0.0,
+                right: 19.0,
+                child: Text('ee',
+                    style: kulitanHome.copyWith(fontSize: 18.0),
+                    textAlign: TextAlign.center),
+              ),
+              Positioned(
+                top: 0.0,
+                left: 19.0,
+                right: 0.0,
+                child: Text('N',
+                    style: kulitanHome.copyWith(fontSize: 18.0),
+                    textAlign: TextAlign.center),
+              ),
+              Positioned(
+                top: 20.0,
+                left: 0.0,
+                right: 5.0,
+                child: Text('g',
+                    style: kulitanHome.copyWith(fontSize: 45.0),
+                    textAlign: TextAlign.center),
+              ),
+              Positioned(
+                top: 26.0,
+                left: 5.0,
+                right: 0.0,
+                child: Text('i',
+                    style: kulitanHome.copyWith(fontSize: 45.0),
+                    textAlign: TextAlign.center),
+              ),
+              Positioned(
+                top: 43.0,
+                left: 0.0,
+                right: 8.0,
+                child: Text('n',
+                    style: kulitanHome.copyWith(fontSize: 45.0),
+                    textAlign: TextAlign.center),
+              ),
+              Positioned(
+                top: 80.0,
+                left: 0.0,
+                right: 10.0,
+                child: Text('oa',
+                    style: kulitanHome.copyWith(fontSize: 25.0),
+                    textAlign: TextAlign.center),
+              ),
+            ],
+          ),
         ),
       ),
-      kulitanTextOffset: 5.0,
+      kulitanTextOffset: 4.0,
       title: 'About',
       route: '/',
     );
