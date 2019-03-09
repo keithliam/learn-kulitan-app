@@ -7,11 +7,13 @@ class LinearProgressBar extends StatefulWidget {
     @required this.progress,
     this.height = 15.0,
     this.animate = true,
+    this.color = linearProgressBackgroundColor,
   });
 
   final double height;
   final double progress;
   final bool animate;
+  final Color color;
 
   @override
   _LinearProgressBarState createState() => _LinearProgressBarState();
@@ -77,7 +79,7 @@ class _LinearProgressBarState extends State<LinearProgressBar>
         key: _progressBackgroundKey,
         height: widget.height,
         alignment: Alignment.centerLeft,
-        color: linearProgressBackgroundColor,
+        color: widget.color,
         child: Container(
           width: _backgroundWidth * _animation.value,
           decoration: BoxDecoration(

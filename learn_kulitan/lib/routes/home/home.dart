@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
       kulitanText: 'p\nmn\neo\nlt',
       kulitanTextOffset: 12.0,
       title: 'Writing',
-      route: '/',
+      route: '/writing',
       progress: 0.1,
     );
 
@@ -156,7 +156,7 @@ class HomePage extends StatelessWidget {
       child: Container(
         color: backgroundColor,
         child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: horizontalScreenPadding, vertical: verticalScreenPadding),
+          padding: EdgeInsets.symmetric(horizontal: quizHorizontalScreenPadding, vertical: writingVerticalScreenPadding),
           children: <Widget>[
             _appTitle,
             _readingButton,

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../styles/theme.dart';
 
 class IconButtonNew extends StatefulWidget {
   IconButtonNew({
     @required this.icon,
     @required this.onPressed,
     @required this.iconSize,
-    this.color = iconButtonDefaultColor,
+    @required this.color,
   });
 
   final IconData icon;
@@ -48,7 +47,7 @@ class _IconButtonNewState extends State<IconButtonNew> {
           duration: Duration(milliseconds: 250),
           child: Container(
             color: Colors.transparent,
-            child:SizedBox(
+            child: SizedBox(
               height: widget.iconSize,
               width: widget.iconSize,
               child: Align(

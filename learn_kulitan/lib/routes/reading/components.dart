@@ -301,7 +301,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   double _cardWidth = 50.0;
 
   double _topOffset = 0.0;
-  double _leftOffset = horizontalScreenPadding;
+  double _leftOffset = quizHorizontalScreenPadding;
 
   bool _disableSwipe = true;
   bool _isSwipeDownSnapping = false;
@@ -430,7 +430,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
     double _widthFinDiff = 0.1;
     setState(() {
       _topOffset = widget.heightToStackTop + _topStart + (_animation.value * _topFin);
-      _leftOffset = horizontalScreenPadding + (widget.stackWidth * _leftStart - (widget.stackWidth * _animation.value * _leftFinDiff));
+      _leftOffset = quizHorizontalScreenPadding + (widget.stackWidth * _leftStart - (widget.stackWidth * _animation.value * _leftFinDiff));
       _cardWidth = widget.stackWidth * _widthStart + (widget.stackWidth * _animation.value * _widthFinDiff);
     });
   }
@@ -607,7 +607,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
 
     return Positioned(
       top: _topOffset - (_swipeRatio * quizCardMoveUpVelocity * 150.0),
-      left: _leftOffset - (_swipeRatio * quizCardMoveLeftVelocity * ((widget.stackWidth + horizontalScreenPadding) * 1.2)),
+      left: _leftOffset - (_swipeRatio * quizCardMoveLeftVelocity * ((widget.stackWidth + quizHorizontalScreenPadding) * 1.2)),
       child: Transform.rotate(
         angle: (_swipeRatio * quizCardRotateVelocity * (-math.pi / 4)),
         alignment: FractionalOffset.center,

@@ -17,11 +17,12 @@ const circularProgressForegroundColor = accentColor;
 const circularProgressBackgroundColor = whiteColor;
 const linearProgressForegroundColor = accentColor;
 const linearProgressBackgroundColor = snowColor;
+const writingHeaderProgressBGColor = whiteColor;
 
+const customCardDefaultColor = whiteColor;
 const customCardShadowColor = Color(0x21000000);
 const customButtonDefaultColor = whiteColor;
 const customButtonShadowColor = Color(0x22000000);
-const iconButtonDefaultColor = whiteColor;
 
 const cardQuizColor1 = whiteColor;
 const cardQuizColor2 = lightBlueColor;
@@ -30,13 +31,21 @@ const cardChoicesColor = whiteColor;
 const cardChoicesRightColor = blueGreenColor;
 const cardChoicesWrongColor = accentColor;
 
+const writingGuideColor = accentColor;
+const writingDrawColor = grayColor;
+const writingKulitanColor = snowColor;
+
 // Spacings
-const horizontalScreenPadding = 38.0;
-const verticalScreenPadding = 28.0;
+const quizHorizontalScreenPadding = 38.0;
+const quizVerticalScreenPadding = 28.0;
+const writingHorizontalScreenPadding = 38.0;
+const writingVerticalScreenPadding = 38.0;
 const headerPadding = 14.0;
 const cardQuizHorizontalPadding = 26.0;
 const cardQuizVerticalPadding = 20.0;
-const cardQuizStackBottomPadding = verticalScreenPadding;
+const cardQuizStackBottomPadding = quizVerticalScreenPadding;
+const cardWritingHorizontalPadding = 26.0;
+const cardWritingVerticalPadding = 20.0;
 const choiceSpacing = 14.0;
 const quizChoiceButtonElevation = 10.0;
 
@@ -245,7 +254,8 @@ int _getSumOfLengths() {
 }
 
 // Limits
-const maxQuizSyllableProgress = 1;
+const maxQuizSyllableProgress = 10;
+const maxWritingSyllableProgress = 10;
 final totalSyllableCount = _getSumOfLengths();
 const quizCardPoolMinCount = 5;
 
@@ -264,7 +274,7 @@ const kulitanQuiz = TextStyle(
 const kulitanWriting = TextStyle(
   fontFamily: 'Baybayin Pamagkulit',
   fontSize: 200.0,
-  color: snowColor,
+  color: writingKulitanColor,
 );
 const kulitanInfo = TextStyle(
   fontFamily: 'Baybayin Pamagkulit',
@@ -336,11 +346,20 @@ const textQuizChoiceWrong = TextStyle(
   fontWeight: FontWeight.w600,
   color: whiteColor,
 );
+const textWritingProgressBar = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 14.0,
+  color: whiteColor,
+);
 const textWriting = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 100.0,
   fontWeight: FontWeight.bold,
   color: whiteColor,
+  height: 0.7,
+  shadows: <Shadow>[
+    Shadow(color: accentColor, offset: Offset(7.0, 7.0))
+  ]
 );
 const textWritingGuide = TextStyle(
   fontFamily: 'Barlow',

@@ -429,10 +429,10 @@ class _ReadingPageState extends State<ReadingPage> {
   void _getQuizCardsSize() {
     final RenderBox _screenBox = _pageKey.currentContext.findRenderObject();
     final RenderBox _cardBox = _quizCardsKey.currentContext.findRenderObject();
-    double _cardWidth = _cardBox.size.width - (horizontalScreenPadding * 2);
+    double _cardWidth = _cardBox.size.width - (quizHorizontalScreenPadding * 2);
     setState(() {
       _quizCardWidth = _cardWidth;
-      _heightToCardStackBottom = _screenBox.size.height - verticalScreenPadding - ((quizChoiceButtonHeight + quizChoiceButtonElevation) * 2) - choiceSpacing - cardQuizStackBottomPadding;
+      _heightToCardStackBottom = _screenBox.size.height - quizVerticalScreenPadding - ((quizChoiceButtonHeight + quizChoiceButtonElevation) * 2) - choiceSpacing - cardQuizStackBottomPadding;
       _heightToQuizCardTop = _heightToCardStackBottom - _quizCardWidth - quizCardStackTopSpace;
       _quizCardStackHeight = _heightToCardStackBottom - _heightToQuizCardTop + cardQuizStackBottomPadding;
     });
@@ -466,7 +466,7 @@ class _ReadingPageState extends State<ReadingPage> {
     Widget _progressBar = Expanded(
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: horizontalScreenPadding,
+          horizontal: quizHorizontalScreenPadding,
           vertical: 15.0,
         ),
         child: CircularProgressBar(
@@ -477,7 +477,7 @@ class _ReadingPageState extends State<ReadingPage> {
     );
 
     Widget _buttonChoices = Padding(
-      padding: EdgeInsets.fromLTRB(horizontalScreenPadding, 0.0, horizontalScreenPadding, verticalScreenPadding),
+      padding: EdgeInsets.fromLTRB(quizHorizontalScreenPadding, 0.0, quizHorizontalScreenPadding, quizVerticalScreenPadding),
       child: Column(
         children: <Widget>[
           Row(

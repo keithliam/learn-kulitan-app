@@ -3,8 +3,8 @@ import '../../styles/theme.dart';
 
 class CustomCard extends StatefulWidget {
   CustomCard({
-    @required this.color,
     @required this.child,
+    this.color = customCardDefaultColor,
     this.hasShadow = false,
     this.padding,
     this.height,
@@ -26,9 +26,9 @@ class _CustomCardState extends State<CustomCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.height != null? widget.height : null,
-      width: widget.width != null? widget.height : null,
-      padding: widget.padding != null? widget.padding : null,
+      height: widget.height,
+      width: widget.width,
+      padding: widget.padding,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.0),
         boxShadow: widget.hasShadow? [

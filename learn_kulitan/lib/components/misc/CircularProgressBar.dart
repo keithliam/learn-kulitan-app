@@ -102,7 +102,7 @@ class _CircularProgressBarState extends State<CircularProgressBar>
   Widget build(BuildContext context) {return FittedBox(
       fit: BoxFit.scaleDown,
       child: Container(
-        width: MediaQuery.of(context).size.width - (horizontalScreenPadding * 2),
+        width: MediaQuery.of(context).size.width - (quizHorizontalScreenPadding * 2),
         height: 124.0,
         child: CustomPaint(
           painter: _CircularProgressBarPainter(
