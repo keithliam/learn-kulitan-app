@@ -318,10 +318,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
     _controller = AnimationController(duration: Duration(milliseconds: swipeDownSnapDuration), vsync: this);
     _curveAnimation = CurvedAnimation(parent: _controller, curve: _swipeDownCurve);
     _tween = Tween<double>(begin: 0.0, end: 1.0);
-    _colorTween = ColorTween(
-      begin: widget.stackNumber == 1? cardQuizColor2 : cardQuizColor3,
-      end: widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 : cardQuizColor3
-    );
+    _colorTween = ColorTween();
     _colorAnimation = _colorTween.animate(_curveAnimation);
     _animation = _tween.animate(_curveAnimation)
       ..addListener(_noneListener);
@@ -340,11 +337,19 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
       setState(() => _disableSwipe = toggle);
   }
 
+  void _animateColor() {
+    _colorTween
+      ..begin = widget.stackNumber == 1? cardQuizColor2 : cardQuizColor3
+      ..end = widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 : cardQuizColor3;
+    _controller
+      ..value = 0.0
+      ..forward();
+  }
+
   void _updatedStackNumber() async {
     setState(() => _animateProgressBar = false);
     if(widget.stackNumber == 1)
       setState(() {
-        _isColorTweening = true;
         _cardSwipeDownY = 0.5;
         _cardRotate = 0.5;
         _cardSwipeLeftX = 0.0;
@@ -353,7 +358,9 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
         _showBackCard = false;
         _hasSeenAnswer = false;
       });
+    setState(() => _isColorTweening = true);
     _animateSwipe(0.0, 1.0, isSwipeDown: false, isForward: true);
+    _animateColor();
     await Future.delayed(Duration(milliseconds: forwardQuizCardsDuration));
     setState(() {
       _isColorTweening = false;
@@ -377,9 +384,9 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
       _disableSwipeStreamSubscription.cancel();
       _disableSwipeStreamSubscription = widget.disableSwipeStream.listen((disableSwipe) => _toggleDisableIfTopCard(disableSwipe));
     }
-    if(widget.disableSwipeStream != oldWidget.disableSwipeStream) {
-      _disableSwipeStreamSubscription.cancel();
-      _disableSwipeStreamSubscription = widget.disableSwipeStream.listen((_) => _updatedStackNumber());
+    if(widget.forwardCardStream != oldWidget.forwardCardStream) {
+      _forwardCardStreamSubscription.cancel();
+      _forwardCardStreamSubscription = widget.forwardCardStream.listen((_) => _updatedStackNumber());
     }
     if(widget.heightToStackTop != oldWidget.heightToStackTop) {
       if(widget.stackNumber == 1)
