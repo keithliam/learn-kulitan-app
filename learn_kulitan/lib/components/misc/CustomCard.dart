@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../styles/theme.dart';
 
-class CustomCard extends StatefulWidget {
+class CustomCard extends StatelessWidget {
   CustomCard({
     @required this.child,
     this.color = customCardDefaultColor,
@@ -19,28 +19,23 @@ class CustomCard extends StatefulWidget {
   final double width;
 
   @override
-  _CustomCardState createState() => _CustomCardState();
-}
-
-class _CustomCardState extends State<CustomCard> {
-  @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.height,
-      width: widget.width,
-      padding: widget.padding,
+      height: this.height,
+      width: this.width,
+      padding: this.padding,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.0),
-        boxShadow: widget.hasShadow? [
+        boxShadow: this.hasShadow? [
           BoxShadow(
             color: customCardShadowColor,
             blurRadius: 30.0,
             offset: Offset(0.0, 20.0),
           ),
         ] : null,
-        color: widget.color,
+        color: this.color,
       ),
-      child: widget.child,
+      child: this.child,
     );
   }
 }
