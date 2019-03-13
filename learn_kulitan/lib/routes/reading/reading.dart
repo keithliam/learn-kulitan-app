@@ -430,7 +430,7 @@ class _ReadingPageState extends State<ReadingPage> {
     final RenderBox _screenBox = _pageKey.currentContext.findRenderObject();
     final RenderBox _cardBox = _quizCardsKey.currentContext.findRenderObject();
     double _cardWidth = _cardBox.size.width - (quizHorizontalScreenPadding * 2);
-    print(_screenBox.size.height);
+
     setState(() {
       _quizCardWidth = _cardWidth;
       _heightToCardStackBottom = _screenBox.size.height - quizVerticalScreenPadding - ((quizChoiceButtonHeight + quizChoiceButtonElevation) * 2) - choiceSpacing - cardQuizStackBottomPadding;

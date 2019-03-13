@@ -193,6 +193,7 @@ class QuizCard extends StatelessWidget {
           child: Text(
             this.kulitan,
             style: kulitanQuiz,
+            textAlign: TextAlign.center,
           ),
         ),
       ),
@@ -215,7 +216,7 @@ class QuizCard extends StatelessWidget {
       _cardContents.insert(1,
         Center(
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 15.0),
+            padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
             child: Text(
               this.answer,
               style: textQuizAnswer,
