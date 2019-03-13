@@ -23,7 +23,7 @@ class _WritingPageState extends State<WritingPage> {
   Map<String, int> _glyphProgresses = {};
   List<Map<String, dynamic>> _cards = [
     {
-      'kulitan': 'pie',
+      'kulitan': 'pii',
       'answer': 'pí',
       'progress': 0.8,
       'cardNumber': 1,

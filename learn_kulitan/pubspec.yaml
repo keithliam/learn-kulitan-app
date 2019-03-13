@@ -44,9 +44,9 @@ flutter:
         - asset: fonts/Barlow-BoldItalic.otf
           style: italic
           weight: 700
-    - family: Baybayin Pamagkulit
+    - family: Kulitan Semi Bold
       fonts:
-        - asset: fonts/Baybayin_Pamagkulit.ttf
+        - asset: fonts/KulitanHandwritingLinear-SemiBold.otf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

@@ -261,27 +261,27 @@ const quizCardPoolMinCount = 5;
 
 // Kulitan Fonts
 const kulitanHome = TextStyle(
-  fontFamily: 'Baybayin Pamagkulit',
+  fontFamily: 'Kulitan Semi Bold',
   color: grayColor,
   height: 0.68,
 );
 const kulitanQuiz = TextStyle(
-  fontFamily: 'Baybayin Pamagkulit',
+  fontFamily: 'Kulitan Semi Bold',
   fontSize: 150.0,
   color: grayColor,
 );
 const kulitanWriting = TextStyle(
-  fontFamily: 'Baybayin Pamagkulit',
+  fontFamily: 'Kulitan Semi Bold',
   fontSize: 200.0,
   color: writingKulitanColor,
 );
 const kulitanInfo = TextStyle(
-  fontFamily: 'Baybayin Pamagkulit',
+  fontFamily: 'Kulitan Semi Bold',
   fontSize: 45.0,
   color: whiteColor,
 );
 const kulitanTranslate = TextStyle(
-  fontFamily: 'Baybayin Pamagkulit',
+  fontFamily: 'Kulitan Semi Bold',
   fontSize: 60.0,
   color: grayColor,
 );

@@ -33,6 +33,7 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> {
               child: Text(
                 widget.kulitan,
                 style: kulitanWriting,
+                textAlign: TextAlign.center,
               ),
             ),
           ),
