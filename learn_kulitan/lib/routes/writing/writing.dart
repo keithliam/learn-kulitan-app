@@ -16,15 +16,15 @@ class WritingPage extends StatefulWidget {
 class _WritingPageState extends State<WritingPage> { 
   Database _db;
   int _overallProgressCount = 0;
-  String _currentText = 'pí';
+  String _currentText = 'da';
   int _batchNumber;
   List<String> _glyphPool = [];
   List<String> _choicePool = [];
   Map<String, int> _glyphProgresses = {};
   List<Map<String, dynamic>> _cards = [
     {
-      'kulitan': 'pii',
-      'answer': 'pí',
+      'kulitan': 'd',
+      'answer': 'da',
       'progress': 0.8,
       'cardNumber': 1,
     },
@@ -64,7 +64,7 @@ class _WritingPageState extends State<WritingPage> {
   @override
   Widget build(BuildContext context) {
     Widget _header = Padding(
-      padding: EdgeInsets.fromLTRB(headerPadding, headerPadding, headerPadding, 0.0),
+      padding: EdgeInsets.fromLTRB(headerHorizontalPadding, headerVerticalPadding, headerHorizontalPadding, 0.0),
       child: StaticHeader(
         left: IconButtonNew(
           icon: Icons.arrow_back_ios,
@@ -75,7 +75,7 @@ class _WritingPageState extends State<WritingPage> {
         middle: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.fromLTRB(headerPadding, headerIconSize / 2, headerPadding, 5.0),
+              padding: const EdgeInsets.fromLTRB(headerHorizontalPadding, headerIconSize / 2, headerHorizontalPadding, 5.0),
               child: LinearProgressBar(
                 progress: 0.4,
                 color: writingHeaderProgressBGColor,
@@ -124,23 +124,25 @@ class _WritingPageState extends State<WritingPage> {
     );
 
     return Material(
-      key: _pageKey,
       color: backgroundColor,
-      child: Column(
-        children: <Widget>[
-          _header,
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: writingHorizontalScreenPadding, right: writingHorizontalScreenPadding, bottom: writingVerticalScreenPadding),
-              child: Column(
-                children: <Widget>[
-                  _text,
-                  _writingCards,
-                ],
+      child: SafeArea(
+        child: Column(
+          key: _pageKey,
+          children: <Widget>[
+            _header,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: writingHorizontalScreenPadding, right: writingHorizontalScreenPadding, bottom: writingVerticalScreenPadding),
+                child: Column(
+                  children: <Widget>[
+                    _text,
+                    _writingCards,
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

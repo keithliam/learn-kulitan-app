@@ -430,6 +430,7 @@ class _ReadingPageState extends State<ReadingPage> {
     final RenderBox _screenBox = _pageKey.currentContext.findRenderObject();
     final RenderBox _cardBox = _quizCardsKey.currentContext.findRenderObject();
     double _cardWidth = _cardBox.size.width - (quizHorizontalScreenPadding * 2);
+    print(_screenBox.size.height);
     setState(() {
       _quizCardWidth = _cardWidth;
       _heightToCardStackBottom = _screenBox.size.height - quizVerticalScreenPadding - ((quizChoiceButtonHeight + quizChoiceButtonElevation) * 2) - choiceSpacing - cardQuizStackBottomPadding;
@@ -441,7 +442,7 @@ class _ReadingPageState extends State<ReadingPage> {
   @override
   Widget build(BuildContext context) {
     Widget _header = Padding(
-      padding: EdgeInsets.fromLTRB(headerPadding, headerPadding, headerPadding, 0.0),
+      padding: EdgeInsets.fromLTRB(headerHorizontalPadding, headerVerticalPadding, headerHorizontalPadding, 0.0),
       child: StaticHeader(
         left: IconButtonNew(
           icon: Icons.arrow_back_ios,
@@ -607,22 +608,24 @@ class _ReadingPageState extends State<ReadingPage> {
     );
 
     return Material(
-      key: _pageKey,
       color: backgroundColor,
-      child: Stack(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              _header,
-              _progressBar,
-              Container(
-                height: _quizCardStackHeight,
-              ),
-              _buttonChoices,
-            ],
-          ),
-          _quizCards,
-        ],
+      child: SafeArea(
+        child: Stack(
+          key: _pageKey,
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                _header,
+                _progressBar,
+                Container(
+                  height: _quizCardStackHeight,
+                ),
+                _buttonChoices,
+              ],
+            ),
+            _quizCards,
+          ],
+        ),
       ),
     );
   }

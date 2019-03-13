@@ -36,11 +36,14 @@ const writingDrawColor = grayColor;
 const writingKulitanColor = snowColor;
 
 // Spacings
-const quizHorizontalScreenPadding = 38.0;
-const quizVerticalScreenPadding = 28.0;
-const writingHorizontalScreenPadding = 38.0;
-const writingVerticalScreenPadding = 38.0;
-const headerPadding = 14.0;
+const homeHorizontalScreenPadding = 32.0;
+const homeVerticalScreenPadding = 32.0;
+const quizHorizontalScreenPadding = 32.0;
+const quizVerticalScreenPadding = quizHorizontalScreenPadding - quizChoiceButtonElevation;
+const writingHorizontalScreenPadding = 32.0;
+const writingVerticalScreenPadding = 32.0;
+const headerHorizontalPadding = 5.0;
+const headerVerticalPadding = 10.0;
 const cardQuizHorizontalPadding = 26.0;
 const cardQuizVerticalPadding = 20.0;
 const cardQuizStackBottomPadding = quizVerticalScreenPadding;
@@ -50,6 +53,7 @@ const choiceSpacing = 14.0;
 const quizChoiceButtonElevation = 10.0;
 
 // Sizes
+const homeTitleHeight = 110.0;
 const headerIconSize = 32.0;
 const quizChoiceButtonHeight = 62.0;
 const quizCardStackTopSpace = 32.0;
@@ -272,7 +276,7 @@ const kulitanQuiz = TextStyle(
 );
 const kulitanWriting = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
-  fontSize: 200.0,
+  fontSize: 330.0,
   color: writingKulitanColor,
 );
 const kulitanInfo = TextStyle(

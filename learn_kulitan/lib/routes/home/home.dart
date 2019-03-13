@@ -5,19 +5,34 @@ import '../../styles/theme.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Widget _appTitle = Stack(
-      alignment: Alignment.topCenter,
-      children: <Widget>[
-        Text('Learn', style: textHomeSubtitle),
-        Container(
-          child: Text('Kulitan', style: textHomeTitle),
-          padding: const EdgeInsets.only(top: 45.0),
+    Widget _appTitle = Container(
+      padding: const EdgeInsets.only(top: 5.0),
+      height: homeTitleHeight,
+      child: Center(
+        child: Container(
+          height: 97.0,
+          child: Stack(
+            children: <Widget>[
+              Positioned(
+                top: -13.0,
+                left: 0.0,
+                right: 0.0,
+                child: Text('Learn', style: textHomeSubtitle, textAlign: TextAlign.center,),
+              ),
+              Positioned(
+                top: 26.0,
+                left: 0.0,
+                right: 0.0,
+                child: Text('Kulitan', style: textHomeTitle, textAlign: TextAlign.center,),
+              ),
+            ],
+          ),
         ),
-      ],
+      ),
     );
 
     Widget _readingButton = Padding(
-      padding: const EdgeInsets.only(top: 26.0),
+      padding: const EdgeInsets.only(top: homeVerticalScreenPadding - quizChoiceButtonElevation),
       child: HomeButton(
         kulitanTextCustom: FittedBox(
           fit: BoxFit.scaleDown,
@@ -294,16 +309,23 @@ class HomePage extends StatelessWidget {
     return Material(
       child: Container(
         color: backgroundColor,
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: quizHorizontalScreenPadding, vertical: writingVerticalScreenPadding),
-          children: <Widget>[
-            _appTitle,
-            _readingButton,
-            _writingButton,
-            _infoButton,
-            _translateButton,
-            _aboutButton,
-          ],
+        child: SafeArea(
+            child: ListView(
+            padding: const EdgeInsets.fromLTRB(
+              homeHorizontalScreenPadding,
+              homeVerticalScreenPadding,
+              homeHorizontalScreenPadding,
+              homeVerticalScreenPadding - quizChoiceButtonElevation,
+            ),
+            children: <Widget>[
+              _appTitle,
+              _readingButton,
+              _writingButton,
+              _infoButton,
+              _translateButton,
+              _aboutButton,
+            ],
+          ),
         ),
       ),
     );

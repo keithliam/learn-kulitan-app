@@ -26,7 +26,7 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> {
       child: Stack(
         children: <Widget>[
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: cardWritingHorizontalPadding),
+            padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, cardWritingVerticalPadding),
             alignment: Alignment.center,
             child: FittedBox(
               fit: BoxFit.scaleDown,
