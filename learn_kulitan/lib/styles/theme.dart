@@ -276,7 +276,7 @@ const kulitanQuiz = TextStyle(
 );
 const kulitanWriting = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
-  fontSize: 330.0,
+  fontSize: 300.0,
   color: writingKulitanColor,
 );
 const kulitanInfo = TextStyle(

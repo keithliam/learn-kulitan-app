@@ -16,15 +16,15 @@ class WritingPage extends StatefulWidget {
 class _WritingPageState extends State<WritingPage> { 
   Database _db;
   int _overallProgressCount = 0;
-  String _currentText = 'da';
+  String _currentText = 'di';
   int _batchNumber;
   List<String> _glyphPool = [];
   List<String> _choicePool = [];
   Map<String, int> _glyphProgresses = {};
   List<Map<String, dynamic>> _cards = [
     {
-      'kulitan': 'd',
-      'answer': 'da',
+      'kulitan': 'di',
+      'answer': 'di',
       'progress': 0.8,
       'cardNumber': 1,
     },
