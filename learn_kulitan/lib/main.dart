@@ -6,8 +6,12 @@ import './routes/reading/reading.dart';
 import './routes/writing/writing.dart';
 
 void main() {
+  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+    statusBarColor: Colors.transparent,
+    systemNavigationBarColor: Color(0x44AAAAAA),
+  ));
   runApp(MyApp());
 }
 
