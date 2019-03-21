@@ -503,7 +503,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
     if(!_disableSwipe) {
       widget.swipingCard();
       if(!_isFlipped) {
-        double _swipeValue = _cardSwipeDownY + (details.delta.dy * swipeDownSensitivity * 0.002);
+        double _swipeValue = _cardSwipeDownY + (details.delta.dy * swipeDownSensitivity * 0.00175);
         if(0.0 < _swipeValue && _swipeValue < 1.0) {
           double _rotationValue = _swipeDownCurve.transform(_swipeValue);
           setState(() {
