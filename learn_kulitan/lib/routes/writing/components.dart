@@ -1,7 +1,81 @@
 import 'package:flutter/material.dart';
+import 'dart:math' show pow, sqrt;
 import '../../components/misc/CustomCard.dart';
 import '../../components/misc/LinearProgressBar.dart';
 import '../../styles/theme.dart';
+
+final Map<String, List<List<double>>> _kulitanPaths = {
+  'ng': [
+    [0.16319, 0.40069, 0.375, 0.46180, 0.41597, 0.72569, 0.3076388889, 0.8965277778],
+    [0.35625, 0.62430, 0.35138, 0.48263, 0.50208, 0.41875, 0.51597 , 0.65277, 0.53055, 0.49583, 0.61388, 0.49444, 0.63263 , 0.6118, 0.66805, 0.83333, 0.83333, 0.79027, 0.83611 , 0.60972, 0.83541, 0.47569, 0.73472, 0.33541, 0.65138 , 0.30069],
+  ],
+};
+
+class _ShadowPainter extends CustomPainter {
+  _ShadowPainter({
+    this.paths,
+  });
+
+  final List<Path> paths;
+
+  @override
+  bool shouldRepaint(_ShadowPainter oldDelegate) { // TODO: Change to => true?
+    if(oldDelegate.paths != this.paths) return true;
+    else return false;
+  }
+  
+  @override
+  void paint(Canvas canvas, Size size) {
+    if(this.paths.length > 0) {
+      Paint _shadowPaint = Paint()
+        ..color = snowColor
+        ..strokeCap = StrokeCap.round
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = writingDrawPointIdleWidth;
+      for(Path _path in this.paths)
+        canvas.drawPath(_path, _shadowPaint);
+    }
+  }
+}
+
+class _KulitanPainter extends CustomPainter {
+  _KulitanPainter({
+    this.path,
+    this.point,
+    this.isIdle,
+    // this.touchAreas,
+  });
+
+  final Path path;
+  final Offset point;
+  final bool isIdle;
+  // final List<List<Offset>> touchAreas;
+
+  @override
+  bool shouldRepaint(_KulitanPainter oldDelegate) {
+    if(oldDelegate.path != this.path || oldDelegate.isIdle != this.isIdle) return true;
+    else return false;
+  }
+  
+  @override
+  void paint(Canvas canvas, Size size) {
+    if(this.path != null) {
+      Paint _strokePaint = Paint()
+        ..color = grayColor
+        ..strokeCap = StrokeCap.round
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = writingDrawPointIdleWidth;
+      canvas.drawPath(this.path, _strokePaint);
+    }
+    if(this.point != null) {
+      Paint _strokeStartPaint = Paint()
+        ..color = accentColor
+        ..strokeCap = StrokeCap.round
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(this.point, (this.isIdle? writingDrawPointIdleWidth : writingDrawPointTouchWidth) / 2, _strokeStartPaint);
+    }
+  }
+}
 
 class AnimatedWritingCard extends StatefulWidget {
   AnimatedWritingCard({
@@ -19,36 +93,234 @@ class AnimatedWritingCard extends StatefulWidget {
 }
 
 class _AnimatedWritingCardState extends State<AnimatedWritingCard> {
+  List<Offset> _currPoints = [];
+  List<List<Offset>> _currTouchAreas = [];
+  Offset _currPoint;
+  double _currBezierT = 0.0;
+  Path _drawPath;
+  Path _currPath;
+  List<Path> _shadowPaths = [];
+  GlobalKey _canvasKey = GlobalKey();
+  double _canvasWidth = 50.0;
+  double _stepLength = 0.01;
+  bool _hitTarget = false;
+  var _cubicBezier;
+  var _splitCubicBezier;
+  bool _isTouchIdle = true;
+
+  void _setCubicBezier(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3) {
+    x0 *= _canvasWidth;
+    y0 *= _canvasWidth;
+    x1 *= _canvasWidth;
+    y1 *= _canvasWidth;
+    x2 *= _canvasWidth;
+    y2 *= _canvasWidth;
+    x3 *= _canvasWidth;
+    y3 *= _canvasWidth;
+    setState(() {
+      _cubicBezier = (double t) {
+        double _getPoint(double z0, double z1, double z2, double z3) => (pow(1 - t, 3) * z0) + (3 * t * pow(1 - t, 2) * z1) + (3 * pow(t, 2) * (1 - t) * z2) + (pow(t, 3) * z3);
+        return Offset(_getPoint(x0, x1, x2, x3), _getPoint(y0, y1, y2, y3));
+      };
+      _splitCubicBezier = (double t) {
+        double _interp(double num1, double num2) => ((num1 - num2) * t) + num2;
+        final double _x01 = _interp(x1, x0);
+        final double _y01 = _interp(y1, y0);
+        final double _x12 = _interp(x2, x1);
+        final double _y12 = _interp(y2, y1);
+        final double _x23 = _interp(x3, x2);
+        final double _y23 = _interp(y3, y2);
+        final double _x012 = _interp(_x12, _x01);
+        final double _y012 = _interp(_y12, _y01);
+        final double _x123 = _interp(_x23, _x12);
+        final double _y123 = _interp(_y23, _y12);
+        final double _x0123 = _interp(_x123, _x012);
+        final double _y0123 = _interp(_y123, _y012);
+        return {
+          'p0': Offset(x0, y0),
+          'a0': Offset(x1, y1),
+          'a1': Offset(_x012, _y012),
+          'p1': Offset(_x0123, _y0123),
+        };
+      };
+    });
+  }
+
+  void _cardTouched(BuildContext context, Offset offset) {
+    final RenderBox _box = context.findRenderObject();
+    final Offset _localOffset = _box.globalToLocal(offset);
+    final Offset _touchLoc = Offset(_localOffset.dx, _localOffset.dy - 20.0);
+    if(_isWithinTouchArea(_touchLoc)){
+      setState(() {
+        _hitTarget = true;
+        _isTouchIdle = false;
+      });
+    }
+  }
+
+  void _cardTouchEnded() => setState(() {
+    _hitTarget = false;
+    _isTouchIdle = true;
+  });
+
+  double _getPointsDist(Offset p1, Offset p2) => sqrt(pow(p2.dx - p1.dx, 2) + pow(p2.dy - p1.dy, 2));  
+
+  bool _isWithinTouchArea(Offset p1) => writingCardTouchRadius >= _getPointsDist(_currPoint, p1);
+
+  Future<Map<String, double>> _getNearestPointInCurve(Offset p1) async {  // TODO: optimize algorithm using sorting
+    double _shortestDistance = double.infinity;
+    double _shortestPoint;
+    bool _evalDist(double i) {
+      final double _dist = _getPointsDist(_cubicBezier(i), p1);
+      if(_dist == _shortestDistance) {
+        return false;
+      } else {
+        if(_dist < _shortestDistance) {
+          _shortestDistance = _dist;
+          _shortestPoint = i;
+        }
+        return true;
+      }
+    }
+    for(double i = 0.0; i < 1.0; i += _stepLength)
+      if(_evalDist(i) == false)
+        return null;
+    if(_evalDist(1) == false)
+        return null;
+    else
+      return {
+        'point': _shortestPoint,
+        'distance': _shortestDistance,
+      };
+  }
+
+  Offset _adjustAnchor0(Offset p0, Offset a0, double pathRatio) {
+    final double _newDist = (_getPointsDist(p0, a0) * pathRatio);
+    final double _slope = (a0.dy - p0.dy) / (a0.dx - p0.dx);
+    if(_slope == 0) {
+      return Offset(p0.dx + (a0.dx < p0.dx? -_newDist :_newDist), p0.dy);
+    } else if(_slope.isNaN) {
+      return Offset(p0.dx, p0.dy + (a0.dy < p0.dy? -_newDist : _newDist));
+    } else {
+      final double _dx = _newDist / sqrt(1 + pow(_slope, 2));
+      final double _dy = _slope * _dx;
+      if(a0.dy < p0.dy)
+        return Offset(p0.dx - _dx, p0.dy - _dy);
+      else
+        return Offset(p0.dx + _dx, p0.dy + _dy);
+    }
+  }
+
+  void _updateTouchOffset(BuildContext context, Offset offset) async {
+    if(_hitTarget) {
+      final RenderBox _box = context.findRenderObject();
+      final Offset _localOffset = _box.globalToLocal(offset);
+      final Offset _touchLoc = Offset(_localOffset.dx, _localOffset.dy - 20.0);
+      Map<String, double> _touchDetails = await _getNearestPointInCurve(_touchLoc);
+      if(_touchDetails != null) {
+        if(_touchDetails['distance'] < writingCardTouchRadius) {
+          final Map<String, Offset> _points = _splitCubicBezier(_touchDetails['point']);
+          final _anchor0 = _adjustAnchor0(_points['p0'], _points['a0'], _touchDetails['point']);
+          setState(() {
+            _drawPath = Path()..moveTo(_points['p0'].dx, _points['p0'].dy)..cubicTo(_anchor0.dx, _anchor0.dy, _points['a1'].dx, _points['a1'].dy, _points['p1'].dx, _points['p1'].dy);
+            _currBezierT = _touchDetails['point'];
+            _currPoint = _points['p1'];
+          });
+        } else {
+          setState(() {
+            _isTouchIdle = true;
+            _hitTarget = false;
+          });
+        }
+      }
+    }
+  }
+
+  void _getPaths() async {
+    final RenderBox _canvasBox = _canvasKey.currentContext.findRenderObject();
+    final double _width = _canvasBox.size.width;
+    setState(() => _canvasWidth = _width);
+    Path _singlePath;
+    List<Path> _manyPaths = [];
+    List<List<double>> _thisKulitanPaths = _kulitanPaths[widget.kulitan];
+    for(List<double> _path in _thisKulitanPaths) {
+      _singlePath = Path()..moveTo(_path[0] * _width, _path[1] * _width);
+      for(int i = 2; i < _path.length; i += 6)
+        _singlePath.cubicTo(_path[i] * _width, _path[i + 1] * _width, _path[i + 2] * _width, _path[i + 3] * _width, _path[i + 4] * _width, _path[i + 5] * _width);
+      _manyPaths.add(_singlePath);
+    }
+
+    List<double> _path = _kulitanPaths[widget.kulitan][0];
+    setState(() {
+      _currPoint = Offset(_path[0] * _width, _path[1] * _width);
+      _currPath = Path()..moveTo(_path[0] * _width, _path[1] * _width)..cubicTo(_path[2] * _width, _path[3] * _width, _path[4] * _width, _path[5] * _width, _path[6] * _width, _path[7] * _width);
+    });
+    // // TODO: calculate steplength
+    // Offset _singlePoint;
+    // List<Offset> _strokePoints = [];
+    // List<List<Offset>> _touchAreas = [];
+    // // for(List<double> _path in _thisKulitanPaths) {
+      _path = _thisKulitanPaths[0];
+    //   // _singlePath = Path()..moveTo(_path[0] * _width, _path[1] * _width);
+    //   // for(int i = 2; i < _path.length; i += 6)
+      int i = 0; // TODO: remove
+      _setCubicBezier(_path[i], _path[i + 1], _path[i + 2], _path[i + 3], _path[i + 4], _path[i + 5], _path[i + 6], _path[i + 7]);
+
+    setState(() {
+      _shadowPaths = _manyPaths;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _getPaths()); 
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomCard(
-      padding: const EdgeInsets.symmetric(vertical: cardWritingVerticalPadding),
-      child: Stack(
+      padding: const EdgeInsets.only(bottom: cardWritingVerticalPadding),
+      child: Column(
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, cardWritingVerticalPadding),
-            alignment: Alignment.center,
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                widget.kulitan,
-                style: kulitanWriting,
-                textAlign: TextAlign.center,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: AspectRatio(
+              aspectRatio: 0.9248554913,
+              child: Stack(
+                fit:StackFit.expand,
+                children: <CustomPaint>[
+                  CustomPaint(
+                    key: _canvasKey,
+                    painter: _ShadowPainter(
+                      paths: _shadowPaths,
+                    ),
+                  ),
+                  CustomPaint(
+                    painter: _KulitanPainter(
+                      path: _drawPath,
+                      point: _currPoint,
+                      isIdle: _isTouchIdle,
+                    ),
+                    child: GestureDetector(
+                      onPanDown: (DragDownDetails details) => _cardTouched(context, details.globalPosition),
+                      onPanEnd: (_) => _cardTouchEnded(),
+                      onPanCancel: () => _cardTouchEnded(),
+                      onPanStart: (DragStartDetails details) => _updateTouchOffset(context, details.globalPosition),
+                      onPanUpdate: (DragUpdateDetails details) => _updateTouchOffset(context, details.globalPosition),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          Positioned(
-            left: 0.0,
-            right: 0.0,
-            bottom: 0.0,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: cardWritingHorizontalPadding,
-                right: cardWritingHorizontalPadding,
-              ),
-              child: LinearProgressBar(
-                progress: widget.progress,
-              ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: cardWritingHorizontalPadding,
+              right: cardWritingHorizontalPadding,
+            ),
+            child: LinearProgressBar(
+              progress: widget.progress,
             ),
           ),
         ],

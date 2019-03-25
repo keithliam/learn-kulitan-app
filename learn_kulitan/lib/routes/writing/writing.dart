@@ -16,15 +16,15 @@ class WritingPage extends StatefulWidget {
 class _WritingPageState extends State<WritingPage> { 
   Database _db;
   int _overallProgressCount = 0;
-  String _currentText = 'di';
+  String _currentText = 'nga';
   int _batchNumber;
   List<String> _glyphPool = [];
   List<String> _choicePool = [];
   Map<String, int> _glyphProgresses = {};
   List<Map<String, dynamic>> _cards = [
     {
-      'kulitan': 'di',
-      'answer': 'di',
+      'kulitan': 'ng',
+      'answer': 'nga',
       'progress': 0.8,
       'cardNumber': 1,
     },
@@ -96,7 +96,7 @@ class _WritingPageState extends State<WritingPage> {
       ),
     );
     
-    Widget _text = Flexible(
+    Widget _text = Expanded(
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: quizHorizontalScreenPadding,
@@ -114,13 +114,10 @@ class _WritingPageState extends State<WritingPage> {
       ),
     );
 
-    Widget _writingCards = Flexible(
-      flex: 2,
-      child: AnimatedWritingCard(
-        kulitan: _cards[0]['kulitan'],
-        progress: _cards[0]['progress'],
-        cardNumber: _cards[0]['cardNumber'],
-      ),
+    Widget _writingCards = AnimatedWritingCard(
+      kulitan: _cards[0]['kulitan'],
+      progress: _cards[0]['progress'],
+      cardNumber: _cards[0]['cardNumber'],
     );
 
     return Material(

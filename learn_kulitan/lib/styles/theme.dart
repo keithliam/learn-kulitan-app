@@ -57,6 +57,9 @@ const homeTitleHeight = 110.0;
 const headerIconSize = 32.0;
 const quizChoiceButtonHeight = 62.0;
 const quizCardStackTopSpace = 32.0;
+const writingCardTouchRadius = 40.0;
+const writingDrawPointIdleWidth = 18.0;
+const writingDrawPointTouchWidth = 36.0;
 
 // Sensitivity
 const swipeDownSensitivity = 1.0;
