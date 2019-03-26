@@ -79,6 +79,8 @@ const quizCardSwipeDownCurve = Curves.easeInOut;  // 0.5 -> 0.5 curves only
 const quizCardAutoSwipeDownCurve = Curves.decelerate;
 const quizCardSwipeLeftCurve = Curves.fastOutSlowIn;
 const quizCardForwardCurve = Curves.fastOutSlowIn;
+const drawTouchPointScaleUpCurve = Curves.easeOutBack;
+const drawTouchPointScaleDownCurve = Curves.easeInBack;
 
 // Durations
 const linearProgressBarChangeDuration = 1000;
@@ -94,6 +96,7 @@ const forwardQuizCardsDuration = resetQuizDuration;
 const updateQuizCardProgressOffset = 250;
 const quizCardsForwardDuration = 500;
 const showAnswerToEnableSwipeDuration = 0;  // linearProgressBarChangeDuration
+const drawTouchPointScaleDuration = 250;
 
 // Kulitan
 const Map<String, String> kulitanGlyphs = {

@@ -19,7 +19,7 @@ class _ShadowPainter extends CustomPainter {
   final List<Path> paths;
 
   @override
-  bool shouldRepaint(_ShadowPainter oldDelegate) { // TODO: Change to => true?
+  bool shouldRepaint(_ShadowPainter oldDelegate) {
     if(oldDelegate.paths != this.paths) return true;
     else return false;
   }
@@ -42,18 +42,16 @@ class _KulitanPainter extends CustomPainter {
   _KulitanPainter({
     this.path,
     this.point,
-    this.isIdle,
-    // this.touchAreas,
+    this.pointSize,
   });
 
   final Path path;
   final Offset point;
-  final bool isIdle;
-  // final List<List<Offset>> touchAreas;
+  final double pointSize;
 
   @override
   bool shouldRepaint(_KulitanPainter oldDelegate) {
-    if(oldDelegate.path != this.path || oldDelegate.isIdle != this.isIdle) return true;
+    if(oldDelegate.path != this.path || oldDelegate.pointSize != this.pointSize) return true;
     else return false;
   }
   
@@ -72,7 +70,7 @@ class _KulitanPainter extends CustomPainter {
         ..color = accentColor
         ..strokeCap = StrokeCap.round
         ..style = PaintingStyle.fill;
-      canvas.drawCircle(this.point, (this.isIdle? writingDrawPointIdleWidth : writingDrawPointTouchWidth) / 2, _strokeStartPaint);
+      canvas.drawCircle(this.point, this.pointSize, _strokeStartPaint);
     }
   }
 }
@@ -92,7 +90,7 @@ class AnimatedWritingCard extends StatefulWidget {
   _AnimatedWritingCardState createState() => _AnimatedWritingCardState();
 }
 
-class _AnimatedWritingCardState extends State<AnimatedWritingCard> {
+class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTickerProviderStateMixin {
   List<Offset> _currPoints = [];
   List<List<Offset>> _currTouchAreas = [];
   Offset _currPoint;
@@ -106,7 +104,11 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> {
   bool _hitTarget = false;
   var _cubicBezier;
   var _splitCubicBezier;
-  bool _isTouchIdle = true;
+
+  AnimationController _pointController;
+  CurvedAnimation _pointCurve;
+  Tween<double> _pointTween;
+  Animation<double> _pointAnimation;
 
   void _setCubicBezier(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3) {
     x0 *= _canvasWidth;
@@ -151,17 +153,19 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> {
     final Offset _localOffset = _box.globalToLocal(offset);
     final Offset _touchLoc = Offset(_localOffset.dx, _localOffset.dy - 20.0);
     if(_isWithinTouchArea(_touchLoc)){
+      _animateTouchPoint();
       setState(() {
         _hitTarget = true;
-        _isTouchIdle = false;
       });
     }
   }
 
-  void _cardTouchEnded() => setState(() {
-    _hitTarget = false;
-    _isTouchIdle = true;
-  });
+  void _cardTouchEnded() {
+    _animateTouchPoint(isScaleUp: false);
+    setState(() {
+      _hitTarget = false;
+    });
+  }
 
   double _getPointsDist(Offset p1, Offset p2) => sqrt(pow(p2.dx - p1.dx, 2) + pow(p2.dy - p1.dy, 2));  
 
@@ -227,8 +231,8 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> {
             _currPoint = _points['p1'];
           });
         } else {
+          _animateTouchPoint(isScaleUp: false);
           setState(() {
-            _isTouchIdle = true;
             _hitTarget = false;
           });
         }
@@ -271,9 +275,25 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> {
     });
   }
 
+  void _animateTouchPoint({ bool isScaleUp: true }) {
+    if(isScaleUp) {
+      _pointCurve.curve = drawTouchPointScaleUpCurve;
+      _pointController.forward();
+    } else {
+      _pointCurve.curve = drawTouchPointScaleDownCurve;
+      _pointController.reverse();
+    }
+
+  }
+
   @override
   void initState() {
     super.initState();
+    _pointController = AnimationController(duration: Duration(milliseconds: drawTouchPointScaleDuration), vsync: this);
+    _pointCurve = CurvedAnimation(parent: _pointController, curve:drawTouchPointScaleUpCurve);
+    _pointTween = Tween<double>(begin: writingDrawPointIdleWidth / 2, end: writingDrawPointTouchWidth / 2);
+    _pointAnimation = _pointTween.animate(_pointCurve)
+      ..addListener(() => setState(() {}));
     WidgetsBinding.instance.addPostFrameCallback((_) => _getPaths()); 
   }
 
@@ -300,7 +320,7 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> {
                     painter: _KulitanPainter(
                       path: _drawPath,
                       point: _currPoint,
-                      isIdle: _isTouchIdle,
+                      pointSize: _pointAnimation.value,
                     ),
                     child: GestureDetector(
                       onPanDown: (DragDownDetails details) => _cardTouched(context, details.globalPosition),
