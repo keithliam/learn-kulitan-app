@@ -390,7 +390,7 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTi
       child: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            padding: const EdgeInsets.only(top: 20.0),
             child: AspectRatio(
               aspectRatio: 0.9248554913,
               child: Stack(
