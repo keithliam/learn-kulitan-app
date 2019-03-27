@@ -384,6 +384,12 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTi
   }
 
   @override
+  void dispose() {
+    _pointController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CustomCard(
       padding: const EdgeInsets.only(bottom: cardWritingVerticalPadding),
