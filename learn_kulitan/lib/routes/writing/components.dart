@@ -58,20 +58,43 @@ class _CurrPathPainter extends CustomPainter {
   }
 }
 
-class _KulitanPainter extends CustomPainter {
-  _KulitanPainter({
-    this.path,
+class _CurrPointPainter extends CustomPainter {
+  _CurrPointPainter({
     this.point,
     this.pointSize,
   });
 
-  final Path path;
   final Offset point;
   final double pointSize;
 
   @override
+  bool shouldRepaint(_CurrPointPainter oldDelegate) {
+    if(oldDelegate.point != this.point || oldDelegate.pointSize != this.pointSize) return true;
+    else return false;
+  }
+  
+  @override
+  void paint(Canvas canvas, Size size) {
+    if(this.point != null) {
+      Paint _strokeStartPaint = Paint()
+        ..color = writingGuideColor
+        ..strokeCap = StrokeCap.round
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(this.point, this.pointSize, _strokeStartPaint);
+    }
+  }
+}
+
+class _KulitanPainter extends CustomPainter {
+  _KulitanPainter({
+    this.path,
+  });
+
+  final Path path;
+
+  @override
   bool shouldRepaint(_KulitanPainter oldDelegate) {
-    if(oldDelegate.path != this.path || oldDelegate.point != this.point || oldDelegate.pointSize != this.pointSize) return true;
+    if(oldDelegate.path != this.path) return true;
     else return false;
   }
   
@@ -84,13 +107,6 @@ class _KulitanPainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = writingDrawPointIdleWidth;
       canvas.drawPath(this.path, _strokePaint);
-    }
-    if(this.point != null) {
-      Paint _strokeStartPaint = Paint()
-        ..color = writingGuideColor
-        ..strokeCap = StrokeCap.round
-        ..style = PaintingStyle.fill;
-      canvas.drawCircle(this.point, this.pointSize, _strokeStartPaint);
     }
   }
 }
@@ -130,6 +146,9 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTi
   CurvedAnimation _pointCurve;
   Tween<double> _pointTween;
   Animation<double> _pointAnimation;
+  Curve _touchPointOpacityCurve = drawGuidesOpacityDownCurve;
+  double _touchPointOpacity = 1.0;
+  double _shadowOffset = 0.0;
 
   void _setCubicBezier(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3) {
     x0 *= _canvasWidth;
@@ -260,20 +279,34 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTi
       _setCubicBezier(_tempPath[_currSubPathNo - 2], _tempPath[_currSubPathNo - 1], _tempPath[_currSubPathNo], _tempPath[_currSubPathNo + 1], _tempPath[_currSubPathNo + 2], _tempPath[_currSubPathNo + 3], _tempPath[_currSubPathNo + 4], _tempPath[_currSubPathNo + 5]);
     } else if(_currPathNo + 1 < _tempGlyph.length) {
       await Future.delayed(const Duration(milliseconds: nextDrawPathDelay));
-      final int _prevPathNo = _currPathNo;
-      final List<double> _prevPath = _tempGlyph[_prevPathNo];
+      setState(() {
+        _touchPointOpacityCurve = drawGuidesOpacityDownCurve;
+        _touchPointOpacity = 0.0;
+      });
+      await Future.delayed(const Duration(milliseconds: drawGuidesOpacityChangeProgressUpdateDuration * 2));
+      final List<double> _prevPath = _tempGlyph[_currPathNo];
       final List<double> _tempPath = _tempGlyph[_currPathNo + 1];
+      _setCubicBezier(_tempPath[0], _tempPath[1], _tempPath[2], _tempPath[3], _tempPath[4], _tempPath[5], _tempPath[6], _tempPath[7]);
       setState(() {
         _prevDrawPaths.add(Path()..moveTo(_prevPath[0] * _canvasWidth, _prevPath[1] * _canvasWidth)..cubicTo(_prevPath[2] * _canvasWidth, _prevPath[3] * _canvasWidth, _prevPath[4] * _canvasWidth, _prevPath[5] * _canvasWidth, _prevPath[6] * _canvasWidth, _prevPath[7] * _canvasWidth));
         _currPoint = Offset(_tempPath[0] * _canvasWidth, _tempPath[1] * _canvasWidth);
         _currBezierT = 0.0;
         _currPathNo++;
         _currSubPathNo = 2;
+        _touchPointOpacityCurve = drawGuidesOpacityDownCurve;
+        _touchPointOpacity = 1.0;
         _disableSwipe = false;
       });
-      _setCubicBezier(_tempPath[0], _tempPath[1], _tempPath[2], _tempPath[3], _tempPath[4], _tempPath[5], _tempPath[6], _tempPath[7]);
     } else {
-      print('Glyph done!');
+      await Future.delayed(const Duration(milliseconds: drawShadowOffsetChangeDelay));
+      setState(() => _shadowOffset = 0.03 * _canvasWidth);
+      await Future.delayed(const Duration(milliseconds: drawShadowOffsetChangeDuration));
+      setState((){
+        _touchPointOpacityCurve = drawGuidesOpacityDownCurve;
+        _touchPointOpacity = 0.0;
+      });
+      // TODO: hide guides
+      // TODO: Update progressbar
     }
   }
 
@@ -284,7 +317,7 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTi
       final Offset _touchLoc = Offset(_localOffset.dx, _localOffset.dy - 20.0);
       Map<String, double> _touchDetails = await _getNearestPointInCurve(_touchLoc);
       if(_touchDetails != null) {
-        if(_isWithinTouchArea(_cubicBezier(_touchDetails['point'])) && _touchDetails['distance'] < writingCardTouchRadius) {
+        if(_isWithinTouchArea(_cubicBezier(_touchDetails['point'])) && _touchDetails['distance'] < writingCardTouchRadius && _touchDetails['point'] - _currBezierT < 0.5) {
           if(_touchDetails['point'] >= _currBezierT) {
             final Map<String, Offset> _points = _splitCubicBezier(_touchDetails['point']);
             final _anchor0 = _adjustAnchor0(_points['p0'], _points['a0'], _touchDetails['point']);
@@ -310,7 +343,6 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTi
     final RenderBox _canvasBox = _canvasKey.currentContext.findRenderObject();
     final double _width = _canvasBox.size.width;
     setState(() => _canvasWidth = _width);
-    Path _singlePath;
     List<Path> _manyPaths = [];
     List<List<double>> _thisKulitanPaths = kulitanPaths[widget.kulitan];
     for(List<double> _path in _thisKulitanPaths) {
@@ -363,14 +395,20 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTi
               aspectRatio: 0.9248554913,
               child: Stack(
                 fit:StackFit.expand,
-                children: <CustomPaint>[
-                  CustomPaint(
-                    key: _canvasKey,
-                    painter: _ShadowPainter(
-                      paths: _shadowPaths,
+                children: <Widget>[
+                  AnimatedPositioned(
+                    top: _shadowOffset,
+                    left: _shadowOffset,
+                    curve: drawShadowOffsetChangeCurve,
+                    duration: const Duration(milliseconds: drawShadowOffsetChangeDuration),
+                    child: CustomPaint(
+                      painter: _ShadowPainter(
+                        paths: _shadowPaths,
+                      ),
                     ),
                   ),
                   CustomPaint(
+                    key: _canvasKey,
                     painter: _CurrPathPainter(
                       paths: _prevDrawPaths,
                     ),
@@ -378,15 +416,24 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTi
                   CustomPaint(
                     painter: _KulitanPainter(
                       path: _drawPath,
-                      point: _currPoint,
-                      pointSize: _pointAnimation.value,
                     ),
-                    child: GestureDetector(
-                      onPanDown: (DragDownDetails details) => _cardTouched(context, details.globalPosition),
-                      onPanEnd: (_) => _cardTouchEnded(),
-                      onPanCancel: () => _cardTouchEnded(),
-                      onPanStart: (DragStartDetails details) => _updateTouchOffset(context, details.globalPosition),
-                      onPanUpdate: (DragUpdateDetails details) => _updateTouchOffset(context, details.globalPosition),
+                  ),
+                  AnimatedOpacity(
+                    curve: _touchPointOpacityCurve,
+                    opacity: _touchPointOpacity,
+                    duration: const Duration(milliseconds: drawGuidesOpacityChangeProgressUpdateDuration),
+                    child: CustomPaint(
+                      painter:  _CurrPointPainter(
+                        point: _currPoint,
+                        pointSize: _pointAnimation.value,
+                      ),
+                      child: GestureDetector(
+                        onPanDown: (DragDownDetails details) => _cardTouched(context, details.globalPosition),
+                        onPanEnd: (_) => _cardTouchEnded(),
+                        onPanCancel: () => _cardTouchEnded(),
+                        onPanStart: (DragStartDetails details) => _updateTouchOffset(context, details.globalPosition),
+                        onPanUpdate: (DragUpdateDetails details) => _updateTouchOffset(context, details.globalPosition),
+                      ),
                     ),
                   ),
                 ],
