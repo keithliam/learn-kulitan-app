@@ -257,6 +257,13 @@ const List<List<String>> kulitanBatches = [
   ['gang', 'kang', 'tang', 'dang', 'nang', 'lang', 'mang', 'pang', 'sang', 'bang', 'ngang'],
 ];
 
+const Map<String, List<List<double>>> kulitanPaths = {
+  'ng': [
+    [0.16319, 0.40069, 0.375, 0.46180, 0.41597, 0.72569, 0.3076388889, 0.8965277778],
+    [0.3595, 0.62430, 0.35138, 0.48263, 0.50208, 0.41875, 0.51597 , 0.65277, 0.53055, 0.49583, 0.61388, 0.49444, 0.63263 , 0.6118, 0.66805, 0.83333, 0.83333, 0.79027, 0.83611 , 0.60972, 0.83541, 0.47569, 0.73472, 0.33541, 0.65138 , 0.30069],
+  ],
+};
+
 int _getSumOfLengths() {
   int sum = 0;
   for(List<String> _arr in kulitanBatches)

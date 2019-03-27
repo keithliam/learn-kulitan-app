@@ -4,13 +4,6 @@ import '../../components/misc/CustomCard.dart';
 import '../../components/misc/LinearProgressBar.dart';
 import '../../styles/theme.dart';
 
-final Map<String, List<List<double>>> _kulitanPaths = {
-  'ng': [
-    [0.16319, 0.40069, 0.375, 0.46180, 0.41597, 0.72569, 0.3076388889, 0.8965277778],
-    [0.35625, 0.62430, 0.35138, 0.48263, 0.50208, 0.41875, 0.51597 , 0.65277, 0.53055, 0.49583, 0.61388, 0.49444, 0.63263 , 0.6118, 0.66805, 0.83333, 0.83333, 0.79027, 0.83611 , 0.60972, 0.83541, 0.47569, 0.73472, 0.33541, 0.65138 , 0.30069],
-  ],
-};
-
 class _ShadowPainter extends CustomPainter {
   _ShadowPainter({
     this.paths,
@@ -249,19 +242,17 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTi
     }
   }
 
-  bool _hasNextSubStroke() => _currSubPathNo + 6 < _kulitanPaths[widget.kulitan][_currPathNo].length;
+  bool _hasNextSubStroke() => _currSubPathNo + 6 < kulitanPaths[widget.kulitan][_currPathNo].length;
 
   void getNextPath() async {
     setState(() => _disableSwipe = true);
-    final List<List<double>> _tempGlyph = _kulitanPaths[widget.kulitan];
+    final List<List<double>> _tempGlyph = kulitanPaths[widget.kulitan];
     if(_hasNextSubStroke()) {
       final List<double> _tempPath = _tempGlyph[_currPathNo];
       final int _prevSubPathNo = _currSubPathNo;
-      if(_currSubPathNo == 2)
-        setState(() => _prevDrawPaths.add(Path()..moveTo(_tempPath[0] * _canvasWidth, _tempPath[1] * _canvasWidth)));
       setState(() => _currSubPathNo += 6);
       setState(() {
-        _prevDrawPaths[_currPathNo].cubicTo(_tempPath[_prevSubPathNo] * _canvasWidth, _tempPath[_prevSubPathNo + 1] * _canvasWidth, _tempPath[_prevSubPathNo + 2] * _canvasWidth, _tempPath[_prevSubPathNo + 3] * _canvasWidth, _tempPath[_prevSubPathNo + 4] * _canvasWidth, _tempPath[_prevSubPathNo + 5] * _canvasWidth);
+        _prevDrawPaths.add(Path()..moveTo(_tempPath[_prevSubPathNo - 2] * _canvasWidth, _tempPath[_prevSubPathNo - 1] * _canvasWidth)..cubicTo(_tempPath[_prevSubPathNo] * _canvasWidth, _tempPath[_prevSubPathNo + 1] * _canvasWidth, _tempPath[_prevSubPathNo + 2] * _canvasWidth, _tempPath[_prevSubPathNo + 3] * _canvasWidth, _tempPath[_prevSubPathNo + 4] * _canvasWidth, _tempPath[_prevSubPathNo + 5] * _canvasWidth));
         _currPoint = Offset(_tempPath[_currSubPathNo - 2] * _canvasWidth, _tempPath[_currSubPathNo - 1] * _canvasWidth);
         _currBezierT = 0.0;
         _disableSwipe = false;
@@ -321,25 +312,16 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTi
     setState(() => _canvasWidth = _width);
     Path _singlePath;
     List<Path> _manyPaths = [];
-    List<List<double>> _thisKulitanPaths = _kulitanPaths[widget.kulitan];
+    List<List<double>> _thisKulitanPaths = kulitanPaths[widget.kulitan];
     for(List<double> _path in _thisKulitanPaths) {
-      _singlePath = Path()..moveTo(_path[0] * _width, _path[1] * _width);
       for(int i = 2; i < _path.length; i += 6)
-        _singlePath.cubicTo(_path[i] * _width, _path[i + 1] * _width, _path[i + 2] * _width, _path[i + 3] * _width, _path[i + 4] * _width, _path[i + 5] * _width);
-      _manyPaths.add(_singlePath);
+        _manyPaths.add(Path()..moveTo(_path[i - 2] * _width, _path[i - 1] * _width)..cubicTo(_path[i] * _width, _path[i + 1] * _width, _path[i + 2] * _width, _path[i + 3] * _width, _path[i + 4] * _width, _path[i + 5] * _width));
     }
 
-    List<double> _path = _kulitanPaths[widget.kulitan][0];
+    List<double> _path = kulitanPaths[widget.kulitan][0];
     setState(() => _currPoint = Offset(_path[0] * _width, _path[1] * _width));
-    // Offset _singlePoint;
-    // List<Offset> _strokePoints = [];
-    // List<List<Offset>> _touchAreas = [];
-    // // for(List<double> _path in _thisKulitanPaths) {
-      _path = _thisKulitanPaths[0];
-    //   // _singlePath = Path()..moveTo(_path[0] * _width, _path[1] * _width);
-    //   // for(int i = 2; i < _path.length; i += 6)
-      int i = 0; // TODO: remove
-      _setCubicBezier(_path[i], _path[i + 1], _path[i + 2], _path[i + 3], _path[i + 4], _path[i + 5], _path[i + 6], _path[i + 7]);
+    _path = _thisKulitanPaths[0];
+    _setCubicBezier(_path[0], _path[1], _path[2], _path[3], _path[4], _path[5], _path[6], _path[7]);
 
     setState(() {
       _shadowPaths = _manyPaths;
