@@ -28,7 +28,7 @@ class _ShadowPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if(this.paths.length > 0) {
       Paint _shadowPaint = Paint()
-        ..color = snowColor
+        ..color = writingShadowColor
         ..strokeCap = StrokeCap.round
         ..style = PaintingStyle.stroke
         ..strokeWidth = writingDrawPointIdleWidth;
@@ -55,7 +55,7 @@ class _CurrPathPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if(this.paths.length > 0) {
       Paint _pathPaint = Paint()
-        ..color = grayColor // TODO: make constant
+        ..color = writingDrawColor
         ..strokeCap = StrokeCap.round
         ..style = PaintingStyle.stroke
         ..strokeWidth = writingDrawPointIdleWidth;
@@ -86,7 +86,7 @@ class _KulitanPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if(this.path != null) {
       Paint _strokePaint = Paint()
-        ..color = grayColor
+        ..color = writingDrawColor
         ..strokeCap = StrokeCap.round
         ..style = PaintingStyle.stroke
         ..strokeWidth = writingDrawPointIdleWidth;
@@ -94,7 +94,7 @@ class _KulitanPainter extends CustomPainter {
     }
     if(this.point != null) {
       Paint _strokeStartPaint = Paint()
-        ..color = accentColor
+        ..color = writingGuideColor
         ..strokeCap = StrokeCap.round
         ..style = PaintingStyle.fill;
       canvas.drawCircle(this.point, this.pointSize, _strokeStartPaint);

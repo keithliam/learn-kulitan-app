@@ -33,7 +33,7 @@ const cardChoicesWrongColor = accentColor;
 
 const writingGuideColor = accentColor;
 const writingDrawColor = grayColor;
-const writingKulitanColor = snowColor;
+const writingShadowColor = snowColor;
 
 // Spacings
 const homeHorizontalScreenPadding = 32.0;
@@ -280,11 +280,6 @@ const kulitanQuiz = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
   fontSize: 150.0,
   color: grayColor,
-);
-const kulitanWriting = TextStyle(
-  fontFamily: 'Kulitan Semi Bold',
-  fontSize: 300.0,
-  color: writingKulitanColor,
 );
 const kulitanInfo = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
