@@ -97,6 +97,7 @@ const updateQuizCardProgressOffset = 250;
 const quizCardsForwardDuration = 500;
 const showAnswerToEnableSwipeDuration = 0;  // linearProgressBarChangeDuration
 const drawTouchPointScaleDuration = 250;
+const nextDrawPathDelay = 1000;
 
 // Kulitan
 const Map<String, String> kulitanGlyphs = {
