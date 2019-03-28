@@ -60,6 +60,9 @@ const quizCardStackTopSpace = 32.0;
 const writingCardTouchRadius = 40.0;
 const writingDrawPointIdleWidth = 18.0;
 const writingDrawPointTouchWidth = 36.0;
+const writingGuideCircleRadius = 0.05069;
+const writingGuideCircleStrokeWidth = 0.01597;
+const writingGuideLineStrokeWidth = 0.02291;
 
 // Sensitivity
 const swipeDownSensitivity = 1.0;
@@ -81,9 +84,11 @@ const quizCardSwipeLeftCurve = Curves.fastOutSlowIn;
 const quizCardForwardCurve = Curves.fastOutSlowIn;
 const drawTouchPointScaleUpCurve = Curves.easeOutBack;
 const drawTouchPointScaleDownCurve = Curves.easeInBack;
+const drawTouchPointOpacityUpCurve = Curves.fastOutSlowIn;
+const drawTouchPointOpacityDownCurve = Curves.decelerate;
+const drawShadowOffsetChangeCurve = Curves.easeOutBack;
 const drawGuidesOpacityUpCurve = Curves.fastOutSlowIn;
 const drawGuidesOpacityDownCurve = Curves.decelerate;
-const drawShadowOffsetChangeCurve = Curves.easeOutBack;
 
 // Durations
 const linearProgressBarChangeDuration = 1000;
@@ -100,10 +105,10 @@ const updateQuizCardProgressOffset = 250;
 const quizCardsForwardDuration = 500;
 const showAnswerToEnableSwipeDuration = 0;  // linearProgressBarChangeDuration
 const drawTouchPointScaleDuration = 250;
-const drawGuidesOpacityChangeProgressUpdateDuration = 250;
 const nextDrawPathDelay = 250;
-const drawShadowOffsetChangeDelay = 500;
 const drawShadowOffsetChangeDuration = 400;
+const drawGuidesOpacityChangeDelay = 500;
+const drawGuidesOpacityChangeDuration = 250;
 
 // Kulitan
 const Map<String, String> kulitanGlyphs = {
@@ -263,10 +268,42 @@ const List<List<String>> kulitanBatches = [
   ['gang', 'kang', 'tang', 'dang', 'nang', 'lang', 'mang', 'pang', 'sang', 'bang', 'ngang'],
 ];
 
+// Drawing Paths
 const Map<String, List<List<double>>> kulitanPaths = {
   'ng': [
     [0.16319, 0.31221, 0.375, 0.37277, 0.41597, 0.6368, 0.30763, 0.80754],
     [0.3595, 0.53124, 0.35138, 0.39305, 0.50208, 0.32985, 0.51597 , 0.56319, 0.53055, 0.40624, 0.61388, 0.40485, 0.63263 , 0.52291, 0.66805, 0.74513, 0.83333, 0.70069, 0.83611 , 0.52013, 0.83541, 0.38681, 0.73472, 0.24722, 0.65138 , 0.21181],
+  ],
+};
+const Map<String, List<Map<String, dynamic>>> kulitanGuides = {
+  'ng': [
+    {
+      'labelOffset': Offset(0.11944, 0.60416),
+      'path': [
+        Offset(0.10138, 0.39861),
+        Offset(0.24166, 0.43541),
+        Offset(0.32777, 0.60555),
+        Offset(0.18889, 0.80972),
+      ],
+    },
+    {
+      'labelOffset': Offset(0.59305, 0.83194),
+      'path': [
+        Offset(0.40416, 0.7375),
+        Offset(0.42916, 0.63333),
+        Offset(0.5243, 0.61458),
+        Offset(0.52708, 0.75902),
+        Offset(0.5375, 0.64375),
+        Offset(0.63263, 0.65486),
+        Offset(0.6625, 0.75138),
+        Offset(0.70347, 0.88125),
+        Offset(0.97638, 0.71527),
+        Offset(0.92916, 0.44791),
+        Offset(0.88472, 0.2),
+        Offset(0.69861, 0.10833),
+        Offset(0.69861, 0.10833),
+      ],
+    }
   ],
 };
 
@@ -381,9 +418,10 @@ const textWriting = TextStyle(
 );
 const textWritingGuide = TextStyle(
   fontFamily: 'Barlow',
-  fontSize: 15.0,
+  fontSize: 100.0,
   fontWeight: FontWeight.bold,
   color: accentColor,
+  height: 0.9,
 );
 const textInfoCaption = TextStyle(
   fontFamily: 'Barlow',
