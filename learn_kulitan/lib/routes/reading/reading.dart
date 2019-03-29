@@ -78,7 +78,6 @@ class _ReadingPageState extends State<ReadingPage> {
   final _showAnswerChoiceController = StreamController.broadcast();
   final _flipStreamController = StreamController.broadcast();
   final _disableSwipeStreamController = StreamController.broadcast();
-  final _forwardCardStreamController = StreamController.broadcast();
 
   void _pressAlert() {
     _disableSwipeStreamController.sink.add(true);
@@ -86,7 +85,7 @@ class _ReadingPageState extends State<ReadingPage> {
   }
 
   void _pressStopAlert() {
-    if(_cards[0]['progress'] != maxQuizGlyphProgress)
+    if(_cards[0]['progress'] < maxQuizGlyphProgress)
       _disableSwipeStreamController.sink.add(false);
     if(_presses > 0)
       setState(() => _presses--);
@@ -233,7 +232,6 @@ class _ReadingPageState extends State<ReadingPage> {
     _pushRemovedCardChoices();
   }
   void _swipedLeft() async {
-    _forwardCardStreamController.sink.add(null);
     setState(() {
       _cards[0] = _cards[1];
       _cards[1] = _cards[2];
@@ -287,7 +285,7 @@ class _ReadingPageState extends State<ReadingPage> {
       final _keyList = _glyphProgresses.keys.toList();
       do {
         _randomGlyph = _keyList[_random.nextInt(_keyList.length)];
-        if(_glyphProgresses[_randomGlyph] == maxQuizGlyphProgress && _glyphPool.indexOf(_randomGlyph) < 0)
+        if(_glyphProgresses[_randomGlyph] >= maxQuizGlyphProgress && _glyphPool.indexOf(_randomGlyph) < 0)
           _glyphPool.add(_randomGlyph);
       } while(_glyphPool.length < quizCardPoolMinCount);
     }
@@ -387,7 +385,7 @@ class _ReadingPageState extends State<ReadingPage> {
       });
     else
       _getNewChoices();
-    if(_cards[0]['progress'] == maxQuizGlyphProgress)
+    if(_cards[0]['progress'] >= maxQuizGlyphProgress)
       _disableSwipeStreamController.sink.add(true);
     if(_glyphPool.length < quizCardPoolMinCount)
       _getNewCards(count: 3);
@@ -422,7 +420,6 @@ class _ReadingPageState extends State<ReadingPage> {
     _showAnswerChoiceController.close();
     _flipStreamController.close();
     _disableSwipeStreamController.close();
-    _forwardCardStreamController.close();
     super.dispose();
   }
 
@@ -567,7 +564,6 @@ class _ReadingPageState extends State<ReadingPage> {
             heightToStackTop: _heightToQuizCardTop, // TODO: Problem
             flipStream: _flipStreamController.stream,
             disableSwipeStream: _disableSwipeStreamController.stream,
-            forwardCardStream:_forwardCardStreamController.stream,
             revealAnswer: _revealAnswer,
             swipedLeft: _swipedLeft,
             swipingCard: _swipingCard,
@@ -582,7 +578,6 @@ class _ReadingPageState extends State<ReadingPage> {
             heightToStackTop: _heightToQuizCardTop,
             flipStream: _flipStreamController.stream,
             disableSwipeStream: _disableSwipeStreamController.stream,
-            forwardCardStream:_forwardCardStreamController.stream,
             revealAnswer: _revealAnswer,
             swipedLeft: _swipedLeft,
             swipingCard: _swipingCard,
@@ -597,7 +592,6 @@ class _ReadingPageState extends State<ReadingPage> {
             heightToStackTop: _heightToQuizCardTop,
             flipStream: _flipStreamController.stream,
             disableSwipeStream: _disableSwipeStreamController.stream,
-            forwardCardStream:_forwardCardStreamController.stream,
             revealAnswer: _revealAnswer,
             swipedLeft: _swipedLeft,
             swipingCard: _swipingCard,

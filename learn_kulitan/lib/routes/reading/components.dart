@@ -256,7 +256,6 @@ class AnimatedQuizCard extends StatefulWidget {
     @required this.heightToStackTop,
     @required this.flipStream,
     @required this.disableSwipeStream,
-    @required this.forwardCardStream,
     @required this.revealAnswer,
     @required this.swipedLeft,
     @required this.swipingCard,
@@ -271,7 +270,6 @@ class AnimatedQuizCard extends StatefulWidget {
   final double heightToStackTop;
   final Stream flipStream;
   final Stream disableSwipeStream;
-  final Stream forwardCardStream;
   final Function revealAnswer;
   final VoidCallback swipedLeft;
   final VoidCallback swipingCard;
@@ -284,7 +282,6 @@ class AnimatedQuizCard extends StatefulWidget {
 class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProviderStateMixin {
   StreamSubscription _flipStreamSubscription;
   StreamSubscription _disableSwipeStreamSubscription;
-  StreamSubscription _forwardCardStreamSubscription;
   Animation<double> _animation;
   AnimationController _controller;
   Tween<double> _tween;
@@ -330,7 +327,6 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
     if(widget.stackNumber == 1)
       setState(() => _disableSwipe = false);
     _disableSwipeStreamSubscription = widget.disableSwipeStream.listen((disableSwipe) => _toggleDisableIfTopCard(disableSwipe));
-    _forwardCardStreamSubscription = widget.forwardCardStream.listen((_) => _updatedStackNumber());
   }
 
   void _toggleDisableIfTopCard(bool toggle) {
@@ -383,10 +379,6 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
       _disableSwipeStreamSubscription.cancel();
       _disableSwipeStreamSubscription = widget.disableSwipeStream.listen((disableSwipe) => _toggleDisableIfTopCard(disableSwipe));
     }
-    if(widget.forwardCardStream != oldWidget.forwardCardStream) {
-      _forwardCardStreamSubscription.cancel();
-      _forwardCardStreamSubscription = widget.forwardCardStream.listen((_) => _updatedStackNumber());
-    }
     if(widget.heightToStackTop != oldWidget.heightToStackTop) {
       if(widget.stackNumber == 1)
         setState(() => _topOffset = widget.heightToStackTop + quizCardStackTopSpace);
@@ -416,7 +408,6 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
     _controller.dispose();
     _flipStreamSubscription.cancel();
     _disableSwipeStreamSubscription.cancel();
-    _forwardCardStreamSubscription.cancel();
     super.dispose();
   }
 
@@ -525,6 +516,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
             _disableSwipe = true;
           });
           widget.swipedLeft();
+          _updatedStackNumber();
         } else if(_slideValue < 0.0) {
           setState(() {
             _cardSwipeLeftX = 0.0;
@@ -595,6 +587,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
           await Future.delayed(Duration(milliseconds: swipeLeftSnapDuration));
           widget.swipingCardDone();
           widget.swipedLeft();
+          _updatedStackNumber();
         }  
       }
     }
