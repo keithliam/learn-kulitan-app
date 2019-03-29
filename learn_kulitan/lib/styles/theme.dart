@@ -243,7 +243,7 @@ const Map<String, String> kulitanGlyphs = {
   'po': 'po',
   'so': 'so',
   'bo': 'bo',
-  'ngo': 'No',
+  'ngo': 'ngo',
   'gang': 'gng',
   'kang': 'kng',
   'tang': 'tng',
