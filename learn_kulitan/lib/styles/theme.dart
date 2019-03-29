@@ -97,11 +97,11 @@ const resetQuizDuration = 750;
 const quizChoicePressDuration = 250;
 const resetChoicesDuration = resetQuizDuration ~/ 2;
 const swipeDownSnapDuration = 250;
-const autoSwipeDownDuration = 500;
+const autoSwipeDownDuration = 400;
 const revealAnswerOffset = 0;
 const swipeLeftSnapDuration = 250;
 const forwardQuizCardsDuration = resetQuizDuration;
-const updateQuizCardProgressOffset = 250;
+const updateQuizCardProgressOffset = 0;
 const quizCardsForwardDuration = 500;
 const showAnswerToEnableSwipeDuration = 0;  // linearProgressBarChangeDuration
 const drawTouchPointScaleDuration = 250;
@@ -315,7 +315,7 @@ int _getSumOfLengths() {
 }
 
 // Limits
-const maxQuizGlyphProgress = 10;
+const maxQuizGlyphProgress = 1;
 const maxWritingGlyphProgress = 10;
 final totalGlyphCount = _getSumOfLengths();
 const quizCardPoolMinCount = 5;
