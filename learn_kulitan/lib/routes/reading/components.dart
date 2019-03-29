@@ -367,8 +367,6 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
       _isColorTweening = false;
       _animateProgressBar = true;
     });
-    if(widget.stackNumber == 1)
-      _disableSwipe = false;
   }
 
   @override
