@@ -255,11 +255,11 @@ class AnimatedQuizCard extends StatefulWidget {
     @required this.stackWidth,
     @required this.heightToStackTop,
     @required this.flipStream,
-    @required this.disableSwipeStream,
     @required this.revealAnswer,
     @required this.swipedLeft,
     @required this.swipingCard,
     @required this.swipingCardDone,
+    this.disableSwipe = true,
   });
 
   final String kulitan;
@@ -269,11 +269,11 @@ class AnimatedQuizCard extends StatefulWidget {
   final double stackWidth;
   final double heightToStackTop;
   final Stream flipStream;
-  final Stream disableSwipeStream;
   final Function revealAnswer;
   final VoidCallback swipedLeft;
   final VoidCallback swipingCard;
   final VoidCallback swipingCardDone;
+  final bool disableSwipe;
 
   @override
   _AnimatedQuizCard createState() => _AnimatedQuizCard();
@@ -281,7 +281,6 @@ class AnimatedQuizCard extends StatefulWidget {
 
 class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProviderStateMixin {
   StreamSubscription _flipStreamSubscription;
-  StreamSubscription _disableSwipeStreamSubscription;
   Animation<double> _animation;
   AnimationController _controller;
   Tween<double> _tween;
@@ -301,7 +300,6 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   double _topOffset = 0.0;
   double _leftOffset = quizHorizontalScreenPadding;
 
-  bool _disableSwipe = true;
   bool _isSwipeDownSnapping = false;
   bool _isSwipeLeftSnapping = false;
   bool _isColorTweening = false;
@@ -309,6 +307,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   bool _showBackCard = false;
   bool _hasSeenAnswer = false;
   bool _animateProgressBar = true;
+  bool _disableSwipe = false;
 
   @override
   void initState() {
@@ -324,14 +323,6 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
       if(widget.stackNumber == 1)
         _animateSwipe(_cardRotate, 1.0);
     });
-    if(widget.stackNumber == 1)
-      setState(() => _disableSwipe = false);
-    _disableSwipeStreamSubscription = widget.disableSwipeStream.listen((disableSwipe) => _toggleDisableIfTopCard(disableSwipe));
-  }
-
-  void _toggleDisableIfTopCard(bool toggle) {
-    if(widget.stackNumber == 1)
-      setState(() => _disableSwipe = toggle);
   }
 
   void _animateColor() {
@@ -375,10 +366,6 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
           _animateSwipe(_cardRotate, 1.0);
       });
     }
-    if(widget.disableSwipeStream != oldWidget.disableSwipeStream) {
-      _disableSwipeStreamSubscription.cancel();
-      _disableSwipeStreamSubscription = widget.disableSwipeStream.listen((disableSwipe) => _toggleDisableIfTopCard(disableSwipe));
-    }
     if(widget.heightToStackTop != oldWidget.heightToStackTop) {
       if(widget.stackNumber == 1)
         setState(() => _topOffset = widget.heightToStackTop + quizCardStackTopSpace);
@@ -407,7 +394,6 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   void dispose() {
     _controller.dispose();
     _flipStreamSubscription.cancel();
-    _disableSwipeStreamSubscription.cancel();
     super.dispose();
   }
 
@@ -465,15 +451,11 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
         )
       )..removeListener(_swipeDownListener)..removeListener(_forwardCardListener)..addListener(_forwardCardListener);
     }
-    if(isSwipeDown) {
+    if(isSwipeDown)
       setState(() => _isSwipeDownSnapping = true);
-    } else if(!isForward) {
+    else if(!isForward)
       setState(() => _isSwipeLeftSnapping = true);
-      if(toValue == 1.0)
-        setState(() => _disableSwipe = true);
-    } else {
-      setState(() => _disableSwipe = true);
-    }
+    setState(() => _disableSwipe = true);
     _tween
       ..begin = fromValue
       ..end = toValue;
@@ -486,10 +468,11 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
       setState(() => _isSwipeDownSnapping = false);
     else if(!isForward)
       setState(() => _isSwipeLeftSnapping = false);
+    setState(() => _disableSwipe = false);
   }
 
   void _swipeAction(details) {
-    if(!_disableSwipe) {
+    if(!_disableSwipe && !widget.disableSwipe) {
       widget.swipingCard();
       if(!_isFlipped) {
         double _swipeValue = _cardSwipeDownY + (details.delta.dy * swipeDownSensitivity * 0.00175);
@@ -533,7 +516,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   }
 
   void _swipeActionCancel() async {
-    if(!_disableSwipe) {
+    if(!_disableSwipe && !widget.disableSwipe) {
       if(!_isFlipped) {
         if(_hasSeenAnswer) {
           setState(() {

@@ -73,20 +73,20 @@ class _ReadingPageState extends State<ReadingPage> {
   double _heightToQuizCardTop = 200.0;
   double _quizCardStackHeight = 100.0;
   double _heightToCardStackBottom = 500.0;
+  bool _disableSwipe = false;
 
   final _resetChoicesController = StreamController.broadcast();
   final _showAnswerChoiceController = StreamController.broadcast();
   final _flipStreamController = StreamController.broadcast();
-  final _disableSwipeStreamController = StreamController.broadcast();
 
   void _pressAlert() {
-    _disableSwipeStreamController.sink.add(true);
-    setState(() => _presses++);
+    setState(() {
+      _presses++;
+      _disableSwipe = true;
+    });
   }
 
   void _pressStopAlert() {
-    if(_cards[0]['progress'] < maxQuizGlyphProgress)
-      _disableSwipeStreamController.sink.add(false);
     if(_presses > 0)
       setState(() => _presses--);
   }
@@ -164,7 +164,7 @@ class _ReadingPageState extends State<ReadingPage> {
   }
 
   void _correctAnswer() async {
-    _disableSwipeStreamController.sink.add(true);
+    setState(() => _disableSwipe = true);
     if(_batchNumber == 0) {
       setState(() => _batchNumber = 1);
       _pushBatchNumber();
@@ -194,11 +194,11 @@ class _ReadingPageState extends State<ReadingPage> {
     if(_isFullProgress)
       _addNextBatchIfGlyphsDone();
     await Future.delayed(const Duration(milliseconds: showAnswerToEnableSwipeDuration));
-    _disableSwipeStreamController.sink.add(false);
+    setState(() => _disableSwipe = false);
     _pushRemovedCardChoices();
   }
   void _wrongAnswer() async {
-    _disableSwipeStreamController.sink.add(true);
+    setState(() => _disableSwipe = true);
     if(_batchNumber == 0) {
       setState(() => _batchNumber = 1);
       _pushBatchNumber();
@@ -222,7 +222,7 @@ class _ReadingPageState extends State<ReadingPage> {
       _pushGlyphProgress();
     }
     await Future.delayed(const Duration(milliseconds: showAnswerToEnableSwipeDuration));
-    _disableSwipeStreamController.sink.add(false);
+    setState(() => _disableSwipe = false);
     _pushRemovedCardChoices();
   }
   void _revealAnswer({int delay: 0}) async {
@@ -233,6 +233,7 @@ class _ReadingPageState extends State<ReadingPage> {
   }
   void _swipedLeft() async {
     setState(() {
+      _disableSwipe = true;
       _cards[0] = _cards[1];
       _cards[1] = _cards[2];
     });
@@ -246,11 +247,11 @@ class _ReadingPageState extends State<ReadingPage> {
     await Future.delayed(const Duration(milliseconds: resetChoicesDuration));
     _getNewChoices();
     _pushCardsChoices();
-    await Future.delayed(const Duration(milliseconds: resetChoicesDuration));
+    await Future.delayed(const Duration(milliseconds: forwardQuizCardsDuration));
     if(_cards[0]['progress'] < maxQuizGlyphProgress)
-      _disableSwipeStreamController.sink.add(false);
+      setState(() => _disableSwipe = false);
     else
-      _disableSwipeStreamController.sink.add(true);
+      setState(() => _disableSwipe = true);
     setState(() => _disableChoices = false);
   }
   
@@ -386,7 +387,7 @@ class _ReadingPageState extends State<ReadingPage> {
     else
       _getNewChoices();
     if(_cards[0]['progress'] >= maxQuizGlyphProgress)
-      _disableSwipeStreamController.sink.add(true);
+      setState(() => _disableSwipe = true);
     if(_glyphPool.length < quizCardPoolMinCount)
       _getNewCards(count: 3);
   }
@@ -419,7 +420,6 @@ class _ReadingPageState extends State<ReadingPage> {
     _resetChoicesController.close();
     _showAnswerChoiceController.close();
     _flipStreamController.close();
-    _disableSwipeStreamController.close();
     super.dispose();
   }
 
@@ -563,7 +563,6 @@ class _ReadingPageState extends State<ReadingPage> {
             stackWidth: _quizCardWidth,
             heightToStackTop: _heightToQuizCardTop, // TODO: Problem
             flipStream: _flipStreamController.stream,
-            disableSwipeStream: _disableSwipeStreamController.stream,
             revealAnswer: _revealAnswer,
             swipedLeft: _swipedLeft,
             swipingCard: _swipingCard,
@@ -577,7 +576,6 @@ class _ReadingPageState extends State<ReadingPage> {
             stackWidth: _quizCardWidth,
             heightToStackTop: _heightToQuizCardTop,
             flipStream: _flipStreamController.stream,
-            disableSwipeStream: _disableSwipeStreamController.stream,
             revealAnswer: _revealAnswer,
             swipedLeft: _swipedLeft,
             swipingCard: _swipingCard,
@@ -591,11 +589,11 @@ class _ReadingPageState extends State<ReadingPage> {
             stackWidth: _quizCardWidth,
             heightToStackTop: _heightToQuizCardTop,
             flipStream: _flipStreamController.stream,
-            disableSwipeStream: _disableSwipeStreamController.stream,
             revealAnswer: _revealAnswer,
             swipedLeft: _swipedLeft,
             swipingCard: _swipingCard,
             swipingCardDone: _swipingCardDone,
+            disableSwipe: _disableSwipe,
           ),
         ],
       ),
