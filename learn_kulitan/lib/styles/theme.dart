@@ -89,6 +89,7 @@ const drawTouchPointOpacityDownCurve = Curves.decelerate;
 const drawShadowOffsetChangeCurve = Curves.easeOutBack;
 const drawGuidesOpacityUpCurve = Curves.fastOutSlowIn;
 const drawGuidesOpacityDownCurve = Curves.decelerate;
+const writingCardPanLeftCurve = Curves.easeInOutCubic;
 
 // Durations
 const linearProgressBarChangeDuration = 1000;
@@ -109,6 +110,8 @@ const nextDrawPathDelay = 250;
 const drawShadowOffsetChangeDuration = 400;
 const drawGuidesOpacityChangeDelay = 500;
 const drawGuidesOpacityChangeDuration = 250;
+const writingNextCardDelay = 500;
+const writingNextCardDuration = 750;
 
 // Kulitan
 const Map<String, String> kulitanGlyphs = {

@@ -12,7 +12,7 @@ class WritingPage extends StatefulWidget {
   _WritingPageState createState() => _WritingPageState();
 }
 
-class _WritingPageState extends State<WritingPage> { 
+class _WritingPageState extends State<WritingPage> with SingleTickerProviderStateMixin { 
   Database _db;
   int _overallProgressCount = 7;
   String _currentText = 'nga';
@@ -28,37 +28,40 @@ class _WritingPageState extends State<WritingPage> {
       'cardNumber': 1,
     },
     {
-      'kulitan': 'du',
-      'answer': 'du',
+      'kulitan': 'ng',
+      'answer': 'nga',
       'progress': 10,
       'cardNumber': 2,
     },
   ];
 
-  GlobalKey _pageKey = GlobalKey();
-  // GlobalKey _writingCardsKey = GlobalKey();
-  // double _quizCardWidth = 100.0;
-  // double _heightToQuizCardTop = 200.0;
-  // double _writingCardStackHeight = 100.0;
-  // double _heightToCardStackBottom = 500.0;
+  AnimationController _panController;
+  Animation<double> _panAnimation;
 
   @override
   void initState() {
     super.initState();   
+    _panController = AnimationController(duration: const Duration(milliseconds: writingNextCardDuration), vsync: this);
+    final CurvedAnimation _panCurve = CurvedAnimation(parent: _panController, curve: writingCardPanLeftCurve);
+    final Tween<double> _panTween = Tween<double>(begin: 0.0, end: 1.0);
+    _panAnimation = _panTween.animate(_panCurve)..addListener(() => setState(() {}));
     // WidgetsBinding.instance.addPostFrameCallback((_) => _getQuizCardsSize()); 
   }
 
-  // void _getQuizCardsSize() {
-  //   final RenderBox _screenBox = _pageKey.currentContext.findRenderObject();
-    // final RenderBox _cardBox = _writingCardsKey.currentContext.findRenderObject();
-  //   double _cardWidth = _cardBox.size.width - (quizHorizontalScreenPadding * 2);
-  //   setState(() {
-  //     _quizCardWidth = _cardWidth;
-  //     _heightToCardStackBottom = _screenBox.size.height - quizVerticalScreenPadding - ((quizChoiceButtonHeight + quizChoiceButtonElevation) * 2) - choiceSpacing - cardQuizStackBottomPadding;
-  //     _heightToQuizCardTop = _heightToCardStackBottom - _quizCardWidth - quizCardStackTopSpace;
-  //     _writingCardStackHeight = _heightToCardStackBottom - _heightToQuizCardTop + cardQuizStackBottomPadding;
-  //   });
-  // }
+  void _animateNextCard() async {
+
+    await Future.delayed(const Duration(milliseconds: writingNextCardDelay));
+    _panController.forward();
+    await Future.delayed(const Duration(milliseconds: writingNextCardDuration));
+    // TODO: get nextCharacter
+    _panController.reset();
+  }
+  
+  @override
+  void dispose() {
+    _panController.dispose();
+    super.dispose();
+  }
 
   void _writingDone() async {
     await Future.delayed(const Duration(milliseconds: drawShadowOffsetChangeDuration));
@@ -78,6 +81,7 @@ class _WritingPageState extends State<WritingPage> {
       });
       // _pushGlyphProgress();
     }
+    _animateNextCard();
     // if(_isFullProgress)
     //   _addNextBatchIfGlyphsDone();
     // _pushRemovedCardChoices();
@@ -117,48 +121,50 @@ class _WritingPageState extends State<WritingPage> {
         ),
       ),
     );
-    
-    Widget _text = Expanded(
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: quizHorizontalScreenPadding,
-          vertical: 15.0,
-        ),
-        child: Center(
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              _currentText,
-              style: textWriting,
-            ),
-          ),
-        ),
+
+    final double _deviceWidth = MediaQuery.of(context).size.width;
+
+    Widget _mainCard = Positioned(
+      left: 0.0 - (_deviceWidth * _panAnimation.value),
+      right: 0.0 + (_deviceWidth * _panAnimation.value),
+      top: 0.0,
+      bottom: 0.0,
+      child: WritingCard(
+        displayText: _currentText,
+        kulitan: _cards[0]['kulitan'],
+        progress: _cards[0]['progress'] / maxWritingGlyphProgress,
+        cardNumber: _cards[0]['cardNumber'],
+        writingDone: _writingDone,
       ),
     );
 
-    Widget _writingCards = AnimatedWritingCard(
-      kulitan: _cards[0]['kulitan'],
-      progress: _cards[0]['progress'],
-      cardNumber: _cards[0]['cardNumber'],
-      writingDone: _writingDone,
+    Widget _secCard = Positioned(
+      left: _deviceWidth - (_deviceWidth * _panAnimation.value),
+      right: -_deviceWidth + (_deviceWidth * _panAnimation.value),
+      top: 0.0,
+      bottom: 0.0,
+      child: WritingCard(
+        displayText: _cards[1]['answer'],
+        kulitan: _cards[1]['kulitan'],
+        progress: _cards[1]['progress'] / maxWritingGlyphProgress,
+        cardNumber: _cards[1]['cardNumber'],
+        writingDone: _writingDone,
+      ),
     );
 
     return Material(
       color: backgroundColor,
       child: SafeArea(
         child: Column(
-          key: _pageKey,
           children: <Widget>[
             _header,
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: writingHorizontalScreenPadding, right: writingHorizontalScreenPadding, bottom: writingVerticalScreenPadding),
-                child: Column(
-                  children: <Widget>[
-                    _text,
-                    _writingCards,
-                  ],
-                ),
+              child: Stack(
+                fit: StackFit.expand,
+                children: <Positioned>[
+                  _mainCard,
+                  _secCard,
+                ],
               ),
             ),
           ],
@@ -167,3 +173,4 @@ class _WritingPageState extends State<WritingPage> {
     );
   }
 }
+

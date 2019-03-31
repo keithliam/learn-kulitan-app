@@ -231,8 +231,8 @@ class _GuideLabelPainter extends CustomPainter {
   }
 }
 
-class AnimatedWritingCard extends StatefulWidget {
-  AnimatedWritingCard({
+class _AnimatedWritingCard extends StatefulWidget {
+  _AnimatedWritingCard({
     @required this.kulitan,
     @required this.progress,
     @required this.cardNumber,
@@ -240,7 +240,7 @@ class AnimatedWritingCard extends StatefulWidget {
   });
 
   final String kulitan;
-  final int progress;
+  final double progress;
   final int cardNumber;
   final VoidCallback writingDone;
 
@@ -250,7 +250,7 @@ class AnimatedWritingCard extends StatefulWidget {
 
 double getPointsDist(Offset p1, Offset p2) => sqrt(pow(p2.dx - p1.dx, 2) + pow(p2.dy - p1.dy, 2));  
 
-class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTickerProviderStateMixin {
+class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleTickerProviderStateMixin {
   Offset _currPoint;
   Path _drawPath;
   List<Path> _prevDrawPaths = [];
@@ -545,7 +545,7 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTi
             child: AspectRatio(
               aspectRatio: 0.9248554913,
               child: Stack(
-                fit:StackFit.expand,
+                fit: StackFit.expand,
                 children: <Widget>[
                   AnimatedPositioned(
                     top: _shadowOffset,
@@ -632,8 +632,59 @@ class _AnimatedWritingCardState extends State<AnimatedWritingCard> with SingleTi
               right: cardWritingHorizontalPadding,
             ),
             child: LinearProgressBar(
-              progress: widget.progress / maxWritingGlyphProgress,
+              progress: widget.progress,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class WritingCard extends StatelessWidget {
+  WritingCard({
+    @required this.displayText,
+    @required this.kulitan,
+    @required this.progress,
+    @required this.cardNumber,
+    @required this.writingDone,
+  });
+  
+  final String displayText;
+  final String kulitan;
+  final double progress;
+  final int cardNumber;
+  final VoidCallback writingDone;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(writingHorizontalScreenPadding, 0.0, writingHorizontalScreenPadding, writingVerticalScreenPadding),
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: quizHorizontalScreenPadding,
+                vertical: 15.0,
+              ),
+              child: Center(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    displayText,
+                    style: textWriting,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          _AnimatedWritingCard(
+            kulitan: kulitan,
+            progress: progress,
+            cardNumber: cardNumber,
+            writingDone: writingDone,
           ),
         ],
       ),
