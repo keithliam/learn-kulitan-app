@@ -322,6 +322,7 @@ const maxQuizGlyphProgress = 1;
 const maxWritingGlyphProgress = 10;
 final totalGlyphCount = _getSumOfLengths();
 const quizCardPoolMinCount = 5;
+const drawCardPoolMinCount = 3;
 
 // Kulitan Fonts
 const kulitanHome = TextStyle(
