@@ -113,9 +113,9 @@ const drawGuidesOpacityChangeDelay = 500;
 const drawGuidesOpacityChangeDuration = 250;
 const writingNextCardDelay = 500;
 const writingNextCardDuration = 750;
-const writingInitDelay = 750;
+const writingInitDelay = 500;
 const writingInitOpacityDuration = 750;
-const writingTextOpacityChangeDelay = 1000;
+const writingTextOpacityChangeDelay = 750;
 
 // Kulitan
 const Map<String, String> kulitanGlyphs = {

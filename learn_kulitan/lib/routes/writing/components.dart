@@ -267,18 +267,18 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
   Offset Function(double) _cubicBezier;
   Map<String, Offset> Function(double) _splitCubicBezier;
   bool _disableTouch = true;
-  bool _animatePointShadowProgress = true;
+  bool _animateShadowAndProgress = true;
 
   AnimationController _pointController;
   CurvedAnimation _pointCurve;
   Tween<double> _pointTween;
   Animation<double> _pointAnimation;
   Curve _touchPointOpacityCurve = drawTouchPointOpacityUpCurve;
-  Duration _touchPointOpacityDuration = const Duration(milliseconds: drawGuidesOpacityChangeDuration);
+  Duration _touchPointOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
   double _touchPointOpacity = 0.0;
   double _shadowOffset = 0.0;
   Curve _guideOpacityCurve = drawGuidesOpacityUpCurve;
-  Duration _guideOpacityDuration = const Duration(milliseconds: drawGuidesOpacityChangeDuration);
+  Duration _guideOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
   double _guideOpacity = 0.0;
 
   Offset Function(double) _getCubicBezier(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3) {
@@ -464,7 +464,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
     super.didUpdateWidget(oldWidget);
     if(oldWidget.kulitan != widget.kulitan) {
       if(oldWidget.kulitan.length > 0) {
-        _animatePointShadowProgress = false;
+        _animateShadowAndProgress = false;
         _currPathNo = 0;
         _currSubPathNo = 0;
         _currBezierT = 0.0;
@@ -513,7 +513,14 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
     setState(() => _canvasWidth = _width);
   }
 
-  void _resetOpacities() async {
+  void _showPaths() async {
+    await Future.delayed(const Duration(milliseconds: writingInitDelay));
+    setState(() {
+      _guideOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
+      _touchPointOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
+      _touchPointOpacity = 1.0;
+      _guideOpacity = 1.0;
+    });
     await Future.delayed(const Duration(milliseconds: writingInitOpacityDuration));
     setState(() {
       _guideOpacityDuration = const Duration(milliseconds: drawGuidesOpacityChangeDuration);
@@ -522,7 +529,6 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
   }
 
   void _getPaths({ first: false }) async {
-    if(first) await Future.delayed(const Duration(milliseconds:  writingInitDelay));
     List<Path> _manyPaths = [];
     List<List<double>> _thisKulitanPaths = kulitanPaths[widget.kulitan];
     for(List<double> _path in _thisKulitanPaths) {
@@ -542,13 +548,12 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
       _splitCubicBezier = _getSplitCubicBezier(_path[0], _path[1], _path[2], _path[3], _path[4], _path[5], _path[6], _path[7]);
       _shadowPaths = _manyPaths;
       _currSubPathNo = 2;
-      _touchPointOpacity = 1.0;
-      _guideOpacity = 1.0;
       _disableTouch = false;
     });
-    if(first) _resetOpacities();
+    if(first) await Future.delayed(const Duration(milliseconds:  writingInitDelay));
+    if(widget.stackNumber == 1) _showPaths();
     await Future.delayed(const Duration(milliseconds: drawShadowOffsetChangeDuration));
-    setState(() => _animatePointShadowProgress = true);
+    setState(() => _animateShadowAndProgress = true);
   }
 
   void _animateTouchPoint({ bool isScaleUp: true }) {
@@ -597,7 +602,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
                     top: _shadowOffset,
                     left: _shadowOffset,
                     curve: drawShadowOffsetChangeCurve,
-                    duration: Duration(milliseconds: _animatePointShadowProgress? drawShadowOffsetChangeDuration : 0),
+                    duration: Duration(milliseconds: _animateShadowAndProgress? drawShadowOffsetChangeDuration : 0),
                     child: CustomPaint(
                       painter: _ShadowPainter(
                         paths: _shadowPaths,
@@ -613,7 +618,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
                   AnimatedOpacity(
                     curve: _guideOpacityCurve,
                     opacity: _guideOpacity,
-                    duration: _animatePointShadowProgress? _guideOpacityDuration : const Duration(milliseconds: 0),
+                    duration: _guideOpacityDuration,
                     child: Stack(
                       fit: StackFit.expand,
                       children: <Widget>[
@@ -653,7 +658,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
                   AnimatedOpacity(
                     curve: _touchPointOpacityCurve,
                     opacity: _touchPointOpacity,
-                    duration: _animatePointShadowProgress? _touchPointOpacityDuration : const Duration(milliseconds: 0),
+                    duration: _touchPointOpacityDuration,
                     child: CustomPaint(
                       painter:  _CurrPointPainter(
                         point: _currPoint,
@@ -678,7 +683,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
               right: cardWritingHorizontalPadding,
             ),
             child: LinearProgressBar(
-              animate: _animatePointShadowProgress,
+              animate: _animateShadowAndProgress,
               progress: widget.progress,
             ),
           ),
