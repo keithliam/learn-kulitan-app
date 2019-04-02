@@ -1,90 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 import '../../styles/theme.dart';
 import '../../components/buttons/IconButtonNew.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/LinearProgressBar.dart';
-import '../../db/DatabaseHelper.dart';
+import '../../components/misc/GameLogicManager.dart';
 import './components.dart';
 
 class WritingPage extends StatefulWidget {
   @override
-  _WritingPageState createState() => _WritingPageState();
+  WritingPageState createState() => WritingPageState();
 }
 
-class _WritingPageState extends State<WritingPage> with SingleTickerProviderStateMixin { 
-  Database _db;
-  int _overallProgressCount = 7;
-  String _currentText = 'nga';
-  int _batchNumber;
-  List<String> _glyphPool = [];
-  List<String> _choicePool = [];
-  Map<String, int> _glyphProgresses = {};
+class WritingPageState extends State<WritingPage> with SingleTickerProviderStateMixin { 
+  final GameLogicManager _gameLogicManager = GameLogicManager(isQuiz: false);
+  int _overallProgressCount = 0;
   List<Map<String, dynamic>> _cards = [
     {
-      'kulitan': 'ng',
-      'answer': 'nga',
+      'kulitan': '',
+      'answer': '',
       'progress': 9,
-      'cardNumber': 1,
+      'stackNumber': 1,
     },
     {
-      'kulitan': 'ng',
-      'answer': 'nga',
+      'kulitan': '',
+      'answer': '',
       'progress': 10,
-      'cardNumber': 2,
+      'stackNumber': 2,
     },
   ];
 
   AnimationController _panController;
   Animation<double> _panAnimation;
 
+  set overallProgressCount(int n) => setState(() => _overallProgressCount = n);
+  void setCard(Map<String, dynamic> card, int i) => setState(() => _cards[i] = card);
+  void setCardStackNo(int i, int sNum) => setState(() => _cards[i]['stackNumber'] = sNum);
+  void incOverallProgressCount() => setState(() => _overallProgressCount++);
+  void decOverallProgressCount() => setState(() => _overallProgressCount--);
+  void incCurrCardProgress() => setState(() => _cards[0]['progress']++);
+  void decCurrCardProgress() => setState(() => _cards[0]['progress']--);
+  void slideCard() => _panController.forward();
+  void resetCard() => _panController.reset();
+  get cards => _cards;
+  get overallProgressCount => _overallProgressCount;
+
+  void _startGame() async {
+    await _gameLogicManager.init(this);
+  }
+
   @override
   void initState() {
     super.initState();   
+    _startGame();
     _panController = AnimationController(duration: const Duration(milliseconds: writingNextCardDuration), vsync: this);
     final CurvedAnimation _panCurve = CurvedAnimation(parent: _panController, curve: writingCardPanLeftCurve);
     final Tween<double> _panTween = Tween<double>(begin: 0.0, end: 1.0);
     _panAnimation = _panTween.animate(_panCurve)..addListener(() => setState(() {}));
-    // WidgetsBinding.instance.addPostFrameCallback((_) => _getQuizCardsSize()); 
   }
 
-  void _animateNextCard() async {
-
-    await Future.delayed(const Duration(milliseconds: writingNextCardDelay));
-    _panController.forward();
-    await Future.delayed(const Duration(milliseconds: writingNextCardDuration));
-    // TODO: get nextCharacter
-    _panController.reset();
-  }
-  
   @override
   void dispose() {
     _panController.dispose();
     super.dispose();
-  }
-
-  void _writingDone() async {
-    await Future.delayed(const Duration(milliseconds: drawShadowOffsetChangeDuration));
-    // bool _isFullProgress = false;
-    if(_cards[0]['progress'] == maxWritingGlyphProgress - 1) {
-      setState(() => _overallProgressCount++);
-      // _pushOverallProgress();
-      // _removeFromGlyphPool();
-      // _isFullProgress = true;
-    } else if(_cards[0]['progress'] == maxQuizGlyphProgress) {
-      // _removeFromGlyphPool();
-    }
-    if(_cards[0]['progress'] < maxQuizGlyphProgress) {
-      setState(() {
-        _cards[0]['progress']++;
-        // _glyphProgresses[_cards[0]['answer']]++;
-      });
-      // _pushGlyphProgress();
-    }
-    _animateNextCard();
-    // if(_isFullProgress)
-    //   _addNextBatchIfGlyphsDone();
-    // _pushRemovedCardChoices();
   }
 
   @override
@@ -130,11 +107,11 @@ class _WritingPageState extends State<WritingPage> with SingleTickerProviderStat
       top: 0.0,
       bottom: 0.0,
       child: WritingCard(
-        displayText: _currentText,
+        displayText: _cards[0]['answer'],
         kulitan: _cards[0]['kulitan'],
         progress: _cards[0]['progress'] / maxWritingGlyphProgress,
-        cardNumber: _cards[0]['cardNumber'],
-        writingDone: _writingDone,
+        stackNumber: _cards[0]['stackNumber'],
+        writingDone: _gameLogicManager.correctAnswer,
       ),
     );
 
@@ -147,8 +124,8 @@ class _WritingPageState extends State<WritingPage> with SingleTickerProviderStat
         displayText: _cards[1]['answer'],
         kulitan: _cards[1]['kulitan'],
         progress: _cards[1]['progress'] / maxWritingGlyphProgress,
-        cardNumber: _cards[1]['cardNumber'],
-        writingDone: _writingDone,
+        stackNumber: _cards[1]['stackNumber'],
+        writingDone: _gameLogicManager.correctAnswer,
       ),
     );
 

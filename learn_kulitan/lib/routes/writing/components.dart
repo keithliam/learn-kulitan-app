@@ -129,83 +129,85 @@ class _GuideLinePainter extends CustomPainter {
   
   @override
   void paint(Canvas canvas, Size size) {
-    Paint _strokePaint = Paint()
-      ..color = writingGuideColor
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = writingGuideLineStrokeWidth * size.width;
+    if(this.path.length > 0) {
+      Paint _strokePaint = Paint()
+        ..color = writingGuideColor
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = writingGuideLineStrokeWidth * size.width;
 
-    Offset _getChangeFromSlopeDist(double d, double m) {
-      final double _dx = d / sqrt(1 + pow(m, 2));
-      return Offset(_dx, m * _dx);
-    }
-
-    List<Offset> _points = [];
-    Offset Function(double) _equation;
-    double _currT = 0.0;
-    double _limit;
-    double _mod;
-    final double _step = 0.01;
-    for(int i = 1; i < path.length; i += 3) {
-      _equation = getCubicBezier(path[i - 1].dx, path[i - 1].dy, path[i].dx, path[i].dy, path[i + 1].dx, path[i + 1].dy, path[i + 2].dx, path[i + 2].dy);
-      _limit = (i ~/ 3) + 1.0;
-      for(double j = _currT + _step; j < _limit; j += _step) {
-        _mod = j % 1.0;
-        _points.add(_equation(_mod == 0.0? j / 1.0 : _mod));
-        _currT = j;
+      Offset _getChangeFromSlopeDist(double d, double m) {
+        final double _dx = d / sqrt(1 + pow(m, 2));
+        return Offset(_dx, m * _dx);
       }
-    }
-    double _dashLength = 0.02 * size.width;
-    double _gapLength = 0.0375 * size.width;
-    int _currPoint;
-    int _nextPoint = 1;
-    final _lastPoint = _points.length - 1;
-    Offset _tempPoint;
-    for(_currPoint = _nextPoint - 1; _nextPoint < _points.length; _currPoint = _nextPoint - 1) {
-      for(; _nextPoint < _points.length; _nextPoint++) {
-        if(_dashLength < getPointsDist(_points[_currPoint], _points[_nextPoint]) || _nextPoint == _lastPoint) {
-          _tempPoint = _nextPoint == _lastPoint? _points[_lastPoint] : _points[_nextPoint];
-          canvas.drawLine(_points[_currPoint], _tempPoint, _strokePaint);
-          _currPoint = _nextPoint;
-          while(++_nextPoint < _points.length)
-            if(_gapLength < getPointsDist(_points[_currPoint], _points[_nextPoint]))
-              break;
-          break;
+
+      List<Offset> _points = [];
+      Offset Function(double) _equation;
+      double _currT = 0.0;
+      double _limit;
+      double _mod;
+      final double _step = 0.01;
+      for(int i = 1; i < path.length; i += 3) {
+        _equation = getCubicBezier(path[i - 1].dx, path[i - 1].dy, path[i].dx, path[i].dy, path[i + 1].dx, path[i + 1].dy, path[i + 2].dx, path[i + 2].dy);
+        _limit = (i ~/ 3) + 1.0;
+        for(double j = _currT + _step; j < _limit; j += _step) {
+          _mod = j % 1.0;
+          _points.add(_equation(_mod == 0.0? j / 1.0 : _mod));
+          _currT = j;
         }
       }
-    }
-    final Offset _lastOffset = _points[_lastPoint];
-    final Offset _lastLastOffset = _points[_lastPoint - 1];
-    final double _slope = (_lastOffset.dy - _lastLastOffset.dy) / (_lastOffset.dx - _lastLastOffset.dx);
-    final _arrowWidth = (size.width * 0.0375);
-    final _arrowHeight = (size.width * 0.03576);
-    if(_slope == 0) {
-      canvas.drawPath(
-        Path()
-          ..moveTo(_lastOffset.dx, _lastOffset.dy - _arrowHeight)
-          ..lineTo(_lastOffset.dx + (_lastOffset.dx > _lastLastOffset.dx? _arrowWidth : -_arrowWidth), _lastOffset.dy)
-          ..lineTo(_lastOffset.dx, _lastOffset.dy + _arrowHeight),
-        _strokePaint,
-      );
-    } else if(_slope.isNaN) {
-      canvas.drawPath(
-        Path()
-          ..moveTo(_lastOffset.dx - _arrowWidth, _lastOffset.dy)
-          ..lineTo(_lastOffset.dx, _lastOffset.dy + (_lastOffset.dy < _lastLastOffset.dy? -_arrowHeight : _arrowHeight))
-          ..lineTo(_lastOffset.dx + _arrowWidth, _lastOffset.dy),
-        _strokePaint,
-      );
-    } else {
-      final Offset _heightChange = _getChangeFromSlopeDist(_arrowHeight, _slope);
-      final Offset _widthChange = _getChangeFromSlopeDist(_arrowWidth, -1 / _slope /* perpendicular slope */);
-      final Offset _left = Offset(_lastOffset.dx - _widthChange.dx, _lastOffset.dy - _widthChange.dy);
-      final Offset _right = Offset(_lastOffset.dx + _widthChange.dx, _lastOffset.dy + _widthChange.dy);
-      Offset _middle = _lastOffset.dx > _lastLastOffset.dx? Offset(_lastOffset.dx + _heightChange.dx, _lastOffset.dy + _heightChange.dy) : Offset(_lastOffset.dx - _heightChange.dx, _lastOffset.dy - _heightChange.dy);;
-      canvas.drawPath(
-        Path()..moveTo(_left.dx, _left.dy)..lineTo(_middle.dx, _middle.dy)..lineTo(_right.dx, _right.dy),
-        _strokePaint,
-      );
+      double _dashLength = 0.02 * size.width;
+      double _gapLength = 0.0375 * size.width;
+      int _currPoint;
+      int _nextPoint = 1;
+      final _lastPoint = _points.length - 1;
+      Offset _tempPoint;
+      for(_currPoint = _nextPoint - 1; _nextPoint < _points.length; _currPoint = _nextPoint - 1) {
+        for(; _nextPoint < _points.length; _nextPoint++) {
+          if(_dashLength < getPointsDist(_points[_currPoint], _points[_nextPoint]) || _nextPoint == _lastPoint) {
+            _tempPoint = _nextPoint == _lastPoint? _points[_lastPoint] : _points[_nextPoint];
+            canvas.drawLine(_points[_currPoint], _tempPoint, _strokePaint);
+            _currPoint = _nextPoint;
+            while(++_nextPoint < _points.length)
+              if(_gapLength < getPointsDist(_points[_currPoint], _points[_nextPoint]))
+                break;
+            break;
+          }
+        }
+      }
+      final Offset _lastOffset = _points[_lastPoint];
+      final Offset _lastLastOffset = _points[_lastPoint - 1];
+      final double _slope = (_lastOffset.dy - _lastLastOffset.dy) / (_lastOffset.dx - _lastLastOffset.dx);
+      final _arrowWidth = (size.width * 0.0375);
+      final _arrowHeight = (size.width * 0.03576);
+      if(_slope == 0) {
+        canvas.drawPath(
+          Path()
+            ..moveTo(_lastOffset.dx, _lastOffset.dy - _arrowHeight)
+            ..lineTo(_lastOffset.dx + (_lastOffset.dx > _lastLastOffset.dx? _arrowWidth : -_arrowWidth), _lastOffset.dy)
+            ..lineTo(_lastOffset.dx, _lastOffset.dy + _arrowHeight),
+          _strokePaint,
+        );
+      } else if(_slope.isInfinite) {
+        canvas.drawPath(
+          Path()
+            ..moveTo(_lastOffset.dx - _arrowWidth, _lastOffset.dy)
+            ..lineTo(_lastOffset.dx, _lastOffset.dy + (_lastOffset.dy < _lastLastOffset.dy? -_arrowHeight : _arrowHeight))
+            ..lineTo(_lastOffset.dx + _arrowWidth, _lastOffset.dy),
+          _strokePaint,
+        );
+      } else {
+        final Offset _heightChange = _getChangeFromSlopeDist(_arrowHeight, _slope);
+        final Offset _widthChange = _getChangeFromSlopeDist(_arrowWidth, -1 / _slope /* perpendicular slope */);
+        final Offset _left = Offset(_lastOffset.dx - _widthChange.dx, _lastOffset.dy - _widthChange.dy);
+        final Offset _right = Offset(_lastOffset.dx + _widthChange.dx, _lastOffset.dy + _widthChange.dy);
+        Offset _middle = _lastOffset.dx > _lastLastOffset.dx? Offset(_lastOffset.dx + _heightChange.dx, _lastOffset.dy + _heightChange.dy) : Offset(_lastOffset.dx - _heightChange.dx, _lastOffset.dy - _heightChange.dy);
+        canvas.drawPath(
+          Path()..moveTo(_left.dx, _left.dy)..lineTo(_middle.dx, _middle.dy)..lineTo(_right.dx, _right.dy),
+          _strokePaint,
+        );
+      }
     }
   }
 }
@@ -235,13 +237,13 @@ class _AnimatedWritingCard extends StatefulWidget {
   _AnimatedWritingCard({
     @required this.kulitan,
     @required this.progress,
-    @required this.cardNumber,
+    @required this.stackNumber,
     @required this.writingDone,
   });
 
   final String kulitan;
   final double progress;
-  final int cardNumber;
+  final int stackNumber;
   final VoidCallback writingDone;
 
   @override
@@ -260,21 +262,24 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
   List<Path> _shadowPaths = [];
   GlobalKey _canvasKey = GlobalKey();
   double _canvasWidth = 50.0;
-  double _stepLength = 0.01;
+  final double _stepLength = 0.01;
   bool _hitTarget = false;
   Offset Function(double) _cubicBezier;
   Map<String, Offset> Function(double) _splitCubicBezier;
-  bool _disableSwipe = true;
+  bool _disableTouch = true;
+  bool _animatePointShadowProgress = true;
 
   AnimationController _pointController;
   CurvedAnimation _pointCurve;
   Tween<double> _pointTween;
   Animation<double> _pointAnimation;
-  Curve _touchPointOpacityCurve = drawTouchPointOpacityDownCurve;
-  double _touchPointOpacity = 1.0;
+  Curve _touchPointOpacityCurve = drawTouchPointOpacityUpCurve;
+  Duration _touchPointOpacityDuration = const Duration(milliseconds: drawGuidesOpacityChangeDuration);
+  double _touchPointOpacity = 0.0;
   double _shadowOffset = 0.0;
-  Curve _guideOpacityCurve = drawGuidesOpacityDownCurve;
-  double _guideOpacity = 1.0;
+  Curve _guideOpacityCurve = drawGuidesOpacityUpCurve;
+  Duration _guideOpacityDuration = const Duration(milliseconds: drawGuidesOpacityChangeDuration);
+  double _guideOpacity = 0.0;
 
   Offset Function(double) _getCubicBezier(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3) {
     x0 *= _canvasWidth;
@@ -324,7 +329,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
   }
 
   void _cardTouched(BuildContext context, Offset offset) {
-    if(!_disableSwipe) {
+    if(!_disableTouch) {
       final RenderBox _box = context.findRenderObject();
       final Offset _localOffset = _box.globalToLocal(offset);
       final Offset _touchLoc = Offset(_localOffset.dx, _localOffset.dy - 20.0);
@@ -338,14 +343,16 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
   }
 
   void _cardTouchEnded() {
-    if(_hitTarget) {
-      _animateTouchPoint(isScaleUp: false);
-      setState(() {
-        _hitTarget = false;
-      });
+    if(!_disableTouch) {
+      if(_hitTarget) {
+        _animateTouchPoint(isScaleUp: false);
+        setState(() {
+          _hitTarget = false;
+        });
+      }
+      if(_currBezierT == 1.0)
+        getNextPath();
     }
-    if(_currBezierT == 1.0)
-      getNextPath();
   }
 
   bool _isWithinTouchArea(Offset p1) => writingCardTouchRadius >= getPointsDist(_currPoint, p1);
@@ -382,23 +389,20 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
     final double _slope = (a0.dy - p0.dy) / (a0.dx - p0.dx);
     if(_slope == 0) {
       return Offset(p0.dx + (a0.dx < p0.dx? -_newDist :_newDist), p0.dy);
-    } else if(_slope.isNaN) {
+    } else if(_slope.isInfinite) {
       return Offset(p0.dx, p0.dy + (a0.dy < p0.dy? -_newDist : _newDist));
     } else {
-      final double _dx = _newDist / sqrt(1 + pow(_slope, 2));
-      final double _dy = _slope * _dx;
-      if(_slope < 0)
-        return Offset(p0.dx + _dx, p0.dy + _dy);
-      else
-        return Offset(p0.dx + (a0.dx < p0.dx? -_dx : _dx), p0.dy + (a0.dy < p0.dy? -_dy : _dy));
+      final double _dx = (_newDist / sqrt(1 + pow(_slope, 2))).abs() * (a0.dx < p0.dx? -1 : 1);
+      final double _dy = (_slope * _dx).abs() * (a0.dy < p0.dy? -1 : 1);
+      return Offset(p0.dx + _dx, p0.dy + _dy);
     }
   }
 
   bool _hasNextSubStroke() => _currSubPathNo + 6 < kulitanPaths[widget.kulitan][_currPathNo].length;
 
   void getNextPath() async {
-    setState(() => _disableSwipe = true);
     final List<List<double>> _tempGlyph = kulitanPaths[widget.kulitan];
+    // Next subpath in stroke
     if(_hasNextSubStroke()) {
       final List<double> _tempPath = _tempGlyph[_currPathNo];
       final int _prevSubPathNo = _currSubPathNo;
@@ -407,10 +411,10 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
         _prevDrawPaths.add(Path()..moveTo(_tempPath[_prevSubPathNo - 2] * _canvasWidth, _tempPath[_prevSubPathNo - 1] * _canvasWidth)..cubicTo(_tempPath[_prevSubPathNo] * _canvasWidth, _tempPath[_prevSubPathNo + 1] * _canvasWidth, _tempPath[_prevSubPathNo + 2] * _canvasWidth, _tempPath[_prevSubPathNo + 3] * _canvasWidth, _tempPath[_prevSubPathNo + 4] * _canvasWidth, _tempPath[_prevSubPathNo + 5] * _canvasWidth));
         _currPoint = Offset(_tempPath[_currSubPathNo - 2] * _canvasWidth, _tempPath[_currSubPathNo - 1] * _canvasWidth);
         _currBezierT = 0.0;
-        _disableSwipe = false;
         _cubicBezier = _getCubicBezier(_tempPath[_currSubPathNo - 2], _tempPath[_currSubPathNo - 1], _tempPath[_currSubPathNo], _tempPath[_currSubPathNo + 1], _tempPath[_currSubPathNo + 2], _tempPath[_currSubPathNo + 3], _tempPath[_currSubPathNo + 4], _tempPath[_currSubPathNo + 5]);
         _splitCubicBezier = _getSplitCubicBezier(_tempPath[_currSubPathNo - 2], _tempPath[_currSubPathNo - 1], _tempPath[_currSubPathNo], _tempPath[_currSubPathNo + 1], _tempPath[_currSubPathNo + 2], _tempPath[_currSubPathNo + 3], _tempPath[_currSubPathNo + 4], _tempPath[_currSubPathNo + 5]);
       });
+    // Next stroke
     } else if(_currPathNo + 1 < _tempGlyph.length) {
       await Future.delayed(const Duration(milliseconds: nextDrawPathDelay));
       setState(() {
@@ -422,10 +426,11 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
       await Future.delayed(const Duration(milliseconds: drawGuidesOpacityChangeDuration * 2));
       final List<double> _prevPath = _tempGlyph[_currPathNo];
       final List<double> _tempPath = _tempGlyph[_currPathNo + 1];
+      final int _prevSubPathNo = _currSubPathNo;
       setState(() {
-        _cubicBezier = _getCubicBezier(_tempPath[0], _tempPath[1], _tempPath[2], _tempPath[3], _tempPath[4], _tempPath[5], _tempPath[6], _tempPath[7]);
-        _splitCubicBezier = _getSplitCubicBezier(_tempPath[0], _tempPath[1], _tempPath[2], _tempPath[3], _tempPath[4], _tempPath[5], _tempPath[6], _tempPath[7]);
-        _prevDrawPaths.add(Path()..moveTo(_prevPath[0] * _canvasWidth, _prevPath[1] * _canvasWidth)..cubicTo(_prevPath[2] * _canvasWidth, _prevPath[3] * _canvasWidth, _prevPath[4] * _canvasWidth, _prevPath[5] * _canvasWidth, _prevPath[6] * _canvasWidth, _prevPath[7] * _canvasWidth));
+        _cubicBezier = _getCubicBezier(_tempPath[0], _tempPath[1], _tempPath[2], _tempPath[3], _tempPath[4], _tempPath[5], _tempPath[6], _tempPath[7]); 
+        _splitCubicBezier = _getSplitCubicBezier(_tempPath[0], _tempPath[1], _tempPath[2], _tempPath[3], _tempPath[4], _tempPath[5], _tempPath[6], _tempPath[7]); 
+        _prevDrawPaths.add(Path()..moveTo(_prevPath[_prevSubPathNo - 2] * _canvasWidth, _prevPath[_prevSubPathNo - 1] * _canvasWidth)..cubicTo(_prevPath[_prevSubPathNo] * _canvasWidth, _prevPath[_prevSubPathNo + 1] * _canvasWidth, _prevPath[_prevSubPathNo + 2] * _canvasWidth, _prevPath[_prevSubPathNo + 3] * _canvasWidth, _prevPath[_prevSubPathNo + 4] * _canvasWidth, _prevPath[_prevSubPathNo + 5] * _canvasWidth));
         _currPoint = Offset(_tempPath[0] * _canvasWidth, _tempPath[1] * _canvasWidth);
         _currBezierT = 0.0;
         _currPathNo++;
@@ -436,7 +441,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
         _guideOpacityCurve = drawGuidesOpacityUpCurve;
       });
       await Future.delayed(const Duration(milliseconds: drawGuidesOpacityChangeDuration));
-      setState(() => _disableSwipe = false);
+    // Finished writing
     } else {
       await Future.delayed(const Duration(milliseconds: drawGuidesOpacityChangeDelay));
       setState(() {
@@ -444,6 +449,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
         _touchPointOpacity = 0.0;
         _guideOpacityCurve = drawGuidesOpacityDownCurve;
         _touchPointOpacityCurve = drawTouchPointOpacityDownCurve;
+        _disableTouch = true;
       });
       await Future.delayed(const Duration(milliseconds: drawGuidesOpacityChangeDuration));
       widget.writingDone();
@@ -453,8 +459,27 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
     }
   }
 
+  @override
+  void didUpdateWidget(_AnimatedWritingCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if(oldWidget.kulitan != widget.kulitan) {
+      if(oldWidget.kulitan.length > 0) {
+        _animatePointShadowProgress = false;
+        _currPathNo = 0;
+        _currSubPathNo = 0;
+        _currBezierT = 0.0;
+        _shadowOffset = 0.0;
+        _prevDrawPaths = [];
+        _drawPath = null;
+        _getPaths();
+      } else {
+        _getPaths(first: true);
+      }
+    }
+  }
+
   void _updateTouchOffset(BuildContext context, Offset offset) async {
-    if(_hitTarget && !_disableSwipe) {
+    if(_hitTarget && !_disableTouch) {
       final RenderBox _box = context.findRenderObject();
       final Offset _localOffset = _box.globalToLocal(offset);
       final Offset _touchLoc = Offset(_localOffset.dx, _localOffset.dy - 20.0);
@@ -482,27 +507,48 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
     }
   }
 
-  void _getPaths() {
+  void _getWidth() {
     final RenderBox _canvasBox = _canvasKey.currentContext.findRenderObject();
     final double _width = _canvasBox.size.width;
     setState(() => _canvasWidth = _width);
+  }
+
+  void _resetOpacities() async {
+    await Future.delayed(const Duration(milliseconds: writingInitOpacityDuration));
+    setState(() {
+      _guideOpacityDuration = const Duration(milliseconds: drawGuidesOpacityChangeDuration);
+      _touchPointOpacityDuration = const Duration(milliseconds: drawGuidesOpacityChangeDuration);
+    });
+  }
+
+  void _getPaths({ first: false }) async {
+    if(first) await Future.delayed(const Duration(milliseconds:  writingInitDelay));
     List<Path> _manyPaths = [];
     List<List<double>> _thisKulitanPaths = kulitanPaths[widget.kulitan];
     for(List<double> _path in _thisKulitanPaths) {
       for(int i = 2; i < _path.length; i += 6)
-        _manyPaths.add(Path()..moveTo(_path[i - 2] * _width, _path[i - 1] * _width)..cubicTo(_path[i] * _width, _path[i + 1] * _width, _path[i + 2] * _width, _path[i + 3] * _width, _path[i + 4] * _width, _path[i + 5] * _width));
+        _manyPaths.add(Path()..moveTo(_path[i - 2] * _canvasWidth, _path[i - 1] * _canvasWidth)..cubicTo(_path[i] * _canvasWidth, _path[i + 1] * _canvasWidth, _path[i + 2] * _canvasWidth, _path[i + 3] * _canvasWidth, _path[i + 4] * _canvasWidth, _path[i + 5] * _canvasWidth));
     }
 
     List<double> _path = kulitanPaths[widget.kulitan][0];
-    setState(() => _currPoint = Offset(_path[0] * _width, _path[1] * _width));
+    setState(() => _currPoint = Offset(_path[0] * _canvasWidth, _path[1] * _canvasWidth));
     _path = _thisKulitanPaths[0];
     setState(() {
+      if(first) {
+        _guideOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
+        _touchPointOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
+      }
       _cubicBezier = _getCubicBezier(_path[0], _path[1], _path[2], _path[3], _path[4], _path[5], _path[6], _path[7]);
       _splitCubicBezier = _getSplitCubicBezier(_path[0], _path[1], _path[2], _path[3], _path[4], _path[5], _path[6], _path[7]);
       _shadowPaths = _manyPaths;
-      _disableSwipe = false;
       _currSubPathNo = 2;
+      _touchPointOpacity = 1.0;
+      _guideOpacity = 1.0;
+      _disableTouch = false;
     });
+    if(first) _resetOpacities();
+    await Future.delayed(const Duration(milliseconds: drawShadowOffsetChangeDuration));
+    setState(() => _animatePointShadowProgress = true);
   }
 
   void _animateTouchPoint({ bool isScaleUp: true }) {
@@ -523,7 +569,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
     _pointTween = Tween<double>(begin: writingDrawPointIdleWidth / 2, end: writingDrawPointTouchWidth / 2);
     _pointAnimation = _pointTween.animate(_pointCurve)
       ..addListener(() => setState(() {}));
-    WidgetsBinding.instance.addPostFrameCallback((_) => _getPaths()); 
+    WidgetsBinding.instance.addPostFrameCallback((_) => _getWidth()); 
   }
 
   @override
@@ -551,34 +597,40 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
                     top: _shadowOffset,
                     left: _shadowOffset,
                     curve: drawShadowOffsetChangeCurve,
-                    duration: const Duration(milliseconds: drawShadowOffsetChangeDuration),
+                    duration: Duration(milliseconds: _animatePointShadowProgress? drawShadowOffsetChangeDuration : 0),
                     child: CustomPaint(
                       painter: _ShadowPainter(
                         paths: _shadowPaths,
                       ),
                     ),
                   ),
+                  CustomPaint(
+                    key: _canvasKey,
+                    painter: _CurrPathPainter(
+                      paths: _prevDrawPaths,
+                    ),
+                  ),
                   AnimatedOpacity(
                     curve: _guideOpacityCurve,
                     opacity: _guideOpacity,
-                    duration: const Duration(milliseconds: drawGuidesOpacityChangeDuration),
+                    duration: _animatePointShadowProgress? _guideOpacityDuration : const Duration(milliseconds: 0),
                     child: Stack(
                       fit: StackFit.expand,
                       children: <Widget>[
                         CustomPaint(
                           painter: _GuideLinePainter(
-                            path: kulitanGuides[widget.kulitan][_currPathNo]['path'],
+                            path: widget.kulitan.length > 0? kulitanGuides[widget.kulitan][_currPathNo]['path'] : [],
                             getCubicBezier: _getCubicBezier,
                           ),
                         ),
                         CustomPaint(
                           painter: _GuideLabelPainter(
-                            offset: kulitanGuides[widget.kulitan][_currPathNo]['labelOffset'],
+                            offset: widget.kulitan.length > 0? kulitanGuides[widget.kulitan][_currPathNo]['labelOffset'] : Offset(0.0, 0.0),
                           ),
                         ),
                         Positioned(
-                          top: (kulitanGuides[widget.kulitan][_currPathNo]['labelOffset'].dy * _canvasWidth) - (_labelSize / 2),
-                          left: (kulitanGuides[widget.kulitan][_currPathNo]['labelOffset'].dx * _canvasWidth) - (_labelSize / 2),
+                          top: widget.kulitan.length > 0? (kulitanGuides[widget.kulitan][_currPathNo]['labelOffset'].dy * _canvasWidth) - (_labelSize / 2) : 0.0,
+                          left: widget.kulitan.length > 0? (kulitanGuides[widget.kulitan][_currPathNo]['labelOffset'].dx * _canvasWidth) - (_labelSize / 2) : 0.0,
                           child: Container(
                             height: _labelSize,
                             width: _labelSize,
@@ -594,12 +646,6 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
                     ),
                   ),
                   CustomPaint(
-                    key: _canvasKey,
-                    painter: _CurrPathPainter(
-                      paths: _prevDrawPaths,
-                    ),
-                  ),
-                  CustomPaint(
                     painter: _KulitanPainter(
                       path: _drawPath,
                     ),
@@ -607,7 +653,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
                   AnimatedOpacity(
                     curve: _touchPointOpacityCurve,
                     opacity: _touchPointOpacity,
-                    duration: const Duration(milliseconds: drawGuidesOpacityChangeDuration),
+                    duration: _animatePointShadowProgress? _touchPointOpacityDuration : const Duration(milliseconds: 0),
                     child: CustomPaint(
                       painter:  _CurrPointPainter(
                         point: _currPoint,
@@ -632,6 +678,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
               right: cardWritingHorizontalPadding,
             ),
             child: LinearProgressBar(
+              animate: _animatePointShadowProgress,
               progress: widget.progress,
             ),
           ),
@@ -646,16 +693,15 @@ class WritingCard extends StatelessWidget {
     @required this.displayText,
     @required this.kulitan,
     @required this.progress,
-    @required this.cardNumber,
+    @required this.stackNumber,
     @required this.writingDone,
   });
   
   final String displayText;
   final String kulitan;
   final double progress;
-  final int cardNumber;
+  final int stackNumber;
   final VoidCallback writingDone;
-
 
   @override
   Widget build(BuildContext context) {
@@ -672,9 +718,8 @@ class WritingCard extends StatelessWidget {
               child: Center(
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: Text(
-                    displayText,
-                    style: textWriting,
+                  child: _AnimatedText(
+                    text: displayText,
                   ),
                 ),
               ),
@@ -683,10 +728,47 @@ class WritingCard extends StatelessWidget {
           _AnimatedWritingCard(
             kulitan: kulitan,
             progress: progress,
-            cardNumber: cardNumber,
+            stackNumber: stackNumber,
             writingDone: writingDone,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _AnimatedText extends StatefulWidget {
+  _AnimatedText({ @required this.text });
+
+  final String text;
+
+  @override
+  _AnimatedTextState createState() => _AnimatedTextState();
+}
+
+class _AnimatedTextState extends State<_AnimatedText> {
+  double _opacity = 0.0;
+
+  void _incOpacity() async {
+    await Future.delayed(const Duration(milliseconds: writingTextOpacityChangeDelay));
+    setState(() => _opacity = 1.0);
+  }
+
+  @override
+  void didUpdateWidget(_AnimatedText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if(oldWidget.text.length == 0) _incOpacity();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: _opacity,
+      curve: writingTextOpacityChangeCurve,
+      duration: const Duration(milliseconds: writingInitOpacityDuration),
+      child: Text(
+        widget.text.isNotEmpty? widget.text : ' ',
+        style: textWriting,
       ),
     );
   }

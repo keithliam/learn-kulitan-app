@@ -90,6 +90,7 @@ const drawShadowOffsetChangeCurve = Curves.easeOutBack;
 const drawGuidesOpacityUpCurve = Curves.fastOutSlowIn;
 const drawGuidesOpacityDownCurve = Curves.decelerate;
 const writingCardPanLeftCurve = Curves.easeInOutCubic;
+const writingTextOpacityChangeCurve = drawGuidesOpacityUpCurve;
 
 // Durations
 const linearProgressBarChangeDuration = 1000;
@@ -112,6 +113,9 @@ const drawGuidesOpacityChangeDelay = 500;
 const drawGuidesOpacityChangeDuration = 250;
 const writingNextCardDelay = 500;
 const writingNextCardDuration = 750;
+const writingInitDelay = 750;
+const writingInitOpacityDuration = 750;
+const writingTextOpacityChangeDelay = 1000;
 
 // Kulitan
 const Map<String, String> kulitanGlyphs = {
@@ -319,10 +323,10 @@ int _getSumOfLengths() {
 
 // Limits
 const maxQuizGlyphProgress = 1;
-const maxWritingGlyphProgress = 10;
+const maxWritingGlyphProgress = 3;
 final totalGlyphCount = _getSumOfLengths();
 const quizCardPoolMinCount = 5;
-const drawCardPoolMinCount = 3;
+const drawCardPoolMinCount = 5;
 
 // Kulitan Fonts
 const kulitanHome = TextStyle(
