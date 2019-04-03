@@ -416,6 +416,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
       });
     // Next stroke
     } else if(_currPathNo + 1 < _tempGlyph.length) {
+      setState(() => _disableTouch = true);
       await Future.delayed(const Duration(milliseconds: nextDrawPathDelay));
       setState(() {
         _touchPointOpacityCurve = drawTouchPointOpacityDownCurve;
@@ -441,15 +442,16 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
         _guideOpacityCurve = drawGuidesOpacityUpCurve;
       });
       await Future.delayed(const Duration(milliseconds: drawGuidesOpacityChangeDuration));
+      setState(() => _disableTouch = false);
     // Finished writing
     } else {
+      setState(() => _disableTouch = true);
       await Future.delayed(const Duration(milliseconds: drawGuidesOpacityChangeDelay));
       setState(() {
         _guideOpacity = 0.0;
         _touchPointOpacity = 0.0;
         _guideOpacityCurve = drawGuidesOpacityDownCurve;
         _touchPointOpacityCurve = drawTouchPointOpacityDownCurve;
-        _disableTouch = true;
       });
       await Future.delayed(const Duration(milliseconds: drawGuidesOpacityChangeDuration));
       widget.writingDone();
@@ -520,6 +522,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
       _touchPointOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
       _touchPointOpacity = 1.0;
       _guideOpacity = 1.0;
+      _disableTouch = false;
     });
     await Future.delayed(const Duration(milliseconds: writingInitOpacityDuration));
     setState(() {
@@ -548,7 +551,6 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
       _splitCubicBezier = _getSplitCubicBezier(_path[0], _path[1], _path[2], _path[3], _path[4], _path[5], _path[6], _path[7]);
       _shadowPaths = _manyPaths;
       _currSubPathNo = 2;
-      _disableTouch = false;
     });
     if(first) await Future.delayed(const Duration(milliseconds:  writingInitDelay));
     if(widget.stackNumber == 1) _showPaths();
