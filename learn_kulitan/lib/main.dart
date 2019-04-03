@@ -4,6 +4,7 @@ import './components/misc/SlideLeftRoute.dart';
 import './routes/home/home.dart';
 import './routes/reading/reading.dart';
 import './routes/writing/writing.dart';
+import './routes/transcribe/transcribe.dart';
 
 void main() {
   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Learn Kulitan',
         home: HomePage(),
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
@@ -31,6 +32,9 @@ class MyApp extends StatelessWidget {
               break;
             case '/writing':
               return SlideLeftRoute(widget: WritingPage());
+              break;
+            case '/transcribe':
+              return SlideLeftRoute(widget: TranscribePage());
               break;
           }
         });
