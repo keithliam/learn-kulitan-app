@@ -580,7 +580,7 @@ const kulitanInfo = TextStyle(
   fontSize: 45.0,
   color: whiteColor,
 );
-const kulitanTranslate = TextStyle(
+const kulitanTranscribe = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
   fontSize: 60.0,
   color: grayColor,
@@ -673,7 +673,7 @@ const textInfoCaption = TextStyle(
   fontWeight: FontWeight.bold,
   color: grayColor,
 );
-const textTranslate = TextStyle(
+const textTranscribe = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 40.0,
   fontWeight: FontWeight.bold,

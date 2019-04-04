@@ -187,7 +187,7 @@ class HomePage extends StatelessWidget {
       route: '/',
     );
 
-    Widget _translateButton = HomeButton(
+    Widget _transcribeButton = HomeButton(
       kulitanTextCustom: FittedBox(
         fit: BoxFit.scaleDown,
         child: Container(
@@ -322,7 +322,7 @@ class HomePage extends StatelessWidget {
               _readingButton,
               _writingButton,
               _infoButton,
-              _translateButton,
+              _transcribeButton,
               _aboutButton,
             ],
           ),
