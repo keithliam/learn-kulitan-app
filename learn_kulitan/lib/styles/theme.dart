@@ -35,6 +35,8 @@ const writingGuideColor = accentColor;
 const writingDrawColor = grayColor;
 const writingShadowColor = snowColor;
 
+const transcribeDividerColor = snowColor;
+
 // Spacings
 const homeHorizontalScreenPadding = 32.0;
 const homeVerticalScreenPadding = 32.0;
@@ -42,6 +44,8 @@ const quizHorizontalScreenPadding = 32.0;
 const quizVerticalScreenPadding = quizHorizontalScreenPadding - quizChoiceButtonElevation;
 const writingHorizontalScreenPadding = 32.0;
 const writingVerticalScreenPadding = 32.0;
+const transcribeHorizontalScreenPadding = 32.0;
+const transcribeVerticalScreenPadding = 25.0;
 const headerHorizontalPadding = 5.0;
 const headerVerticalPadding = 10.0;
 const cardQuizHorizontalPadding = 26.0;
@@ -51,6 +55,8 @@ const cardWritingHorizontalPadding = 26.0;
 const cardWritingVerticalPadding = 20.0;
 const choiceSpacing = 14.0;
 const quizChoiceButtonElevation = 10.0;
+const cardTranscribeHorizontalPadding = 26.0;
+const cardTranscribeVerticalPadding = 26.0;
 
 // Sizes
 const homeTitleHeight = 110.0;
@@ -582,7 +588,7 @@ const kulitanInfo = TextStyle(
 );
 const kulitanTranscribe = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
-  fontSize: 60.0,
+  // fontSize: 60.0,
   color: grayColor,
 );
 

@@ -237,7 +237,7 @@ class HomePage extends StatelessWidget {
       ),
       kulitanTextOffset: 11.0,
       title: 'Transcribe',
-      route: '/',
+      route: '/transcribe',
     );
 
     Widget _aboutButton = HomeButton(
