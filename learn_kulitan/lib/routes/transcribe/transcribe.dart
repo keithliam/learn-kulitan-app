@@ -139,7 +139,8 @@ class _TranscribePageState extends State<TranscribePage> {
         0,
         Container(
           height: double.infinity,
-          padding: const EdgeInsets.only(left: 5.0 * transcribeRelativeFontSize),
+          padding:
+              const EdgeInsets.only(left: 5.0 * transcribeRelativeFontSize),
           child: Wrap(
             runSpacing: 5.0 * transcribeRelativeFontSize,
             direction: Axis.vertical,
@@ -180,18 +181,18 @@ class _TranscribePageState extends State<TranscribePage> {
     List<List<String>> _lineGlyphs = [];
     for (String _line in _lines) {
       _line = _line
-        .replaceAll(RegExp(r'(^|\s)e+(\s|$)'), ' alii ')
-        .replaceAll(RegExp(r'(^|\s)(e+|e\s)ka(\s|$)'), ' alii ka ')
-        .replaceAll(RegExp(r'(^|\s)(e+|e\s)ku(\s|$)'), ' alii ku ')
-        .replaceAll(RegExp(r'(^|\s)(e+|e\s)ke(\s|$)'), ' alii ke ')
-        .replaceAll(RegExp(r'(^|\s)(e+|e\s)ko(\s|$)'), ' alii ko ')
-        .replaceAll(RegExp(r'(^|\s)i+ka(\s|$)'), ' iik ')
-        .replaceAll(RegExp(r'(^|\s)i+ka\s?tamu(\s|$)'), ' iik tamu ')
-        .replaceAll(RegExp(r'(^|\s)i+ka\s?mi(\s|$)'), ' iik mi ')
-        .replaceAll(RegExp(r'(^|\s)i+ka\s?yu(\s|$)'), ' iik yu ')
-        .replaceAll(RegExp(r'(^|\s)i+la(\s|$)'), ' iil ')
-        .replaceAll(RegExp(r'(^|\s)mewala(\s|$)'), ' me ala ')
-        .trim();
+          .replaceAll(RegExp(r'(^|\s)e+(\s|$)'), ' alii ')
+          .replaceAll(RegExp(r'(^|\s)(e+|e\s)ka(\s|$)'), ' alii ka ')
+          .replaceAll(RegExp(r'(^|\s)(e+|e\s)ku(\s|$)'), ' alii ku ')
+          .replaceAll(RegExp(r'(^|\s)(e+|e\s)ke(\s|$)'), ' alii ke ')
+          .replaceAll(RegExp(r'(^|\s)(e+|e\s)ko(\s|$)'), ' alii ko ')
+          .replaceAll(RegExp(r'(^|\s)i+ka(\s|$)'), ' iik ')
+          .replaceAll(RegExp(r'(^|\s)i+ka\s?tamu(\s|$)'), ' iik tamu ')
+          .replaceAll(RegExp(r'(^|\s)i+ka\s?mi(\s|$)'), ' iik mi ')
+          .replaceAll(RegExp(r'(^|\s)i+ka\s?yu(\s|$)'), ' iik yu ')
+          .replaceAll(RegExp(r'(^|\s)i+la(\s|$)'), ' iil ')
+          .replaceAll(RegExp(r'(^|\s)mewala(\s|$)'), ' me ala ')
+          .trim();
       _lineGlyphs.add(_line.split(' '));
     }
     String _glyphText;
@@ -235,11 +236,12 @@ class _TranscribePageState extends State<TranscribePage> {
       _tempLines.add(_getGlyphs(_allTempGlyphs));
     }
     setState(() => _glyphLines = _getLines(_tempLines));
-    if(!isInit) {
+    if (!isInit) {
       final double _maxPosition = _scrollController.position.maxScrollExtent;
       _scrollController.animateTo(_maxPosition,
           curve: transcribeScrollChangeCurve,
-          duration: const Duration(milliseconds: transcribeScrollChangeDuration));
+          duration:
+              const Duration(milliseconds: transcribeScrollChangeDuration));
     }
   }
 
@@ -271,16 +273,18 @@ class _TranscribePageState extends State<TranscribePage> {
 
     Widget _romanInput = Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
-      child: TextField(
-        controller: _romanController,
-        autocorrect: false,
-        maxLines: null,
-        keyboardType: TextInputType.multiline,
-        style: textTranscribe,
-        cursorColor: accentColor,
-        cursorRadius: Radius.circular(15.0),
-        cursorWidth: 4.0,
-        decoration: null,
+      child: Scrollbar(
+        child: TextField(
+          controller: _romanController,
+          autocorrect: false,
+          maxLines: null,
+          keyboardType: TextInputType.multiline,
+          style: textTranscribe,
+          cursorColor: accentColor,
+          cursorRadius: Radius.circular(15.0),
+          cursorWidth: 4.0,
+          decoration: null,
+        ),
       ),
     );
 
@@ -289,13 +293,15 @@ class _TranscribePageState extends State<TranscribePage> {
       alignment: Alignment.topRight,
       child: SizedBox(
         height: double.infinity,
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          scrollDirection: Axis.horizontal,
-          reverse: true,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: _glyphLines,
+        child: Scrollbar(
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            scrollDirection: Axis.horizontal,
+            reverse: true,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: _glyphLines,
+            ),
           ),
         ),
       ),
@@ -318,7 +324,7 @@ class _TranscribePageState extends State<TranscribePage> {
             cardTranscribeHorizontalPadding,
             cardTranscribeVerticalPadding,
             cardTranscribeHorizontalPadding,
-            cardTranscribeVerticalPadding /  2),
+            cardTranscribeVerticalPadding / 2),
         child: Column(
           children: <Widget>[
             Expanded(
