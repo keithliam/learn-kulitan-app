@@ -13,11 +13,12 @@ class TranscribePage extends StatefulWidget {
 }
 
 class _TranscribePageState extends State<TranscribePage> {
+  final ScrollController _scrollController = ScrollController();
   final TextEditingController _romanController =
       TextEditingController(text: 'atin ku pung singsing metung yang timpukan');
 
   String _kulitanText = 'atin ku pung singsing metung yang timpukan';
-  List<SizedBox> _glyphs = [];
+  List<Container> _glyphLines = [];
 
   void _textChanged() {
     setState(() => _kulitanText = _romanController.text);
@@ -28,7 +29,7 @@ class _TranscribePageState extends State<TranscribePage> {
   void initState() {
     super.initState();
     _romanController.addListener(_textChanged);
-    _transcribeRoman();
+    _transcribeRoman(isInit: true);
   }
 
   @override
@@ -71,58 +72,57 @@ class _TranscribePageState extends State<TranscribePage> {
                 ? kulitanTranscribe.copyWith(height: 0.7)
                 : kulitanTranscribe,
       );
-      if (_glyph == 'nu' || _glyph == 'lu') {
+      double _width = 75.0 * transcribeRelativeFontSize;
+      if (_glyph == 'nu' || _glyph == 'lu')
         _textWidget = Padding(
           padding: const EdgeInsets.only(bottom: 2.0),
           child: _textWidget,
         );
-      } else if (_glyph.contains('s')) {
+      else if (_glyph.contains('s'))
         _textWidget = Padding(
           padding: const EdgeInsets.only(top: 2.0),
           child: _textWidget,
         );
-      }
+      if (_glyph == '?')
+        _width = 40.0 * transcribeRelativeFontSize;
+      else if (_glyph == 'ngaa' ||
+          (_glyph.length == 3 && (_glyph.contains('ng') && _glyph != 'ang')))
+        _width = 100.0 * transcribeRelativeFontSize;
+      else if (_glyph == 'a' ||
+          _glyph == 'aa' ||
+          _glyph == 'ee' ||
+          _glyph == 'oo' ||
+          _glyph == 'ng' ||
+          _glyph == 'ang')
+        _width = 60.0 * transcribeRelativeFontSize;
+      else if ((_glyph.length == 1 &&
+              _glyph != 'a' &&
+              _glyph != 'i' &&
+              _glyph != 'u' &&
+              _glyph != 'e' &&
+              _glyph != 'o') ||
+          (_glyph.length == 2 &&
+              _glyph[0] != 'i' &&
+              _glyph[0] != 'u' &&
+              _glyph[0] != 'e' &&
+              _glyph[0] != 'o' &&
+              (_glyph[1] == 'a' || _glyph[1] == 'i' || _glyph[1] == 'u')))
+        _width = 90.0 * transcribeRelativeFontSize;
+      else if (_glyph == 'i' || _glyph == 'u' || _glyph == 'e' || _glyph == 'o')
+        _width = 40.0 * transcribeRelativeFontSize;
+      else if (((_glyph.length > 2 &&
+                  midEnd.contains(_glyph.substring(0, 3)) &&
+                  !_glyph.contains('ng')) ||
+              (_glyph.length > 1 && midEnd.contains(_glyph.substring(0, 2)))) &&
+          _glyph != 'alii')
+        _width = 45.0 * transcribeRelativeFontSize;
+      else if (_glyph == 'yaa' || _glyph == 'waa')
+        _width = 100.0 * transcribeRelativeFontSize;
+      else
+        _width = 75.0 * transcribeRelativeFontSize;
+      if (_glyph == 'nga') print(_width);
       _tempGlyphs.add(SizedBox(
-        width: _glyph == '?'
-            ? 40.0
-            : (_glyph.length == 1 &&
-                        _glyph != 'a' &&
-                        _glyph != 'i' &&
-                        _glyph != 'u' &&
-                        _glyph != 'e' &&
-                        _glyph != 'o') ||
-                    (_glyph.length == 2 &&
-                        _glyph[0] != 'i' &&
-                        _glyph[0] != 'u' &&
-                        _glyph[0] != 'e' &&
-                        _glyph[0] != 'o' &&
-                        (_glyph[1] == 'a' ||
-                            _glyph[1] == 'i' ||
-                            _glyph[1] == 'u'))
-                ? 100.0
-                : _glyph == 'a' ||
-                        _glyph == 'ee' ||
-                        _glyph == 'oo' ||
-                        _glyph == 'ng' ||
-                        _glyph == 'nga' ||
-                        _glyph == 'ngi' ||
-                        _glyph == 'ngu'
-                    ? 50.0
-                    : _glyph == 'i' ||
-                            _glyph == 'u' ||
-                            _glyph == 'e' ||
-                            _glyph == 'o'
-                        ? 40.0
-                        : ((_glyph.length > 2 &&
-                                        midEnd
-                                            .contains(_glyph.substring(0, 3)) &&
-                                        !_glyph.contains('ng')) ||
-                                    (_glyph.length > 1 &&
-                                        midEnd.contains(
-                                            _glyph.substring(0, 2)))) &&
-                                _glyph != 'alii'
-                            ? 40.0
-                            : _glyph == 'yaa' || _glyph == 'waa' ? 100.0 : 75.0,
+        width: _width,
         child: FittedBox(
           fit: BoxFit.fitWidth,
           child: _textWidget,
@@ -132,67 +132,114 @@ class _TranscribePageState extends State<TranscribePage> {
     return _tempGlyphs;
   }
 
-  void _transcribeRoman() {
+  List<Container> _getLines(List<List<SizedBox>> lines) {
+    List<Container> _tempLines = [];
+    for (List<SizedBox> _glyphs in lines) {
+      _tempLines.insert(
+        0,
+        Container(
+          height: double.infinity,
+          padding: const EdgeInsets.only(left: 5.0 * transcribeRelativeFontSize),
+          child: Wrap(
+            runSpacing: 5.0 * transcribeRelativeFontSize,
+            direction: Axis.vertical,
+            verticalDirection: VerticalDirection.down,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            textDirection: TextDirection.rtl,
+            children: _glyphs,
+          ),
+        ),
+      );
+    }
+    return _tempLines;
+  }
+
+  void _transcribeRoman({isInit: false}) {
     List<String> _allTempGlyphs = [];
     String _filteredText = _kulitanText
         .toLowerCase()
         .replaceAll(
             RegExp(
-                r'[^\saàáâäæãåābcdeèéêëēėęfgiîïíīįìjklmnoôöòóœøōõpqrstuûüùúūvwyz?]'),
+                r'[^\s\\naàáâäæãåābcdeèéêëēėęfgiîïíīįìjklmnoôöòóœøōõpqrstuûüùúūvwyz]'),
             ' ')
-        .replaceAll(RegExp(r'[àáâäæãåā]+ | a{2,}'), 'aa')
-        .replaceAll(RegExp(r'[îïíīįì]+ | i{2,}'), 'ii')
-        .replaceAll(RegExp(r'[ûüùúū]+ | u{2,}'), 'uu')
+        .replaceAll(RegExp(r'[àáâäæãåā]+|aa+'), 'aa')
+        .replaceAll(RegExp(r'[îïíīįì]+|ii+'), 'ii')
+        .replaceAll(RegExp(r'[ûüùúū]+|uu+'), 'uu')
         .replaceAll(RegExp(r'[èéêëēėę]'), 'e')
         .replaceAll(RegExp(r'[ôöòóœøōõ]'), 'o')
         .replaceAll('?', ' ? ')
-        .replaceAll(RegExp(r'\s+'), ' ')
-        .replaceAll(RegExp(r'(^|\s)(e+|e\s)ka\s'), ' alii ka ')
-        .replaceAll(RegExp(r'(^|\s)(e+|e\s)ku\s'), ' alii ku ')
-        .replaceAll(RegExp(r'(^|\s)(e+|e\s)ke\s'), ' alii ke ')
-        .replaceAll(RegExp(r'(^|\s)(e+|e\s)ko\s'), ' alii ko ')
+        .replaceAll(RegExp(r'[ \t]+'), ' ')
         .replaceAll('r', 'd')
+        .replaceAll('z', 's')
         .replaceAll('ua', 'wa')
         .replaceAll('ea', 'ya')
         .replaceAll('kapampangan', 'kapangpang an')
         .replaceAll('pampanga', 'pangpanga')
         .trim();
-    final List<String> _filteredWords = _filteredText.split(RegExp(r' '));
+    final List<String> _lines = _filteredText.split('\n');
+    List<List<String>> _lineGlyphs = [];
+    for (String _line in _lines) {
+      _line = _line
+        .replaceAll(RegExp(r'(^|\s)e+(\s|$)'), ' alii ')
+        .replaceAll(RegExp(r'(^|\s)(e+|e\s)ka(\s|$)'), ' alii ka ')
+        .replaceAll(RegExp(r'(^|\s)(e+|e\s)ku(\s|$)'), ' alii ku ')
+        .replaceAll(RegExp(r'(^|\s)(e+|e\s)ke(\s|$)'), ' alii ke ')
+        .replaceAll(RegExp(r'(^|\s)(e+|e\s)ko(\s|$)'), ' alii ko ')
+        .replaceAll(RegExp(r'(^|\s)i+ka(\s|$)'), ' iik ')
+        .replaceAll(RegExp(r'(^|\s)i+ka\s?tamu(\s|$)'), ' iik tamu ')
+        .replaceAll(RegExp(r'(^|\s)i+ka\s?mi(\s|$)'), ' iik mi ')
+        .replaceAll(RegExp(r'(^|\s)i+ka\s?yu(\s|$)'), ' iik yu ')
+        .replaceAll(RegExp(r'(^|\s)i+la(\s|$)'), ' iil ')
+        .replaceAll(RegExp(r'(^|\s)mewala(\s|$)'), ' me ala ')
+        .trim();
+      _lineGlyphs.add(_line.split(' '));
+    }
     String _glyphText;
     int _len, _maxLen;
+    List<List<SizedBox>> _tempLines = [];
     List<String> _tempGlyphs;
-    for (String str in _filteredWords) {
-      if (str == 'ali' || str == 'alii') {
-        _allTempGlyphs.add('alii');
-      } else if (str == '?') {
-        _allTempGlyphs.add('?');
-      } else {
-        _tempGlyphs = [];
-        _filteredText = str;
-        while (_filteredText.length > 0) {
-          if (_filteredText == 'e') {
-            _filteredText = '';
-            _tempGlyphs.insert(0, 'ee');
-          } else if (_filteredText == 'o') {
-            _filteredText = '';
-            _tempGlyphs.insert(0, 'oo');
-          } else {
-            _len = _filteredText.length;
-            _maxLen = _len < 6 ? _len : 6;
-            _glyphText = _getGlyph(
-                _filteredText.substring(_len - _maxLen, _len), _maxLen);
-            if (_glyphText.length != 0) {
-              _filteredText =
-                  _filteredText.substring(0, _len - _glyphText.length);
-              _tempGlyphs.insert(0, _glyphText);
+    for (List<String> _line in _lineGlyphs) {
+      _allTempGlyphs = [];
+      for (String str in _line) {
+        if (str == 'ali' || str == 'alii') {
+          _allTempGlyphs.add('alii');
+        } else if (str == '?') {
+          _allTempGlyphs.add('?');
+        } else {
+          _tempGlyphs = [];
+          _filteredText = str;
+          while (_filteredText.length > 0) {
+            if (_filteredText == 'e') {
+              _filteredText = '';
+              _tempGlyphs.insert(0, 'ee');
+            } else if (_filteredText == 'o') {
+              _filteredText = '';
+              _tempGlyphs.insert(0, 'oo');
             } else {
-              _filteredText = _filteredText.substring(0, _len - 1);
+              _len = _filteredText.length;
+              _maxLen = _len < 6 ? _len : 6;
+              _glyphText = _getGlyph(
+                  _filteredText.substring(_len - _maxLen, _len), _maxLen);
+              if (_glyphText.length != 0) {
+                _filteredText =
+                    _filteredText.substring(0, _len - _glyphText.length);
+                _tempGlyphs.insert(0, _glyphText);
+              } else {
+                _filteredText = _filteredText.substring(0, _len - 1);
+              }
             }
           }
+          _allTempGlyphs.addAll(_tempGlyphs);
         }
-        _allTempGlyphs.addAll(_tempGlyphs);
       }
-      setState(() => _glyphs = _getGlyphs(_allTempGlyphs));
+      _tempLines.add(_getGlyphs(_allTempGlyphs));
+    }
+    setState(() => _glyphLines = _getLines(_tempLines));
+    if(!isInit) {
+      final double _maxPosition = _scrollController.position.maxScrollExtent;
+      _scrollController.animateTo(_maxPosition,
+          curve: transcribeScrollChangeCurve,
+          duration: const Duration(milliseconds: transcribeScrollChangeDuration));
     }
   }
 
@@ -243,15 +290,12 @@ class _TranscribePageState extends State<TranscribePage> {
       child: SizedBox(
         height: double.infinity,
         child: SingleChildScrollView(
+          controller: _scrollController,
           scrollDirection: Axis.horizontal,
           reverse: true,
-          child: Wrap(
-            runSpacing: 15.0,
-            direction: Axis.vertical,
-            verticalDirection: VerticalDirection.down,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            textDirection: TextDirection.rtl,
-            children: _glyphs,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: _glyphLines,
           ),
         ),
       ),
@@ -270,9 +314,11 @@ class _TranscribePageState extends State<TranscribePage> {
           horizontal: transcribeHorizontalScreenPadding,
           vertical: transcribeVerticalScreenPadding),
       child: CustomCard(
-        padding: const EdgeInsets.symmetric(
-            horizontal: cardTranscribeHorizontalPadding,
-            vertical: cardTranscribeVerticalPadding),
+        padding: const EdgeInsets.fromLTRB(
+            cardTranscribeHorizontalPadding,
+            cardTranscribeVerticalPadding,
+            cardTranscribeHorizontalPadding,
+            cardTranscribeVerticalPadding /  2),
         child: Column(
           children: <Widget>[
             Expanded(

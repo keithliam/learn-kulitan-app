@@ -69,6 +69,7 @@ const writingDrawPointTouchWidth = 36.0;
 const writingGuideCircleRadius = 0.05069;
 const writingGuideCircleStrokeWidth = 0.01597;
 const writingGuideLineStrokeWidth = 0.02291;
+const transcribeRelativeFontSize = 1.0;
 
 // Sensitivity
 const swipeDownSensitivity = 1.0;
@@ -97,6 +98,7 @@ const drawGuidesOpacityUpCurve = Curves.fastOutSlowIn;
 const drawGuidesOpacityDownCurve = Curves.decelerate;
 const writingCardPanLeftCurve = Curves.easeInOutCubic;
 const writingTextOpacityChangeCurve = drawGuidesOpacityUpCurve;
+const transcribeScrollChangeCurve = Curves.decelerate;
 
 // Durations
 const linearProgressBarChangeDuration = 1000;
@@ -122,6 +124,7 @@ const writingNextCardDuration = 750;
 const writingInitDelay = 500;
 const writingInitOpacityDuration = 750;
 const writingTextOpacityChangeDelay = 750;
+const transcribeScrollChangeDuration = 500;
 
 // Kulitan
 const Map<String, String> kulitanGlyphs = {
