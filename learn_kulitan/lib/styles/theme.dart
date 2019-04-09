@@ -37,6 +37,9 @@ const writingShadowColor = snowColor;
 
 const transcribeDividerColor = snowColor;
 
+const keyboardStrokeColor = whiteColor;
+const keyboardStrokeShadowColor = accentColor;
+
 // Spacings
 const homeHorizontalScreenPadding = 32.0;
 const homeVerticalScreenPadding = 32.0;
@@ -57,6 +60,8 @@ const choiceSpacing = 14.0;
 const quizChoiceButtonElevation = 10.0;
 const cardTranscribeHorizontalPadding = 26.0;
 const cardTranscribeVerticalPadding = 26.0;
+const keyboardPadding = 15.0;
+const keyboardKeyPadding = 5.0;
 
 // Sizes
 const homeTitleHeight = 110.0;
@@ -70,12 +75,14 @@ const writingGuideCircleRadius = 0.05069;
 const writingGuideCircleStrokeWidth = 0.01597;
 const writingGuideLineStrokeWidth = 0.02291;
 const transcribeRelativeFontSize = 1.0;
+const keyboardDividerHeight = 8.0;
 
 // Sensitivity
 const swipeDownSensitivity = 1.0;
 const swipeLeftSensitivity = 1.0;
 const swipeLeftThreshold = 0.25;
 const swipeLeftMax = 350.0;
+const keyboardToggleSensitivity = 1.0;
 
 // Velocities
 const quizCardMoveUpVelocity = 1.0;
@@ -99,6 +106,9 @@ const drawGuidesOpacityDownCurve = Curves.decelerate;
 const writingCardPanLeftCurve = Curves.easeInOutCubic;
 const writingTextOpacityChangeCurve = drawGuidesOpacityUpCurve;
 const transcribeScrollChangeCurve = Curves.decelerate;
+const openKeyboardCurve = Curves.decelerate;
+const keyboardToggleCurve = Curves.easeInOut;
+const keyboardAnimateToggleCurve = Curves.fastOutSlowIn;
 
 // Durations
 const linearProgressBarChangeDuration = 1000;
@@ -125,6 +135,7 @@ const writingInitDelay = 500;
 const writingInitOpacityDuration = 750;
 const writingTextOpacityChangeDelay = 750;
 const transcribeScrollChangeDuration = 500;
+const keyboardAnimateDuration = 250;
 
 // Kulitan
 const Map<String, String> kulitanGlyphs = {
@@ -591,8 +602,11 @@ const kulitanInfo = TextStyle(
 );
 const kulitanTranscribe = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
-  // fontSize: 60.0,
   color: grayColor,
+);
+const kulitanKeyboard = TextStyle(
+  fontFamily: 'Kulitan Semi Bold',
+  color: keyboardStrokeColor,
 );
 
 // Barlow Fonts
