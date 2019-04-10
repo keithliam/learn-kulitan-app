@@ -1,29 +1,104 @@
 import 'package:flutter/material.dart';
 import '../../styles/theme.dart';
 
-class KeyboardKey extends StatelessWidget {
-  KeyboardKey({this.keyType, this.height});
+class _KeyboardKey extends StatefulWidget {
+  _KeyboardKey({this.keyType, this.height, this.keyPressed});
 
   final String keyType;
   final double height;
+  final Function keyPressed;
+
+  @override
+  _KeyboardKeyState createState() => _KeyboardKeyState();
+}
+
+class _KeyboardKeyState extends State<_KeyboardKey> {
+  double _startPos = 0.0;
+  double _endPos = 0.0;
+  bool _isPressed = false;
+
+  void _dragStart(DragStartDetails details) {
+    _startPos = details.globalPosition.dy;
+    setState(() => _isPressed = true);
+  }
+
+  void _dragUpdate(DragUpdateDetails details) =>
+      _endPos = details.globalPosition.dy;
+  void _dragEnd(DragEndDetails details) {
+    setState(() => _isPressed = false);
+    if (_startPos - (keyboardKeyMiddleZoneHeight / 2.0) <= _endPos &&
+        _endPos <= _startPos + (keyboardKeyMiddleZoneHeight / 2.0)) {
+      widget.keyPressed(widget.keyType);
+    } else if (_startPos > _endPos) {
+      if (widget.keyType == 'i')
+        widget.keyPressed('yi');
+      else if (widget.keyType == 'u')
+        widget.keyPressed('wi');
+      else
+        widget.keyPressed(widget.keyType + 'i');
+    } else {
+      if (widget.keyType == 'i')
+        widget.keyPressed('yu');
+      else if (widget.keyType == 'u')
+        widget.keyPressed('wu');
+      else
+        widget.keyPressed(widget.keyType + 'u');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(keyboardKeyPadding),
-      height: height,
-      child: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: KeyboardKeyContainer(
-          keyType: this.keyType,
+    final Stack _mainWidget = Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        AnimatedOpacity(
+          opacity: _isPressed ? keyboardPressOpacity : 0.0,
+          duration: const Duration(milliseconds: keyboardPressOpacityDuration),
+          curve: keyboardPressOpacityCurve,
+          child: Container(color: keyboardPressColor),
         ),
-      ),
+        Container(
+          padding: const EdgeInsets.all(keyboardKeyPadding),
+          height: widget.height,
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: _KeyboardKeyContainer(keyType: this.widget.keyType),
+          ),
+        ),
+      ],
     );
+
+    if (widget.keyType == 'a' ||
+        widget.keyType == 'add' ||
+        widget.keyType == 'clear' ||
+        widget.keyType == 'delete' ||
+        widget.keyType == 'enter') {
+      return SizedBox(
+        height: widget.height,
+        child: GestureDetector(
+          onTapDown: (_) => setState(() => _isPressed = true),
+          onTapUp: (_) => setState(() => _isPressed = false),
+          onTapCancel: () => setState(() => _isPressed = false),
+          onTap: () => widget.keyPressed(widget.keyType),
+          child: _mainWidget,
+        ),
+      );
+    } else {
+      return SizedBox(
+        height: widget.height,
+        child: GestureDetector(
+          onVerticalDragStart: _dragStart,
+          onVerticalDragUpdate: _dragUpdate,
+          onVerticalDragEnd: _dragEnd,
+          child: _mainWidget,
+        ),
+      );
+    }
   }
 }
 
-class KeyboardKeyContainer extends StatelessWidget {
-  const KeyboardKeyContainer({this.keyType});
+class _KeyboardKeyContainer extends StatelessWidget {
+  const _KeyboardKeyContainer({this.keyType});
 
   final String keyType;
 
@@ -192,5 +267,132 @@ class _KeyIconPainter extends CustomPainter {
       canvas.drawPath(_topDown, _stroke..color = keyboardStrokeColor);
       canvas.drawPath(_leftRight, _stroke..color = keyboardStrokeColor);
     }
+  }
+}
+
+class KulitanKeyboard extends StatelessWidget {
+  KulitanKeyboard({this.keyHeight});
+
+  final double keyHeight;
+
+  void _keyPressed(String key) {
+    print(key);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Table(
+      defaultColumnWidth: FlexColumnWidth(1.0),
+      children: <TableRow>[
+        TableRow(
+          children: <Widget>[
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'g',
+              keyPressed: _keyPressed,
+            ),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'k',
+              keyPressed: _keyPressed,
+            ),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'ng',
+              keyPressed: _keyPressed,
+            ),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'a',
+              keyPressed: _keyPressed,
+            ),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'clear',
+              keyPressed: _keyPressed,
+            ),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 't',
+              keyPressed: _keyPressed,
+            ),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'd',
+              keyPressed: _keyPressed,
+            ),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'n',
+              keyPressed: _keyPressed,
+            ),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'i',
+              keyPressed: _keyPressed,
+            ),
+            Container(),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'l',
+              keyPressed: _keyPressed,
+            ),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 's',
+              keyPressed: _keyPressed,
+            ),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'm',
+              keyPressed: _keyPressed,
+            ),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'u',
+              keyPressed: _keyPressed,
+            ),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'delete',
+              keyPressed: _keyPressed,
+            ),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'p',
+              keyPressed: _keyPressed,
+            ),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'b',
+              keyPressed: _keyPressed,
+            ),
+            Container(),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'add',
+              keyPressed: _keyPressed,
+            ),
+            _KeyboardKey(
+              height: keyHeight,
+              keyType: 'enter',
+              keyPressed: _keyPressed,
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }

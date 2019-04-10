@@ -374,7 +374,8 @@ class _TranscribePageState extends State<TranscribePage>
           horizontal: transcribeHorizontalScreenPadding,
           vertical: transcribeVerticalScreenPadding),
       child: GestureDetector(
-        onVerticalDragStart: (_) => FocusScope.of(context).requestFocus(new FocusNode()),
+        onVerticalDragStart: (_) =>
+            FocusScope.of(context).requestFocus(new FocusNode()),
         onVerticalDragUpdate: _dragUpdate,
         onVerticalDragEnd: _dragEnd,
         onTap: _animateToggleKeyboard,
@@ -440,100 +441,8 @@ class _TranscribePageState extends State<TranscribePage>
                             ),
                           ),
                           Expanded(
-                            child: Table(
-                              defaultColumnWidth: FlexColumnWidth(1.0),
-                              children: <TableRow>[
-                                TableRow(
-                                  children: <Widget>[
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'g',
-                                    ),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'k',
-                                    ),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'ng',
-                                    ),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'a',
-                                    ),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'clear',
-                                    ),
-                                  ],
-                                ),
-                                TableRow(
-                                  children: <Widget>[
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 't',
-                                    ),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'd',
-                                    ),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'n',
-                                    ),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'i',
-                                    ),
-                                    Container(),
-                                  ],
-                                ),
-                                TableRow(
-                                  children: <Widget>[
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'l',
-                                    ),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 's',
-                                    ),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'm',
-                                    ),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'u',
-                                    ),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'delete',
-                                    ),
-                                  ],
-                                ),
-                                TableRow(
-                                  children: <Widget>[
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'p',
-                                    ),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'b',
-                                    ),
-                                    Container(),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'add',
-                                    ),
-                                    KeyboardKey(
-                                      height: _keyHeight,
-                                      keyType: 'enter',
-                                    ),
-                                  ],
-                                ),
-                              ],
+                            child: KulitanKeyboard(
+                              keyHeight: _keyHeight,
                             ),
                           ),
                         ],
