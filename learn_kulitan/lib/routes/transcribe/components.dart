@@ -70,7 +70,8 @@ class _KeyHintState extends State<_KeyHint>
         }
         _controller.forward();
       });
-    } else if (widget.hint != oldWidget.hint) {
+    }
+    if (widget.hint != oldWidget.hint) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _refresh());
     }
   }
@@ -81,9 +82,14 @@ class _KeyHintState extends State<_KeyHint>
     Offset offset = renderBox.localToGlobal(Offset.zero);
 
     Widget _child;
-    if (widget.hint.length > 1 && widget.hint.endsWith('a')) {
-      final String _i = widget.hint.substring(0, widget.hint.length - 1) + 'i';
-      final String _u = widget.hint.substring(0, widget.hint.length - 1) + 'u';
+    final _hintText = widget.hint;
+    if (_hintText.length > 1 &&
+        _hintText.endsWith('a') &&
+        !(_hintText.endsWith('aa') ||
+            _hintText.endsWith('ii') ||
+            _hintText.endsWith('uu'))) {
+      final String _i = _hintText.substring(0, _hintText.length - 1) + 'i';
+      final String _u = _hintText.substring(0, _hintText.length - 1) + 'u';
 
       _child = Column(
         children: <Widget>[
@@ -103,7 +109,7 @@ class _KeyHintState extends State<_KeyHint>
             child: FittedBox(
               fit: BoxFit.contain,
               child: Text(
-                widget.hint,
+                _hintText,
                 textAlign: TextAlign.center,
                 style: kulitanKeyboard,
               ),
@@ -125,7 +131,7 @@ class _KeyHintState extends State<_KeyHint>
       _child = FittedBox(
         fit: BoxFit.contain,
         child: Text(
-          widget.hint,
+          _hintText,
           textAlign: TextAlign.center,
           style: kulitanKeyboard,
         ),
@@ -147,7 +153,10 @@ class _KeyHintState extends State<_KeyHint>
             child: Material(
               color: Colors.transparent,
               child: Container(
-                padding: widget.hint == 'a'
+                padding: _hintText == 'a' ||
+                        _hintText == 'aa' ||
+                        _hintText == 'ii' ||
+                        _hintText == 'uu'
                     ? const EdgeInsets.all(keyHintPadding + 10.0)
                     : const EdgeInsets.all(keyHintPadding),
                 height: keyHintSizeRatio * size.height,
@@ -346,45 +355,92 @@ class _KeyboardAddKey extends StatefulWidget {
 class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
   final List<String> _allowedGlyphs = [
     'a',
+    'i',
+    'u',
     'g',
     'ga',
+    'gi',
+    'gu',
     'k',
     'ka',
+    'ki',
+    'ku',
     'ng',
     'nga',
+    'ngi',
+    'ngu',
     't',
     'ta',
+    'ti',
+    'tu',
     'd',
     'da',
+    'di',
+    'du',
     'n',
     'na',
+    'ni',
+    'nu',
     'l',
     'la',
+    'li',
+    'lu',
     's',
     'sa',
+    'si',
+    'su',
     'm',
     'ma',
+    'mi',
+    'mu',
     'p',
     'pa',
+    'pi',
+    'pu',
     'b',
-    'ba'
+    'ba',
+    'bi',
+    'bu',
+    'ya',
+    'yi',
+    'yu',
+    'wa',
+    'wi',
+    'wu'
   ];
   String _keyHintText = '';
   bool _isPressed = false;
+  bool _showKeyHint = false;
 
   void _pressed(TapDownDetails details) {
-    setState(() {
-      _isPressed = true;
-      final _oldGlyph = widget.getGlyph();
-      if (_allowedGlyphs.contains(_oldGlyph)) {
-        String _newGlyph;
+    final _oldGlyph = widget.getGlyph();
+    if (!_isPressed) setState(() => _isPressed = true);
+    if (_allowedGlyphs.contains(_oldGlyph)) {
+      if (_oldGlyph.endsWith('i')) {
+        setState(() => _keyHintText = _oldGlyph + 'i');
+      } else if (_oldGlyph.endsWith('u')) {
+        setState(() => _keyHintText = _oldGlyph + 'u');
+      } else {
         if (_oldGlyph.endsWith('a'))
-          _newGlyph = _oldGlyph + 'a';
+          setState(() => _keyHintText = _oldGlyph + 'a');
         else
-          _newGlyph = _oldGlyph + 'aa';
-        _keyHintText = _newGlyph;
+          setState(() => _keyHintText = _oldGlyph + 'aa');
       }
+      if (!_showKeyHint) setState(() => _showKeyHint = true);
+    } else if (_keyHintText != '') {
+      setState(() => _keyHintText = '');
+    }
+  }
+
+  void _unPress() {
+    setState(() {
+      _isPressed = false;
+      _showKeyHint = false;
     });
+  }
+
+  void _press() {
+    if (_keyHintText.length > 0) widget.keyPressed('add');
   }
 
   @override
@@ -411,14 +467,14 @@ class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
 
     return _KeyHint(
       hint: _keyHintText,
-      visible: _isPressed,
+      visible: _showKeyHint,
       child: SizedBox(
         height: widget.height,
         child: GestureDetector(
           onTapDown: _pressed,
-          onTapUp: (_) => setState(() => _isPressed = false),
-          onTapCancel: () => setState(() => _isPressed = false),
-          onTap: () => widget.keyPressed('add'),
+          onTapUp: (_) => _unPress(),
+          onTapCancel: _unPress,
+          onTap: _press,
           child: _mainWidget,
         ),
       ),
