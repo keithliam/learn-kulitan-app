@@ -20,6 +20,7 @@ class _TranscribePageState extends State<TranscribePage>
 
   String _kulitanText = 'atin ku pung singsing metung yang timpukan';
   List<Container> _glyphLines = [];
+  List<List<String>> _kulitanGlyphs = [];
 
   double _keyboardDrag = 0.0;
   double _keyboardOffset = 0.0;
@@ -214,6 +215,7 @@ class _TranscribePageState extends State<TranscribePage>
     String _glyphText;
     int _len, _maxLen;
     List<List<SizedBox>> _tempLines = [];
+    List<List<String>> _tempKulitans = [];
     List<String> _tempGlyphs;
     for (List<String> _line in _lineGlyphs) {
       _allTempGlyphs = [];
@@ -249,9 +251,13 @@ class _TranscribePageState extends State<TranscribePage>
           _allTempGlyphs.addAll(_tempGlyphs);
         }
       }
+      _tempKulitans.add(_allTempGlyphs);
       _tempLines.add(_getGlyphs(_allTempGlyphs));
     }
-    setState(() => _glyphLines = _getLines(_tempLines));
+    setState(() {
+      _glyphLines = _getLines(_tempLines);
+      _kulitanGlyphs = _tempKulitans;
+    });
     if (!isInit) {
       final double _maxPosition = _scrollController.position.maxScrollExtent;
       _scrollController.animateTo(_maxPosition,
@@ -297,6 +303,8 @@ class _TranscribePageState extends State<TranscribePage>
     _keyboardController.reset();
     _keyboardController.forward();
   }
+
+  String _getLastKulitanGlyph() => _kulitanGlyphs.length > 0 && _kulitanGlyphs.last.length > 0 ? _kulitanGlyphs.last.last : null;
 
   @override
   Widget build(BuildContext context) {
@@ -443,6 +451,7 @@ class _TranscribePageState extends State<TranscribePage>
                           Expanded(
                             child: KulitanKeyboard(
                               keyHeight: _keyHeight,
+                              getGlyph: _getLastKulitanGlyph,
                             ),
                           ),
                         ],

@@ -40,6 +40,7 @@ const transcribeDividerColor = snowColor;
 const keyboardStrokeColor = whiteColor;
 const keyboardStrokeShadowColor = accentColor;
 const keyboardPressColor = whiteColor;
+const keyboardKeyHintColor = accentColor;
 
 // Opacities
 const keyboardPressOpacity = 0.2;
@@ -66,6 +67,8 @@ const cardTranscribeHorizontalPadding = 26.0;
 const cardTranscribeVerticalPadding = 26.0;
 const keyboardPadding = 15.0;
 const keyboardKeyPadding = 5.0;
+const keyHintTopOffset = 20.0;
+const keyHintPadding = 5.0;
 
 // Sizes
 const homeTitleHeight = 110.0;
@@ -81,6 +84,8 @@ const writingGuideLineStrokeWidth = 0.02291;
 const transcribeRelativeFontSize = 1.0;
 const keyboardDividerHeight = 8.0;
 const keyboardKeyMiddleZoneHeight = 50.0;
+const keyHintSizeRatio = 1.0;
+const keyHintASizeRatio = 0.4;
 
 // Sensitivity
 const swipeDownSensitivity = 1.0;
@@ -115,6 +120,7 @@ const openKeyboardCurve = Curves.decelerate;
 const keyboardToggleCurve = Curves.easeInOut;
 const keyboardAnimateToggleCurve = Curves.fastOutSlowIn;
 const keyboardPressOpacityCurve = Curves.fastLinearToSlowEaseIn;
+const keyHintOpacityCurve = Curves.fastLinearToSlowEaseIn;
 
 // Durations
 const linearProgressBarChangeDuration = 1000;
@@ -142,7 +148,8 @@ const writingInitOpacityDuration = 750;
 const writingTextOpacityChangeDelay = 750;
 const transcribeScrollChangeDuration = 500;
 const keyboardAnimateDuration = 250;
-const keyboardPressOpacityDuration = 500;
+const keyboardPressOpacityDuration = 350;
+const keyHintOpacityDuration = 350;
 
 // Kulitan
 const Map<String, String> kulitanGlyphs = {
