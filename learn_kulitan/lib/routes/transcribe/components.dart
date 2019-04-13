@@ -62,7 +62,7 @@ class _KeyHintState extends State<_KeyHint>
     _shouldRemove = true;
     _controller.reverse();
     await Future.delayed(const Duration(milliseconds: keyHintOpacityDuration));
-    if(_shouldRemove) _removeEntry();
+    if (_shouldRemove) _removeEntry();
   }
 
   @override
@@ -316,14 +316,26 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
           children: <Widget>[
             Flexible(
               child: AnimatedOpacity(
-                opacity: _half1Pressed && !_half2Pressed
+                opacity: !(widget.keyType == 'clear' ||
+                            widget.keyType == 'delete' ||
+                            widget.keyType == 'enter') &&
+                        (_half1Pressed && !_half2Pressed)
                     ? keyboardMainPressOpacity
-                    : _half2Pressed ? keyboardPressOpacity : 0.0,
+                    : ((widget.keyType == 'clear' ||
+                                    widget.keyType == 'delete' ||
+                                    widget.keyType == 'enter') &&
+                                _half1Pressed) ||
+                            _half2Pressed
+                        ? keyboardPressOpacity
+                        : 0.0,
                 duration:
                     const Duration(milliseconds: keyboardPressOpacityDuration),
                 curve: keyboardPressOpacityCurve,
                 child: Container(
-                    color: _half1Pressed && !_half2Pressed
+                    color: !(widget.keyType == 'clear' ||
+                                widget.keyType == 'delete' ||
+                                widget.keyType == 'enter') &&
+                            (_half1Pressed && !_half2Pressed)
                         ? keyboardMainPressColor
                         : keyboardPressColor),
               ),
