@@ -308,19 +308,30 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
           children: <Widget>[
             Flexible(
               child: AnimatedOpacity(
-                opacity: _half1Pressed && !_half2Pressed? keyboardMainPressOpacity : _half2Pressed? keyboardPressOpacity : 0.0,
-                duration: const Duration(milliseconds: keyboardPressOpacityDuration),
+                opacity: _half1Pressed && !_half2Pressed
+                    ? keyboardMainPressOpacity
+                    : _half2Pressed ? keyboardPressOpacity : 0.0,
+                duration:
+                    const Duration(milliseconds: keyboardPressOpacityDuration),
                 curve: keyboardPressOpacityCurve,
-                child: Container(color: _half1Pressed && !_half2Pressed? keyboardMainPressColor : keyboardPressColor),
+                child: Container(
+                    color: _half1Pressed && !_half2Pressed
+                        ? keyboardMainPressColor
+                        : keyboardPressColor),
               ),
             ),
             Flexible(
               child: AnimatedOpacity(
-                opacity: _half2Pressed && !_half1Pressed? keyboardMainPressOpacity : _half1Pressed? keyboardPressOpacity : 0.0,
+                opacity: _half2Pressed && !_half1Pressed
+                    ? keyboardMainPressOpacity
+                    : _half1Pressed ? keyboardPressOpacity : 0.0,
                 duration:
                     const Duration(milliseconds: keyboardPressOpacityDuration),
                 curve: keyboardPressOpacityCurve,
-                child: Container(color: _half2Pressed && !_half1Pressed? keyboardMainPressColor : keyboardPressColor),
+                child: Container(
+                    color: _half2Pressed && !_half1Pressed
+                        ? keyboardMainPressColor
+                        : keyboardPressColor),
               ),
             ),
           ],
@@ -336,8 +347,7 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
       ],
     );
 
-    if (widget.keyType == 'add' ||
-        widget.keyType == 'clear' ||
+    if (widget.keyType == 'clear' ||
         widget.keyType == 'delete' ||
         widget.keyType == 'enter') {
       return SizedBox(
@@ -380,7 +390,7 @@ class _KeyboardAddKey extends StatefulWidget {
 }
 
 class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
-  final List<String> _allowedGlyphs = [
+  static final List<String> _allowedGlyphs = [
     'a',
     'i',
     'u',
@@ -437,11 +447,17 @@ class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
   ];
   String _keyHintText = '';
   bool _isPressed = false;
-  bool _showKeyHint = false;
+  RenderBox _renderBox;
 
-  void _pressed(TapDownDetails details) {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _renderBox = context.findRenderObject());
+  }
+
+  void _dragStart(DragStartDetails _) {
     final _oldGlyph = widget.getGlyph();
-    if (!_isPressed) setState(() => _isPressed = true);
     if (_allowedGlyphs.contains(_oldGlyph)) {
       if (_oldGlyph.endsWith('i')) {
         setState(() => _keyHintText = _oldGlyph + 'i');
@@ -453,21 +469,25 @@ class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
         else
           setState(() => _keyHintText = _oldGlyph + 'aa');
       }
-      if (!_showKeyHint) setState(() => _showKeyHint = true);
+      setState(() => _isPressed = true);
     } else if (_keyHintText != '') {
       setState(() => _keyHintText = '');
     }
   }
 
-  void _unPress() {
-    setState(() {
-      _isPressed = false;
-      _showKeyHint = false;
-    });
+  void _dragUpdate(DragUpdateDetails details) {
+    final bool _withinBounds = _renderBox.paintBounds
+        .contains(_renderBox.globalToLocal(details.globalPosition));
+    if (_withinBounds && !_isPressed && _keyHintText.length > 0)
+      setState(() => _isPressed = true);
+    else if (!_withinBounds && _isPressed) setState(() => _isPressed = false);
   }
 
-  void _press() {
-    if (_keyHintText.length > 0) widget.keyPressed('add');
+  void _dragEnd(DragEndDetails details) {
+    if (_isPressed) {
+      if (_keyHintText.length > 0) widget.keyPressed('add');
+      setState(() => _isPressed = false);
+    }
   }
 
   @override
@@ -494,14 +514,13 @@ class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
 
     return _KeyHint(
       hint: _keyHintText,
-      visible: _showKeyHint,
+      visible: _isPressed,
       child: SizedBox(
         height: widget.height,
         child: GestureDetector(
-          onTapDown: _pressed,
-          onTapUp: (_) => _unPress(),
-          onTapCancel: _unPress,
-          onTap: _press,
+          onVerticalDragStart: _dragStart,
+          onVerticalDragUpdate: _dragUpdate,
+          onVerticalDragEnd: _dragEnd,
           child: _mainWidget,
         ),
       ),
