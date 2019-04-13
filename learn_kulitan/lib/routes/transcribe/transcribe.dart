@@ -305,6 +305,10 @@ class _TranscribePageState extends State<TranscribePage>
 
   String _getLastKulitanGlyph() => _kulitanGlyphs.length > 0 && _kulitanGlyphs.last.length > 0 ? _kulitanGlyphs.last.last : null;
 
+  void _kulitanKeyPressed(String key) {
+    print(key);
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget _header = Padding(
@@ -376,7 +380,7 @@ class _TranscribePageState extends State<TranscribePage>
       ),
     );
 
-    Widget _pageCard = Padding(
+    Widget _page = Padding(
       padding: const EdgeInsets.symmetric(
           horizontal: transcribeHorizontalScreenPadding,
           vertical: transcribeVerticalScreenPadding),
@@ -412,9 +416,6 @@ class _TranscribePageState extends State<TranscribePage>
       ),
     );
 
-    final double _keyboardHeight = MediaQuery.of(context).size.width * 0.6588;
-    final double _keyHeight = (_keyboardHeight - keyboardDividerHeight) / 4.0;
-
     return Material(
       color: backgroundColor,
       child: SafeArea(
@@ -422,42 +423,11 @@ class _TranscribePageState extends State<TranscribePage>
           children: <Widget>[
             _header,
             Expanded(
-              child: Stack(
-                children: <Widget>[
-                  Positioned(
-                    top: -_keyboardHeight * _keyboardOffset,
-                    bottom: _keyboardHeight * _keyboardOffset,
-                    left: 0.0,
-                    right: 0.0,
-                    child: _pageCard,
-                  ),
-                  Positioned(
-                    bottom:
-                        -_keyboardHeight + (_keyboardHeight * _keyboardOffset),
-                    left: keyboardPadding,
-                    right: keyboardPadding,
-                    child: SizedBox(
-                      height: _keyboardHeight,
-                      child: Column(
-                        children: <Widget>[
-                          Opacity(
-                            opacity: 0.55,
-                            child: DividerNew(
-                              height: keyboardDividerHeight,
-                              color: whiteColor,
-                            ),
-                          ),
-                          Expanded(
-                            child: KulitanKeyboard(
-                              keyHeight: _keyHeight,
-                              getGlyph: _getLastKulitanGlyph,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              child: KulitanKeyboard(
+                getGlyph: _getLastKulitanGlyph,
+                visibility: _keyboardOffset,
+                onKeyPress: _kulitanKeyPressed,
+                child: _page,
               ),
             ),
           ],

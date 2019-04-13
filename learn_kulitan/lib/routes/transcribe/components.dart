@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import '../../styles/theme.dart';
+import '../../components/misc/DividerNew.dart';
 
 class _KeyHint extends StatefulWidget {
   _KeyHint({this.hint, this.visible, this.child});
@@ -722,70 +722,71 @@ class _KeyIconPainter extends CustomPainter {
 }
 
 class KulitanKeyboard extends StatelessWidget {
-  KulitanKeyboard({this.keyHeight, this.getGlyph});
+  KulitanKeyboard({this.visibility, this.getGlyph, this.onKeyPress, this.child});
 
-  final double keyHeight;
   final String Function() getGlyph;
-
-  void _keyPressed(String key) {
-    print(key);
-  }
+  final double visibility;
+  final void Function(String) onKeyPress;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return Table(
+    final double _keyboardHeight = MediaQuery.of(context).size.width * 0.6588;
+    final double _keyHeight = (_keyboardHeight - keyboardDividerHeight) / 4.0;
+
+    Widget _keyboard = Table(
       defaultColumnWidth: FlexColumnWidth(1.0),
       children: <TableRow>[
         TableRow(
           children: <Widget>[
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'g',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'k',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'ng',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'a',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'clear',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
           ],
         ),
         TableRow(
           children: <Widget>[
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 't',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'd',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'n',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'i',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             Container(),
           ],
@@ -793,56 +794,91 @@ class KulitanKeyboard extends StatelessWidget {
         TableRow(
           children: <Widget>[
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'l',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 's',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'm',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'u',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'delete',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
           ],
         ),
         TableRow(
           children: <Widget>[
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'p',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'b',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             Container(),
             _KeyboardAddKey(
-              height: keyHeight,
+              height: _keyHeight,
               getGlyph: getGlyph,
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
             _KeyboardKey(
-              height: keyHeight,
+              height: _keyHeight,
               keyType: 'enter',
-              keyPressed: _keyPressed,
+              keyPressed: onKeyPress,
             ),
           ],
+        ),
+      ],
+    );
+
+    return Stack(
+      children: <Widget>[
+        Positioned(
+          top: -_keyboardHeight * visibility,
+          bottom: _keyboardHeight * visibility,
+          left: 0.0,
+          right: 0.0,
+          child: child,
+        ),
+        Positioned(
+          bottom:
+              -_keyboardHeight + (_keyboardHeight * visibility),
+          left: keyboardPadding,
+          right: keyboardPadding,
+          child: SizedBox(
+            height: _keyboardHeight,
+            child: Column(
+              children: <Widget>[
+                Opacity(
+                  opacity: 0.55,
+                  child: DividerNew(
+                    height: keyboardDividerHeight,
+                    color: whiteColor,
+                  ),
+                ),
+                Expanded(
+                  child: _keyboard,
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );
