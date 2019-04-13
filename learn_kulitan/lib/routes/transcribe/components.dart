@@ -16,6 +16,7 @@ class _KeyHint extends StatefulWidget {
 class _KeyHintState extends State<_KeyHint>
     with SingleTickerProviderStateMixin {
   OverlayEntry _overlay;
+  bool _shouldRemove = false;
 
   AnimationController _controller;
 
@@ -57,12 +58,20 @@ class _KeyHintState extends State<_KeyHint>
     Overlay.of(context).insert(_overlay);
   }
 
+  void _removeOverlay() async {
+    _shouldRemove = true;
+    _controller.reverse();
+    await Future.delayed(const Duration(milliseconds: keyHintOpacityDuration));
+    if(_shouldRemove) _removeEntry();
+  }
+
   @override
   void didUpdateWidget(_KeyHint oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!widget.visible && oldWidget.visible)
-      _controller.reverse();
+      _removeOverlay();
     else if (widget.visible && !oldWidget.visible) {
+      _shouldRemove = false;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_overlay == null) {
           _overlay = this._createKeyHint();
@@ -71,9 +80,8 @@ class _KeyHintState extends State<_KeyHint>
         _controller.forward();
       });
     }
-    if (widget.hint != oldWidget.hint) {
+    if (widget.hint != oldWidget.hint && widget.visible && oldWidget.visible)
       WidgetsBinding.instance.addPostFrameCallback((_) => _refresh());
-    }
   }
 
   OverlayEntry _createKeyHint() {
