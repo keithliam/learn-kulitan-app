@@ -668,22 +668,22 @@ class _KeyIconPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = _strokeWidth;
     if (keyType == 'delete') {
-      final double _midpoint = _start + (_width * 0.66678);
-      final double _offset1 = _width * 0.33391;
-      final double _offset2 = _width * 0.16713;
+      final double _crossOrigin = _start + (_width * 0.66678);
+      final double _arrowOffset = _width * 0.33391;
+      final double _crossOffset = _width * 0.13713;
       final Path _outline = Path()
         ..moveTo(_start, _middle)
-        ..lineTo(_start + _offset1, _middle - _offset1)
-        ..lineTo(_end, _middle - _offset1)
-        ..lineTo(_end, _middle + _offset1)
-        ..lineTo(_start + _offset1, _middle + _offset1)
+        ..lineTo(_start + _arrowOffset, _middle - _arrowOffset)
+        ..lineTo(_end, _middle - _arrowOffset)
+        ..lineTo(_end, _middle + _arrowOffset)
+        ..lineTo(_start + _arrowOffset, _middle + _arrowOffset)
         ..lineTo(_start, _middle);
       final Path _cross1 = Path()
-        ..moveTo(_midpoint - _offset2, _middle - _offset2)
-        ..lineTo(_midpoint + _offset2, _middle + _offset2);
+        ..moveTo(_crossOrigin - _crossOffset, _middle - _crossOffset)
+        ..lineTo(_crossOrigin + _crossOffset, _middle + _crossOffset);
       final Path _cross2 = Path()
-        ..moveTo(_midpoint - _offset2, _middle + _offset2)
-        ..lineTo(_midpoint + _offset2, _middle - _offset2);
+        ..moveTo(_crossOrigin - _crossOffset, _middle + _crossOffset)
+        ..lineTo(_crossOrigin + _crossOffset, _middle - _crossOffset);
       canvas.drawPath(_outline.shift(_shadowOffset), _stroke);
       canvas.drawPath(_cross1.shift(_shadowOffset), _stroke);
       canvas.drawPath(_cross2.shift(_shadowOffset), _stroke);
