@@ -191,8 +191,7 @@ class _TranscribePageState extends State<TranscribePage>
         .replaceAll('z', 's')
         .replaceAll('ua', 'wa')
         .replaceAll('ea', 'ya')
-        .replaceAll('kapampangan', 'kapangpang an')
-        .replaceAll('pampanga', 'pangpanga')
+        .replaceAll(RegExp(r'kapampangan|pampanga|kapampaangan'), 'kapangpaang an')
         .trim();
     final List<String> _lines = _filteredText.split('\n');
     List<List<String>> _lineGlyphs = [];
