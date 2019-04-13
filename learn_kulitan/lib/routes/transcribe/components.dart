@@ -194,11 +194,11 @@ class _KeyboardKey extends StatefulWidget {
 class _KeyboardKeyState extends State<_KeyboardKey> {
   double _startPos = 0.0;
   double _endPos = 0.0;
-  bool _isPressed = false;
+  bool _half1Pressed = false;
+  bool _half2Pressed = false;
 
   String _keyHintText = '';
   RenderBox _renderBox;
-  bool _endedInside = false;
 
   @override
   void initState() {
@@ -215,18 +215,27 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
         .addPostFrameCallback((_) => _renderBox = context.findRenderObject());
   }
 
+  void _pressHighlight({bool top, bool bottom}) {
+    if (top && !_half1Pressed)
+      setState(() => _half1Pressed = true);
+    else if (!top && _half1Pressed) setState(() => _half1Pressed = false);
+    if (bottom && !_half2Pressed)
+      setState(() => _half2Pressed = true);
+    else if (!bottom && _half2Pressed) setState(() => _half2Pressed = false);
+  }
+
   void _dragStart(DragStartDetails details) {
     if (widget.keyType != 'a') _startPos = details.globalPosition.dy;
-    setState(() => _isPressed = true);
+    _pressHighlight(top: true, bottom: true);
   }
 
   void _dragUpdate(DragUpdateDetails details) {
     if (widget.keyType == 'a') {
       if (_renderBox.paintBounds
           .contains(_renderBox.globalToLocal(details.globalPosition)))
-        setState(() => _isPressed = true);
+        _pressHighlight(top: true, bottom: true);
       else
-        setState(() => _isPressed = false);
+        _pressHighlight(top: false, bottom: false);
     } else {
       _endPos = details.globalPosition.dy;
       if (_startPos - (keyboardKeyMiddleZoneHeight / 2.0) <= _endPos &&
@@ -239,6 +248,7 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
           else
             setState(() => _keyHintText = widget.keyType + 'a');
         }
+        _pressHighlight(top: true, bottom: true);
       } else if (_startPos > _endPos) {
         if (!_keyHintText.endsWith('i')) {
           if (widget.keyType == 'i')
@@ -248,6 +258,7 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
           else
             setState(() => _keyHintText = widget.keyType + 'i');
         }
+        _pressHighlight(top: true, bottom: false);
       } else {
         if (!_keyHintText.endsWith('u')) {
           if (widget.keyType == 'i')
@@ -257,13 +268,14 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
           else
             setState(() => _keyHintText = widget.keyType + 'u');
         }
+        _pressHighlight(top: false, bottom: true);
       }
     }
   }
 
   void _dragEnd(DragEndDetails details) {
     if (widget.keyType == 'a') {
-      if (_isPressed) widget.keyPressed(widget.keyType);
+      if (_half1Pressed) widget.keyPressed(widget.keyType);
     } else {
       if (_startPos - (keyboardKeyMiddleZoneHeight / 2.0) <= _endPos &&
           _endPos <= _startPos + (keyboardKeyMiddleZoneHeight / 2.0)) {
@@ -284,7 +296,7 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
           widget.keyPressed(widget.keyType + 'u');
       }
     }
-    if (_isPressed) setState(() => _isPressed = false);
+    _pressHighlight(top: false, bottom: false);
   }
 
   @override
@@ -292,11 +304,26 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
     final Stack _mainWidget = Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        AnimatedOpacity(
-          opacity: _isPressed ? keyboardPressOpacity : 0.0,
-          duration: const Duration(milliseconds: keyboardPressOpacityDuration),
-          curve: keyboardPressOpacityCurve,
-          child: Container(color: keyboardPressColor),
+        Column(
+          children: <Widget>[
+            Flexible(
+              child: AnimatedOpacity(
+                opacity: _half1Pressed && !_half2Pressed? keyboardMainPressOpacity : _half2Pressed? keyboardPressOpacity : 0.0,
+                duration: const Duration(milliseconds: keyboardPressOpacityDuration),
+                curve: keyboardPressOpacityCurve,
+                child: Container(color: _half1Pressed && !_half2Pressed? keyboardMainPressColor : keyboardPressColor),
+              ),
+            ),
+            Flexible(
+              child: AnimatedOpacity(
+                opacity: _half2Pressed && !_half1Pressed? keyboardMainPressOpacity : _half1Pressed? keyboardPressOpacity : 0.0,
+                duration:
+                    const Duration(milliseconds: keyboardPressOpacityDuration),
+                curve: keyboardPressOpacityCurve,
+                child: Container(color: _half2Pressed && !_half1Pressed? keyboardMainPressColor : keyboardPressColor),
+              ),
+            ),
+          ],
         ),
         Container(
           padding: const EdgeInsets.all(keyboardKeyPadding),
@@ -316,9 +343,9 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
       return SizedBox(
         height: widget.height,
         child: GestureDetector(
-          onTapDown: (_) => setState(() => _isPressed = true),
-          onTapUp: (_) => setState(() => _isPressed = false),
-          onTapCancel: () => setState(() => _isPressed = false),
+          onTapDown: (_) => setState(() => _half1Pressed = true),
+          onTapUp: (_) => setState(() => _half1Pressed = false),
+          onTapCancel: () => setState(() => _half1Pressed = false),
           onTap: () => widget.keyPressed(widget.keyType),
           child: _mainWidget,
         ),
@@ -326,7 +353,7 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
     } else {
       return _KeyHint(
         hint: _keyHintText,
-        visible: _isPressed,
+        visible: _half1Pressed || _half2Pressed,
         child: SizedBox(
           height: widget.height,
           child: GestureDetector(

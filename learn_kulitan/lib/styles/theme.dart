@@ -40,10 +40,12 @@ const transcribeDividerColor = snowColor;
 const keyboardStrokeColor = whiteColor;
 const keyboardStrokeShadowColor = accentColor;
 const keyboardPressColor = whiteColor;
+const keyboardMainPressColor = whiteColor;
 const keyboardKeyHintColor = accentColor;
 
 // Opacities
-const keyboardPressOpacity = 0.2;
+const keyboardPressOpacity = 0.25;
+const keyboardMainPressOpacity = 0.6;
 
 // Spacings
 const homeHorizontalScreenPadding = 32.0;
