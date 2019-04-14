@@ -14,6 +14,24 @@ class TranscribePage extends StatefulWidget {
 
 class _TranscribePageState extends State<TranscribePage>
     with SingleTickerProviderStateMixin {
+  static final SizedBox _kulitanCursor = SizedBox(
+    height: kulitanCursorHeight + kulitanCursorTopPadding,
+    width: 75.0 * transcribeRelativeFontSize,
+    child: Blinker(
+      child: Padding(
+        padding: const EdgeInsets.only(top: kulitanCursorTopPadding),
+        child: Container(
+          height: kulitanCursorHeight,
+          width: 50.0 * transcribeRelativeFontSize,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0),
+            color: transcribeCursorColor,
+          ),
+        ),
+      ),
+    ),
+  );
+
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _romanController =
       TextEditingController(text: 'atin ku pung singsing metung yang timpukan');
@@ -29,8 +47,10 @@ class _TranscribePageState extends State<TranscribePage>
   Animation<double> _keyboardAnimation;
 
   void _textChanged() {
-    setState(() => _kulitanText = _romanController.text);
-    _transcribeRoman();
+    if (_keyboardOffset == 0.0) {
+      setState(() => _kulitanText = _romanController.text);
+      _transcribeRoman();
+    }
   }
 
   @override
@@ -78,74 +98,89 @@ class _TranscribePageState extends State<TranscribePage>
   }
 
   List<SizedBox> _getGlyphs(List<String> glyphList) {
-    Widget _textWidget;
-    List<SizedBox> _tempGlyphs = [];
-    for (String _glyph in glyphList) {
-      _textWidget = Text(
-        _glyph,
-        textAlign: TextAlign.center,
-        style:
-            _glyph == 'k' || _glyph == 'ka' || _glyph == 'ki' || _glyph == 'ku'
+    if (glyphList.length > 0) {
+      Widget _textWidget;
+      List<SizedBox> _tempGlyphs = [];
+      for (String _glyph in glyphList) {
+        if (_glyph != 'br') {
+          _textWidget = Text(
+            _glyph,
+            textAlign: TextAlign.center,
+            style: _glyph == 'k' ||
+                    _glyph == 'ka' ||
+                    _glyph == 'ki' ||
+                    _glyph == 'ku'
                 ? kulitanTranscribe.copyWith(height: 0.7)
                 : kulitanTranscribe,
-      );
-      double _width = 75.0 * transcribeRelativeFontSize;
-      if (_glyph == 'nu' || _glyph == 'lu')
-        _textWidget = Padding(
-          padding: const EdgeInsets.only(bottom: 2.0),
-          child: _textWidget,
-        );
-      else if (_glyph.contains('s'))
-        _textWidget = Padding(
-          padding: const EdgeInsets.only(top: 2.0),
-          child: _textWidget,
-        );
-      if (_glyph == '?')
-        _width = 40.0 * transcribeRelativeFontSize;
-      else if (_glyph == 'ngaa' ||
-          (_glyph.length == 3 && (_glyph.contains('ng') && _glyph != 'ang')))
-        _width = 100.0 * transcribeRelativeFontSize;
-      else if (_glyph == 'a' ||
-          _glyph == 'aa' ||
-          _glyph == 'ee' ||
-          _glyph == 'oo' ||
-          _glyph == 'ng' ||
-          _glyph == 'ang')
-        _width = 60.0 * transcribeRelativeFontSize;
-      else if ((_glyph.length == 1 &&
-              _glyph != 'a' &&
-              _glyph != 'i' &&
-              _glyph != 'u' &&
-              _glyph != 'e' &&
-              _glyph != 'o') ||
-          (_glyph.length == 2 &&
-              _glyph[0] != 'i' &&
-              _glyph[0] != 'u' &&
-              _glyph[0] != 'e' &&
-              _glyph[0] != 'o' &&
-              (_glyph[1] == 'a' || _glyph[1] == 'i' || _glyph[1] == 'u')))
-        _width = 90.0 * transcribeRelativeFontSize;
-      else if (_glyph == 'i' || _glyph == 'u' || _glyph == 'e' || _glyph == 'o')
-        _width = 40.0 * transcribeRelativeFontSize;
-      else if (((_glyph.length > 2 &&
-                  midEnd.contains(_glyph.substring(0, 3)) &&
-                  !_glyph.contains('ng')) ||
-              (_glyph.length > 1 && midEnd.contains(_glyph.substring(0, 2)))) &&
-          _glyph != 'alii')
-        _width = 45.0 * transcribeRelativeFontSize;
-      else if (_glyph == 'yaa' || _glyph == 'waa')
-        _width = 100.0 * transcribeRelativeFontSize;
-      else
-        _width = 75.0 * transcribeRelativeFontSize;
-      _tempGlyphs.add(SizedBox(
-        width: _width,
-        child: FittedBox(
-          fit: BoxFit.fitWidth,
-          child: _textWidget,
-        ),
-      ));
+          );
+          double _width = 75.0 * transcribeRelativeFontSize;
+          if (_glyph == 'nu' || _glyph == 'lu')
+            _textWidget = Padding(
+              padding: const EdgeInsets.only(bottom: 2.0),
+              child: _textWidget,
+            );
+          else if (_glyph.contains('s'))
+            _textWidget = Padding(
+              padding: const EdgeInsets.only(top: 2.0),
+              child: _textWidget,
+            );
+          if (_glyph == '?')
+            _width = 40.0 * transcribeRelativeFontSize;
+          else if (_glyph == 'ngaa' ||
+              (_glyph.length == 3 &&
+                  (_glyph.contains('ng') && _glyph != 'ang')))
+            _width = 100.0 * transcribeRelativeFontSize;
+          else if (_glyph == 'a' ||
+              _glyph == 'aa' ||
+              _glyph == 'ee' ||
+              _glyph == 'oo' ||
+              _glyph == 'ng' ||
+              _glyph == 'ang')
+            _width = 60.0 * transcribeRelativeFontSize;
+          else if ((_glyph.length == 1 &&
+                  _glyph != 'a' &&
+                  _glyph != 'i' &&
+                  _glyph != 'u' &&
+                  _glyph != 'e' &&
+                  _glyph != 'o') ||
+              (_glyph.length == 2 &&
+                  _glyph[0] != 'i' &&
+                  _glyph[0] != 'u' &&
+                  _glyph[0] != 'e' &&
+                  _glyph[0] != 'o' &&
+                  (_glyph[1] == 'a' || _glyph[1] == 'i' || _glyph[1] == 'u')))
+            _width = 90.0 * transcribeRelativeFontSize;
+          else if (_glyph == 'i' ||
+              _glyph == 'u' ||
+              _glyph == 'e' ||
+              _glyph == 'o')
+            _width = 40.0 * transcribeRelativeFontSize;
+          else if (((_glyph.length > 2 &&
+                      midEnd.contains(_glyph.substring(0, 3)) &&
+                      !_glyph.contains('ng')) ||
+                  (_glyph.length > 1 &&
+                      midEnd.contains(_glyph.substring(0, 2)))) &&
+              _glyph != 'alii')
+            _width = 45.0 * transcribeRelativeFontSize;
+          else if (_glyph == 'yaa' || _glyph == 'waa')
+            _width = 100.0 * transcribeRelativeFontSize;
+          else
+            _width = 75.0 * transcribeRelativeFontSize;
+          _tempGlyphs.add(SizedBox(
+            width: _width,
+            child: FittedBox(
+              fit: BoxFit.fitHeight,
+              child: _textWidget,
+            ),
+          ));
+        } else {
+          _tempGlyphs.add(_kulitanCursor);
+        }
+      }
+      return _tempGlyphs;
+    } else {
+      return [_kulitanCursor];
     }
-    return _tempGlyphs;
   }
 
   List<Container> _getLines(List<List<SizedBox>> lines) {
@@ -169,6 +204,13 @@ class _TranscribePageState extends State<TranscribePage>
       );
     }
     return _tempLines;
+  }
+
+  void _updateKulitanInputScroll() {
+    final double _maxPosition = _scrollController.position.maxScrollExtent;
+    _scrollController.animateTo(_maxPosition,
+        curve: transcribeScrollChangeCurve,
+        duration: const Duration(milliseconds: transcribeScrollChangeDuration));
   }
 
   void _transcribeRoman({isInit: false}) {
@@ -257,13 +299,9 @@ class _TranscribePageState extends State<TranscribePage>
       _glyphLines = _getLines(_tempLines);
       _kulitanGlyphs = _tempKulitans.length > 0 ? _tempKulitans : [[]];
     });
-    if (!isInit) {
-      final double _maxPosition = _scrollController.position.maxScrollExtent;
-      _scrollController.animateTo(_maxPosition,
-          curve: transcribeScrollChangeCurve,
-          duration:
-              const Duration(milliseconds: transcribeScrollChangeDuration));
-    }
+    if (!isInit)
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _updateKulitanInputScroll());
   }
 
   void _dragUpdate(DragUpdateDetails details) {
@@ -298,7 +336,8 @@ class _TranscribePageState extends State<TranscribePage>
     } else {
       _keyboardDrag = 1.0;
       _keyboardTween.end = 1.0;
-      _transcribeKulitan();
+      _normalizeToKulitan();
+      _updateInputsFromKulitan();
     }
     _keyboardController.reset();
     _keyboardController.forward();
@@ -318,14 +357,57 @@ class _TranscribePageState extends State<TranscribePage>
           glyph.endsWith('o'));
 
   bool _hasTwoIndungSulat(String glyph) =>
-      glyph.contains(RegExp(r'^.+(a|i|u|e|o).+$'));
+      glyph.contains(RegExp(r'^[^aiueo]+(a|i|u|e|o)[^aiueo]+$'));
 
   void _kulitanKeyPressed(String next, {String glyph}) {
+    _normalizeToKulitan();
+    final List<String> _induA = [
+      'ga',
+      'ka',
+      'nga',
+      'ta',
+      'da',
+      'na',
+      'la',
+      'sa',
+      'ma',
+      'pa',
+      'ba',
+      'ia',
+      'ua',
+    ];
+    final List<String> _induI = [
+      'gi',
+      'ki',
+      'ngi',
+      'ti',
+      'di',
+      'ni',
+      'li',
+      'si',
+      'mi',
+      'pi',
+      'bi',
+    ];
+    final List<String> _induU = [
+      'gu',
+      'ku',
+      'ngu',
+      'tu',
+      'du',
+      'nu',
+      'lu',
+      'su',
+      'mu',
+      'pu',
+      'bu',
+    ];
     if (next == 'enter') {
       if (_kulitanGlyphs.last.length > 0 && _kulitanGlyphs.last.last != 'br')
         _kulitanGlyphs.last.add('br');
       else {
-        if (_kulitanGlyphs.last.last == 'br') _kulitanGlyphs.last.removeLast();
+        if (_kulitanGlyphs.last.length > 0 && _kulitanGlyphs.last.last == 'br')
+          _kulitanGlyphs.last.removeLast();
         _kulitanGlyphs.add([]);
       }
     } else if (next == 'delete') {
@@ -333,19 +415,23 @@ class _TranscribePageState extends State<TranscribePage>
         final List<String> _kulitList = _kulitanGlyphs.last;
         final int _last = _kulitList.length - 1;
         final String _curr = _kulitList.last;
-        // if (_curr.length == 1)
-        if (_hasTwoIndungSulat(_curr))
+        if (_curr == 'br') {
+          _kulitList.removeLast();
+        } else if (_hasTwoIndungSulat(_curr) ||
+            _curr.contains(RegExp(r'^(aa?|ii?|uu?|e|o)[^aiueo]+$'))) {
           _kulitList[_last] =
               _curr.replaceAll(RegExp(r'(g|k|ng|t|d|n|l|s|m|p|b)$'), '');
-        else if (_curr.contains(RegExp(r'^.+(e|o)$')))
+        } else if (_curr.contains(RegExp(r'^.+(e|o)$')))
           _kulitList[_last] = _curr.replaceAll(RegExp(r'e|o'), 'a');
         else if (_curr.contains(RegExp(r'^(i|u)a(a|e|o)$')) ||
             _curr.contains(RegExp(r'^(i|u)a$')) ||
             _curr.contains(RegExp(r'^a(i|u)$')) ||
-            _curr.contains(RegExp(r'(aa|ii|uu)$')))
+            _curr.contains(RegExp(r'(aa|ii|uu|ui)$')))
           _kulitList[_last] = _curr.substring(0, _curr.length - 1);
         else
-          _kulitList.removeLast();
+          _kulitList[_last] = 'br';
+      } else if (_kulitanGlyphs.length > 1) {
+        _kulitanGlyphs.removeLast();
       }
     } else if (next == 'clear') {
       _kulitanGlyphs = [[]];
@@ -353,58 +439,37 @@ class _TranscribePageState extends State<TranscribePage>
       _kulitanGlyphs.last[_kulitanGlyphs.last.length - 1] = glyph;
     } else {
       if (_kulitanGlyphs.last.length > 0 && _kulitanGlyphs.last.last != 'br') {
-        final List<String> _induA = [
-          'ga',
-          'ka',
-          'nga',
-          'ta',
-          'da',
-          'na',
-          'la',
-          'sa',
-          'ma',
-          'pa',
-          'ba',
-          'ia',
-          'ua',
+        final List<String> _longVowels = [
+          'aa',
+          'e',
+          'o',
         ];
-        final List<String> _induI = [
-          'gi',
-          'ki',
-          'ngi',
-          'ti',
-          'di',
-          'ni',
-          'li',
-          'si',
-          'mi',
-          'pi',
-          'bi',
-        ];
-        final List<String> _induU = [
-          'gu',
-          'ku',
-          'ngu',
-          'tu',
-          'du',
-          'nu',
-          'lu',
-          'su',
-          'mu',
-          'pu',
-          'bu',
+        final List<String> _allVowels = [
+          'a',
+          'aa',
+          'i',
+          'ii',
+          'u',
+          'uu',
+          'e',
+          'o',
         ];
         final List<String> _kulitList = _kulitanGlyphs.last;
         final int _last = _kulitList.length - 1;
         final String _curr = _kulitList.last;
         if (next == 'a') {
-          if (_induA.contains(_curr) || _curr == 'i' || _curr == 'u')
+          if (_induA.contains(_curr) ||
+              _curr == 'a' ||
+              _curr == 'i' ||
+              _curr == 'u')
             _kulitList[_last] += 'a';
           else
             _kulitanGlyphs.last.add('a');
         } else if (next == 'e') {
           if (_curr == 'ali')
             _kulitList[_last] = 'alii';
+          else if (_induA.contains(_curr))
+            _kulitList[_last] = _curr.replaceAll('a', 'e');
           else if (_induI.contains(_curr) ||
               _induU.contains(_curr) ||
               _curr == 'e' ||
@@ -415,7 +480,9 @@ class _TranscribePageState extends State<TranscribePage>
           else
             _kulitanGlyphs.last.add('i');
         } else if (next == 'o') {
-          if (_induU.contains(_curr) ||
+          if (_induA.contains(_curr))
+            _kulitList[_last] = _curr.replaceAll('a', 'o');
+          else if (_induU.contains(_curr) ||
               _curr == 'o' ||
               _curr == 'ia' ||
               _curr == 'ua' ||
@@ -424,8 +491,15 @@ class _TranscribePageState extends State<TranscribePage>
           else
             _kulitanGlyphs.last.add('u');
         } else if (next == 'li' && _curr == 'a') {
+          // 'a' -> 'ali'
           _kulitList[_last] = 'ali';
-        } else if (next.endsWith('a') && _hasOneIndungSulat(_curr)) {
+        } else if (next.endsWith('a') &&
+            _hasOneIndungSulat(_curr) &&
+            !_longVowels.contains(_curr)) {
+          // 'mí' -> 'míng'
+          _kulitList[_last] += next.substring(0, next.length - 1);
+        } else if (next.endsWith('a') && (_allVowels.contains(_curr))) {
+          // 'í' -> 'in'
           _kulitList[_last] += next.substring(0, next.length - 1);
         } else {
           _kulitanGlyphs.last.add(next);
@@ -441,10 +515,10 @@ class _TranscribePageState extends State<TranscribePage>
           _kulitanGlyphs[_kulitanGlyphs.length - 1].add(next);
       }
     }
-    _transcribeKulitan();
+    _updateInputsFromKulitan();
   }
 
-  void _transcribeKulitan() {
+  void _normalizeToKulitan() {
     for (List<String> _list in _kulitanGlyphs)
       for (int i = 0; i < _list.length; i++)
         _list[i] = _list[i]
@@ -454,7 +528,6 @@ class _TranscribePageState extends State<TranscribePage>
             .replaceAll('wa', 'ua')
             .replaceAll('we', 'uai')
             .replaceAll('wo', 'uau');
-    _updateInputsFromKulitan();
   }
 
   void _updateInputsFromKulitan() {
@@ -475,18 +548,15 @@ class _TranscribePageState extends State<TranscribePage>
       }
       _transcribed.replaceAll(RegExp(r' $'), ' ');
       _transcribed += '\n';
-      if (_tempLine.length > 0) {
-        if (_tempLine.last != 'br')
-          _tempGlyphs.add(_getGlyphs(_tempLine));
-        else
-          _tempGlyphs
-              .add(_getGlyphs(_tempLine.sublist(0, _tempLine.length - 1)));
-      }
+      if (_tempLine.length > 0) _tempGlyphs.add(_getGlyphs(_tempLine));
     }
+    if (_tempLine.length == 0) _tempGlyphs.add(_getGlyphs([]));
     if (_tempLine.length > 0 && _tempLine.last != 'br')
       _transcribed = _transcribed.trimRight();
     _romanController.text = _transcribed;
     setState(() => _glyphLines = _getLines(_tempGlyphs));
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _updateKulitanInputScroll());
   }
 
   @override
@@ -538,6 +608,7 @@ class _TranscribePageState extends State<TranscribePage>
       alignment: Alignment.topRight,
       child: SizedBox(
         height: double.infinity,
+        width: double.infinity,
         child: Scrollbar(
           child: SingleChildScrollView(
             controller: _scrollController,

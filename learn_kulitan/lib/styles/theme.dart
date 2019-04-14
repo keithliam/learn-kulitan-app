@@ -72,6 +72,7 @@ const keyboardPadding = 15.0;
 const keyboardKeyPadding = 5.0;
 const keyHintTopOffset = 20.0;
 const keyHintPadding = 5.0;
+const kulitanCursorTopPadding = 5.0;
 
 // Sizes
 const homeTitleHeight = 110.0;
@@ -90,7 +91,7 @@ const keyboardKeyMiddleZoneHeight = 50.0;
 const keyHintSizeRatio = 1.0;
 const keyHintASizeRatio = 0.4;
 const transcribeCursorWidth = 4.0;
-const kulitanCursorHeight = 50.0;
+const kulitanCursorHeight = transcribeCursorWidth;
 
 // Sensitivity
 const swipeDownSensitivity = 1.0;
@@ -126,7 +127,7 @@ const keyboardToggleCurve = Curves.easeInOut;
 const keyboardAnimateToggleCurve = Curves.fastOutSlowIn;
 const keyboardPressOpacityCurve = Curves.fastLinearToSlowEaseIn;
 const keyHintOpacityCurve = Curves.fastLinearToSlowEaseIn;
-const kulitanCursorBlinkCurve = Curves.easeInOut;
+const kulitanCursorBlinkCurve = Curves.ease;
 
 // Durations
 const linearProgressBarChangeDuration = 1000;
@@ -156,7 +157,7 @@ const transcribeScrollChangeDuration = 500;
 const keyboardAnimateDuration = 250;
 const keyboardPressOpacityDuration = 350;
 const keyHintOpacityDuration = 350;
-const kulitanCursorBlinkDuration = 2000;
+const kulitanCursorBlinkDuration = 1000;
 const kulitanCursorBlinkDelay = 500;
 
 // Kulitan
