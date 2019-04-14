@@ -283,11 +283,16 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
 
   void _dragEnd(DragEndDetails details) {
     if (widget.keyType == 'a') {
-      if (_half1Pressed) widget.keyPressed(widget.keyType);
+      if (_half1Pressed) widget.keyPressed('a');
     } else {
       if (_startPos - (keyboardKeyMiddleZoneHeight / 2.0) <= _endPos &&
           _endPos <= _startPos + (keyboardKeyMiddleZoneHeight / 2.0)) {
-        widget.keyPressed(widget.keyType);
+        if (widget.keyType == 'i')
+          widget.keyPressed('e');
+        else if (widget.keyType == 'u')
+          widget.keyPressed('o');
+        else
+          widget.keyPressed(widget.keyType + 'a');
       } else if (_startPos > _endPos) {
         if (widget.keyType == 'i')
           widget.keyPressed('yi');
@@ -411,7 +416,6 @@ class _KeyboardAddKey extends StatefulWidget {
 
 class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
   static final List<String> _allowedGlyphs = [
-    'a',
     'i',
     'u',
     'g',
@@ -505,7 +509,8 @@ class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
 
   void _dragEnd(DragEndDetails details) {
     if (_isPressed) {
-      if (_keyHintText.length > 0) widget.keyPressed('add');
+      if (_keyHintText.length > 0)
+        widget.keyPressed('add', glyph: _keyHintText);
       setState(() => _isPressed = false);
     }
   }
@@ -722,7 +727,8 @@ class _KeyIconPainter extends CustomPainter {
 }
 
 class KulitanKeyboard extends StatelessWidget {
-  KulitanKeyboard({this.visibility, this.getGlyph, this.onKeyPress, this.child});
+  KulitanKeyboard(
+      {this.visibility, this.getGlyph, this.onKeyPress, this.child});
 
   final String Function() getGlyph;
   final double visibility;
@@ -858,8 +864,7 @@ class KulitanKeyboard extends StatelessWidget {
           child: child,
         ),
         Positioned(
-          bottom:
-              -_keyboardHeight + (_keyboardHeight * visibility),
+          bottom: -_keyboardHeight + (_keyboardHeight * visibility),
           left: keyboardPadding,
           right: keyboardPadding,
           child: SizedBox(

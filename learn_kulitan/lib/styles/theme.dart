@@ -36,6 +36,7 @@ const writingDrawColor = grayColor;
 const writingShadowColor = snowColor;
 
 const transcribeDividerColor = snowColor;
+const transcribeCursorColor = accentColor;
 
 const keyboardStrokeColor = whiteColor;
 const keyboardStrokeShadowColor = accentColor;
@@ -88,6 +89,8 @@ const keyboardDividerHeight = 8.0;
 const keyboardKeyMiddleZoneHeight = 50.0;
 const keyHintSizeRatio = 1.0;
 const keyHintASizeRatio = 0.4;
+const transcribeCursorWidth = 4.0;
+const kulitanCursorHeight = 50.0;
 
 // Sensitivity
 const swipeDownSensitivity = 1.0;
@@ -123,6 +126,7 @@ const keyboardToggleCurve = Curves.easeInOut;
 const keyboardAnimateToggleCurve = Curves.fastOutSlowIn;
 const keyboardPressOpacityCurve = Curves.fastLinearToSlowEaseIn;
 const keyHintOpacityCurve = Curves.fastLinearToSlowEaseIn;
+const kulitanCursorBlinkCurve = Curves.easeInOut;
 
 // Durations
 const linearProgressBarChangeDuration = 1000;
@@ -152,6 +156,8 @@ const transcribeScrollChangeDuration = 500;
 const keyboardAnimateDuration = 250;
 const keyboardPressOpacityDuration = 350;
 const keyHintOpacityDuration = 350;
+const kulitanCursorBlinkDuration = 2000;
+const kulitanCursorBlinkDelay = 500;
 
 // Kulitan
 const Map<String, String> kulitanGlyphs = {
