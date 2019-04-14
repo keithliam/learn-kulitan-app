@@ -1,3 +1,4 @@
+import 'dart:async' show Timer;
 import 'package:flutter/material.dart';
 import '../../styles/theme.dart';
 import '../../components/misc/DividerNew.dart';
@@ -886,6 +887,61 @@ class KulitanKeyboard extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class Blinker extends StatefulWidget {
+  Blinker({@required this.child});
+
+  final Widget child;
+
+  @override
+  _BlinkerState createState() => _BlinkerState();
+}
+
+class _BlinkerState extends State<Blinker> {
+  static final int _visibilityDuration = kulitanCursorBlinkDuration ~/ 2;
+  static final int _cycleDuration =
+      _visibilityDuration + kulitanCursorBlinkDelay;
+  bool _show = false;
+  Timer _showTimer;
+  Timer _hideTimer;
+
+  void _initializeTimers() async {
+    _showTimer = Timer.periodic(Duration(milliseconds: _cycleDuration),
+        (_) => setState(() => _show = true));
+    await Future.delayed(Duration(milliseconds: _visibilityDuration));
+    if (mounted)
+      _hideTimer = Timer.periodic(Duration(milliseconds: _cycleDuration),
+          (_) => setState(() => _show = false));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeTimers();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      setState(() => _show = true);
+      await Future.delayed(Duration(milliseconds: _visibilityDuration));
+      if (mounted) setState(() => _show = false);
+    });
+  }
+
+  @override
+  void dispose() {
+    _showTimer?.cancel();
+    _hideTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: _show ? 1.0 : 0.0,
+      duration: Duration(milliseconds: _visibilityDuration),
+      curve: kulitanCursorBlinkCurve,
+      child: widget.child,
     );
   }
 }
