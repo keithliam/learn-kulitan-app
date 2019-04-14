@@ -205,6 +205,7 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
   double _endPos = 0.0;
   bool _half1Pressed = false;
   bool _half2Pressed = false;
+  Timer _deleteLongPressTimer;
 
   String _keyHintText = '';
   RenderBox _renderBox;
@@ -313,6 +314,28 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
     _pressHighlight(top: false, bottom: false);
   }
 
+  void _tapStop() {
+    if (_deleteLongPressTimer != null) setState(() => _half1Pressed = false);
+  }
+
+  void _deleteLongPressDown() {
+    _deleteLongPressTimer = Timer.periodic(
+        const Duration(milliseconds: keyDeleteLongPressFrequency),
+        (_) => widget.keyPressed('delete'));
+  }
+
+  void _deleteLongPressUp() {
+    setState(() => _half1Pressed = false);
+    _deleteLongPressTimer?.cancel();
+    _deleteLongPressTimer = null;
+  }
+
+  @override
+  void dispose() {
+    _deleteLongPressTimer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Stack _mainWidget = Stack(
@@ -379,9 +402,11 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
       return SizedBox(
         height: widget.height,
         child: GestureDetector(
+          onLongPress: _deleteLongPressDown,
+          onLongPressUp: _deleteLongPressUp,
           onTapDown: (_) => setState(() => _half1Pressed = true),
-          onTapUp: (_) => setState(() => _half1Pressed = false),
-          onTapCancel: () => setState(() => _half1Pressed = false),
+          onTapUp: (_) => _tapStop,
+          onTapCancel: _tapStop,
           onTap: () => widget.keyPressed(widget.keyType),
           child: _mainWidget,
         ),
@@ -901,19 +926,19 @@ class Blinker extends StatefulWidget {
 }
 
 class _BlinkerState extends State<Blinker> {
-  static final int _visibilityDuration = kulitanCursorBlinkDuration ~/ 2;
-  static final int _cycleDuration =
+  static const int _visibilityDuration = kulitanCursorBlinkDuration ~/ 2;
+  static const int _cycleDuration =
       _visibilityDuration + kulitanCursorBlinkDelay;
   bool _show = false;
   Timer _showTimer;
   Timer _hideTimer;
 
   void _initializeTimers() async {
-    _showTimer = Timer.periodic(Duration(milliseconds: _cycleDuration),
+    _showTimer = Timer.periodic(const Duration(milliseconds: _cycleDuration),
         (_) => setState(() => _show = true));
-    await Future.delayed(Duration(milliseconds: _visibilityDuration));
+    await Future.delayed(const Duration(milliseconds: _visibilityDuration));
     if (mounted)
-      _hideTimer = Timer.periodic(Duration(milliseconds: _cycleDuration),
+      _hideTimer = Timer.periodic(const Duration(milliseconds: _cycleDuration),
           (_) => setState(() => _show = false));
   }
 

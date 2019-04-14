@@ -159,6 +159,7 @@ const keyboardPressOpacityDuration = 350;
 const keyHintOpacityDuration = 350;
 const kulitanCursorBlinkDuration = 1000;
 const kulitanCursorBlinkDelay = 500;
+const keyDeleteLongPressFrequency = 150;
 
 // Kulitan
 const Map<String, String> kulitanGlyphs = {
