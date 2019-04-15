@@ -314,17 +314,13 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
     _pressHighlight(top: false, bottom: false);
   }
 
-  void _tapStop() {
-    if (_deleteLongPressTimer != null) setState(() => _half1Pressed = false);
-  }
-
-  void _deleteLongPressDown() {
+  void _deleteLongPressDown(_) {
     _deleteLongPressTimer = Timer.periodic(
         const Duration(milliseconds: keyDeleteLongPressFrequency),
         (_) => widget.keyPressed('delete'));
   }
 
-  void _deleteLongPressUp() {
+  void _deleteLongPressUp(_) {
     setState(() => _half1Pressed = false);
     _deleteLongPressTimer?.cancel();
     _deleteLongPressTimer = null;
@@ -345,10 +341,11 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
           children: <Widget>[
             Flexible(
               child: AnimatedOpacity(
-                opacity: !(widget.keyType == 'clear' ||
-                            widget.keyType == 'delete' ||
-                            widget.keyType == 'enter') &&
-                        (_half1Pressed && !_half2Pressed)
+                opacity: widget.keyType != 'clear' &&
+                        widget.keyType != 'delete' &&
+                        widget.keyType != 'enter' &&
+                        _half1Pressed &&
+                        !_half2Pressed
                     ? keyboardMainPressOpacity
                     : ((widget.keyType == 'clear' ||
                                     widget.keyType == 'delete' ||
@@ -396,17 +393,26 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
       ],
     );
 
-    if (widget.keyType == 'clear' ||
-        widget.keyType == 'delete' ||
-        widget.keyType == 'enter') {
+    if (widget.keyType == 'delete') {
       return SizedBox(
         height: widget.height,
         child: GestureDetector(
-          onLongPress: _deleteLongPressDown,
-          onLongPressUp: _deleteLongPressUp,
+          onLongPressDragStart: _deleteLongPressDown,
+          onLongPressDragUp: _deleteLongPressUp,
           onTapDown: (_) => setState(() => _half1Pressed = true),
-          onTapUp: (_) => _tapStop,
-          onTapCancel: _tapStop,
+          onTapUp: (_) => setState(() => _half1Pressed = false),
+          onTapCancel: () => setState(() => _half1Pressed = false),
+          onTap: () => widget.keyPressed(widget.keyType),
+          child: _mainWidget,
+        ),
+      );
+    } else if (widget.keyType == 'clear' || widget.keyType == 'enter') {
+      return SizedBox(
+        height: widget.height,
+        child: GestureDetector(
+          onTapDown: (_) => setState(() => _half1Pressed = true),
+          onTapUp: (_) => setState(() => _half1Pressed = false),
+          onTapCancel: () => setState(() => _half1Pressed = false),
           onTap: () => widget.keyPressed(widget.keyType),
           child: _mainWidget,
         ),
