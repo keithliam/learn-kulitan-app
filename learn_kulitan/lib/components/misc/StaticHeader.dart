@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class StaticHeader extends StatefulWidget {
   StaticHeader({
     this.left = const Spacer(),
-    this.middle = const Spacer(),
+    this.middle,
     this.right = const Spacer(),
   });
 
@@ -23,9 +23,11 @@ class _StaticHeader extends State<StaticHeader> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         widget.left,
-        Expanded(
-          child: widget.middle,
-        ),
+        widget.middle == null
+            ? const Spacer()
+            : Expanded(
+                child: widget.middle,
+              ),
         widget.right,
       ],
     );
