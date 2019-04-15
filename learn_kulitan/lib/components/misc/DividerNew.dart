@@ -4,12 +4,14 @@ class DividerNew extends StatelessWidget {
   DividerNew({
     @required this.height,
     @required this.color,
+    this.boxShadow,
     this.width = -1,
   });
 
   final double width;
   final double height;
   final Color color;
+  final BoxShadow boxShadow;
 
   Widget build(BuildContext context) {
     return Container(
@@ -18,6 +20,7 @@ class DividerNew extends StatelessWidget {
       decoration: BoxDecoration(
         color: this.color,
         borderRadius: BorderRadius.circular(100.0),
+        boxShadow: [this.boxShadow],
       ),
     );
   }
