@@ -552,7 +552,11 @@ class _TranscribePageState extends State<TranscribePage>
     }
     if (_tempLine.length == 0) _tempGlyphs.add(_getGlyphs([]));
     if (_tempLine.length > 0 && _tempLine.last != 'br')
-      _transcribed = _transcribed.trimRight();
+      _transcribed = _transcribed
+          .trimRight()
+          .replaceAll('aa', 'á')
+          .replaceAll('ii', 'í')
+          .replaceAll('uu', 'ú');
     _romanController.text = _transcribed;
     setState(() => _glyphLines = _getLines(_tempGlyphs));
     WidgetsBinding.instance
