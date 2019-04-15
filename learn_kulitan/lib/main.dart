@@ -4,6 +4,9 @@ import './components/misc/SlideLeftRoute.dart';
 import './routes/home/home.dart';
 import './routes/reading/reading.dart';
 import './routes/writing/writing.dart';
+import './routes/information/information.dart';
+import './routes/information/routes/history.dart';
+import './routes/information/routes/writingguide.dart';
 import './routes/transcribe/transcribe.dart';
 
 void main() {
@@ -32,6 +35,15 @@ class MyApp extends StatelessWidget {
               break;
             case '/writing':
               return SlideLeftRoute(widget: WritingPage());
+              break;
+            case '/information':
+              return SlideLeftRoute(widget: InformationPage());
+              break;
+            case '/information/history':
+              return SlideLeftRoute(widget: HistoryPage());
+              break;
+            case '/information/guide':
+              return SlideLeftRoute(widget: WritingGuidePage());
               break;
             case '/transcribe':
               return SlideLeftRoute(widget: TranscribePage());

@@ -38,6 +38,9 @@ const writingShadowColor = snowColor;
 const transcribeDividerColor = snowColor;
 const transcribeCursorColor = accentColor;
 
+const informationDividerColor = accentColor;
+const informationDividerShadowColor = customButtonShadowColor;
+
 const keyboardStrokeColor = whiteColor;
 const keyboardStrokeShadowColor = accentColor;
 const keyboardPressColor = whiteColor;
@@ -55,6 +58,8 @@ const quizHorizontalScreenPadding = 32.0;
 const quizVerticalScreenPadding = quizHorizontalScreenPadding - quizChoiceButtonElevation;
 const writingHorizontalScreenPadding = 32.0;
 const writingVerticalScreenPadding = 32.0;
+const informationHorizontalScreenPadding = 32.0;
+const informationVerticalScreenPadding = 32.0;
 const transcribeHorizontalScreenPadding = 32.0;
 const transcribeVerticalScreenPadding = 25.0;
 const headerHorizontalPadding = 5.0;
@@ -73,6 +78,7 @@ const keyboardKeyPadding = 5.0;
 const keyHintTopOffset = 20.0;
 const keyHintPadding = 5.0;
 const kulitanCursorTopPadding = 5.0;
+const informationSubtitleBottomPadding = 15.0;
 
 // Sizes
 const homeTitleHeight = 110.0;
@@ -713,6 +719,12 @@ const textWritingGuide = TextStyle(
   fontWeight: FontWeight.bold,
   color: accentColor,
   height: 0.9,
+);
+const textInfoButton = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 30.0,
+  fontWeight: FontWeight.w600,
+  color: grayColor,
 );
 const textInfoCaption = TextStyle(
   fontFamily: 'Barlow',

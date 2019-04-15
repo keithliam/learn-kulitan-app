@@ -20,7 +20,7 @@ class DividerNew extends StatelessWidget {
       decoration: BoxDecoration(
         color: this.color,
         borderRadius: BorderRadius.circular(100.0),
-        boxShadow: [this.boxShadow],
+        boxShadow: this.boxShadow != null ? [this.boxShadow] : null,
       ),
     );
   }
