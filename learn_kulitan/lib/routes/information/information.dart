@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 import '../../styles/theme.dart';
 import '../../components/buttons/IconButtonNew.dart';
 import '../../components/buttons/CustomButton.dart';
@@ -19,12 +20,6 @@ class InformationPage extends StatelessWidget {
           color: headerNavigationColor,
           onPressed: () => Navigator.pushNamed(context, '/'),
         ),
-        middle: Padding(
-          padding: const EdgeInsets.only(bottom: headerVerticalPadding),
-          child: Center(
-            child: Text('Information', style: textPageTitle),
-          ),
-        ),
         right: IconButtonNew(
           icon: Icons.settings,
           iconSize: headerIconSize,
@@ -34,79 +29,123 @@ class InformationPage extends StatelessWidget {
       ),
     );
 
-    final Widget _historyButton = CustomButton(
-      onPressed: () => Navigator.pushNamed(context, '/information/history'),
-      height: 60.0,
-      borderRadius: 30.0,
-      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-      elevation: 10.0,
-      child: Center(
-          child: Row(
-        children: <Widget>[
-          Text('History of Kulitan', style: textInfoButton),
-          Spacer(),
-          Text('>', style: textInfoButton.copyWith(color: accentColor)),
-        ],
-      )),
-    );
-    final Widget _writingInstructionsButton = CustomButton(
-      onPressed: () => Navigator.pushNamed(context, '/information/guide'),
-      height: 60.0,
-      borderRadius: 30.0,
-      marginTop: 10.0,
-      elevation: 10.0,
-      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-      child: Center(
-          child: Row(
-        children: <Widget>[
-          Text('Writing Guide', style: textInfoButton),
-          Spacer(),
-          Text('>', style: textInfoButton.copyWith(color: accentColor)),
-        ],
-      )),
+    final Widget _pageTitle = Container(
+      alignment: Alignment.center,
+      color: backgroundColor,
+      padding: const EdgeInsets.only(
+        top: headerVerticalPadding - 8.0,
+        bottom: headerVerticalPadding,
+      ),
+      child: Text('Information', style: textPageTitle),
     );
 
-    final Widget _indungSulatTable = Table(
-      defaultColumnWidth: FlexColumnWidth(1.0),
-      children: <TableRow>[
-        TableRow(children: <Widget>[
-          KulitanInfoCell('ga', 'ga'),
-          KulitanInfoCell('ka', 'ka'),
-          KulitanInfoCell('nga', 'nga'),
-          KulitanInfoCell('ta', 'ta'),
-        ]),
-        TableRow(children: <Widget>[
-          KulitanInfoCell('da', 'da'),
-          KulitanInfoCell('na', 'na'),
-          KulitanInfoCell('la', 'la'),
-          KulitanInfoCell('sa', 'sa'),
-        ]),
-        TableRow(children: <Widget>[
-          KulitanInfoCell('ma', 'ma'),
-          KulitanInfoCell('pa', 'pa'),
-          KulitanInfoCell('ba', 'ba'),
-          Container(),
-        ]),
-      ],
+    final Widget _historyButton = Padding(
+      padding: const EdgeInsets.fromLTRB(
+        informationHorizontalScreenPadding,
+        informationVerticalScreenPadding,
+        informationHorizontalScreenPadding,
+        0.0,
+      ),
+      child: CustomButton(
+        onPressed: () => Navigator.pushNamed(context, '/information/history'),
+        height: 60.0,
+        borderRadius: 30.0,
+        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+        elevation: 10.0,
+        child: Center(
+          child: Row(
+            children: <Widget>[
+              Text('History of Kulitan', style: textInfoButton),
+              Spacer(),
+              Text('>', style: textInfoButton.copyWith(color: accentColor)),
+            ],
+          ),
+        ),
+      ),
     );
-    final Widget _indungSulatVowelTable = Table(
-      defaultColumnWidth: FlexColumnWidth(1.0),
-      children: <TableRow>[
-        TableRow(children: <Widget>[
-          KulitanInfoCell('a', 'a'),
-          KulitanInfoCell('i', 'ka'),
-          KulitanInfoCell('u', 'u'),
-          KulitanInfoCell('e', 'e'),
-          KulitanInfoCell('o', 'o'),
-        ]),
-        TableRow(children: <Widget>[
-          KulitanInfoCell('aa', 'á/â'),
-          KulitanInfoCell('ii', 'í/î'),
-          KulitanInfoCell('uu', 'ú/û'),
-          Container(),
-          Container(),
-        ]),
-      ],
+    final Widget _writingInstructionsButton = Padding(
+      padding: const EdgeInsets.fromLTRB(
+        informationHorizontalScreenPadding,
+        0.0,
+        informationHorizontalScreenPadding,
+        informationVerticalScreenPadding - headerVerticalPadding + 8.0,
+      ),
+      child: CustomButton(
+        onPressed: () => Navigator.pushNamed(context, '/information/guide'),
+        height: 60.0,
+        borderRadius: 30.0,
+        marginTop: 10.0,
+        elevation: 10.0,
+        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+        child: Center(
+          child: Row(
+            children: <Widget>[
+              Text('Writing Guide', style: textInfoButton),
+              Spacer(),
+              Text('>', style: textInfoButton.copyWith(color: accentColor)),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    final Widget _indungSulatTable = Padding(
+      padding: const EdgeInsets.fromLTRB(
+        informationHorizontalScreenPadding,
+        informationSubtitleBottomPadding - headerVerticalPadding,
+        informationHorizontalScreenPadding,
+        0.0,
+      ),
+      child: Table(
+        defaultColumnWidth: FlexColumnWidth(1.0),
+        children: <TableRow>[
+          TableRow(children: <Widget>[
+            KulitanInfoCell('ga', 'ga'),
+            KulitanInfoCell('ka', 'ka'),
+            KulitanInfoCell('nga', 'nga'),
+            KulitanInfoCell('ta', 'ta'),
+          ]),
+          TableRow(children: <Widget>[
+            KulitanInfoCell('da', 'da'),
+            KulitanInfoCell('na', 'na'),
+            KulitanInfoCell('la', 'la'),
+            KulitanInfoCell('sa', 'sa'),
+          ]),
+          TableRow(children: <Widget>[
+            KulitanInfoCell('ma', 'ma'),
+            KulitanInfoCell('pa', 'pa'),
+            KulitanInfoCell('ba', 'ba'),
+            Container(),
+          ]),
+        ],
+      ),
+    );
+    final Widget _indungSulatVowelTable = Padding(
+      padding: const EdgeInsets.fromLTRB(
+        informationHorizontalScreenPadding,
+        0.0,
+        informationHorizontalScreenPadding,
+        informationVerticalScreenPadding - headerVerticalPadding + 8.0,
+      ),
+      child: Table(
+        defaultColumnWidth: FlexColumnWidth(1.0),
+        children: <TableRow>[
+          TableRow(children: <Widget>[
+            KulitanInfoCell('a', 'a'),
+            KulitanInfoCell('i', 'ka'),
+            KulitanInfoCell('u', 'u'),
+            KulitanInfoCell('e', 'e'),
+            KulitanInfoCell('o', 'o'),
+          ]),
+          TableRow(children: <Widget>[
+            KulitanInfoCell('aa', 'á/â'),
+            KulitanInfoCell('ii', 'í/î'),
+            KulitanInfoCell('uu', 'ú/û'),
+            Container(),
+            Container(),
+          ]),
+        ],
+      ),
     );
 
     final double _screenWidth = MediaQuery.of(context).size.width;
@@ -116,8 +155,12 @@ class InformationPage extends StatelessWidget {
     final Widget _anakSulatTable = SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: informationHorizontalScreenPadding),
+        padding: const EdgeInsets.fromLTRB(
+          informationHorizontalScreenPadding,
+          0.0,
+          informationHorizontalScreenPadding,
+          informationVerticalScreenPadding,
+        ),
         child: Table(
           defaultColumnWidth: FixedColumnWidth(_cellWidth),
           children: <TableRow>[
@@ -237,9 +280,11 @@ class InformationPage extends StatelessWidget {
     );
 
     final _indungSulatDivider = Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: _screenWidth * 0.25,
-        vertical: informationSubtitleBottomPadding,
+      padding: EdgeInsets.fromLTRB(
+        _screenWidth * 0.31,
+        40.0,
+        _screenWidth * 0.31,
+        22.0,
       ),
       child: DividerNew(
         height: 3.0,
@@ -251,10 +296,11 @@ class InformationPage extends StatelessWidget {
       ),
     );
 
-    const Widget _indungSulatTitle = Padding(
+    final Widget _indungSulatTitle = Container(
+      color: backgroundColor,
       padding: const EdgeInsets.only(
-        top: informationVerticalScreenPadding,
-        bottom: informationSubtitleBottomPadding,
+        top: headerVerticalPadding - 8.0,
+        bottom: headerVerticalPadding,
       ),
       child: Center(
         child: Text(
@@ -263,10 +309,11 @@ class InformationPage extends StatelessWidget {
         ),
       ),
     );
-    const Widget _anakSulatTitle = Padding(
+    final Widget _anakSulatTitle = Container(
+      color: backgroundColor,
       padding: const EdgeInsets.only(
-        top: informationVerticalScreenPadding,
-        bottom: informationSubtitleBottomPadding,
+        top: headerVerticalPadding - 8.0,
+        bottom: headerVerticalPadding,
       ),
       child: Center(
         child: Text(
@@ -276,38 +323,45 @@ class InformationPage extends StatelessWidget {
       ),
     );
 
+    final Widget _contents = SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          StickyHeader(
+            header: _pageTitle,
+            content: Column(
+              children: <Widget>[
+                _historyButton,
+                _writingInstructionsButton,
+              ],
+            ),
+          ),
+          StickyHeader(
+            header: _indungSulatTitle,
+            content: Column(
+              children: <Widget>[
+                _indungSulatTable,
+                _indungSulatDivider,
+                _indungSulatVowelTable,
+              ],
+            ),
+          ),
+          StickyHeader(
+            header: _anakSulatTitle,
+            content: Column(
+              children: <Widget>[_anakSulatTable],
+            ),
+          )
+        ],
+      ),
+    );
+
     return Material(
       color: backgroundColor,
       child: SafeArea(
-        child: Column(
+        child: Stack(
           children: <Widget>[
+            _contents,
             _header,
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: informationVerticalScreenPadding),
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: informationHorizontalScreenPadding),
-                        child: Column(children: <Widget>[
-                          _historyButton,
-                          _writingInstructionsButton,
-                          _indungSulatTitle,
-                          _indungSulatTable,
-                          _indungSulatDivider,
-                          _indungSulatVowelTable,
-                          _anakSulatTitle,
-                        ]),
-                      ),
-                      _anakSulatTable,
-                    ],
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
