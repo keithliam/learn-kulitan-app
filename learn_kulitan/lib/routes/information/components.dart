@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../styles/theme.dart';
 
 class KulitanInfoCell extends StatelessWidget {
-  KulitanInfoCell(this.kulitan, this.caption);
+  const KulitanInfoCell(this.kulitan, this.caption);
 
   final String kulitan;
   final String caption;

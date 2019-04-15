@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sticky_headers/sticky_headers.dart';
 import '../../styles/theme.dart';
 import '../../components/buttons/IconButtonNew.dart';
 import '../../components/buttons/CustomButton.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/DividerNew.dart';
+import '../../components/misc/StickyHeading.dart';
 import './components.dart';
 
 class InformationPage extends StatelessWidget {
@@ -27,16 +27,6 @@ class InformationPage extends StatelessWidget {
           onPressed: null,
         ),
       ),
-    );
-
-    final Widget _pageTitle = Container(
-      alignment: Alignment.center,
-      color: backgroundColor,
-      padding: const EdgeInsets.only(
-        top: headerVerticalPadding - 8.0,
-        bottom: headerVerticalPadding,
-      ),
-      child: Text('Information', style: textPageTitle),
     );
 
     final Widget _historyButton = Padding(
@@ -99,13 +89,13 @@ class InformationPage extends StatelessWidget {
       child: Table(
         defaultColumnWidth: FlexColumnWidth(1.0),
         children: <TableRow>[
-          TableRow(children: <Widget>[
+          TableRow(children: const <Widget>[
             KulitanInfoCell('ga', 'ga'),
             KulitanInfoCell('ka', 'ka'),
             KulitanInfoCell('nga', 'nga'),
             KulitanInfoCell('ta', 'ta'),
           ]),
-          TableRow(children: <Widget>[
+          TableRow(children: const <Widget>[
             KulitanInfoCell('da', 'da'),
             KulitanInfoCell('na', 'na'),
             KulitanInfoCell('la', 'la'),
@@ -130,7 +120,7 @@ class InformationPage extends StatelessWidget {
       child: Table(
         defaultColumnWidth: FlexColumnWidth(1.0),
         children: <TableRow>[
-          TableRow(children: <Widget>[
+          TableRow(children: const <Widget>[
             KulitanInfoCell('a', 'a'),
             KulitanInfoCell('i', 'ka'),
             KulitanInfoCell('u', 'u'),
@@ -163,7 +153,7 @@ class InformationPage extends StatelessWidget {
         ),
         child: Table(
           defaultColumnWidth: FixedColumnWidth(_cellWidth),
-          children: <TableRow>[
+          children: const <TableRow>[
             TableRow(children: <Widget>[
               KulitanInfoCell('gaa', 'gá/gâ'),
               KulitanInfoCell('gi', 'gi'),
@@ -296,38 +286,11 @@ class InformationPage extends StatelessWidget {
       ),
     );
 
-    final Widget _indungSulatTitle = Container(
-      color: backgroundColor,
-      padding: const EdgeInsets.only(
-        top: headerVerticalPadding - 8.0,
-        bottom: headerVerticalPadding,
-      ),
-      child: Center(
-        child: Text(
-          'Indûng Súlat',
-          style: textPageTitle,
-        ),
-      ),
-    );
-    final Widget _anakSulatTitle = Container(
-      color: backgroundColor,
-      padding: const EdgeInsets.only(
-        top: headerVerticalPadding - 8.0,
-        bottom: headerVerticalPadding,
-      ),
-      child: Center(
-        child: Text(
-          'Anak Súlat',
-          style: textPageTitle,
-        ),
-      ),
-    );
-
     final Widget _contents = SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          StickyHeader(
-            header: _pageTitle,
+          StickyHeading(
+            headingText: 'Information',
             content: Column(
               children: <Widget>[
                 _historyButton,
@@ -335,8 +298,8 @@ class InformationPage extends StatelessWidget {
               ],
             ),
           ),
-          StickyHeader(
-            header: _indungSulatTitle,
+          StickyHeading(
+            headingText: 'Indûng Súlat',
             content: Column(
               children: <Widget>[
                 _indungSulatTable,
@@ -345,8 +308,8 @@ class InformationPage extends StatelessWidget {
               ],
             ),
           ),
-          StickyHeader(
-            header: _anakSulatTitle,
+          StickyHeading(
+            headingText: 'Anak Súlat',
             content: Column(
               children: <Widget>[_anakSulatTable],
             ),
