@@ -8,6 +8,7 @@ import './routes/information/information.dart';
 import './routes/information/routes/history.dart';
 import './routes/information/routes/writingguide.dart';
 import './routes/transcribe/transcribe.dart';
+import './components/misc/CustomScrollBehavior.dart';
 
 void main() {
   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
@@ -23,6 +24,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        builder: (context, child) {
+          return ScrollConfiguration(
+            behavior: CustomScrollBehavior(),
+            child: child,
+          );
+        },
         title: 'Learn Kulitan',
         home: HomePage(),
         onGenerateRoute: (RouteSettings settings) {
