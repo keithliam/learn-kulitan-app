@@ -105,6 +105,7 @@ const keyHintSizeRatio = 1.0;
 const keyHintASizeRatio = 0.4;
 const transcribeCursorWidth = 4.0;
 const kulitanCursorHeight = transcribeCursorWidth;
+const toastFontSize = 16.0;
 
 // Sensitivity
 const swipeDownSensitivity = 1.0;
