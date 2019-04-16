@@ -4,9 +4,10 @@ import '../../../styles/theme.dart';
 class ImageWithCaption extends StatelessWidget {
   const ImageWithCaption({
     @required this.filename,
-    @required this.caption,
     @required this.screenWidth,
+    this.caption,
     this.subcaption,
+    this.hasPadding = true,
     this.orientation = Axis.vertical,
   });
 
@@ -14,6 +15,7 @@ class ImageWithCaption extends StatelessWidget {
   final TextSpan caption;
   final String subcaption;
   final double screenWidth;
+  final bool hasPadding;
   final Axis orientation;
 
   @override
@@ -38,28 +40,42 @@ class ImageWithCaption extends StatelessWidget {
           ),
         ),
       ),
-      Padding(
-        padding: const EdgeInsets.fromLTRB(
-          imageCaptionHorizontalPadding,
-          imageCaptionTopPadding,
-          imageCaptionHorizontalPadding,
-          0.0,
-        ),
-        child: Center(
-          child: Text.rich(
-            caption,
-            textAlign: TextAlign.justify,
-            style: textInfoImageCaption,
+    ];
+
+    if (caption != null)
+      _list.add(
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            imageCaptionHorizontalPadding,
+            imageCaptionTopPadding,
+            imageCaptionHorizontalPadding,
+            0.0,
+          ),
+          child: Center(
+            child: Text.rich(
+              caption,
+              textAlign: TextAlign.justify,
+              style: textInfoImageCaption,
+            ),
           ),
         ),
-      ),
-    ];
+      );
 
     if (subcaption != null)
       _list
           .add(Center(child: Text(subcaption, style: textInfoImageSubCaption)));
 
-    return Column(children: _list);
+    final Widget _widget = Column(children: _list);
+
+    if (hasPadding)
+      return Padding(
+        padding: const EdgeInsets.only(
+          top: imageTopPadding,
+        ),
+        child: _widget,
+      );
+    else
+      return _widget;
   }
 }
 

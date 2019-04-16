@@ -87,6 +87,7 @@ class HistoryPage extends StatelessWidget {
           caption: TextSpan(text: 'KASALÉSAYAN'),
           subcaption: 'HISTORY',
           screenWidth: _width,
+          hasPadding: false,
         ),
         Paragraphs(
           paragraphs: [
@@ -103,54 +104,47 @@ class HistoryPage extends StatelessWidget {
             ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding),
-          child: ImageWithCaption(
-            filename: 'japanese_map.jpeg',
-            screenWidth: _width,
-            orientation: Axis.horizontal,
-            caption: TextSpan(
-              children: <TextSpan>[
-                TextSpan(
-                    text: 'Figure 1.',
-                    style: textInfoImageCaption.copyWith(
-                        fontStyle: FontStyle.italic)),
-                TextSpan(
-                    text:
-                        ' The Kingdom of Luzon (呂宋國) as it appears on a Japanese map during the Ming dynasty (1368 to 1644). From “A look at history based on Ming dynasty maps” (從大明坤輿萬國 圖看歷史) posted by zhaijia1987 in '),
-                TextSpan(
-                    text: 'Baidu Tieba (百度贴吧)',
-                    style: textInfoImageCaption.copyWith(
-                        fontStyle: FontStyle.italic)),
-                TextSpan(text: ' on 2010 November 11.'),
-              ],
-            ),
+        ImageWithCaption(
+          filename: 'japanese_map.jpeg',
+          screenWidth: _width,
+          orientation: Axis.horizontal,
+          caption: TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                  text: 'Figure 1.',
+                  style: textInfoImageCaption.copyWith(
+                      fontStyle: FontStyle.italic)),
+              TextSpan(
+                  text:
+                      ' The Kingdom of Luzon (呂宋國) as it appears on a Japanese map during the Ming dynasty (1368 to 1644). From “A look at history based on Ming dynasty maps” (從大明坤輿萬國 圖看歷史) posted by zhaijia1987 in '),
+              TextSpan(
+                  text: 'Baidu Tieba (百度贴吧)',
+                  style: textInfoImageCaption.copyWith(
+                      fontStyle: FontStyle.italic)),
+              TextSpan(text: ' on 2010 November 11.'),
+            ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding),
-          child: ImageWithCaption(
-            filename: 'map_of_pampanga.jpeg',
-            screenWidth: _width,
-            orientation: Axis.horizontal,
-            caption: TextSpan(
-              children: <TextSpan>[
-                TextSpan(
-                    text: 'Figure 2.',
-                    style: textInfoImageCaption.copyWith(
-                        fontStyle: FontStyle.italic)),
-                TextSpan(
-                    text:
-                        ' Map of Pampanga from Pedro Murillo Velarde’s 1744 '),
-                TextSpan(
-                    text: 'Mapa de las Islas Filipinas.',
-                    style: textInfoImageCaption.copyWith(
-                        fontStyle: FontStyle.italic)),
-                TextSpan(
-                    text:
-                        ' The Pampanga Delta Region had been inaccurately assigned to Bulacan.'),
-              ],
-            ),
+        ImageWithCaption(
+          filename: 'map_of_pampanga.jpeg',
+          screenWidth: _width,
+          orientation: Axis.horizontal,
+          caption: TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                  text: 'Figure 2.',
+                  style: textInfoImageCaption.copyWith(
+                      fontStyle: FontStyle.italic)),
+              TextSpan(
+                  text: ' Map of Pampanga from Pedro Murillo Velarde’s 1744 '),
+              TextSpan(
+                  text: 'Mapa de las Islas Filipinas.',
+                  style: textInfoImageCaption.copyWith(
+                      fontStyle: FontStyle.italic)),
+              TextSpan(
+                  text:
+                      ' The Pampanga Delta Region had been inaccurately assigned to Bulacan.'),
+            ],
           ),
         ),
         Paragraphs(
@@ -172,47 +166,41 @@ class HistoryPage extends StatelessWidget {
             ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding),
-          child: ImageWithCaption(
-            filename: 'luzon_jar.jpeg',
-            screenWidth: _width,
-            caption: TextSpan(
-              children: <TextSpan>[
-                TextSpan(
-                    text: 'Figure 3.',
-                    style: textInfoImageCaption.copyWith(
-                        fontStyle: FontStyle.italic)),
-                TextSpan(
-                    text:
-                        ' A typical brown-glazed four-eared Luzon jar (呂宋壷 [褐釉 四耳壷]) exported to Japan by the Kingdom of Luzon in the mid-16th century. Photo courtesy of Hikone Castle Museum (彦根城博物館) Newsletter, Vol. 13, 1991 May 1.Figure 3. A typical brown-glazed four-eared Luzon jar (呂宋壷 [褐釉 四耳壷]) exported to Japan by the Kingdom of Luzon in the mid-16th century. Photo courtesy of Hikone Castle Museum (彦根城博物館) Newsletter, Vol. 13, 1991 May 1.'),
-              ],
-            ),
+        ImageWithCaption(
+          filename: 'luzon_jar.jpeg',
+          screenWidth: _width,
+          caption: TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                  text: 'Figure 3.',
+                  style: textInfoImageCaption.copyWith(
+                      fontStyle: FontStyle.italic)),
+              TextSpan(
+                  text:
+                      ' A typical brown-glazed four-eared Luzon jar (呂宋壷 [褐釉 四耳壷]) exported to Japan by the Kingdom of Luzon in the mid-16th century. Photo courtesy of Hikone Castle Museum (彦根城博物館) Newsletter, Vol. 13, 1991 May 1.Figure 3. A typical brown-glazed four-eared Luzon jar (呂宋壷 [褐釉 四耳壷]) exported to Japan by the Kingdom of Luzon in the mid-16th century. Photo courtesy of Hikone Castle Museum (彦根城博物館) Newsletter, Vol. 13, 1991 May 1.'),
+            ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding),
-          child: ImageWithCaption(
-            filename: 'tokiko.jpeg',
-            screenWidth: _width,
-            caption: TextSpan(
-              children: <TextSpan>[
-                TextSpan(
-                    text: 'Figure 4.',
-                    style: textInfoImageCaption.copyWith(
-                        fontStyle: FontStyle.italic)),
-                TextSpan(
-                    text:
-                        ' A page in Faye-Cooper Cole’s English translation of Tauchi Yonesaburo’s '),
-                TextSpan(
-                    text: 'Tokiko',
-                    style: textInfoImageCaption.copyWith(
-                        fontStyle: FontStyle.italic)),
-                TextSpan(
-                    text:
-                        ' (陶器考) showing the ‘national writing of Luzon’ (呂宋國字) in comparison to Philippine scripts.'),
-              ],
-            ),
+        ImageWithCaption(
+          filename: 'tokiko.jpeg',
+          screenWidth: _width,
+          caption: TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                  text: 'Figure 4.',
+                  style: textInfoImageCaption.copyWith(
+                      fontStyle: FontStyle.italic)),
+              TextSpan(
+                  text:
+                      ' A page in Faye-Cooper Cole’s English translation of Tauchi Yonesaburo’s '),
+              TextSpan(
+                  text: 'Tokiko',
+                  style: textInfoImageCaption.copyWith(
+                      fontStyle: FontStyle.italic)),
+              TextSpan(
+                  text:
+                      ' (陶器考) showing the ‘national writing of Luzon’ (呂宋國字) in comparison to Philippine scripts.'),
+            ],
           ),
         ),
         Paragraphs(
