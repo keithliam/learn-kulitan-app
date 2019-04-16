@@ -52,10 +52,10 @@ class ImageWithCaption extends StatelessWidget {
             0.0,
           ),
           child: Center(
-            child: Text.rich(
-              caption,
+            child: RichText(
+              text: TextSpan(
+                  children: <TextSpan>[caption], style: textInfoImageCaption),
               textAlign: TextAlign.justify,
-              style: textInfoImageCaption,
             ),
           ),
         ),
@@ -94,10 +94,9 @@ class Paragraphs extends StatelessWidget {
       children: paragraphs.map((text) {
         return Padding(
           padding: const EdgeInsets.only(top: paragraphTopPadding),
-          child: Text.rich(
-            text,
+          child: RichText(
+            text: TextSpan(children: <TextSpan>[text], style: textInfoText),
             textAlign: textAlign,
-            style: textInfoText,
           ),
         );
       }).toList(growable: false),
