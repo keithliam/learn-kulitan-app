@@ -47,6 +47,8 @@ const keyboardPressColor = whiteColor;
 const keyboardMainPressColor = whiteColor;
 const keyboardKeyHintColor = accentColor;
 
+const linksColor = accentColor;
+
 // Opacities
 const keyboardPressOpacity = 0.25;
 const keyboardMainPressOpacity = 0.6;
@@ -79,6 +81,11 @@ const keyHintTopOffset = 20.0;
 const keyHintPadding = 5.0;
 const kulitanCursorTopPadding = 5.0;
 const informationSubtitleBottomPadding = 15.0;
+const informationCreditsHorizontalPadding = informationHorizontalScreenPadding - 10.0;
+const imageTopPadding = 30.0;
+const imageCaptionTopPadding = 10.0;
+const imageCaptionHorizontalPadding = 30.0;
+const paragraphTopPadding = 20.0;
 
 // Sizes
 const homeTitleHeight = 110.0;
@@ -630,6 +637,11 @@ const kulitanInfo = TextStyle(
   fontSize: 45.0,
   color: whiteColor,
 );
+const kulitanInfoText = TextStyle(
+  fontFamily: 'Kulitan Semi Bold',
+  fontSize: 15.0,
+  color: whiteColor,
+);
 const kulitanTranscribe = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
   color: grayColor,
@@ -731,6 +743,38 @@ const textInfoCaption = TextStyle(
   fontSize: 20.0,
   fontWeight: FontWeight.bold,
   color: grayColor,
+);
+const textInfoCredits = TextStyle(
+  fontFamily: 'Barlow',
+  fontStyle: FontStyle.italic,
+  color: whiteColor,
+);
+const textInfoCreditsLink = TextStyle(
+  fontFamily: 'Barlow',
+  fontWeight: FontWeight.bold,
+  fontStyle: FontStyle.italic,
+  color: linksColor,
+);
+const textInfoImageCaption =TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 13.0,
+  color: whiteColor,
+);
+const textInfoImageSubCaption = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 9.0,
+  color: whiteColor,
+);
+const textInfoText = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 15.0,
+  color: whiteColor,
+);
+const textInfoTextItalic = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 15.0,
+  fontStyle: FontStyle.italic,
+  color: whiteColor,
 );
 const textTranscribe = TextStyle(
   fontFamily: 'Barlow',

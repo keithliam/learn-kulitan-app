@@ -19,7 +19,9 @@ dependencies:
   path_provider: ^0.5.0+1
   auto_size_text: ^1.1.1
   sticky_headers: ^0.1.7
-
+  url_launcher: ^5.0.2
+  fluttertoast: ^3.0.3
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -33,26 +35,29 @@ flutter:
   fonts:
     - family: Barlow
       fonts:
-        - asset: /assets/fonts/Barlow-Regular.otf
-        - asset: /assets/fonts/Barlow-Italic.otf
+        - asset: assets/fonts/Barlow-Regular.otf
+        - asset: assets/fonts/Barlow-Italic.otf
           style: italic
-        - asset: /assets/fonts/Barlow-SemiBold.otf
+        - asset: assets/fonts/Barlow-SemiBold.otf
           weight: 600
-        - asset: /assets/fonts/Barlow-SemiBoldItalic.otf
+        - asset: assets/fonts/Barlow-SemiBoldItalic.otf
           style: italic
           weight: 600
-        - asset: /assets/fonts/Barlow-Bold.otf
+        - asset: assets/fonts/Barlow-Bold.otf
           weight: 700
-        - asset: /assets/fonts/Barlow-BoldItalic.otf
+        - asset: assets/fonts/Barlow-BoldItalic.otf
           style: italic
           weight: 700
     - family: Kulitan Semi Bold
       fonts:
-        - asset: /assets/fonts/KulitanHandwriting-SemiBold.otf
+        - asset: assets/fonts/KulitanHandwriting-SemiBold.otf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

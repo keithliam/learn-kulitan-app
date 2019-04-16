@@ -14,9 +14,11 @@ class StickyHeading extends StatelessWidget {
       header: Container(
         alignment: Alignment.center,
         color: backgroundColor,
-        padding: const EdgeInsets.only(
-          top: headerVerticalPadding - 8.0,
-          bottom: headerVerticalPadding,
+        padding: const EdgeInsets.fromLTRB(
+          informationHorizontalScreenPadding,
+          headerVerticalPadding - 8.0,
+          informationHorizontalScreenPadding,
+          headerVerticalPadding,
         ),
         child: Text(headingText, style: textPageTitle),
       ),
