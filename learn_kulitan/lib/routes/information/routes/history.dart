@@ -96,7 +96,7 @@ class HistoryPage extends StatelessWidget {
       children: <Widget>[
         ImageWithCaption(
           filename: 'history_kulitan.png',
-          caption: TextSpan(text: 'KASALÉSAYAN'),
+          caption: TextSpan(text: 'KASALÉSAYAN', style: textInfoImageCaption),
           subcaption: 'HISTORY',
           screenWidth: _width,
           hasPadding: false,
@@ -117,6 +117,7 @@ class HistoryPage extends StatelessWidget {
           screenWidth: _width,
           orientation: Axis.horizontal,
           caption: TextSpan(
+            style: textInfoImageCaption,
             children: <TextSpan>[
               TextSpan(
                   text: 'Figure 1.',
@@ -138,6 +139,7 @@ class HistoryPage extends StatelessWidget {
           screenWidth: _width,
           orientation: Axis.horizontal,
           caption: TextSpan(
+            style: textInfoImageCaption,
             children: <TextSpan>[
               TextSpan(
                   text: 'Figure 2.',
@@ -172,6 +174,7 @@ class HistoryPage extends StatelessWidget {
           filename: 'luzon_jar.jpeg',
           screenWidth: _width,
           caption: TextSpan(
+            style: textInfoImageCaption,
             children: <TextSpan>[
               TextSpan(
                   text: 'Figure 3.',
@@ -187,6 +190,7 @@ class HistoryPage extends StatelessWidget {
           filename: 'tokiko.jpeg',
           screenWidth: _width,
           caption: TextSpan(
+            style: textInfoImageCaption,
             children: <TextSpan>[
               TextSpan(
                   text: 'Figure 4.',

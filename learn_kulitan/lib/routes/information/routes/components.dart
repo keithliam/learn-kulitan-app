@@ -53,8 +53,7 @@ class ImageWithCaption extends StatelessWidget {
           ),
           child: Center(
             child: RichText(
-              text: TextSpan(
-                  children: <TextSpan>[caption], style: textInfoImageCaption),
+              text: caption,
               textAlign: TextAlign.justify,
             ),
           ),
