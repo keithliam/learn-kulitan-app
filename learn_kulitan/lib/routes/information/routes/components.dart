@@ -95,7 +95,7 @@ class Paragraphs extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.only(top: paragraphTopPadding),
           child: RichText(
-            text: TextSpan(children: <TextSpan>[text], style: textInfoText),
+            text: TextSpan(children: <TextSpan>[text]),
             textAlign: textAlign,
           ),
         );
