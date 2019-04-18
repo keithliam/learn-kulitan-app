@@ -60,38 +60,6 @@ class HistoryPage extends StatelessWidget {
       ),
     );
 
-    final Widget _pageCredits = Container(
-      width: double.infinity,
-      alignment: Alignment.center,
-      padding: const EdgeInsets.fromLTRB(
-        informationVerticalScreenPadding,
-        3.0,
-        informationVerticalScreenPadding,
-        0.0,
-      ),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 300.0),
-        child: FittedBox(
-          fit: BoxFit.contain,
-          child: RichText(
-            text: TextSpan(
-              style: textInfoCredits,
-              children: <TextSpan>[
-                TextSpan(text: 'Written by Siuálâ Ding Meángûbié. '),
-                TextSpan(
-                  text: 'Learn more',
-                  style: textInfoCreditsLink,
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () => _openURL('http://siuala.com'),
-                ),
-                TextSpan(text: '.'),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-
     final Widget _history = Column(
       children: <Widget>[
         ImageWithCaption(
@@ -489,22 +457,18 @@ class HistoryPage extends StatelessWidget {
                   children: <Widget>[
                     StickyHeading(
                       headingText: 'History',
-                      content: Column(
-                        children: <Widget>[
-                          _pageCredits,
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.fromLTRB(
-                              informationHorizontalScreenPadding,
-                              imageTopPadding,
-                              informationHorizontalScreenPadding,
-                              informationVerticalScreenPadding -
-                                  headerVerticalPadding +
-                                  8.0,
-                            ),
-                            child: _history,
-                          ),
-                        ],
+                      showCredits: true,
+                      content: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.fromLTRB(
+                          informationHorizontalScreenPadding,
+                          imageTopPadding - informationCreditsVerticalPadding,
+                          informationHorizontalScreenPadding,
+                          informationVerticalScreenPadding -
+                              headerVerticalPadding +
+                              8.0,
+                        ),
+                        child: _history,
                       ),
                     ),
                     StickyHeading(

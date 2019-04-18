@@ -82,6 +82,7 @@ const keyHintPadding = 5.0;
 const kulitanCursorTopPadding = 5.0;
 const informationSubtitleBottomPadding = 15.0;
 const informationCreditsHorizontalPadding = informationHorizontalScreenPadding - 10.0;
+const informationCreditsVerticalPadding = 10.0;
 const imageTopPadding = 30.0;
 const imageCaptionTopPadding = 10.0;
 const imageCaptionHorizontalPadding = 30.0;
@@ -758,6 +759,17 @@ const textInfoCreditsLink = TextStyle(
 );
 const textInfoImageCaption = TextStyle(
   fontFamily: 'Barlow',
+  fontSize: 13.0,
+  color: whiteColor,
+);
+const textInfoImageCaptionItalic = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 13.0,
+  fontStyle: FontStyle.italic,
+  color: whiteColor,
+);
+const textInfoImageCaptionKulitan = TextStyle(
+  fontFamily: 'Kulitan Semi Bold',
   fontSize: 13.0,
   color: whiteColor,
 );
