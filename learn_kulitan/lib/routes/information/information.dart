@@ -2,12 +2,37 @@ import 'package:flutter/material.dart';
 import '../../styles/theme.dart';
 import '../../components/buttons/IconButtonNew.dart';
 import '../../components/buttons/CustomButton.dart';
+import '../../components/buttons/BackToStartButton.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/DividerNew.dart';
 import '../../components/misc/StickyHeading.dart';
 import './components.dart';
 
-class InformationPage extends StatelessWidget {
+class InformationPage extends StatefulWidget {
+  @override
+  _InformationPageState createState() => _InformationPageState();
+}
+
+class _InformationPageState extends State<InformationPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  bool _showBackToStartFAB = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController
+      ..addListener(() {
+        final double _position = _scrollController.offset;
+        final double _threshold = informationFABThreshold *
+            _scrollController.position.maxScrollExtent;
+        if (_position <= _threshold && _showBackToStartFAB == true)
+          setState(() => _showBackToStartFAB = false);
+        else if (_position > _threshold && !_showBackToStartFAB)
+          setState(() => _showBackToStartFAB = true);
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     final Widget _header = Padding(
@@ -287,6 +312,7 @@ class InformationPage extends StatelessWidget {
     );
 
     final Widget _contents = SingleChildScrollView(
+      controller: _scrollController,
       child: Column(
         children: <Widget>[
           StickyHeading(
@@ -318,14 +344,31 @@ class InformationPage extends StatelessWidget {
       ),
     );
 
+    List<Widget> _pageStack = [
+      _contents,
+      _header,
+    ];
+
+    if (_showBackToStartFAB) {
+      _pageStack.add(
+        BackToStartButton(
+          onPressed: () {
+            _scrollController.animateTo(
+              0.0,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve,
+            );
+          },
+        ),
+      );
+    }
+
     return Material(
       color: backgroundColor,
       child: SafeArea(
         child: Stack(
-          children: <Widget>[
-            _contents,
-            _header,
-          ],
+          children: _pageStack,
         ),
       ),
     );

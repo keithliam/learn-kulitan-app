@@ -41,6 +41,11 @@ const transcribeCursorColor = accentColor;
 const informationDividerColor = accentColor;
 const informationDividerShadowColor = customButtonShadowColor;
 
+const backToStartFABColor = whiteColor;
+const backToStartFABShadowColor = customButtonShadowColor;
+final backToStartFABPressedColor = Color.lerp(whiteColor, grayColor, 0.2);
+const backToStartFABIconColor = accentColor;
+
 const keyboardStrokeColor = whiteColor;
 const keyboardStrokeShadowColor = accentColor;
 const keyboardPressColor = whiteColor;
@@ -107,6 +112,8 @@ const keyHintASizeRatio = 0.4;
 const transcribeCursorWidth = 4.0;
 const kulitanCursorHeight = transcribeCursorWidth;
 const toastFontSize = 16.0;
+const historyFABThreshold = 0.05;
+const informationFABThreshold = 0.15;
 
 // Sensitivity
 const swipeDownSensitivity = 1.0;

@@ -6,10 +6,36 @@ import '../../../styles/theme.dart';
 import '../../../components/buttons/IconButtonNew.dart';
 import '../../../components/misc/StaticHeader.dart';
 import '../../../components/buttons/CustomButton.dart';
+import '../../../components/buttons/BackToStartButton.dart';
 import './components.dart';
 
-class WritingGuidePage extends StatelessWidget {
+class WritingGuidePage extends StatefulWidget {
+  @override
+  _WritingGuidePageState createState() => _WritingGuidePageState();
+}
+
+class _WritingGuidePageState extends State<WritingGuidePage> {
   final PageController _pageController = PageController();
+
+  bool _showBackToStartFAB = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController
+      ..addListener(() {
+        if (_pageController.page == 0)
+          setState(() => _showBackToStartFAB = false);
+        else
+          setState(() => _showBackToStartFAB = true);
+      });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   void _openURL(String url) async {
     if (await canLaunch(url)) {
@@ -68,7 +94,10 @@ class WritingGuidePage extends StatelessWidget {
     final Widget _pageCredits = Container(
       width: double.infinity,
       alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(horizontal: informationCreditsHorizontalPadding, vertical: informationCreditsVerticalPadding,),
+      padding: const EdgeInsets.symmetric(
+        horizontal: informationCreditsHorizontalPadding,
+        vertical: informationCreditsVerticalPadding,
+      ),
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 300.0),
         child: FittedBox(
@@ -117,7 +146,10 @@ class WritingGuidePage extends StatelessWidget {
       [
         CustomButton(
           marginTop: 10.0,
-          onPressed: () => _pageController.animateToPage(1, duration: const Duration(milliseconds: informationPageScrollDuration), curve: informationPageScrollCurve),
+          onPressed: () => _pageController.animateToPage(1,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve),
           borderRadius: 30.0,
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           elevation: 10.0,
@@ -134,7 +166,10 @@ class WritingGuidePage extends StatelessWidget {
         ),
         CustomButton(
           marginTop: 10.0,
-          onPressed: () => _pageController.animateToPage(2, duration: const Duration(milliseconds: informationPageScrollDuration), curve: informationPageScrollCurve),
+          onPressed: () => _pageController.animateToPage(2,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve),
           borderRadius: 30.0,
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           elevation: 10.0,
@@ -151,7 +186,10 @@ class WritingGuidePage extends StatelessWidget {
         ),
         CustomButton(
           marginTop: 10.0,
-          onPressed: () => _pageController.animateToPage(3, duration: const Duration(milliseconds: informationPageScrollDuration), curve: informationPageScrollCurve),
+          onPressed: () => _pageController.animateToPage(3,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve),
           borderRadius: 30.0,
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           elevation: 10.0,
@@ -168,7 +206,10 @@ class WritingGuidePage extends StatelessWidget {
         ),
         CustomButton(
           marginTop: 10.0,
-          onPressed: () => _pageController.animateToPage(4, duration: const Duration(milliseconds: informationPageScrollDuration), curve: informationPageScrollCurve),
+          onPressed: () => _pageController.animateToPage(4,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve),
           borderRadius: 30.0,
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           elevation: 10.0,
@@ -185,7 +226,10 @@ class WritingGuidePage extends StatelessWidget {
         ),
         CustomButton(
           marginTop: 10.0,
-          onPressed: () => _pageController.animateToPage(5, duration: const Duration(milliseconds: informationPageScrollDuration), curve: informationPageScrollCurve),
+          onPressed: () => _pageController.animateToPage(5,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve),
           borderRadius: 30.0,
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           elevation: 10.0,
@@ -202,7 +246,10 @@ class WritingGuidePage extends StatelessWidget {
         ),
         CustomButton(
           marginTop: 10.0,
-          onPressed: () => _pageController.animateToPage(6, duration: const Duration(milliseconds: informationPageScrollDuration), curve: informationPageScrollCurve),
+          onPressed: () => _pageController.animateToPage(6,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve),
           borderRadius: 30.0,
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           elevation: 10.0,
@@ -210,7 +257,8 @@ class WritingGuidePage extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Pámanganak ning Indûng Súlat king Siuálâng `I`', style: textInfoButton),
+                  child: Text('Pámanganak ning Indûng Súlat king Siuálâng `I`',
+                      style: textInfoButton),
                 ),
                 Text('>', style: textInfoButton.copyWith(color: accentColor)),
               ],
@@ -219,7 +267,10 @@ class WritingGuidePage extends StatelessWidget {
         ),
         CustomButton(
           marginTop: 10.0,
-          onPressed: () => _pageController.animateToPage(7, duration: const Duration(milliseconds: informationPageScrollDuration), curve: informationPageScrollCurve),
+          onPressed: () => _pageController.animateToPage(7,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve),
           borderRadius: 30.0,
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           elevation: 10.0,
@@ -227,7 +278,8 @@ class WritingGuidePage extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Pámanganak ning Indûng Súlat king Siuálâng `U`', style: textInfoButton),
+                  child: Text('Pámanganak ning Indûng Súlat king Siuálâng `U`',
+                      style: textInfoButton),
                 ),
                 Text('>', style: textInfoButton.copyWith(color: accentColor)),
               ],
@@ -236,7 +288,10 @@ class WritingGuidePage extends StatelessWidget {
         ),
         CustomButton(
           marginTop: 10.0,
-          onPressed: () => _pageController.animateToPage(8, duration: const Duration(milliseconds: informationPageScrollDuration), curve: informationPageScrollCurve),
+          onPressed: () => _pageController.animateToPage(8,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve),
           borderRadius: 30.0,
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           elevation: 10.0,
@@ -244,7 +299,8 @@ class WritingGuidePage extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Ding Ának ning Indûng Súlat a `I`', style: textInfoButton),
+                  child: Text('Ding Ának ning Indûng Súlat a `I`',
+                      style: textInfoButton),
                 ),
                 Text('>', style: textInfoButton.copyWith(color: accentColor)),
               ],
@@ -253,7 +309,10 @@ class WritingGuidePage extends StatelessWidget {
         ),
         CustomButton(
           marginTop: 10.0,
-          onPressed: () => _pageController.animateToPage(9, duration: const Duration(milliseconds: informationPageScrollDuration), curve: informationPageScrollCurve),
+          onPressed: () => _pageController.animateToPage(9,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve),
           borderRadius: 30.0,
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           elevation: 10.0,
@@ -261,7 +320,8 @@ class WritingGuidePage extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Ding Ának ning Indûng Súlat a `U`', style: textInfoButton),
+                  child: Text('Ding Ának ning Indûng Súlat a `U`',
+                      style: textInfoButton),
                 ),
                 Text('>', style: textInfoButton.copyWith(color: accentColor)),
               ],
@@ -270,7 +330,10 @@ class WritingGuidePage extends StatelessWidget {
         ),
         CustomButton(
           marginTop: 10.0,
-          onPressed: () => _pageController.animateToPage(10, duration: const Duration(milliseconds: informationPageScrollDuration), curve: informationPageScrollCurve),
+          onPressed: () => _pageController.animateToPage(10,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve),
           borderRadius: 30.0,
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           elevation: 10.0,
@@ -278,7 +341,8 @@ class WritingGuidePage extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Pámanganak ning Indûng Súlat king Siuálâng `E`', style: textInfoButton),
+                  child: Text('Pámanganak ning Indûng Súlat king Siuálâng `E`',
+                      style: textInfoButton),
                 ),
                 Text('>', style: textInfoButton.copyWith(color: accentColor)),
               ],
@@ -287,7 +351,10 @@ class WritingGuidePage extends StatelessWidget {
         ),
         CustomButton(
           marginTop: 10.0,
-          onPressed: () => _pageController.animateToPage(11, duration: const Duration(milliseconds: informationPageScrollDuration), curve: informationPageScrollCurve),
+          onPressed: () => _pageController.animateToPage(11,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve),
           borderRadius: 30.0,
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           elevation: 10.0,
@@ -295,7 +362,8 @@ class WritingGuidePage extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Pámanganak ning Indûng Súlat king Siuálâng `O`', style: textInfoButton),
+                  child: Text('Pámanganak ning Indûng Súlat king Siuálâng `O`',
+                      style: textInfoButton),
                 ),
                 Text('>', style: textInfoButton.copyWith(color: accentColor)),
               ],
@@ -304,7 +372,10 @@ class WritingGuidePage extends StatelessWidget {
         ),
         CustomButton(
           marginTop: 10.0,
-          onPressed: () => _pageController.animateToPage(12, duration: const Duration(milliseconds: informationPageScrollDuration), curve: informationPageScrollCurve),
+          onPressed: () => _pageController.animateToPage(12,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve),
           borderRadius: 30.0,
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           elevation: 10.0,
@@ -324,7 +395,8 @@ class WritingGuidePage extends StatelessWidget {
       // Introduction: Poem
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'kulitan_direction_poem.png',
             screenWidth: _width,
@@ -332,13 +404,9 @@ class WritingGuidePage extends StatelessWidget {
             caption: TextSpan(
               style: textInfoImageCaption,
               children: <TextSpan>[
-                TextSpan(
-                    text: 'Figure A. ',
-                    style: textInfoImageCaptionItalic),
+                TextSpan(text: 'Figure A. ', style: textInfoImageCaptionItalic),
                 TextSpan(text: 'The Kapampangan verse that explains why '),
-                TextSpan(
-                    text: 'Kulitan',
-                    style: textInfoImageCaptionItalic),
+                TextSpan(text: 'Kulitan', style: textInfoImageCaptionItalic),
                 TextSpan(text: ' is written top to bottom, left to right.'),
               ],
             ),
@@ -371,16 +439,18 @@ class WritingGuidePage extends StatelessWidget {
           screenWidth: _width,
         ),
       ],
-      
+
       // Indu at Anak
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'indu_at_anak.png',
             hasPadding: false,
             orientation: Axis.horizontal,
-            caption: TextSpan(text: 'INDÛ AT ANAK', style: textInfoImageCaption),
+            caption:
+                TextSpan(text: 'INDÛ AT ANAK', style: textInfoImageCaption),
             subcaption: 'Mother and Child',
             screenWidth: _width,
           ),
@@ -460,7 +530,8 @@ class WritingGuidePage extends StatelessWidget {
       // Indûng Súlat a Mágkas
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'kulit_a_magkas.png',
             hasPadding: false,
@@ -492,13 +563,10 @@ class WritingGuidePage extends StatelessWidget {
           caption: TextSpan(
             style: textInfoImageCaption,
             children: <TextSpan>[
-              TextSpan(
-                  text: 'Table 5.',
-                  style: textInfoImageCaptionItalic),
+              TextSpan(text: 'Table 5.', style: textInfoImageCaptionItalic),
               TextSpan(text: ' The '),
               TextSpan(
-                  text: 'kulit a mágkas',
-                  style: textInfoImageCaptionItalic),
+                  text: 'kulit a mágkas', style: textInfoImageCaptionItalic),
               TextSpan(
                   text:
                       ' or Kulitan consonantal characters in their natural arrangement, read from the right column going to the left.'),
@@ -647,7 +715,8 @@ class WritingGuidePage extends StatelessWidget {
       // Indûng Súlat a Sisiuálâ
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'kulit_a_sisiuala.png',
             hasPadding: false,
@@ -701,8 +770,7 @@ class WritingGuidePage extends StatelessWidget {
             children: <TextSpan>[
               TextSpan(
                 text: 'Table 6',
-                style:
-                    textInfoImageCaptionItalic,
+                style: textInfoImageCaptionItalic,
               ),
               TextSpan(text: '. The '),
               TextSpan(text: 'kulit a siuálâ'),
@@ -775,7 +843,8 @@ class WritingGuidePage extends StatelessWidget {
       // Anak Súlat
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'anak_sulat.png',
             hasPadding: false,
@@ -813,22 +882,19 @@ class WritingGuidePage extends StatelessWidget {
             children: <TextSpan>[
               TextSpan(
                 text: 'Table 7a',
-                style:
-                    textInfoImageCaptionItalic,
+                style: textInfoImageCaptionItalic,
               ),
               TextSpan(text: '. The ', style: textInfoImageCaption),
               TextSpan(
                 text: 'anak súlat',
-                style:
-                    textInfoImageCaptionItalic,
+                style: textInfoImageCaptionItalic,
               ),
               TextSpan(
                   text: ' or offspring characters of the ',
                   style: textInfoImageCaption),
               TextSpan(
                 text: 'indûng súlat',
-                style:
-                    textInfoImageCaptionItalic,
+                style: textInfoImageCaptionItalic,
               ),
               TextSpan(text: ' SA (', style: textInfoImageCaption),
               TextSpan(
@@ -841,38 +907,36 @@ class WritingGuidePage extends StatelessWidget {
           screenWidth: _width,
         ),
         ImageWithCaption(
-        filename: 'indu_anak_table.jpeg',
-        orientation: Axis.horizontal,
-        caption: TextSpan(
-          children: <TextSpan>[
-            TextSpan(
-              text: 'Table 7b',
-              style:
-                  textInfoImageCaptionItalic,
-            ),
-            TextSpan(text: '. Table of ', style: textInfoImageCaption),
-            TextSpan(
-              text: 'Indûng Súlat',
-              style:
-                  textInfoImageCaptionItalic,
-            ),
-            TextSpan(text: ' and their ', style: textInfoImageCaption),
-            TextSpan(
-              text: 'Anak Súlat',
-              style:
-                  textInfoImageCaptionItalic,
-            ),
-            TextSpan(text: '.', style: textInfoImageCaption),
-          ],
+          filename: 'indu_anak_table.jpeg',
+          orientation: Axis.horizontal,
+          caption: TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                text: 'Table 7b',
+                style: textInfoImageCaptionItalic,
+              ),
+              TextSpan(text: '. Table of ', style: textInfoImageCaption),
+              TextSpan(
+                text: 'Indûng Súlat',
+                style: textInfoImageCaptionItalic,
+              ),
+              TextSpan(text: ' and their ', style: textInfoImageCaption),
+              TextSpan(
+                text: 'Anak Súlat',
+                style: textInfoImageCaptionItalic,
+              ),
+              TextSpan(text: '.', style: textInfoImageCaption),
+            ],
+          ),
+          screenWidth: _width,
         ),
-        screenWidth: _width,
-      ),
       ],
 
       // Pámanganak Ning Indûng Súlat King Siuálâng `I`
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'pamanganak.png',
             hasPadding: false,
@@ -917,7 +981,8 @@ class WritingGuidePage extends StatelessWidget {
       // Pámanganak Ning Indûng Súlat King Siuálâng `U`
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'pamanganak.png',
             hasPadding: false,
@@ -958,11 +1023,12 @@ class WritingGuidePage extends StatelessWidget {
           screenWidth: _width,
         ),
       ],
-      
+
       // Ding Ának ning Indûng Súlat A `I`
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'anak_a_i_u.png',
             hasPadding: false,
@@ -1038,21 +1104,17 @@ class WritingGuidePage extends StatelessWidget {
             children: <TextSpan>[
               TextSpan(
                 text: 'Table 8',
-                style:
-                    textInfoImageCaptionItalic,
+                style: textInfoImageCaptionItalic,
               ),
               TextSpan(text: '. The ', style: textInfoImageCaption),
               TextSpan(
                 text: 'anak kulit',
-                style:
-                    textInfoImageCaptionItalic,
+                style: textInfoImageCaptionItalic,
               ),
               TextSpan(
                   text: ' or offspring characters of the ',
                   style: textInfoImageCaption),
-              TextSpan(
-                  text: 'indung kulit',
-                  style: textInfoImageCaptionItalic),
+              TextSpan(text: 'indung kulit', style: textInfoImageCaptionItalic),
               TextSpan(text: ' I (', style: textInfoImageCaption),
               TextSpan(
                 text: 'i',
@@ -1067,7 +1129,8 @@ class WritingGuidePage extends StatelessWidget {
       // Ding Ának ning Indûng Súlat A `U`
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'anak_a_i_u.png',
             hasPadding: false,
@@ -1101,20 +1164,24 @@ class WritingGuidePage extends StatelessWidget {
                 _romanText(
                     ') may actually be the consonant glyph WA acting as a vowel glyph. Christopher Miller (2011b) also noted the similarity in shape of the Baybayin WA with Kapampangan U ('),
                 _kulitanText('u'),
-                _romanText('). In Kulitan, WA is usually written by combining the vowels characters U ( '),
+                _romanText(
+                    '). In Kulitan, WA is usually written by combining the vowels characters U ( '),
                 _kulitanText('u'),
                 _romanText(') and A ('),
                 _kulitanText('a'),
-                _romanText(') [Table 9] but surprisingly the vowel character U ('),
+                _romanText(
+                    ') [Table 9] but surprisingly the vowel character U ('),
                 _kulitanText('u'),
                 _romanText(') stood alone without the vowel A ('),
                 _kulitanText('a'),
-                _romanText(') in the 1621 signature of Doña Isabel Pangisnauan of Mexico (Masíku) [Fig. 21]. Could this be proof that Kapampangan vowel character U may actually be the consonantal character WA?'),
+                _romanText(
+                    ') in the 1621 signature of Doña Isabel Pangisnauan of Mexico (Masíku) [Fig. 21]. Could this be proof that Kapampangan vowel character U may actually be the consonantal character WA?'),
               ],
             ),
             TextSpan(
               children: <TextSpan>[
-                _romanText('As explained by Fray Alvaro de Benavente (1699) in his '),
+                _romanText(
+                    'As explained by Fray Alvaro de Benavente (1699) in his '),
                 _italicRomanText('Arte de Lengua Pampanga'),
                 _romanText(' and by Zoilo Hilario (1962) in his '),
                 _italicRomanText('Báyung Súnis'),
@@ -1124,9 +1191,11 @@ class WritingGuidePage extends StatelessWidget {
                 _kulitanText('u'),
                 _romanText(') can be altered with the use of a '),
                 _italicRomanText('garlit'),
-                _romanText(' or diacritical mark placed above or below it as well as adding vowel ligatures next to it to produce '),
+                _romanText(
+                    ' or diacritical mark placed above or below it as well as adding vowel ligatures next to it to produce '),
                 _italicRomanText('Anak Súlat'),
-                _romanText(' or offspring characters of the consonant sound W. For instance the '),
+                _romanText(
+                    ' or offspring characters of the consonant sound W. For instance the '),
                 _italicRomanText('Indûng Súlat'),
                 _romanText(' U ('),
                 _kulitanText('u'),
@@ -1155,21 +1224,17 @@ class WritingGuidePage extends StatelessWidget {
             children: <TextSpan>[
               TextSpan(
                 text: 'Table 9',
-                style:
-                    textInfoImageCaptionItalic,
+                style: textInfoImageCaptionItalic,
               ),
               TextSpan(text: '. The ', style: textInfoImageCaption),
               TextSpan(
                 text: 'anak kulit',
-                style:
-                    textInfoImageCaptionItalic,
+                style: textInfoImageCaptionItalic,
               ),
               TextSpan(
                   text: ' or offspring characters of the ',
                   style: textInfoImageCaption),
-              TextSpan(
-                  text: 'indung kulit',
-                  style: textInfoImageCaptionItalic),
+              TextSpan(text: 'indung kulit', style: textInfoImageCaptionItalic),
               TextSpan(text: ' U (', style: textInfoImageCaption),
               TextSpan(
                 text: 'u',
@@ -1184,7 +1249,8 @@ class WritingGuidePage extends StatelessWidget {
       // Pámanganak Ning Indûng Súlat King Siuálâng `E`
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'pamanganak.png',
             hasPadding: false,
@@ -1200,9 +1266,11 @@ class WritingGuidePage extends StatelessWidget {
           paragraphs: <TextSpan>[
             TextSpan(
               children: <TextSpan>[
-                _romanText('Since the Kapampangan vowel sound ‘E’ was developed from the monophthongisation of the diphthong ‘AI’, simply place the whole vowel glyph I ('),
+                _romanText(
+                    'Since the Kapampangan vowel sound ‘E’ was developed from the monophthongisation of the diphthong ‘AI’, simply place the whole vowel glyph I ('),
                 _kulitanText('i'),
-                _romanText(') right next to the target consonantal glyph to change its inherent vowel sound ‘A’ to ‘E’. For example, '),
+                _romanText(
+                    ') right next to the target consonantal glyph to change its inherent vowel sound ‘A’ to ‘E’. For example, '),
                 _italicRomanText('Indûng Súlat'),
                 _romanText(' KA ('),
                 _kulitanText('ka'),
@@ -1219,16 +1287,17 @@ class WritingGuidePage extends StatelessWidget {
           ],
         ),
         ImageWithCaption(
-        filename: 'anak_sulat_diagram_3.png',
-        orientation: Axis.horizontal,
-        screenWidth: _width,
-      ),
+          filename: 'anak_sulat_diagram_3.png',
+          orientation: Axis.horizontal,
+          screenWidth: _width,
+        ),
       ],
 
       // Pámanganak Ning Indûng Súlat King Siuálâng `O`
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'pamanganak.png',
             hasPadding: false,
@@ -1244,9 +1313,11 @@ class WritingGuidePage extends StatelessWidget {
           paragraphs: <TextSpan>[
             TextSpan(
               children: <TextSpan>[
-                _romanText('Since the Kapampangan vowel sound ‘O’ was developed from the monophthongisation of the diphthong ‘AU’, simply place the whole vowel glyph U ('),
+                _romanText(
+                    'Since the Kapampangan vowel sound ‘O’ was developed from the monophthongisation of the diphthong ‘AU’, simply place the whole vowel glyph U ('),
                 _kulitanText('u'),
-                _romanText(') right next to the target consonantal glyph to change its inherent vowel sound ‘A’ to ‘O’. For example, '),
+                _romanText(
+                    ') right next to the target consonantal glyph to change its inherent vowel sound ‘A’ to ‘O’. For example, '),
                 _italicRomanText('Indûng Súlat'),
                 _romanText(' KA ('),
                 _kulitanText('ka'),
@@ -1263,23 +1334,23 @@ class WritingGuidePage extends StatelessWidget {
           ],
         ),
         ImageWithCaption(
-        filename: 'anak_sulat_diagram_4.png',
-        orientation: Axis.horizontal,
-        screenWidth: _width,
-      ),
+          filename: 'anak_sulat_diagram_4.png',
+          orientation: Axis.horizontal,
+          screenWidth: _width,
+        ),
       ],
 
       // Ding Kambal Siuálâ
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'kambal_siuala.png',
             hasPadding: false,
             orientation: Axis.horizontal,
             caption: TextSpan(
-                text: 'DING KAMBAL SIUÁLÂ',
-                style: textInfoImageCaption),
+                text: 'DING KAMBAL SIUÁLÂ', style: textInfoImageCaption),
             subcaption: 'Stress and Accents in Kulitan',
             screenWidth: _width,
           ),
@@ -1290,10 +1361,12 @@ class WritingGuidePage extends StatelessWidget {
               children: <TextSpan>[
                 _romanText('The'),
                 _italicRomanText('Kambal Siuálâ'),
-                _romanText(' or the lengthening of the vowel sounds in the Kapampangan language indicate the stress emphasis given to one or more syllables in a word. The accents or stress in the Kapampangan language or often lexical in nature. In Kapampangan, there are usually two or more words that are spelled similarly when written in the Latin script. Their meanings are different however depending on which syllable the emphasis falls. Strictly speaking, words having different accents, even if they are spelled the same way, are not the same word (Bachuber, 1952). In the Kapampangan language, a shift in stress may indicate a change in numbers among nouns, a change in tense among verbs, or even a change in the parts of speech (Hilario, 1962, Henson, 1965 and Pangilinan, 2006).'),
+                _romanText(
+                    ' or the lengthening of the vowel sounds in the Kapampangan language indicate the stress emphasis given to one or more syllables in a word. The accents or stress in the Kapampangan language or often lexical in nature. In Kapampangan, there are usually two or more words that are spelled similarly when written in the Latin script. Their meanings are different however depending on which syllable the emphasis falls. Strictly speaking, words having different accents, even if they are spelled the same way, are not the same word (Bachuber, 1952). In the Kapampangan language, a shift in stress may indicate a change in numbers among nouns, a change in tense among verbs, or even a change in the parts of speech (Hilario, 1962, Henson, 1965 and Pangilinan, 2006).'),
               ],
             ),
-            _romanText('The following classic example comes from Mariano Henson (1965):'),
+            _romanText(
+                'The following classic example comes from Mariano Henson (1965):'),
           ],
         ),
         Container(
@@ -1301,13 +1374,24 @@ class WritingGuidePage extends StatelessWidget {
           constraints: BoxConstraints(maxWidth: 600.0),
           child: FittedBox(
             fit: BoxFit.fitWidth,
-            child:  SizedBox(
+            child: SizedBox(
               width: 0.5 * _width,
               child: Row(
                 children: <Widget>[
-                  Expanded(child: Text('masákit\nmásakit\nmasakit', style: textInfoTextItalic),),
-                  Expanded(child: Text('‘difficult’\n‘infirm’\n‘painful’', style: textInfoText),),
-                  Expanded(child: Text('(ADJ.)\n(N.)\n(ADJ.)', style: textInfoText,),),
+                  Expanded(
+                    child: Text('masákit\nmásakit\nmasakit',
+                        style: textInfoTextItalic),
+                  ),
+                  Expanded(
+                    child: Text('‘difficult’\n‘infirm’\n‘painful’',
+                        style: textInfoText),
+                  ),
+                  Expanded(
+                    child: Text(
+                      '(ADJ.)\n(N.)\n(ADJ.)',
+                      style: textInfoText,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -1315,7 +1399,8 @@ class WritingGuidePage extends StatelessWidget {
         ),
         Paragraphs(
           paragraphs: <TextSpan>[
-            _romanText('In the Latin script, stress is indicated by the indispensable use of the diacritical marks. A misplacement of these marks could result in a fallacy of accent, or the confusion of one word with another due to similarity in spelling but with a different reading.'),
+            _romanText(
+                'In the Latin script, stress is indicated by the indispensable use of the diacritical marks. A misplacement of these marks could result in a fallacy of accent, or the confusion of one word with another due to similarity in spelling but with a different reading.'),
           ],
         ),
         ImageWithCaption(
@@ -1324,35 +1409,37 @@ class WritingGuidePage extends StatelessWidget {
           screenWidth: _width,
         ),
         Paragraphs(
-        paragraphs: <TextSpan>[
-          TextSpan(
-            children: <TextSpan>[
-              _romanText('In Kulitan however, the placement of stress in a syllable is quite evident because of the '),
-              _italicRomanText('Kambal Siuálâ'),
-              _romanText('. Unlike the Latin script, no two words are spelled the same way in Kulitan. Notice Mariano Henson’s examples again written in Kulitan above. Unlike in the Latin script, none of the three words in the examples are spelled the same way in Kulitan. The placement extra glyph ‘A’ ('),
-              _kulitanText('a'),
-              _romanText(') to form the '),
-              _italicRomanText('Kambal Siuálâ'),
-              _romanText(' –Á-/-Â ('),
-              _kulitanText('aa'),
-              _romanText(') can be readily seen.'),
-            ],
-          ),
-        ],
-      ),
+          paragraphs: <TextSpan>[
+            TextSpan(
+              children: <TextSpan>[
+                _romanText(
+                    'In Kulitan however, the placement of stress in a syllable is quite evident because of the '),
+                _italicRomanText('Kambal Siuálâ'),
+                _romanText(
+                    '. Unlike the Latin script, no two words are spelled the same way in Kulitan. Notice Mariano Henson’s examples again written in Kulitan above. Unlike in the Latin script, none of the three words in the examples are spelled the same way in Kulitan. The placement extra glyph ‘A’ ('),
+                _kulitanText('a'),
+                _romanText(') to form the '),
+                _italicRomanText('Kambal Siuálâ'),
+                _romanText(' –Á-/-Â ('),
+                _kulitanText('aa'),
+                _romanText(') can be readily seen.'),
+              ],
+            ),
+          ],
+        ),
       ],
 
       // Kambal Siuálâ `A`
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'kambal_siuala.png',
             hasPadding: false,
             orientation: Axis.horizontal,
             caption: TextSpan(
-                text: 'KAMBAL SIUÁLÂ ‘A’',
-                style: textInfoImageCaption),
+                text: 'KAMBAL SIUÁLÂ ‘A’', style: textInfoImageCaption),
             subcaption: 'Lengthening the inherent vowel ‘A’',
             screenWidth: _width,
           ),
@@ -1380,23 +1467,23 @@ class WritingGuidePage extends StatelessWidget {
           ],
         ),
         ImageWithCaption(
-        filename: 'kambal_siuala_diagram_1.png',
-        orientation: Axis.horizontal,
-        screenWidth: _width,
-      ),
+          filename: 'kambal_siuala_diagram_1.png',
+          orientation: Axis.horizontal,
+          screenWidth: _width,
+        ),
       ],
 
       // Kambal Siuálâ `I`
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'kambal_siuala.png',
             hasPadding: false,
             orientation: Axis.horizontal,
             caption: TextSpan(
-                text: 'KAMBAL SIUÁLÂ ‘I’',
-                style: textInfoImageCaption),
+                text: 'KAMBAL SIUÁLÂ ‘I’', style: textInfoImageCaption),
             subcaption: 'Lengthening the offspring vowel sound ‘I’',
             screenWidth: _width,
           ),
@@ -1405,7 +1492,8 @@ class WritingGuidePage extends StatelessWidget {
           paragraphs: <TextSpan>[
             TextSpan(
               children: <TextSpan>[
-                _romanText('The vowel sound ‘I’ of an Anak Súlat or offspring character can further be lengthened simply by adding the '),
+                _romanText(
+                    'The vowel sound ‘I’ of an Anak Súlat or offspring character can further be lengthened simply by adding the '),
                 _italicRomanText('Indûng Súlat'),
                 _romanText(' vowel character I ('),
                 _kulitanText('i'),
@@ -1432,23 +1520,23 @@ class WritingGuidePage extends StatelessWidget {
           ],
         ),
         ImageWithCaption(
-        filename: 'kambal_siuala_diagram_2.png',
-        orientation: Axis.horizontal,
-        screenWidth: _width,
-      ),
+          filename: 'kambal_siuala_diagram_2.png',
+          orientation: Axis.horizontal,
+          screenWidth: _width,
+        ),
       ],
 
       // Kambal Siuálâ `U`
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'kambal_siuala.png',
             hasPadding: false,
             orientation: Axis.horizontal,
             caption: TextSpan(
-                text: 'KAMBAL SIUÁLÂ ‘U’',
-                style: textInfoImageCaption),
+                text: 'KAMBAL SIUÁLÂ ‘U’', style: textInfoImageCaption),
             subcaption: 'Lengthening the offspring vowel sound ‘U’',
             screenWidth: _width,
           ),
@@ -1457,7 +1545,8 @@ class WritingGuidePage extends StatelessWidget {
           paragraphs: <TextSpan>[
             TextSpan(
               children: <TextSpan>[
-                _romanText('The vowel sound ‘U’ of an Anak Súlat or offspring character can further be lengthened simply by adding the '),
+                _romanText(
+                    'The vowel sound ‘U’ of an Anak Súlat or offspring character can further be lengthened simply by adding the '),
                 _italicRomanText('Indûng Súlat'),
                 _romanText(' vowel character U ('),
                 _kulitanText('u'),
@@ -1491,13 +1580,13 @@ class WritingGuidePage extends StatelessWidget {
       // Pámakamaté Siuálâ
       [
         Padding(
-          padding: const EdgeInsets.only(top: imageTopPadding - informationCreditsVerticalPadding),
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
           child: ImageWithCaption(
             filename: 'pamakamate_siuala.png',
             hasPadding: false,
             caption: TextSpan(
-                text: 'PÁMAKAMATÉ SIUÁLÂ',
-                style: textInfoImageCaption),
+                text: 'PÁMAKAMATÉ SIUÁLÂ', style: textInfoImageCaption),
             subcaption: 'Terminating the default vowel sound',
             screenWidth: _width,
           ),
@@ -1506,23 +1595,30 @@ class WritingGuidePage extends StatelessWidget {
           paragraphs: <TextSpan>[
             TextSpan(
               children: <TextSpan>[
-                _romanText('There are two things that actually make Súlat Kapampángan different from all other scripts within the archipelago: First, it is the only script in the archipelago that is traditionally and preferably written vertically top to bottom, left to right, similar to other East Asian scripts. Second, Súlat Kapampángan is also the only script in the archipelago that has managed to create a spelling convention where the final consonant glyph is retained minus its inherent vowel sound ‘A’ without using a '),
+                _romanText(
+                    'There are two things that actually make Súlat Kapampángan different from all other scripts within the archipelago: First, it is the only script in the archipelago that is traditionally and preferably written vertically top to bottom, left to right, similar to other East Asian scripts. Second, Súlat Kapampángan is also the only script in the archipelago that has managed to create a spelling convention where the final consonant glyph is retained minus its inherent vowel sound ‘A’ without using a '),
                 _italicRomanText('virama'),
-                _romanText(' (vowel killer).This spelling convention has been observed as early as the 17\u1d57\u02b0 century based on several Kapampángan signatures from that era (Miller, 2010 and 2011a). While the other indigenous scripts in the archipelago either dropped the coda consonant in the same manner as the Bugis-Makasarese scripts of Indonesia (Miller, 2011a and 2012) or use the '),
+                _romanText(
+                    ' (vowel killer).This spelling convention has been observed as early as the 17\u1d57\u02b0 century based on several Kapampángan signatures from that era (Miller, 2010 and 2011a). While the other indigenous scripts in the archipelago either dropped the coda consonant in the same manner as the Bugis-Makasarese scripts of Indonesia (Miller, 2011a and 2012) or use the '),
                 _italicRomanText('virama'),
-                _romanText(' or “vowel killer” in the form of a “cross kudlit” introduced by the Spanish friar Francisco Lopez in 1620 (Marcilla, 1895), the final consonant glyph is written out in full in Súlat Kapampángan but is read without the default vowel sound ‘A’.'),
+                _romanText(
+                    ' or “vowel killer” in the form of a “cross kudlit” introduced by the Spanish friar Francisco Lopez in 1620 (Marcilla, 1895), the final consonant glyph is written out in full in Súlat Kapampángan but is read without the default vowel sound ‘A’.'),
               ],
             ),
-            TextSpan(text: 'The only way to appreciate how this is done is by writing Súlat Kapampángan vertically instead of horizontally. To terminate the inherent vowel sound ‘A’ of any of the consonantal glyphs, simply write the target character next to the one preceding it instead of below it. This will terminate its default vowel sound.'),
+            TextSpan(
+                text:
+                    'The only way to appreciate how this is done is by writing Súlat Kapampángan vertically instead of horizontally. To terminate the inherent vowel sound ‘A’ of any of the consonantal glyphs, simply write the target character next to the one preceding it instead of below it. This will terminate its default vowel sound.'),
             TextSpan(
               children: <TextSpan>[
-                _romanText('For instance on [Table 10], to terminate the inherent ‘A’ sound of NA ('),
+                _romanText(
+                    'For instance on [Table 10], to terminate the inherent ‘A’ sound of NA ('),
                 _kulitanText('na'),
                 _romanText(') in ‘NGANA’ simply write NA ('),
                 _kulitanText('na'),
                 _romanText(') right next to NGA ('),
                 _kulitanText('nga'),
-                _romanText(') instead of below it. This will terminate the default ‘A’ sound of NA ('),
+                _romanText(
+                    ') instead of below it. This will terminate the default ‘A’ sound of NA ('),
                 _kulitanText('na'),
                 _romanText('), creating the syllable ‘NGAN’.'),
               ],
@@ -1535,7 +1631,8 @@ class WritingGuidePage extends StatelessWidget {
                 _kulitanText('nga'),
                 _romanText(') right next to SA ('),
                 _kulitanText('sa'),
-                _romanText(') instead of below it. This will terminate the default ‘A’ sound of NGA ('),
+                _romanText(
+                    ') instead of below it. This will terminate the default ‘A’ sound of NGA ('),
                 _kulitanText('nga'),
                 _romanText('), creating the syllable ‘SANG’.'),
               ],
@@ -1550,7 +1647,8 @@ class WritingGuidePage extends StatelessWidget {
                 _italicRomanText('anak súlat'),
                 _romanText(' BU ('),
                 _italicRomanText('bu'),
-                _romanText(') instead of below it. This will terminate the default ‘A’ sound of SA ('),
+                _romanText(
+                    ') instead of below it. This will terminate the default ‘A’ sound of SA ('),
                 _kulitanText('sa'),
                 _romanText('), creating the syllable ‘BUS’.'),
               ],
@@ -1558,15 +1656,18 @@ class WritingGuidePage extends StatelessWidget {
           ],
         ),
         ImageWithCaption(
-        filename: 'terminating_vowel_table.png',
-        caption: TextSpan(
-          children: <TextSpan>[
-            TextSpan(text: 'Table 10', style: textInfoImageCaptionItalic,),
-            TextSpan(text: '. Terminating the inherent vowel sound ‘A’.'),
-          ],
+          filename: 'terminating_vowel_table.png',
+          caption: TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                text: 'Table 10',
+                style: textInfoImageCaptionItalic,
+              ),
+              TextSpan(text: '. Terminating the inherent vowel sound ‘A’.'),
+            ],
+          ),
+          screenWidth: _width,
         ),
-        screenWidth: _width,
-      ),
       ],
     ];
 
@@ -1577,45 +1678,65 @@ class WritingGuidePage extends StatelessWidget {
         itemBuilder: (BuildContext _, int index) {
           return Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: informationHorizontalScreenPadding),
+            padding: const EdgeInsets.symmetric(
+                horizontal: informationHorizontalScreenPadding),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: informationVerticalScreenPadding),
+                padding: const EdgeInsets.only(
+                    bottom: informationVerticalScreenPadding),
                 child: Column(
                   children: _guideList[index],
                 ),
               ),
             ),
           );
-        }
+        },
       ),
     );
+
+    List<Widget> _pageStack = [
+      Column(
+        children: <Widget>[
+          Container(
+            color: backgroundColor,
+            padding: const EdgeInsets.fromLTRB(
+              informationHorizontalScreenPadding,
+              headerVerticalPadding - 8.0,
+              informationHorizontalScreenPadding,
+              0.0,
+            ),
+            child: Text('Guide', style: textPageTitle),
+          ),
+          _pageCredits,
+          Expanded(
+            child: _chapters,
+          ),
+        ],
+      ),
+      _header,
+    ];
+
+    if (_showBackToStartFAB) {
+      _pageStack.add(
+        BackToStartButton(
+          direction: Axis.horizontal,
+          onPressed: () {
+            _pageController.animateToPage(
+              0,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve,
+            );
+          },
+        ),
+      );
+    }
 
     return Material(
       color: backgroundColor,
       child: SafeArea(
         child: Stack(
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Container(
-                  color: backgroundColor,
-                  padding: const EdgeInsets.fromLTRB(
-                    informationHorizontalScreenPadding,
-                    headerVerticalPadding - 8.0,
-                    informationHorizontalScreenPadding,
-                    0.0,
-                  ),
-                  child: Text('Guide', style: textPageTitle),
-                ),
-                _pageCredits,
-                Expanded(
-                  child: _chapters,
-                ),
-              ],
-            ),
-            _header,
-          ],
+          children: _pageStack,
         ),
       ),
     );

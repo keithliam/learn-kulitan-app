@@ -4,11 +4,41 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../../styles/theme.dart';
 import '../../../components/buttons/IconButtonNew.dart';
+import '../../../components/buttons/BackToStartButton.dart';
 import '../../../components/misc/StaticHeader.dart';
 import '../../../components/misc/StickyHeading.dart';
 import './components.dart';
 
-class HistoryPage extends StatelessWidget {
+class HistoryPage extends StatefulWidget {
+  @override
+  _HistoryPageState createState() => _HistoryPageState();
+}
+
+class _HistoryPageState extends State<HistoryPage> {
+  final _scrollController = ScrollController();
+
+  bool _showBackToStartFAB = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController
+      ..addListener(() {
+        final double _position = _scrollController.offset;
+        final double _threshold = historyFABThreshold * _scrollController.position.maxScrollExtent;
+        if (_position <= _threshold && _showBackToStartFAB == true)
+          setState(() => _showBackToStartFAB = false);
+        else if (_position > _threshold && !_showBackToStartFAB)
+          setState(() => _showBackToStartFAB = true);
+      });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
+  
   void _openURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -446,50 +476,68 @@ class HistoryPage extends StatelessWidget {
       ],
     );
 
+    List<Widget> _pageStack = [
+      Scrollbar(
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: Column(
+            children: <Widget>[
+              StickyHeading(
+                headingText: 'History',
+                showCredits: true,
+                content: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(
+                    informationHorizontalScreenPadding,
+                    imageTopPadding - informationCreditsVerticalPadding,
+                    informationHorizontalScreenPadding,
+                    informationVerticalScreenPadding -
+                        headerVerticalPadding +
+                        8.0,
+                  ),
+                  child: _history,
+                ),
+              ),
+              StickyHeading(
+                headingText: 'References',
+                content: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    informationHorizontalScreenPadding,
+                    informationSubtitleBottomPadding -
+                        headerVerticalPadding,
+                    informationHorizontalScreenPadding,
+                    informationVerticalScreenPadding,
+                  ),
+                  child: _references,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      _header,
+    ];
+
+    if (_showBackToStartFAB) {
+      _pageStack.add(
+        BackToStartButton(
+          onPressed: () {
+            _scrollController.animateTo(
+              0.0,
+              duration:
+                  const Duration(milliseconds: informationPageScrollDuration),
+              curve: informationPageScrollCurve,
+            );
+          },
+        ),
+      );
+    }
+
     return Material(
       color: backgroundColor,
       child: SafeArea(
         child: Stack(
-          children: <Widget>[
-            Scrollbar(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    StickyHeading(
-                      headingText: 'History',
-                      showCredits: true,
-                      content: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.fromLTRB(
-                          informationHorizontalScreenPadding,
-                          imageTopPadding - informationCreditsVerticalPadding,
-                          informationHorizontalScreenPadding,
-                          informationVerticalScreenPadding -
-                              headerVerticalPadding +
-                              8.0,
-                        ),
-                        child: _history,
-                      ),
-                    ),
-                    StickyHeading(
-                      headingText: 'References',
-                      content: Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          informationHorizontalScreenPadding,
-                          informationSubtitleBottomPadding -
-                              headerVerticalPadding,
-                          informationHorizontalScreenPadding,
-                          informationVerticalScreenPadding,
-                        ),
-                        child: _references,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            _header,
-          ],
+          children: _pageStack,
         ),
       ),
     );
