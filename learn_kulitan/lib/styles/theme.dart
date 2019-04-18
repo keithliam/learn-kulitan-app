@@ -143,6 +143,7 @@ const keyboardAnimateToggleCurve = Curves.fastOutSlowIn;
 const keyboardPressOpacityCurve = Curves.fastLinearToSlowEaseIn;
 const keyHintOpacityCurve = Curves.fastLinearToSlowEaseIn;
 const kulitanCursorBlinkCurve = Curves.ease;
+const informationPageScrollCurve = Curves.easeInOutCubic;
 
 // Durations
 const linearProgressBarChangeDuration = 1000;
@@ -168,6 +169,7 @@ const writingNextCardDuration = 750;
 const writingInitDelay = 500;
 const writingInitOpacityDuration = 750;
 const writingTextOpacityChangeDelay = 750;
+const informationPageScrollDuration = 500;
 const transcribeScrollChangeDuration = 500;
 const keyboardAnimateDuration = 250;
 const keyboardPressOpacityDuration = 350;

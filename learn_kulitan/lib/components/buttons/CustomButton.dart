@@ -5,7 +5,7 @@ class CustomButton extends StatefulWidget {
   CustomButton({
     @required this.onPressed,
     @required this.child,
-    @required this.height,
+    this.height,
     this.color = customButtonDefaultColor,
     this.borderRadius = 0.0,
     this.elevation = 0.0,
@@ -37,6 +37,8 @@ class CustomButton extends StatefulWidget {
 }
 
 class _CustomButtonState extends State<CustomButton> {
+  final GlobalKey _key = GlobalKey();
+  double _height = 0.0;
   double _elevation = 0;
   bool _doneTapping = true;
 
@@ -90,6 +92,15 @@ class _CustomButtonState extends State<CustomButton> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+      final RenderBox _renderBox = _key.currentContext.findRenderObject();
+      _height = _renderBox.size.height;
+    }));
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget _button = AnimatedPositioned(
       duration: Duration(
@@ -105,6 +116,7 @@ class _CustomButtonState extends State<CustomButton> {
         onTapUp: (_) => buttonHoldUp(),
         onTapCancel: buttonCancel,
         child: Container(
+          key: _key,
           height: widget.height,
           padding: widget.padding,
           decoration: BoxDecoration(
@@ -121,7 +133,7 @@ class _CustomButtonState extends State<CustomButton> {
       left: 0,
       right: 0,
       child: Container(
-        height: widget.height,
+        height: _height,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(widget.borderRadius),
           color: customButtonShadowColor,
@@ -131,7 +143,7 @@ class _CustomButtonState extends State<CustomButton> {
 
     return Container(
       padding: EdgeInsets.only(top: widget.marginTop),
-      height: widget.height + widget.elevation + widget.marginTop,
+      height: _height + widget.elevation + widget.marginTop,
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
