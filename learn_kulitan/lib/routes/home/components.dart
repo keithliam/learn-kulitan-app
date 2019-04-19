@@ -43,7 +43,7 @@ class HomeButton extends StatelessWidget {
       ),
     ];
 
-    if (progress >= 0)
+    if (progress > 0)
       _title.add(
         LinearProgressBar(height: 15.0, progress: progress),
       );

@@ -626,8 +626,8 @@ int _getSumOfLengths() {
 }
 
 // Limits
-const maxQuizGlyphProgress = 1;
-const maxWritingGlyphProgress = 3;
+const maxQuizGlyphProgress = 5;
+const maxWritingGlyphProgress = 1;
 final totalGlyphCount = _getSumOfLengths();
 const quizCardPoolMinCount = 5;
 const drawCardPoolMinCount = 5;

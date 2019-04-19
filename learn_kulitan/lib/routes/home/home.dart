@@ -1,8 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 import './components.dart';
 import '../../styles/theme.dart';
+import '../../db/DatabaseHelper.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _readingProgress = -1;
+  int _writingProgress = -1;
+
+  void _initDB() async {
+    final Database _db = await DatabaseHelper.instance.database;
+    final int _reading = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "reading"'))[0]['overall_progress'];
+    final int _writing = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "writing"'))[0]['overall_progress'];
+    setState(() {
+      _readingProgress = _reading;
+      _writingProgress = _writing;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initDB();
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget _appTitle = Padding(
@@ -25,7 +51,7 @@ class HomePage extends StatelessWidget {
       kapampanganText: 'PÁMAMÁSÂ',
       title: 'Reading',
       route: '/reading',
-      progress: 0.80,
+      progress: _readingProgress / totalGlyphCount,
     );
 
     Widget _writingButton = HomeButton(
@@ -39,7 +65,7 @@ class HomePage extends StatelessWidget {
       kapampanganText: 'PÁMANIÚLAT',
       title: 'Writing',
       route: '/writing',
-      progress: 0.1,
+      progress: _writingProgress / totalGlyphCount,
     );
 
     Widget _infoButton = HomeButton(
