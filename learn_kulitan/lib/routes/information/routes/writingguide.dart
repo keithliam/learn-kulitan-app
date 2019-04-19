@@ -220,7 +220,8 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Indûng Súlat a Sisiuálâ', style: textGuideButton),
+                  child:
+                      Text('Indûng Súlat a Sisiuálâ', style: textGuideButton),
                 ),
                 Container(width: 5.0),
                 Text('>', style: textGuideButton.copyWith(color: accentColor)),
