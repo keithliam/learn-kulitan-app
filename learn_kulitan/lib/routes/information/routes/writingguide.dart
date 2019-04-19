@@ -145,247 +145,259 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
       // Table of Contents
       [
         CustomButton(
-          marginTop: 10.0,
+          marginTop: 7.5,
           onPressed: () => _pageController.animateToPage(1,
               duration:
                   const Duration(milliseconds: informationPageScrollDuration),
               curve: informationPageScrollCurve),
           borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-          elevation: 10.0,
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+          elevation: 7.5,
           child: Center(
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Writing Direction', style: textInfoButton),
+                  child: Text('Writing Direction', style: textGuideButton),
                 ),
-                Text('>', style: textInfoButton.copyWith(color: accentColor)),
+                Container(width: 5.0),
+                Text('>', style: textGuideButton.copyWith(color: accentColor)),
               ],
             ),
           ),
         ),
         CustomButton(
-          marginTop: 10.0,
+          marginTop: 7.5,
           onPressed: () => _pageController.animateToPage(2,
               duration:
                   const Duration(milliseconds: informationPageScrollDuration),
               curve: informationPageScrollCurve),
           borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-          elevation: 10.0,
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+          elevation: 7.5,
           child: Center(
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Indú at Anak', style: textInfoButton),
+                  child: Text('Indú at Anak', style: textGuideButton),
                 ),
-                Text('>', style: textInfoButton.copyWith(color: accentColor)),
+                Container(width: 5.0),
+                Text('>', style: textGuideButton.copyWith(color: accentColor)),
               ],
             ),
           ),
         ),
         CustomButton(
-          marginTop: 10.0,
+          marginTop: 7.5,
           onPressed: () => _pageController.animateToPage(3,
               duration:
                   const Duration(milliseconds: informationPageScrollDuration),
               curve: informationPageScrollCurve),
           borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-          elevation: 10.0,
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+          elevation: 7.5,
           child: Center(
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Indûng Súlat a Mágkas', style: textInfoButton),
+                  child: Text('Indûng Súlat a Mágkas', style: textGuideButton),
                 ),
-                Text('>', style: textInfoButton.copyWith(color: accentColor)),
+                Container(width: 5.0),
+                Text('>', style: textGuideButton.copyWith(color: accentColor)),
               ],
             ),
           ),
         ),
         CustomButton(
-          marginTop: 10.0,
+          marginTop: 7.5,
           onPressed: () => _pageController.animateToPage(4,
               duration:
                   const Duration(milliseconds: informationPageScrollDuration),
               curve: informationPageScrollCurve),
           borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-          elevation: 10.0,
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+          elevation: 7.5,
           child: Center(
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Indûng Súlat a Sisiuálâ', style: textInfoButton),
+                  child: Text('Indûng Súlat a Sisiuálâ', style: textGuideButton),
                 ),
-                Text('>', style: textInfoButton.copyWith(color: accentColor)),
+                Container(width: 5.0),
+                Text('>', style: textGuideButton.copyWith(color: accentColor)),
               ],
             ),
           ),
         ),
         CustomButton(
-          marginTop: 10.0,
+          marginTop: 7.5,
           onPressed: () => _pageController.animateToPage(5,
               duration:
                   const Duration(milliseconds: informationPageScrollDuration),
               curve: informationPageScrollCurve),
           borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-          elevation: 10.0,
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+          elevation: 7.5,
           child: Center(
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Anak Súlat', style: textInfoButton),
+                  child: Text('Anak Súlat', style: textGuideButton),
                 ),
-                Text('>', style: textInfoButton.copyWith(color: accentColor)),
+                Container(width: 5.0),
+                Text('>', style: textGuideButton.copyWith(color: accentColor)),
               ],
             ),
           ),
         ),
         CustomButton(
-          marginTop: 10.0,
+          marginTop: 7.5,
           onPressed: () => _pageController.animateToPage(6,
               duration:
                   const Duration(milliseconds: informationPageScrollDuration),
               curve: informationPageScrollCurve),
           borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-          elevation: 10.0,
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+          elevation: 7.5,
           child: Center(
             child: Row(
               children: <Widget>[
                 Expanded(
                   child: Text('Pámanganak ning Indûng Súlat king Siuálâng `I`',
-                      style: textInfoButton),
+                      style: textGuideButton),
                 ),
-                Text('>', style: textInfoButton.copyWith(color: accentColor)),
+                Container(width: 5.0),
+                Text('>', style: textGuideButton.copyWith(color: accentColor)),
               ],
             ),
           ),
         ),
         CustomButton(
-          marginTop: 10.0,
+          marginTop: 7.5,
           onPressed: () => _pageController.animateToPage(7,
               duration:
                   const Duration(milliseconds: informationPageScrollDuration),
               curve: informationPageScrollCurve),
           borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-          elevation: 10.0,
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+          elevation: 7.5,
           child: Center(
             child: Row(
               children: <Widget>[
                 Expanded(
                   child: Text('Pámanganak ning Indûng Súlat king Siuálâng `U`',
-                      style: textInfoButton),
+                      style: textGuideButton),
                 ),
-                Text('>', style: textInfoButton.copyWith(color: accentColor)),
+                Container(width: 5.0),
+                Text('>', style: textGuideButton.copyWith(color: accentColor)),
               ],
             ),
           ),
         ),
         CustomButton(
-          marginTop: 10.0,
+          marginTop: 7.5,
           onPressed: () => _pageController.animateToPage(8,
               duration:
                   const Duration(milliseconds: informationPageScrollDuration),
               curve: informationPageScrollCurve),
           borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-          elevation: 10.0,
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+          elevation: 7.5,
           child: Center(
             child: Row(
               children: <Widget>[
                 Expanded(
                   child: Text('Ding Ának ning Indûng Súlat a `I`',
-                      style: textInfoButton),
+                      style: textGuideButton),
                 ),
-                Text('>', style: textInfoButton.copyWith(color: accentColor)),
+                Container(width: 5.0),
+                Text('>', style: textGuideButton.copyWith(color: accentColor)),
               ],
             ),
           ),
         ),
         CustomButton(
-          marginTop: 10.0,
+          marginTop: 7.5,
           onPressed: () => _pageController.animateToPage(9,
               duration:
                   const Duration(milliseconds: informationPageScrollDuration),
               curve: informationPageScrollCurve),
           borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-          elevation: 10.0,
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+          elevation: 7.5,
           child: Center(
             child: Row(
               children: <Widget>[
                 Expanded(
                   child: Text('Ding Ának ning Indûng Súlat a `U`',
-                      style: textInfoButton),
+                      style: textGuideButton),
                 ),
-                Text('>', style: textInfoButton.copyWith(color: accentColor)),
+                Container(width: 5.0),
+                Text('>', style: textGuideButton.copyWith(color: accentColor)),
               ],
             ),
           ),
         ),
         CustomButton(
-          marginTop: 10.0,
+          marginTop: 7.5,
           onPressed: () => _pageController.animateToPage(10,
               duration:
                   const Duration(milliseconds: informationPageScrollDuration),
               curve: informationPageScrollCurve),
           borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-          elevation: 10.0,
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+          elevation: 7.5,
           child: Center(
             child: Row(
               children: <Widget>[
                 Expanded(
                   child: Text('Pámanganak ning Indûng Súlat king Siuálâng `E`',
-                      style: textInfoButton),
+                      style: textGuideButton),
                 ),
-                Text('>', style: textInfoButton.copyWith(color: accentColor)),
+                Container(width: 5.0),
+                Text('>', style: textGuideButton.copyWith(color: accentColor)),
               ],
             ),
           ),
         ),
         CustomButton(
-          marginTop: 10.0,
+          marginTop: 7.5,
           onPressed: () => _pageController.animateToPage(11,
               duration:
                   const Duration(milliseconds: informationPageScrollDuration),
               curve: informationPageScrollCurve),
           borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-          elevation: 10.0,
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+          elevation: 7.5,
           child: Center(
             child: Row(
               children: <Widget>[
                 Expanded(
                   child: Text('Pámanganak ning Indûng Súlat king Siuálâng `O`',
-                      style: textInfoButton),
+                      style: textGuideButton),
                 ),
-                Text('>', style: textInfoButton.copyWith(color: accentColor)),
+                Container(width: 5.0),
+                Text('>', style: textGuideButton.copyWith(color: accentColor)),
               ],
             ),
           ),
         ),
         CustomButton(
-          marginTop: 10.0,
+          marginTop: 7.5,
           onPressed: () => _pageController.animateToPage(12,
               duration:
                   const Duration(milliseconds: informationPageScrollDuration),
               curve: informationPageScrollCurve),
           borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-          elevation: 10.0,
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+          elevation: 7.5,
           child: Center(
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Ding Kambal Siuálâ', style: textInfoButton),
+                  child: Text('Ding Kambal Siuálâ', style: textGuideButton),
                 ),
-                Text('>', style: textInfoButton.copyWith(color: accentColor)),
+                Container(width: 5.0),
+                Text('>', style: textGuideButton.copyWith(color: accentColor)),
               ],
             ),
           ),

@@ -749,6 +749,12 @@ const textInfoButton = TextStyle(
   fontWeight: FontWeight.w600,
   color: grayColor,
 );
+const textGuideButton = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 20.0,
+  fontWeight: FontWeight.w600,
+  color: grayColor,
+);
 const textInfoCaption = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 20.0,
