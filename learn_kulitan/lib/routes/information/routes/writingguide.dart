@@ -5,7 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../../styles/theme.dart';
 import '../../../components/buttons/IconButtonNew.dart';
 import '../../../components/misc/StaticHeader.dart';
-import '../../../components/buttons/CustomButton.dart';
 import '../../../components/buttons/BackToStartButton.dart';
 import './components.dart';
 
@@ -144,264 +143,90 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
     final List<List<Widget>> _guideList = [
       // Table of Contents
       [
-        CustomButton(
-          marginTop: 7.5,
-          onPressed: () => _pageController.animateToPage(1,
-              duration:
-                  const Duration(milliseconds: informationPageScrollDuration),
-              curve: informationPageScrollCurve),
-          borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-          elevation: 7.5,
-          child: Center(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text('Writing Direction', style: textGuideButton),
-                ),
-                Container(width: 5.0),
-                Text('>', style: textGuideButton.copyWith(color: accentColor)),
-              ],
-            ),
-          ),
+        GuideButton(
+          pageNumber: 1,
+          text: 'Writing Direction',
+          controller: _pageController,
         ),
-        CustomButton(
-          marginTop: 7.5,
-          onPressed: () => _pageController.animateToPage(2,
-              duration:
-                  const Duration(milliseconds: informationPageScrollDuration),
-              curve: informationPageScrollCurve),
-          borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-          elevation: 7.5,
-          child: Center(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text('Indú at Anak', style: textGuideButton),
-                ),
-                Container(width: 5.0),
-                Text('>', style: textGuideButton.copyWith(color: accentColor)),
-              ],
-            ),
-          ),
+        GuideButton(
+          pageNumber: 2,
+          text: 'Indú at Anak',
+          controller: _pageController,
         ),
-        CustomButton(
-          marginTop: 7.5,
-          onPressed: () => _pageController.animateToPage(3,
-              duration:
-                  const Duration(milliseconds: informationPageScrollDuration),
-              curve: informationPageScrollCurve),
-          borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-          elevation: 7.5,
-          child: Center(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text('Indûng Súlat a Mágkas', style: textGuideButton),
-                ),
-                Container(width: 5.0),
-                Text('>', style: textGuideButton.copyWith(color: accentColor)),
-              ],
-            ),
-          ),
+        GuideButton(
+          pageNumber: 3,
+          text: 'Indûng Súlat a Mágkas',
+          controller: _pageController,
         ),
-        CustomButton(
-          marginTop: 7.5,
-          onPressed: () => _pageController.animateToPage(4,
-              duration:
-                  const Duration(milliseconds: informationPageScrollDuration),
-              curve: informationPageScrollCurve),
-          borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-          elevation: 7.5,
-          child: Center(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child:
-                      Text('Indûng Súlat a Sisiuálâ', style: textGuideButton),
-                ),
-                Container(width: 5.0),
-                Text('>', style: textGuideButton.copyWith(color: accentColor)),
-              ],
-            ),
-          ),
+        GuideButton(
+          pageNumber: 4,
+          text: 'Indûng Súlat a Sisiuálâ',
+          controller: _pageController,
         ),
-        CustomButton(
-          marginTop: 7.5,
-          onPressed: () => _pageController.animateToPage(5,
-              duration:
-                  const Duration(milliseconds: informationPageScrollDuration),
-              curve: informationPageScrollCurve),
-          borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-          elevation: 7.5,
-          child: Center(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text('Anak Súlat', style: textGuideButton),
-                ),
-                Container(width: 5.0),
-                Text('>', style: textGuideButton.copyWith(color: accentColor)),
-              ],
-            ),
-          ),
+        GuideButton(
+          pageNumber: 5,
+          text: 'Anak Súlat',
+          controller: _pageController,
         ),
-        CustomButton(
-          marginTop: 7.5,
-          onPressed: () => _pageController.animateToPage(6,
-              duration:
-                  const Duration(milliseconds: informationPageScrollDuration),
-              curve: informationPageScrollCurve),
-          borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-          elevation: 7.5,
-          child: Center(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text('Pámanganak ning Indûng Súlat king Siuálâng `I`',
-                      style: textGuideButton),
-                ),
-                Container(width: 5.0),
-                Text('>', style: textGuideButton.copyWith(color: accentColor)),
-              ],
-            ),
-          ),
+        GuideButton(
+          pageNumber: 6,
+          text: 'Pámanganak ning Indûng Súlat king Siuálâng `I`',
+          controller: _pageController,
         ),
-        CustomButton(
-          marginTop: 7.5,
-          onPressed: () => _pageController.animateToPage(7,
-              duration:
-                  const Duration(milliseconds: informationPageScrollDuration),
-              curve: informationPageScrollCurve),
-          borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-          elevation: 7.5,
-          child: Center(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text('Pámanganak ning Indûng Súlat king Siuálâng `U`',
-                      style: textGuideButton),
-                ),
-                Container(width: 5.0),
-                Text('>', style: textGuideButton.copyWith(color: accentColor)),
-              ],
-            ),
-          ),
+        GuideButton(
+          pageNumber: 7,
+          text: 'Pámanganak ning Indûng Súlat king Siuálâng `U`',
+          controller: _pageController,
         ),
-        CustomButton(
-          marginTop: 7.5,
-          onPressed: () => _pageController.animateToPage(8,
-              duration:
-                  const Duration(milliseconds: informationPageScrollDuration),
-              curve: informationPageScrollCurve),
-          borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-          elevation: 7.5,
-          child: Center(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text('Ding Ának ning Indûng Súlat a `I`',
-                      style: textGuideButton),
-                ),
-                Container(width: 5.0),
-                Text('>', style: textGuideButton.copyWith(color: accentColor)),
-              ],
-            ),
-          ),
+        GuideButton(
+          pageNumber: 8,
+          text: 'Ding Ának ning Indûng Súlat a `I`',
+          controller: _pageController,
         ),
-        CustomButton(
-          marginTop: 7.5,
-          onPressed: () => _pageController.animateToPage(9,
-              duration:
-                  const Duration(milliseconds: informationPageScrollDuration),
-              curve: informationPageScrollCurve),
-          borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-          elevation: 7.5,
-          child: Center(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text('Ding Ának ning Indûng Súlat a `U`',
-                      style: textGuideButton),
-                ),
-                Container(width: 5.0),
-                Text('>', style: textGuideButton.copyWith(color: accentColor)),
-              ],
-            ),
-          ),
+        GuideButton(
+          pageNumber: 9,
+          text: 'Ding Ának ning Indûng Súlat a `U`',
+          controller: _pageController,
         ),
-        CustomButton(
-          marginTop: 7.5,
-          onPressed: () => _pageController.animateToPage(10,
-              duration:
-                  const Duration(milliseconds: informationPageScrollDuration),
-              curve: informationPageScrollCurve),
-          borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-          elevation: 7.5,
-          child: Center(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text('Pámanganak ning Indûng Súlat king Siuálâng `E`',
-                      style: textGuideButton),
-                ),
-                Container(width: 5.0),
-                Text('>', style: textGuideButton.copyWith(color: accentColor)),
-              ],
-            ),
-          ),
+        GuideButton(
+          pageNumber: 10,
+          text: 'Pámanganak ning Indûng Súlat king Siuálâng `E`',
+          controller: _pageController,
         ),
-        CustomButton(
-          marginTop: 7.5,
-          onPressed: () => _pageController.animateToPage(11,
-              duration:
-                  const Duration(milliseconds: informationPageScrollDuration),
-              curve: informationPageScrollCurve),
-          borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-          elevation: 7.5,
-          child: Center(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text('Pámanganak ning Indûng Súlat king Siuálâng `O`',
-                      style: textGuideButton),
-                ),
-                Container(width: 5.0),
-                Text('>', style: textGuideButton.copyWith(color: accentColor)),
-              ],
-            ),
-          ),
+        GuideButton(
+          pageNumber: 11,
+          text: 'Pámanganak ning Indûng Súlat king Siuálâng `O`',
+          controller: _pageController,
         ),
-        CustomButton(
-          marginTop: 7.5,
-          onPressed: () => _pageController.animateToPage(12,
-              duration:
-                  const Duration(milliseconds: informationPageScrollDuration),
-              curve: informationPageScrollCurve),
-          borderRadius: 30.0,
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-          elevation: 7.5,
-          child: Center(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text('Ding Kambal Siuálâ', style: textGuideButton),
-                ),
-                Container(width: 5.0),
-                Text('>', style: textGuideButton.copyWith(color: accentColor)),
-              ],
-            ),
-          ),
+        GuideButton(
+          pageNumber: 12,
+          text: 'Ding Kambal Siuálâ',
+          controller: _pageController,
+        ),
+        GuideButton(
+          pageNumber: 13,
+          text: 'Kambal Siuálâ `A`',
+          controller: _pageController,
+        ),
+        GuideButton(
+          pageNumber: 14,
+          text: 'Kambal Siuálâ `I`',
+          controller: _pageController,
+        ),
+        GuideButton(
+          pageNumber: 15,
+          text: 'Kambal Siuálâ `U`',
+          controller: _pageController,
+        ),
+        GuideButton(
+          pageNumber: 16,
+          text: 'Pámakamaté Siuálâ',
+          controller: _pageController,
+        ),
+        GuideButton(
+          pageNumber: 17,
+          text: 'Advanced Kulitan',
+          controller: _pageController,
         ),
       ],
 
@@ -1680,6 +1505,79 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             ],
           ),
           screenWidth: _width,
+        ),
+      ],
+
+      // Advanced Kulitan
+      [
+        Padding(
+          padding: const EdgeInsets.only(
+              top: imageTopPadding - informationCreditsVerticalPadding),
+          child: ImageWithCaption(
+            filename: 'sinupan.jpg',
+            hasPadding: false,
+            caption: TextSpan(
+                text:
+                    'Sínúpan Singsing: Center for Kapampángan Cultural Heritage'),
+            screenWidth: _width,
+            borderRadius: 1.0,
+          ),
+        ),
+        ImageWithCaption(
+          filename: 'kulitan_book.jpg',
+          orientation: Axis.horizontal,
+          caption: TextSpan(
+              text:
+                  'An Introduction to Kulitan: The Indigenous Kapampangan Script',
+              style: textInfoImageCaption),
+          screenWidth: _width,
+        ),
+        Paragraphs(
+          paragraphs: <TextSpan>[
+            TextSpan(children: <TextSpan>[
+              _romanText(
+                  'To learn more about the history, rules, and uses of Kulitan, you may read the continuation of this guide in the book '),
+              TextSpan(
+                text:
+                    'An Introduction to Kulitan: The Indigenous Kapampangan Script',
+                style: textInfoLink,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => _openURL('http://siuala.com/'),
+              ),
+              _romanText(' by '),
+              TextSpan(
+                text: 'Michael Raymon M. Pangilinan',
+                style: textInfoLink,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => _openURL('http://siuala.com/siuala/'),
+              ),
+              _romanText('.')
+            ]),
+            TextSpan(
+              children: <TextSpan>[
+                _romanText(
+                    'For a hands-on experience, you may opt to attend writing workshops organized by Sínúpan Singsing: Center for Kapampángan Cultural Heritage. Upcoming events and activites can be viewed on their '),
+                TextSpan(
+                  text: 'Facebook page',
+                  style: textInfoLink,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () =>
+                        _openURL('https://www.facebook.com/sinupan.singsing/'),
+                ),
+                _romanText(
+                    '. For related news and articles, you may also visit their official website at '),
+                TextSpan(
+                  text: 'sinupan.org',
+                  style: textInfoLink,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => _openURL('https://www.sinupan.org/'),
+                ),
+                _romanText('.'),
+              ],
+            ),
+            _romanText(
+                'It is important to note that Kulitan should exclusively be written in the Kapampangan language only.'),
+          ],
         ),
       ],
     ];

@@ -777,6 +777,7 @@ const textInfoCreditsLink = TextStyle(
   fontFamily: 'Barlow',
   fontWeight: FontWeight.bold,
   fontStyle: FontStyle.italic,
+  decorationStyle: TextDecorationStyle.solid,
   color: linksColor,
 );
 const textInfoImageCaption = TextStyle(
@@ -815,6 +816,7 @@ const textInfoLink = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 15.0,
   fontStyle: FontStyle.italic,
+  decorationStyle: TextDecorationStyle.solid,
   color: linksColor,
 );
 const textTranscribe = TextStyle(

@@ -75,7 +75,7 @@ class StickyHeading extends StatelessWidget {
                       text: TextSpan(
                         style: textInfoCredits,
                         children: <TextSpan>[
-                          TextSpan(text: 'Written by Siuálâ Ding Meángûbié. '),
+                          TextSpan(text: 'Written by Siuálâ ding Meángûbié. '),
                           TextSpan(
                             text: 'Learn more',
                             style: textInfoCreditsLink,

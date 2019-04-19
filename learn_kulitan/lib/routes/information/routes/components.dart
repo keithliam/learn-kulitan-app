@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../styles/theme.dart';
+import '../../../components/buttons/CustomButton.dart';
 
 class ImageWithCaption extends StatelessWidget {
   const ImageWithCaption({
@@ -9,6 +10,7 @@ class ImageWithCaption extends StatelessWidget {
     this.subcaption,
     this.hasPadding = true,
     this.orientation = Axis.vertical,
+    this.borderRadius = 0.03623,
   });
 
   final String filename;
@@ -17,6 +19,7 @@ class ImageWithCaption extends StatelessWidget {
   final double screenWidth;
   final bool hasPadding;
   final Axis orientation;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class ImageWithCaption extends StatelessWidget {
         child: FittedBox(
           fit: BoxFit.fitWidth,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(0.03623 * screenWidth),
+            borderRadius: BorderRadius.circular(borderRadius * screenWidth),
             child: Image.asset(
               'assets/images/$filename',
               width: screenWidth * (orientation == Axis.vertical ? 0.5 : 0.75),
@@ -81,10 +84,12 @@ class ImageWithCaption extends StatelessWidget {
 class Paragraphs extends StatelessWidget {
   const Paragraphs({
     @required this.paragraphs,
+    this.padding = paragraphTopPadding,
     this.textAlign = TextAlign.justify,
   });
 
   final List<TextSpan> paragraphs;
+  final double padding;
   final TextAlign textAlign;
 
   @override
@@ -92,13 +97,49 @@ class Paragraphs extends StatelessWidget {
     return Column(
       children: paragraphs.map((text) {
         return Padding(
-          padding: const EdgeInsets.only(top: paragraphTopPadding),
+          padding: EdgeInsets.only(top: padding),
           child: RichText(
             text: TextSpan(children: <TextSpan>[text]),
             textAlign: textAlign,
           ),
         );
       }).toList(growable: false),
+    );
+  }
+}
+
+class GuideButton extends StatelessWidget {
+  const GuideButton({
+    @required this.text,
+    @required this.controller,
+    @required this.pageNumber,
+  });
+
+  final String text;
+  final PageController controller;
+  final int pageNumber;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomButton(
+      marginTop: 7.5,
+      onPressed: () => controller.animateToPage(pageNumber,
+          duration: const Duration(milliseconds: informationPageScrollDuration),
+          curve: informationPageScrollCurve),
+      borderRadius: 30.0,
+      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+      elevation: 7.5,
+      child: Center(
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(text, style: textGuideButton),
+            ),
+            Container(width: 5.0),
+            Text('>', style: textGuideButton.copyWith(color: accentColor)),
+          ],
+        ),
+      ),
     );
   }
 }
