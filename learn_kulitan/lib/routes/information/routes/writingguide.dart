@@ -1593,8 +1593,9 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                 horizontal: informationHorizontalScreenPadding),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(
-                    bottom: informationVerticalScreenPadding),
+                padding: EdgeInsets.only(
+                    bottom: informationVerticalScreenPadding -
+                        (index == 0 ? 7.5 : 0.0)),
                 child: Column(
                   children: _guideList[index],
                 ),
