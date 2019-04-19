@@ -636,7 +636,6 @@ const drawCardPoolMinCount = 5;
 const kulitanHome = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
   color: grayColor,
-  height: 0.68,
 );
 const kulitanQuiz = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
@@ -664,6 +663,7 @@ const kulitanKeyboard = TextStyle(
 
 // Barlow Fonts
 const textHomeTitle = TextStyle(
+  height: 0.8,
   fontFamily: 'Barlow',
   fontSize: 75.0,
   fontWeight: FontWeight.bold,
@@ -684,6 +684,13 @@ const textHomeSubtitle = TextStyle(
 const textHomeButton = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 40.0,
+  fontWeight: FontWeight.w600,
+  color: grayColor,
+  height: 0.7,
+);
+const textHomeButtonSub = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 10.0,
   fontWeight: FontWeight.w600,
   color: grayColor,
 );
