@@ -71,6 +71,7 @@ class _TranscribePageState extends State<TranscribePage>
   @override
   void dispose() {
     _keyboardController.dispose();
+    _scrollController.dispose();
     _romanController.dispose();
     super.dispose();
   }

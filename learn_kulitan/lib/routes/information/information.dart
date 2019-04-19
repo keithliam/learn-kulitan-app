@@ -34,6 +34,12 @@ class _InformationPageState extends State<InformationPage> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding,
