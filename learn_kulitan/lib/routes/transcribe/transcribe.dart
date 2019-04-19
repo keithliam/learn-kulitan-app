@@ -235,6 +235,7 @@ class _TranscribePageState extends State<TranscribePage>
         .replaceAll('ea', 'ya')
         .replaceAll(
             RegExp(r'kapampangan|pampanga|kapampaangan'), 'kapangpaang an')
+        .replaceAll(RegExp('kulitan'), 'ku lit an')
         .trim();
     final List<String> _lines = _filteredText.split('\n');
     List<List<String>> _lineGlyphs = [];
