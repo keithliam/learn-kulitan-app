@@ -6,6 +6,7 @@ class ImageWithCaption extends StatelessWidget {
   const ImageWithCaption({
     @required this.filename,
     @required this.screenWidth,
+    this.captionAlignment = TextAlign.justify,
     this.caption,
     this.subcaption,
     this.hasPadding = true,
@@ -17,6 +18,7 @@ class ImageWithCaption extends StatelessWidget {
   final TextSpan caption;
   final String subcaption;
   final double screenWidth;
+  final TextAlign captionAlignment;
   final bool hasPadding;
   final Axis orientation;
   final double borderRadius;
@@ -57,7 +59,7 @@ class ImageWithCaption extends StatelessWidget {
           child: Center(
             child: RichText(
               text: caption,
-              textAlign: TextAlign.justify,
+              textAlign: captionAlignment,
             ),
           ),
         ),

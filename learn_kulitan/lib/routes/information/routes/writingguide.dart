@@ -780,8 +780,9 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             filename: 'pamanganak.png',
             hasPadding: false,
             orientation: Axis.horizontal,
+            captionAlignment: TextAlign.center,
             caption: TextSpan(
-                text: 'PÁMANGANAK NING INDÛNG SÚLAT KING SIUÁLÂNG ‘I’',
+                text: 'PÁMANGANAK NING INDÛNG SÚLAT\nKING SIUÁLÂNG ‘I’',
                 style: textInfoImageCaption),
             subcaption: 'Changing the default vowel sound `A` to `I`',
             screenWidth: _width,
@@ -826,8 +827,9 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             filename: 'pamanganak.png',
             hasPadding: false,
             orientation: Axis.horizontal,
+            captionAlignment: TextAlign.center,
             caption: TextSpan(
-                text: 'PÁMANGANAK NING INDÛNG SÚLAT KING SIUÁLÂNG ‘U’',
+                text: 'PÁMANGANAK NING INDÛNG SÚLAT\nKING SIUÁLÂNG ‘U’',
                 style: textInfoImageCaption),
             subcaption: 'Changing the default vowel sound `A` to `U`',
             screenWidth: _width,
@@ -1094,8 +1096,9 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             filename: 'pamanganak.png',
             hasPadding: false,
             orientation: Axis.horizontal,
+            captionAlignment: TextAlign.center,
             caption: TextSpan(
-                text: 'PÁMANGANAK NING INDÛNG SÚLAT KING SIUÁLÂNG ‘E’',
+                text: 'PÁMANGANAK NING INDÛNG SÚLAT\nKING SIUÁLÂNG ‘E’',
                 style: textInfoImageCaption),
             subcaption: 'Changing the default vowel sound `A` to `E`',
             screenWidth: _width,
@@ -1141,8 +1144,9 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             filename: 'pamanganak.png',
             hasPadding: false,
             orientation: Axis.horizontal,
+            captionAlignment: TextAlign.center,
             caption: TextSpan(
-                text: 'PÁMANGANAK NING INDÛNG SÚLAT KING SIUÁLÂNG ‘O’',
+                text: 'PÁMANGANAK NING INDÛNG SÚLAT\nKING SIUÁLÂNG ‘O’',
                 style: textInfoImageCaption),
             subcaption: 'Changing the default vowel sound ‘A’ to ‘O’',
             screenWidth: _width,
@@ -1517,9 +1521,10 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           child: ImageWithCaption(
             filename: 'sinupan.jpg',
             hasPadding: false,
+            captionAlignment: TextAlign.center,
             caption: TextSpan(
                 text:
-                    'Sínúpan Singsing: Center for Kapampángan Cultural Heritage'),
+                    'Sínúpan Singsing:\nCenter for Kapampángan Cultural Heritage'),
             screenWidth: _width,
             borderRadius: 1.0,
           ),
@@ -1527,10 +1532,11 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
         ImageWithCaption(
           filename: 'kulitan_book.jpg',
           orientation: Axis.horizontal,
+          captionAlignment: TextAlign.center,
           caption: TextSpan(
               text:
-                  'An Introduction to Kulitan: The Indigenous Kapampangan Script',
-              style: textInfoImageCaption),
+                  'An Introduction to Kulitan:\nThe Indigenous Kapampangan Script'),
+          subcaption: 'by Michael Raymon M. Pangilinan',
           screenWidth: _width,
         ),
         Paragraphs(
@@ -1549,7 +1555,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                 TapGestureRecognizer()
                   ..onTap = () => _openURL('http://siuala.com/siuala/'),
               ),
-              _romanText('.')
+              _romanText(' (Siuálâ ding Meángûbié).'),
             ]),
             TextSpan(
               children: <TextSpan>[
