@@ -68,18 +68,6 @@ class _HomePageState extends State<HomePage> {
       progress: _writingProgress / totalGlyphCount,
     );
 
-    Widget _infoButton = HomeButton(
-      kulitanText: <Widget>[
-        Text('k ', textAlign: TextAlign.center, style: kulitanHome.copyWith(height: 0.7)),
-        Text('p ', textAlign: TextAlign.center, style: kulitanHome.copyWith(height: 0.9)),
-        Text('b ', textAlign: TextAlign.center, style: kulitanHome.copyWith(height: 0.7)),
-        Text('luan', textAlign: TextAlign.center, style: kulitanHome),
-      ],
-      title: 'Kapabaluan',
-      subtitle: 'INFORMATION',
-      route: '/information',
-    );
-
     Widget _transcribeButton = HomeButton(
       kulitanText: <Widget>[
         Text('paa', textAlign: TextAlign.center, style: kulitanHome),
@@ -90,6 +78,18 @@ class _HomePageState extends State<HomePage> {
       title: 'Pámanlíkas',
       subtitle: 'TRANSCRIBE',
       route: '/transcribe',
+    );
+
+    Widget _infoButton = HomeButton(
+      kulitanText: <Widget>[
+        Text('k ', textAlign: TextAlign.center, style: kulitanHome.copyWith(height: 0.7)),
+        Text('p ', textAlign: TextAlign.center, style: kulitanHome.copyWith(height: 0.9)),
+        Text('b ', textAlign: TextAlign.center, style: kulitanHome.copyWith(height: 0.7)),
+        Text('luan', textAlign: TextAlign.center, style: kulitanHome),
+      ],
+      title: 'Kapabaluan',
+      subtitle: 'INFORMATION',
+      route: '/information',
     );
 
     Widget _aboutButton = HomeButton(
@@ -119,8 +119,8 @@ class _HomePageState extends State<HomePage> {
               _appTitle,
               _readingButton,
               _writingButton,
-              _infoButton,
               _transcribeButton,
+              _infoButton,
               _aboutButton,
             ],
           ),
