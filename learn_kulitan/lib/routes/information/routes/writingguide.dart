@@ -52,10 +52,11 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
     }
   }
 
-  TextSpan _romanText(String text) {
+  TextSpan _romanText(String text, [TapGestureRecognizer recognizer]) {
     return TextSpan(
       text: text,
-      style: textInfoText,
+      style: recognizer == null ? textInfoText : textInfoLink,
+      recognizer: recognizer,
     );
   }
 
@@ -1537,18 +1538,15 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             TextSpan(children: <TextSpan>[
               _romanText(
                   'To learn more about the history, rules, and uses of Kulitan, you may read the continuation of this guide in the book '),
-              TextSpan(
-                text:
-                    'An Introduction to Kulitan: The Indigenous Kapampangan Script',
-                style: textInfoLink,
-                recognizer: TapGestureRecognizer()
+              _romanText(
+                'An Introduction to Kulitan: The Indigenous Kapampangan Script',
+                TapGestureRecognizer()
                   ..onTap = () => _openURL('http://siuala.com/'),
               ),
               _romanText(' by '),
-              TextSpan(
-                text: 'Michael Raymon M. Pangilinan',
-                style: textInfoLink,
-                recognizer: TapGestureRecognizer()
+              _romanText(
+                'Michael Raymon M. Pangilinan',
+                TapGestureRecognizer()
                   ..onTap = () => _openURL('http://siuala.com/siuala/'),
               ),
               _romanText('.')
@@ -1557,19 +1555,17 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
               children: <TextSpan>[
                 _romanText(
                     'For a hands-on experience, you may opt to attend writing workshops organized by Sínúpan Singsing: Center for Kapampángan Cultural Heritage. Upcoming events and activites can be viewed on their '),
-                TextSpan(
-                  text: 'Facebook page',
-                  style: textInfoLink,
-                  recognizer: TapGestureRecognizer()
+                _romanText(
+                  'Facebook page',
+                  TapGestureRecognizer()
                     ..onTap = () =>
                         _openURL('https://www.facebook.com/sinupan.singsing/'),
                 ),
                 _romanText(
                     '. For related news and articles, you may also visit their official website at '),
-                TextSpan(
-                  text: 'sinupan.org',
-                  style: textInfoLink,
-                  recognizer: TapGestureRecognizer()
+                _romanText(
+                  'sinupan.org',
+                  TapGestureRecognizer()
                     ..onTap = () => _openURL('https://www.sinupan.org/'),
                 ),
                 _romanText('.'),
