@@ -1577,8 +1577,21 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                 _romanText('.'),
               ],
             ),
+            TextSpan(
+              children: <TextSpan>[
+                _romanText('A '),
+                _romanText(
+                  'Facebook group',
+                  TapGestureRecognizer()
+                    ..onTap = () => _openURL(
+                        'https://www.facebook.com/groups/Kulitkulitan/'),
+                ),
+                _romanText(
+                    ' exists for Kulitan enthusiasts and those who would like to learn the indigenous Kapampangan script. Only English and Kapampangan languages are allowed in the group.'),
+              ],
+            ),
             _romanText(
-                'It is important to note that Kulitan should exclusively be written in the Kapampangan language only.'),
+                'It is important to note that Kulitan shall exclusively be written in the Kapampangan language only.'),
           ],
         ),
       ],
