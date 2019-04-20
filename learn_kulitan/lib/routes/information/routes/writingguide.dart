@@ -243,7 +243,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             caption: TextSpan(
               style: textInfoImageCaption,
               children: <TextSpan>[
-                TextSpan(text: 'Figure A. ', style: textInfoImageCaptionItalic),
+                TextSpan(text: 'Figure 1. ', style: textInfoImageCaptionItalic),
                 TextSpan(text: 'The Kapampangan verse that explains why '),
                 TextSpan(text: 'Kulitan', style: textInfoImageCaptionItalic),
                 TextSpan(text: ' is written top to bottom, left to right.'),
@@ -390,7 +390,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                 _romanText('There are eleven '),
                 _italicRomanText('Kulit a Mágkas'),
                 _romanText(
-                    ' or consonantal glyphs in Kulitan, the recital order of which are GA, KA, NGA, TA, DA, NA, LA, SA, MA, PA, BA. They are however arranged and usually grouped together as follows [Table 5]:'),
+                    ' or consonantal glyphs in Kulitan, the recital order of which are GA, KA, NGA, TA, DA, NA, LA, SA, MA, PA, BA. They are however arranged and usually grouped together as follows [Table 1]:'),
               ],
             ),
           ],
@@ -402,7 +402,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           caption: TextSpan(
             style: textInfoImageCaption,
             children: <TextSpan>[
-              TextSpan(text: 'Table 5.', style: textInfoImageCaptionItalic),
+              TextSpan(text: 'Table 1.', style: textInfoImageCaptionItalic),
               TextSpan(text: ' The '),
               TextSpan(
                   text: 'kulit a mágkas', style: textInfoImageCaptionItalic),
@@ -608,7 +608,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             style: textInfoImageCaption,
             children: <TextSpan>[
               TextSpan(
-                text: 'Table 6',
+                text: 'Table 2',
                 style: textInfoImageCaptionItalic,
               ),
               TextSpan(text: '. The '),
@@ -633,7 +633,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                 _romanText('), and O ('),
                 _kulitanText('oo'),
                 _romanText(
-                    ') [Table 6]. Unlike other Philippine languages, the Kapampangan language does not interchange the vowels I and E since E is a monophthongized diphthong. Kapampangan words ending in the vowel E like '),
+                    ') [Table 2]. Unlike other Philippine languages, the Kapampangan language does not interchange the vowels I and E since E is a monophthongized diphthong. Kapampangan words ending in the vowel E like '),
                 _italicRomanText('bale'),
                 _romanText(' (house), '),
                 _italicRomanText('pále'),
@@ -659,7 +659,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                 _romanText('The '),
                 _italicRomanText('Kambal Siuálâ'),
                 _romanText(
-                    ' or “twin” vowels seen on Table 6 represent the lengthening of the vowel sounds and the glottal stops in the Kapampangan language. These are usually represented by the diacritical marks '),
+                    ' or “twin” vowels seen on Table 2 represent the lengthening of the vowel sounds and the glottal stops in the Kapampangan language. These are usually represented by the diacritical marks '),
                 _italicRomanText('sakúrut'),
                 _romanText(' ( ́) and '),
                 _italicRomanText('télaturung'),
@@ -709,7 +709,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                     ' or diacritical marks above or below or place a ligature character next to the mother character. Again, the '),
                 _italicRomanText('Anak Súlat'),
                 _romanText(
-                    ' or offspring characters are those characters with their inherent vowel sounds altered by the diacritical marks or ligatures [Table 7a & 7b].'),
+                    ' or offspring characters are those characters with their inherent vowel sounds altered by the diacritical marks or ligatures [Table 3a & 3b].'),
               ],
             ),
           ],
@@ -720,7 +720,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           caption: TextSpan(
             children: <TextSpan>[
               TextSpan(
-                text: 'Table 7a',
+                text: 'Table 3a',
                 style: textInfoImageCaptionItalic,
               ),
               TextSpan(text: '. The ', style: textInfoImageCaption),
@@ -751,7 +751,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           caption: TextSpan(
             children: <TextSpan>[
               TextSpan(
-                text: 'Table 7b',
+                text: 'Table 3b',
                 style: textInfoImageCaptionItalic,
               ),
               TextSpan(text: '. Table of ', style: textInfoImageCaption),
@@ -931,7 +931,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                 _kulitanText('yu'),
                 _romanText(') by placing the '),
                 _italicRomanText('garlit'),
-                _romanText(' below it [Table 8].'),
+                _romanText(' below it [Table 4].'),
               ],
             ),
             _romanText('Example diagram:'),
@@ -944,7 +944,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           caption: TextSpan(
             children: <TextSpan>[
               TextSpan(
-                text: 'Table 8',
+                text: 'Table 4',
                 style: textInfoImageCaptionItalic,
               ),
               TextSpan(text: '. The ', style: textInfoImageCaption),
@@ -1011,12 +1011,12 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                 _romanText(') and A ('),
                 _kulitanText('a'),
                 _romanText(
-                    ') [Table 9] but surprisingly the vowel character U ('),
+                    ') [Table 5] but surprisingly the vowel character U ('),
                 _kulitanText('u'),
                 _romanText(') stood alone without the vowel A ('),
                 _kulitanText('a'),
                 _romanText(
-                    ') in the 1621 signature of Doña Isabel Pangisnauan of Mexico (Masíku) [Fig. 21]. Could this be proof that Kapampangan vowel character U may actually be the consonantal character WA?'),
+                    ') in the 1621 signature of Doña Isabel Pangisnauan of Mexico (Masíku). Could this be proof that Kapampangan vowel character U may actually be the consonantal character WA?'),
               ],
             ),
             TextSpan(
@@ -1052,7 +1052,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                 _kulitanText('wu'),
                 _romanText(') by placing the '),
                 _italicRomanText('garlit'),
-                _romanText(' below it [Table 9].'),
+                _romanText(' below it [Table 5].'),
               ],
             ),
           ],
@@ -1064,7 +1064,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           caption: TextSpan(
             children: <TextSpan>[
               TextSpan(
-                text: 'Table 9',
+                text: 'Table 5',
                 style: textInfoImageCaptionItalic,
               ),
               TextSpan(text: '. The ', style: textInfoImageCaption),
@@ -1454,7 +1454,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             TextSpan(
               children: <TextSpan>[
                 _romanText(
-                    'For instance on [Table 10], to terminate the inherent ‘A’ sound of NA ('),
+                    'For instance on [Table 6], to terminate the inherent ‘A’ sound of NA ('),
                 _kulitanText('na'),
                 _romanText(') in ‘NGANA’ simply write NA ('),
                 _kulitanText('na'),
@@ -1503,7 +1503,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           caption: TextSpan(
             children: <TextSpan>[
               TextSpan(
-                text: 'Table 10',
+                text: 'Table 6',
                 style: textInfoImageCaptionItalic,
               ),
               TextSpan(text: '. Terminating the inherent vowel sound ‘A’.'),
