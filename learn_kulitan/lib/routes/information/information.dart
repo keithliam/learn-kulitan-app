@@ -322,7 +322,7 @@ class _InformationPageState extends State<InformationPage> {
       child: Column(
         children: <Widget>[
           StickyHeading(
-            headingText: 'Information',
+            headingText: 'Kapabaluan',
             content: Column(
               children: <Widget>[
                 _historyButton,

@@ -48,8 +48,8 @@ class _HomePageState extends State<HomePage> {
         Text('maa', textAlign: TextAlign.center, style: kulitanHome),
         Text('saa', textAlign: TextAlign.center, style: kulitanHome),
       ],
-      kapampanganText: 'PÁMAMÁSÂ',
-      title: 'Reading',
+      title: 'Pámamásâ',
+      subtitle: 'READING',
       route: '/reading',
       progress: _readingProgress / totalGlyphCount,
     );
@@ -62,8 +62,8 @@ class _HomePageState extends State<HomePage> {
         Text(' lat ', textAlign: TextAlign.center, style: kulitanHome),
       ],
       padRight: 5.0,
-      kapampanganText: 'PÁMANIÚLAT',
-      title: 'Writing',
+      title: 'Pámaniúlat',
+      subtitle: 'WRITING',
       route: '/writing',
       progress: _writingProgress / totalGlyphCount,
     );
@@ -75,8 +75,8 @@ class _HomePageState extends State<HomePage> {
         Text('b ', textAlign: TextAlign.center, style: kulitanHome.copyWith(height: 0.7)),
         Text('luan', textAlign: TextAlign.center, style: kulitanHome),
       ],
-      kapampanganText: 'KAPABALUAN',
-      title: 'Information',
+      title: 'Kapabaluan',
+      subtitle: 'INFORMATION',
       route: '/information',
     );
 
@@ -87,8 +87,8 @@ class _HomePageState extends State<HomePage> {
         Text('lii', textAlign: TextAlign.center, style: kulitanHome),
         Text('kas  ', textAlign: TextAlign.center, style: kulitanHome),
       ],
-      kapampanganText: 'PÁMANLÍKAS',
-      title: 'Transcribe',
+      title: 'Pámanlíkas',
+      subtitle: 'TRANSCRIBE',
       route: '/transcribe',
     );
 
@@ -99,8 +99,8 @@ class _HomePageState extends State<HomePage> {
         Text('n  ', textAlign: TextAlign.center, style: kulitanHome.copyWith(height: 0.8)),
         Text('waa', textAlign: TextAlign.center, style: kulitanHome),
       ],
-      kapampanganText: 'DENG GÍNAWÁ',
-      title: 'About',
+      title: 'Reng Gínawá',
+      subtitle: 'ABOUT THE AUTHORS',
       route: '/',
     );
 

@@ -8,7 +8,7 @@ class HomeButton extends StatelessWidget {
     @required this.title,
     @required this.route,
     @required this.kulitanText,
-    @required this.kapampanganText,
+    @required this.subtitle,
     this.height,
     this.progress = -1,
     this.padRight,
@@ -18,7 +18,7 @@ class HomeButton extends StatelessWidget {
   final double height;
   final String title;
   final String route;
-  final String kapampanganText;
+  final String subtitle;
   final double progress;
   final double padRight;
 
@@ -35,7 +35,7 @@ class HomeButton extends StatelessWidget {
               Text(title, style: textHomeButton),
               Padding(
                 padding: const EdgeInsets.only(left: 2.0),
-                child: Text(kapampanganText, style: textHomeButtonSub),
+                child: Text(subtitle, style: textHomeButtonSub),
               ),
             ],
           ),

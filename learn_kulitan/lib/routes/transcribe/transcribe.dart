@@ -580,7 +580,7 @@ class _TranscribePageState extends State<TranscribePage>
         middle: Padding(
           padding: const EdgeInsets.only(bottom: headerVerticalPadding),
           child: Center(
-            child: Text('Transcribe', style: textPageTitle),
+            child: Text('Pámanlíkas', style: textPageTitle),
           ),
         ),
         right: IconButtonNew(
