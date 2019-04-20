@@ -109,6 +109,7 @@ class _HomePageState extends State<HomePage> {
         color: backgroundColor,
         child: SafeArea(
           child: ListView(
+            physics: BouncingScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(
               homeHorizontalScreenPadding,
               0.0,

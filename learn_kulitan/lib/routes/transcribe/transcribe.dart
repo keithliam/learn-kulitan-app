@@ -618,6 +618,7 @@ class _TranscribePageState extends State<TranscribePage>
         child: Scrollbar(
           child: SingleChildScrollView(
             controller: _scrollController,
+            physics: BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             reverse: true,
             child: Row(

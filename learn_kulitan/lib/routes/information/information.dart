@@ -175,6 +175,7 @@ class _InformationPageState extends State<InformationPage> {
 
     final Widget _anakSulatTable = SingleChildScrollView(
       scrollDirection: Axis.horizontal,
+      physics: BouncingScrollPhysics(),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(
           informationHorizontalScreenPadding,

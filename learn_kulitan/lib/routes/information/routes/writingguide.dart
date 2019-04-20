@@ -1600,6 +1600,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
     final Widget _chapters = Scrollbar(
       child: PageView.builder(
         controller: _pageController,
+        physics: BouncingScrollPhysics(),
         itemCount: _guideList.length,
         itemBuilder: (BuildContext _, int index) {
           return Container(
@@ -1607,6 +1608,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             padding: const EdgeInsets.symmetric(
                 horizontal: informationHorizontalScreenPadding),
             child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Padding(
                 padding: EdgeInsets.only(
                     bottom: informationVerticalScreenPadding -
