@@ -8,7 +8,8 @@ import '../../../components/buttons/IconButtonNew.dart';
 import '../../../components/buttons/BackToStartButton.dart';
 import '../../../components/misc/StaticHeader.dart';
 import '../../../components/misc/StickyHeading.dart';
-import './components.dart';
+import '../../../components/misc/ImageWithCaption.dart';
+import '../../../components/misc/Paragraphs.dart';
 
 class HistoryPage extends StatefulWidget {
   @override

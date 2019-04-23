@@ -4,9 +4,11 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../../styles/theme.dart';
 import '../../../components/buttons/IconButtonNew.dart';
-import '../../../components/misc/StaticHeader.dart';
 import '../../../components/buttons/BackToStartButton.dart';
-import './components.dart';
+import '../../../components/buttons/GuideButton.dart';
+import '../../../components/misc/StaticHeader.dart';
+import '../../../components/misc/ImageWithCaption.dart';
+import '../../../components/misc/Paragraphs.dart';
 
 class WritingGuidePage extends StatefulWidget {
   @override
