@@ -248,7 +248,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                 TextSpan(text: 'Figure 1. ', style: textInfoImageCaptionItalic),
                 TextSpan(text: 'The Kapampangan verse that explains why '),
                 TextSpan(text: 'Kulitan', style: textInfoImageCaptionItalic),
-                TextSpan(text: ' is written top to bottom, left to right.'),
+                TextSpan(text: ' is written top to bottom, right to left.'),
               ],
             ),
           ),
