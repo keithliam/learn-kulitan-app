@@ -24,23 +24,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        builder: (context, child) {
-          return ScrollConfiguration(
-            behavior: CustomScrollBehavior(),
-            child: child,
-          );
-        },
-        title: 'Learn Kulitan',
-        initialRoute: '/',
-        routes: {
-          '/': (context) => HomePage(),
-          '/reading': (context) => ReadingPage(),
-          '/writing': (context) => WritingPage(),
-          '/information': (context) => InformationPage(),
-          '/information/history': (context) => HistoryPage(),
-          '/information/guide': (context) => WritingGuidePage(),
-          '/transcribe': (context) => TranscribePage(),
-          '/about': (context) => AboutPage(),
-        });
+      builder: (context, child) {
+        return ScrollConfiguration(
+          behavior: CustomScrollBehavior(),
+          child: child,
+        );
+      },
+      title: 'Learn Kulitan',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomePage(),
+        '/reading': (context) => ReadingPage(),
+        '/writing': (context) => WritingPage(),
+        '/information': (context) => InformationPage(),
+        '/information/history': (context) => HistoryPage(),
+        '/information/guide': (context) => WritingGuidePage(),
+        '/transcribe': (context) => TranscribePage(),
+        '/about': (context) => AboutPage(),
+      },
+    );
   }
 }
