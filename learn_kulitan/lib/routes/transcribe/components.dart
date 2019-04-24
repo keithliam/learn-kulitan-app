@@ -320,7 +320,7 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
         (_) => widget.keyPressed('delete'));
   }
 
-  void _deleteLongPressUp(_) {
+  void _deleteLongPressUp() {
     setState(() => _half1Pressed = false);
     _deleteLongPressTimer?.cancel();
     _deleteLongPressTimer = null;
@@ -397,8 +397,8 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
       return SizedBox(
         height: widget.height,
         child: GestureDetector(
-          onLongPressDragStart: _deleteLongPressDown,
-          onLongPressDragUp: _deleteLongPressUp,
+          onLongPressStart: _deleteLongPressDown,
+          onLongPressUp: _deleteLongPressUp,
           onTapDown: (_) => setState(() => _half1Pressed = true),
           onTapUp: (_) => setState(() => _half1Pressed = false),
           onTapCancel: () => setState(() => _half1Pressed = false),
