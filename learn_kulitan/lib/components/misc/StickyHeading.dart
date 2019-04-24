@@ -6,8 +6,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../styles/theme.dart';
 
 class StickyHeading extends StatelessWidget {
-  const StickyHeading(
-      {this.headingText, this.content, this.showCredits = false});
+  const StickyHeading({
+    this.headingText,
+    this.content,
+    this.showCredits = false,
+  });
 
   final String headingText;
   final Widget content;
@@ -34,12 +37,15 @@ class StickyHeading extends StatelessWidget {
     final Widget _header = Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.fromLTRB(
-        informationHorizontalScreenPadding,
+        headerIconSize + (headerHorizontalPadding * 2.0) + 16.0,
         headerVerticalPadding - 8.0,
-        informationHorizontalScreenPadding,
+        headerIconSize + (headerHorizontalPadding * 2.0) + 16.0,
         0.0,
       ),
-      child: Text(headingText, style: textPageTitle),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(headingText, style: textPageTitle),
+      ),
     );
 
     if (!showCredits) {
@@ -62,11 +68,10 @@ class StickyHeading extends StatelessWidget {
                 width: double.infinity,
                 alignment: Alignment.center,
                 padding: const EdgeInsets.fromLTRB(
-                  informationCreditsHorizontalPadding,
-                  informationCreditsVerticalPadding,
-                  informationCreditsHorizontalPadding,
-                  informationCreditsVerticalPadding
-                ),
+                    informationCreditsHorizontalPadding,
+                    informationCreditsVerticalPadding,
+                    informationCreditsHorizontalPadding,
+                    informationCreditsVerticalPadding),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: 300.0),
                   child: FittedBox(

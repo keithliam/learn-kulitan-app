@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import '../../styles/theme.dart';
 import '../../components/buttons/IconButtonNew.dart';
 import '../../components/buttons/CustomButton.dart';
@@ -15,6 +16,7 @@ class InformationPage extends StatefulWidget {
 
 class _InformationPageState extends State<InformationPage> {
   final ScrollController _scrollController = ScrollController();
+  final AutoSizeGroup _textGroup = AutoSizeGroup();
 
   bool _showBackToStartFAB = false;
 
@@ -42,8 +44,12 @@ class _InformationPageState extends State<InformationPage> {
   @override
   Widget build(BuildContext context) {
     final Widget _header = Padding(
-      padding: EdgeInsets.fromLTRB(headerHorizontalPadding,
-          headerVerticalPadding, headerHorizontalPadding, 0.0),
+      padding: EdgeInsets.fromLTRB(
+        headerHorizontalPadding,
+        headerVerticalPadding,
+        headerHorizontalPadding,
+        0.0,
+      ),
       child: StaticHeader(
         left: IconButtonNew(
           icon: Icons.arrow_back_ios,
@@ -69,15 +75,24 @@ class _InformationPageState extends State<InformationPage> {
       ),
       child: CustomButton(
         onPressed: () => Navigator.pushNamed(context, '/information/history'),
-        height: 60.0,
+        height: MediaQuery.of(context).size.height > 600 ? 60.0 : 50.0,
         borderRadius: 30.0,
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
         elevation: 10.0,
         child: Center(
           child: Row(
             children: <Widget>[
-              Text('History of Kulitan', style: textInfoButton),
-              Spacer(),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: AutoSizeText(
+                    'History of Kulitan',
+                    group: _textGroup,
+                    style: textInfoButton,
+                  ),
+                ),
+              ),
+              SizedBox(width: 10.0),
               Text('>', style: textInfoButton.copyWith(color: accentColor)),
             ],
           ),
@@ -101,8 +116,17 @@ class _InformationPageState extends State<InformationPage> {
         child: Center(
           child: Row(
             children: <Widget>[
-              Text('Writing Guide', style: textInfoButton),
-              Spacer(),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: AutoSizeText(
+                    'Writing Guide',
+                    group: _textGroup,
+                    style: textInfoButton,
+                  ),
+                ),
+              ),
+              SizedBox(width: 10.0),
               Text('>', style: textInfoButton.copyWith(color: accentColor)),
             ],
           ),

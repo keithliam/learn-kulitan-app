@@ -39,7 +39,7 @@ class CustomButton extends StatefulWidget {
 class _CustomButtonState extends State<CustomButton> {
   final GlobalKey _key = GlobalKey();
   double _height = 0.0;
-  double _elevation = 0;
+  double _elevation = 0.0;
   bool _doneTapping = true;
 
   bool _checkIfPressNum({int num = 0}) {

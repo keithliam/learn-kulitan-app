@@ -32,6 +32,8 @@ class _TranscribePageState extends State<TranscribePage>
     ),
   );
 
+  double _fontSizePercent = 1.0;
+
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _romanController =
       TextEditingController(text: 'atin ku pung singsing metung yang timpukan');
@@ -65,7 +67,9 @@ class _TranscribePageState extends State<TranscribePage>
       ..addListener(
           () => setState(() => _keyboardOffset = _keyboardAnimation.value));
     _romanController.addListener(_textChanged);
-    _transcribeRoman(isInit: true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _transcribeRoman(isInit: true);
+    });
   }
 
   @override
@@ -111,33 +115,33 @@ class _TranscribePageState extends State<TranscribePage>
                     _glyph == 'ka' ||
                     _glyph == 'ki' ||
                     _glyph == 'ku'
-                ? kulitanTranscribe.copyWith(height: 0.7)
+                ? kulitanTranscribe.copyWith(height: 0.8 * _fontSizePercent)
                 : kulitanTranscribe,
           );
-          double _width = 75.0 * transcribeRelativeFontSize;
+          double _width = 75.0 * transcribeRelativeFontSize * _fontSizePercent;
           if (_glyph == 'nu' || _glyph == 'lu')
             _textWidget = Padding(
-              padding: const EdgeInsets.only(bottom: 2.0),
+              padding: EdgeInsets.only(bottom: 2.0 * _fontSizePercent),
               child: _textWidget,
             );
           else if (_glyph.contains('s'))
             _textWidget = Padding(
-              padding: const EdgeInsets.only(top: 2.0),
+              padding: EdgeInsets.only(top: 2.0 * _fontSizePercent),
               child: _textWidget,
             );
           if (_glyph == '?')
-            _width = 40.0 * transcribeRelativeFontSize;
+            _width = 40.0 * transcribeRelativeFontSize * _fontSizePercent;
           else if (_glyph == 'ngaa' ||
               (_glyph.length == 3 &&
                   (_glyph.contains('ng') && _glyph != 'ang')))
-            _width = 100.0 * transcribeRelativeFontSize;
+            _width = 100.0 * transcribeRelativeFontSize * _fontSizePercent;
           else if (_glyph == 'a' ||
               _glyph == 'aa' ||
               _glyph == 'ee' ||
               _glyph == 'oo' ||
               _glyph == 'ng' ||
               _glyph == 'ang')
-            _width = 60.0 * transcribeRelativeFontSize;
+            _width = 60.0 * transcribeRelativeFontSize * _fontSizePercent;
           else if ((_glyph.length == 1 &&
                   _glyph != 'a' &&
                   _glyph != 'i' &&
@@ -150,23 +154,23 @@ class _TranscribePageState extends State<TranscribePage>
                   _glyph[0] != 'e' &&
                   _glyph[0] != 'o' &&
                   (_glyph[1] == 'a' || _glyph[1] == 'i' || _glyph[1] == 'u')))
-            _width = 90.0 * transcribeRelativeFontSize;
+            _width = 90.0 * transcribeRelativeFontSize * _fontSizePercent;
           else if (_glyph == 'i' ||
               _glyph == 'u' ||
               _glyph == 'e' ||
               _glyph == 'o')
-            _width = 40.0 * transcribeRelativeFontSize;
+            _width = 40.0 * transcribeRelativeFontSize * _fontSizePercent;
           else if (((_glyph.length > 2 &&
                       midEnd.contains(_glyph.substring(0, 3)) &&
                       !_glyph.contains('ng')) ||
                   (_glyph.length > 1 &&
                       midEnd.contains(_glyph.substring(0, 2)))) &&
               _glyph != 'alii')
-            _width = 45.0 * transcribeRelativeFontSize;
+            _width = 45.0 * transcribeRelativeFontSize * _fontSizePercent;
           else if (_glyph == 'yaa' || _glyph == 'waa')
-            _width = 100.0 * transcribeRelativeFontSize;
+            _width = 100.0 * transcribeRelativeFontSize * _fontSizePercent;
           else
-            _width = 75.0 * transcribeRelativeFontSize;
+            _width = 75.0 * transcribeRelativeFontSize * _fontSizePercent;
           _tempGlyphs.add(SizedBox(
             width: _width,
             child: FittedBox(
@@ -191,10 +195,10 @@ class _TranscribePageState extends State<TranscribePage>
         0,
         Container(
           height: double.infinity,
-          padding:
-              const EdgeInsets.only(left: 5.0 * transcribeRelativeFontSize),
+          padding: EdgeInsets.only(
+              left: 5.0 * transcribeRelativeFontSize * _fontSizePercent),
           child: Wrap(
-            runSpacing: 5.0 * transcribeRelativeFontSize,
+            runSpacing: 5.0 * transcribeRelativeFontSize * _fontSizePercent,
             direction: Axis.vertical,
             verticalDirection: VerticalDirection.down,
             crossAxisAlignment: WrapCrossAlignment.center,
@@ -567,6 +571,8 @@ class _TranscribePageState extends State<TranscribePage>
 
   @override
   Widget build(BuildContext context) {
+    if (!(MediaQuery.of(context).size.height > 600)) _fontSizePercent = 0.75;
+
     Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding,
           headerVerticalPadding, headerHorizontalPadding, 0.0),
@@ -580,7 +586,10 @@ class _TranscribePageState extends State<TranscribePage>
         middle: Padding(
           padding: const EdgeInsets.only(bottom: headerVerticalPadding),
           child: Center(
-            child: Text('Pámanlíkas', style: textPageTitle),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text('Pámanlíkas', style: textPageTitle),
+            ),
           ),
         ),
         right: IconButtonNew(
@@ -600,7 +609,9 @@ class _TranscribePageState extends State<TranscribePage>
           autocorrect: false,
           maxLines: null,
           keyboardType: TextInputType.multiline,
-          style: textTranscribe,
+          style: MediaQuery.of(context).size.height > 600
+              ? textTranscribe
+              : textTranscribe.copyWith(fontSize: 25.0),
           cursorColor: transcribeCursorColor,
           cursorRadius: Radius.circular(15.0),
           cursorWidth: transcribeCursorWidth,

@@ -773,9 +773,12 @@ class _AnimatedTextState extends State<_AnimatedText> {
       opacity: _opacity,
       curve: writingTextOpacityChangeCurve,
       duration: const Duration(milliseconds: writingInitOpacityDuration),
-      child: Text(
-        widget.text.isNotEmpty? widget.text : ' ',
-        style: textWriting,
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Text(
+          widget.text.isNotEmpty? widget.text : ' ',
+          style: textWriting,
+        ),
       ),
     );
   }

@@ -32,7 +32,10 @@ class HomeButton extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(title, style: textHomeButton),
+              FittedBox(
+                fit: BoxFit.contain,
+                child: Text(title, style: textHomeButton),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 2.0),
                 child: Text(subtitle, style: textHomeButtonSub),
@@ -45,12 +48,15 @@ class HomeButton extends StatelessWidget {
 
     if (progress > 0)
       _title.add(
-        LinearProgressBar(height: 15.0, progress: progress),
+        LinearProgressBar(
+          height: MediaQuery.of(context).size.width > 340.0 ? 15.0 : 11.0,
+          progress: progress,
+        ),
       );
 
     return CustomButton(
       onPressed: () => Navigator.pushNamed(context, route),
-      elevation: 10.0,
+      elevation: MediaQuery.of(context).size.height > 600.0 ? 10.0 : 7.0,
       borderRadius: 30.0,
       height: 100.0,
       padding: const EdgeInsets.only(right: 20.0),

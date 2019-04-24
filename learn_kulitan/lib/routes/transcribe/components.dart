@@ -629,6 +629,7 @@ class _KeyboardKeyContainer extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: CustomPaint(
           painter: _KeyIconPainter(
+            strokePercent: MediaQuery.of(context).size.width / 414.0,
             keyType: this.keyType,
           ),
         ),
@@ -682,17 +683,18 @@ class _KeyboardKeyContainer extends StatelessWidget {
 }
 
 class _KeyIconPainter extends CustomPainter {
-  _KeyIconPainter({this.keyType});
+  _KeyIconPainter({this.keyType, this.strokePercent});
 
   final String keyType;
+  final double strokePercent;
 
   @override
   bool shouldRepaint(_KeyIconPainter oldDelegate) => false;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Offset _shadowOffset = Offset(2.5, 2.5);
-    final double _strokeWidth = 3.0;
+    final Offset _shadowOffset = Offset(2.5 * strokePercent, 2.5 * strokePercent);
+    final double _strokeWidth = 3.0 * strokePercent;
     final double _start = _strokeWidth - (_shadowOffset.dx / 2.0);
     final double _end = size.width - _strokeWidth - (_shadowOffset.dx / 2.0);
     final double _width = _end - _start;

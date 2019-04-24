@@ -17,6 +17,7 @@ class ReadingPageState extends State<ReadingPage> {
   final GameLogicManager _gameLogicManager = GameLogicManager();
   bool _isLoading = true;
   int _overallProgressCount = 0;
+  Size _screenSize;
   List<Map<String, dynamic>> _cards = [
     {
       'kulitan': 'pie',
@@ -139,16 +140,23 @@ class ReadingPageState extends State<ReadingPage> {
     final RenderBox _cardBox = _quizCardsKey.currentContext.findRenderObject();
     double _cardWidth = _cardBox.size.width - (quizHorizontalScreenPadding * 2);
 
+    final _cardStackBottomPadding = _screenSize.aspectRatio < 0.5 ? cardQuizStackBottomPadding : 13.0;
+    final _buttonElevation = _screenSize.aspectRatio < 0.5 ? quizChoiceButtonElevation : 7.0;
+    final _buttonHeight = _screenSize.aspectRatio < 0.5 ? quizChoiceButtonHeight : 45.0;
+    final _choiceSpacing = MediaQuery.of(context).size.aspectRatio < 0.5 ? choiceSpacing : 7.0;
+
     setState(() {
       _quizCardWidth = _cardWidth;
-      _heightToCardStackBottom = _screenBox.size.height - quizVerticalScreenPadding - ((quizChoiceButtonHeight + quizChoiceButtonElevation) * 2) - choiceSpacing - cardQuizStackBottomPadding;
+      _heightToCardStackBottom = _screenBox.size.height - quizVerticalScreenPadding - ((_buttonHeight + _buttonElevation) * 2) - _choiceSpacing - _cardStackBottomPadding;
       _heightToQuizCardTop = _heightToCardStackBottom - _quizCardWidth - quizCardStackTopSpace;
-      _quizCardStackHeight = _heightToCardStackBottom - _heightToQuizCardTop + cardQuizStackBottomPadding;
+      _quizCardStackHeight = _heightToCardStackBottom - _heightToQuizCardTop + _cardStackBottomPadding;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    _screenSize = MediaQuery.of(context).size;
+
     Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding, headerVerticalPadding, headerHorizontalPadding, 0.0),
       child: StaticHeader(
@@ -158,10 +166,13 @@ class ReadingPageState extends State<ReadingPage> {
           color: headerNavigationColor,
           onPressed: () => Navigator.pop(context),
         ),
-        middle: Text(
-          'Glyphs\nLearned',
-          style: textQuizHeader,
-          textAlign: TextAlign.center,
+        middle: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            'Glyphs Learned',
+            style: textQuizHeader,
+            textAlign: TextAlign.center,
+          ),
         ),
         right: IconButtonNew(
           icon: Icons.settings,
@@ -174,10 +185,10 @@ class ReadingPageState extends State<ReadingPage> {
     
     Widget _progressBar = Expanded(
       child: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: MediaQuery.of(context).size.aspectRatio < 0.5 ? const EdgeInsets.symmetric(
           horizontal: quizHorizontalScreenPadding,
           vertical: 15.0,
-        ),
+        ) : const EdgeInsets.only(bottom: 7.0),
         child: CircularProgressBar(
           numerator: _overallProgressCount,
           denominator: totalGlyphCount,
@@ -186,7 +197,7 @@ class ReadingPageState extends State<ReadingPage> {
     );
 
     Widget _buttonChoices = Padding(
-      padding: EdgeInsets.fromLTRB(quizHorizontalScreenPadding, 0.0, quizHorizontalScreenPadding, quizVerticalScreenPadding),
+      padding: const EdgeInsets.fromLTRB(quizHorizontalScreenPadding, 0.0, quizHorizontalScreenPadding, quizVerticalScreenPadding),
       child: Column(
         children: <Widget>[
           Row(
@@ -223,7 +234,7 @@ class ReadingPageState extends State<ReadingPage> {
             ],
           ),
           Container(
-            height: choiceSpacing,
+            height: MediaQuery.of(context).size.aspectRatio < 0.5 ? choiceSpacing : 7.0,
           ),
           Row(
             children: <Widget>[

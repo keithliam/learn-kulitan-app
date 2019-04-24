@@ -26,10 +26,13 @@ class KulitanInfoCell extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 5.0),
-              child: Text(
-                caption,
-                style: textInfoCaption,
-                textAlign: TextAlign.center,
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  caption,
+                  style: textInfoCaption,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ],

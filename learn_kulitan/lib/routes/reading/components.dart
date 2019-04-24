@@ -135,11 +135,11 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return CustomButton(
-      height: quizChoiceButtonHeight,
+      height: MediaQuery.of(context).size.aspectRatio < 0.5 ? quizChoiceButtonHeight : 45.0,
       color: _animation.value,
       onPressed: tapped,
       disable:  widget.disable,
-      elevation: quizChoiceButtonElevation,
+      elevation: MediaQuery.of(context).size.aspectRatio < 0.5 ? quizChoiceButtonElevation : 7.0,
       borderRadius: 15.0,
       padding: const EdgeInsets.all(12.0),
       pressDelay: quizChoicePressDuration,
@@ -151,10 +151,13 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
           opacity: _opacity,
           duration: const Duration(milliseconds: resetChoicesDuration),
           curve: customButtonPressCurve,
-          child: Text(
-            '${widget.text}',
-            style: _textStyle.copyWith(
-              color: widget.type == ChoiceButton.wrong? _animationText.value : textQuizChoice.color
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              '${widget.text}',
+              style: _textStyle.copyWith(
+                color: widget.type == ChoiceButton.wrong? _animationText.value : textQuizChoice.color
+              ),
             ),
           ),
         ),
