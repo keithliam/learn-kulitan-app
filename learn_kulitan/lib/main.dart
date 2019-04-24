@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import './components/misc/SlideLeftRoute.dart';
 import './routes/home/home.dart';
 import './routes/reading/reading.dart';
 import './routes/writing/writing.dart';
