@@ -8,6 +8,7 @@ import './routes/information/information.dart';
 import './routes/information/routes/history.dart';
 import './routes/information/routes/writingguide.dart';
 import './routes/transcribe/transcribe.dart';
+import './routes/about/about.dart';
 import './components/misc/CustomScrollBehavior.dart';
 
 void main() {
@@ -54,6 +55,9 @@ class MyApp extends StatelessWidget {
               break;
             case '/transcribe':
               return SlideLeftRoute(widget: TranscribePage());
+              break;
+            case '/about':
+              return SlideLeftRoute(widget: AboutPage());
               break;
           }
         });

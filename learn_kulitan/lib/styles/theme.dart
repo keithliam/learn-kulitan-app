@@ -54,6 +54,8 @@ const keyboardKeyHintColor = accentColor;
 
 const linksColor = accentColor;
 
+const paragraphTextColor = whiteColor;
+
 // Opacities
 const keyboardPressOpacity = 0.25;
 const keyboardMainPressOpacity = 0.6;
@@ -69,6 +71,8 @@ const informationHorizontalScreenPadding = 32.0;
 const informationVerticalScreenPadding = 32.0;
 const transcribeHorizontalScreenPadding = 32.0;
 const transcribeVerticalScreenPadding = 25.0;
+const aboutHorizontalScreenPadding = 32.0;
+const aboutVerticalScreenPadding = 25.0;
 const headerHorizontalPadding = 5.0;
 const headerVerticalPadding = 10.0;
 const cardQuizHorizontalPadding = 26.0;
@@ -92,6 +96,7 @@ const imageTopPadding = 30.0;
 const imageCaptionTopPadding = 10.0;
 const imageCaptionHorizontalPadding = 30.0;
 const paragraphTopPadding = 20.0;
+const aboutSubtitleTopPadding = 25.0;
 
 // Sizes
 const homeTitleHeight = 110.0;
@@ -824,4 +829,18 @@ const textTranscribe = TextStyle(
   fontSize: 40.0,
   fontWeight: FontWeight.bold,
   color: grayColor,
+);
+const textAboutSubtitle = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 30.0,
+  fontWeight: FontWeight.bold,
+  color: whiteColor,
+  shadows: <Shadow>[
+    Shadow(color: accentColor, offset: Offset(3.0, 3.0))
+  ]
+);
+const textAboutFooter = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 10.0,
+  color: whiteColor,
 );

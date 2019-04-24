@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
       ],
       title: 'Reng Gínawá',
       subtitle: 'ABOUT THE AUTHORS',
-      route: '/',
+      route: '/about',
     );
 
     return Material(
