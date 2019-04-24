@@ -56,6 +56,10 @@ const linksColor = accentColor;
 
 const paragraphTextColor = whiteColor;
 
+const loaderStrokeColor = whiteColor;
+const loaderStrokeShadowColor = accentColor;
+const loaderBackgroundColor = primaryColor;
+
 // Opacities
 const keyboardPressOpacity = 0.25;
 const keyboardMainPressOpacity = 0.6;
@@ -119,6 +123,7 @@ const kulitanCursorHeight = transcribeCursorWidth;
 const toastFontSize = 16.0;
 const historyFABThreshold = 0.05;
 const informationFABThreshold = 0.15;
+const loaderWidthPercent = 0.4;
 
 // Sensitivity
 const swipeDownSensitivity = 1.0;
@@ -156,6 +161,7 @@ const keyboardPressOpacityCurve = Curves.fastLinearToSlowEaseIn;
 const keyHintOpacityCurve = Curves.fastLinearToSlowEaseIn;
 const kulitanCursorBlinkCurve = Curves.ease;
 const informationPageScrollCurve = Curves.easeInOutCubic;
+const loaderOpacityCurve = Curves.fastOutSlowIn;
 
 // Durations
 const linearProgressBarChangeDuration = 1000;
@@ -189,6 +195,7 @@ const keyHintOpacityDuration = 350;
 const kulitanCursorBlinkDuration = 1000;
 const kulitanCursorBlinkDelay = 500;
 const keyDeleteLongPressFrequency = 150;
+const loaderOpacityDuration = 250;
 
 // Kulitan
 const Map<String, String> kulitanGlyphs = {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import '../../components/animations/Loader.dart';
 import './components.dart';
 import '../../styles/theme.dart';
 import '../../db/DatabaseHelper.dart';
@@ -10,6 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _isLoading = true;  
   int _readingProgress = -1;
   int _writingProgress = -1;
 
@@ -20,6 +22,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _readingProgress = _reading;
       _writingProgress = _writing;
+      _isLoading = false;
     });
   }
 
@@ -108,22 +111,25 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         color: backgroundColor,
         child: SafeArea(
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(
-              homeHorizontalScreenPadding,
-              0.0,
-              homeHorizontalScreenPadding,
-              homeVerticalScreenPadding - quizChoiceButtonElevation,
+          child: Loader(
+            isVisible: _isLoading,
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(
+                homeHorizontalScreenPadding,
+                0.0,
+                homeHorizontalScreenPadding,
+                homeVerticalScreenPadding - quizChoiceButtonElevation,
+              ),
+              children: <Widget>[
+                _appTitle,
+                _readingButton,
+                _writingButton,
+                _transcribeButton,
+                _infoButton,
+                _aboutButton,
+              ],
             ),
-            children: <Widget>[
-              _appTitle,
-              _readingButton,
-              _writingButton,
-              _transcribeButton,
-              _infoButton,
-              _aboutButton,
-            ],
           ),
         ),
       ),

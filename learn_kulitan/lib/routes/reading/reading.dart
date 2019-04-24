@@ -5,6 +5,7 @@ import '../../components/buttons/IconButtonNew.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/CircularProgressBar.dart';
 import '../../components/misc/GameLogicManager.dart';
+import '../../components/animations/Loader.dart';
 import './components.dart';
 
 class ReadingPage extends StatefulWidget {
@@ -12,8 +13,9 @@ class ReadingPage extends StatefulWidget {
   ReadingPageState createState() => ReadingPageState();
 }
 
-class ReadingPageState extends State<ReadingPage> { 
+class ReadingPageState extends State<ReadingPage> {
   final GameLogicManager _gameLogicManager = GameLogicManager();
+  bool _isLoading = true;
   int _overallProgressCount = 0;
   List<Map<String, dynamic>> _cards = [
     {
@@ -114,13 +116,14 @@ class ReadingPageState extends State<ReadingPage> {
 
   void _startGame() async {
     await _gameLogicManager.init(this);
+    setState(() => _isLoading = false);
   }
 
   @override
   void initState() {
-    _startGame();
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _getQuizCardsSize()); 
+    _startGame();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _getQuizCardsSize());
   }
 
   @override
@@ -310,21 +313,24 @@ class ReadingPageState extends State<ReadingPage> {
     return Material(
       color: backgroundColor,
       child: SafeArea(
-        child: Stack(
-          key: _pageKey,
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                _header,
-                _progressBar,
-                Container(
-                  height: _quizCardStackHeight,
-                ),
-                _buttonChoices,
-              ],
-            ),
-            _quizCards,
-          ],
+        child: Loader(
+          isVisible: _isLoading,
+          child: Stack(
+            key: _pageKey,
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  _header,
+                  _progressBar,
+                  Container(
+                    height: _quizCardStackHeight,
+                  ),
+                  _buttonChoices,
+                ],
+              ),
+              _quizCards,
+            ],
+          ),
         ),
       ),
     );

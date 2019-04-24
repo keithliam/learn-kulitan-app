@@ -4,6 +4,7 @@ import '../../components/buttons/IconButtonNew.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/LinearProgressBar.dart';
 import '../../components/misc/GameLogicManager.dart';
+import '../../components/animations/Loader.dart';
 import './components.dart';
 
 class WritingPage extends StatefulWidget {
@@ -13,6 +14,7 @@ class WritingPage extends StatefulWidget {
 
 class WritingPageState extends State<WritingPage> with SingleTickerProviderStateMixin { 
   final GameLogicManager _gameLogicManager = GameLogicManager(isQuiz: false);
+  bool _isLoading = true;
   int _overallProgressCount = 0;
   List<Map<String, dynamic>> _cards = [
     {
@@ -46,6 +48,7 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
 
   void _startGame() async {
     await _gameLogicManager.init(this);
+    setState(() => _isLoading = false);
   }
 
   @override
@@ -132,19 +135,22 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
     return Material(
       color: backgroundColor,
       child: SafeArea(
-        child: Column(
-          children: <Widget>[
-            _header,
-            Expanded(
-              child: Stack(
-                fit: StackFit.expand,
-                children: <Positioned>[
-                  _mainCard,
-                  _secCard,
-                ],
+        child: Loader(
+          isVisible: _isLoading,
+            child: Column(
+            children: <Widget>[
+              _header,
+              Expanded(
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: <Positioned>[
+                    _mainCard,
+                    _secCard,
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
