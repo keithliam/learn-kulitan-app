@@ -82,7 +82,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           icon: Icons.arrow_back_ios,
           iconSize: headerIconSize,
           color: headerNavigationColor,
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
         right: IconButtonNew(
           icon: Icons.settings,

@@ -84,7 +84,7 @@ class _HistoryPageState extends State<HistoryPage> {
           icon: Icons.arrow_back_ios,
           iconSize: headerIconSize,
           color: headerNavigationColor,
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
         right: IconButtonNew(
           icon: Icons.settings,

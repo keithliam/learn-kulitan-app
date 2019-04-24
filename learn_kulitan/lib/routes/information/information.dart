@@ -49,7 +49,7 @@ class _InformationPageState extends State<InformationPage> {
           icon: Icons.arrow_back_ios,
           iconSize: headerIconSize,
           color: headerNavigationColor,
-          onPressed: () => Navigator.pushNamed(context, '/'),
+          onPressed: () => Navigator.pop(context),
         ),
         right: IconButtonNew(
           icon: Icons.settings,

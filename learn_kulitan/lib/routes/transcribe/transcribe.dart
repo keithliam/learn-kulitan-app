@@ -575,7 +575,7 @@ class _TranscribePageState extends State<TranscribePage>
           icon: Icons.arrow_back_ios,
           iconSize: headerIconSize,
           color: headerNavigationColor,
-          onPressed: () => Navigator.pushNamed(context, '/'),
+          onPressed: () => Navigator.pop(context),
         ),
         middle: Padding(
           padding: const EdgeInsets.only(bottom: headerVerticalPadding),

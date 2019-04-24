@@ -73,7 +73,7 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
           icon: Icons.arrow_back_ios,
           iconSize: headerIconSize,
           color: headerNavigationColor,
-          onPressed: () => Navigator.pushNamed(context, '/'),
+          onPressed: () => Navigator.pop(context),
         ),
         middle: Column(
           children: <Widget>[

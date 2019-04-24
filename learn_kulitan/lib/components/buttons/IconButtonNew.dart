@@ -20,24 +20,15 @@ class IconButtonNew extends StatefulWidget {
 class _IconButtonNewState extends State<IconButtonNew> {
   double _opacity = 1.0;
 
-  void _pressDown(details) {
-    setState(() => _opacity = 0.6);
-  }
+  void _pressDown(details) => setState(() => _opacity = 0.6);
 
-  void _pressUp(details) {
-    setState(() => _opacity = 1.0);
-    widget.onPressed();
-  }
-
-  void _cancel() {
-    setState(() => _opacity = 1.0);
-  }
+  void _cancel() => setState(() => _opacity = 1.0);
 
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.onPressed,
       onTapDown: _pressDown,
-      onTapUp: _pressUp,
+      onTapUp: (_) => _cancel(),
       onTapCancel: _cancel,
       child: ConstrainedBox(
         constraints: const BoxConstraints(minWidth: 48.0, minHeight: 48.0),

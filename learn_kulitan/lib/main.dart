@@ -32,34 +32,16 @@ class MyApp extends StatelessWidget {
           );
         },
         title: 'Learn Kulitan',
-        home: HomePage(),
-        onGenerateRoute: (RouteSettings settings) {
-          switch (settings.name) {
-            case '/':
-              return SlideLeftRoute(widget: HomePage());
-              break;
-            case '/reading':
-              return SlideLeftRoute(widget: ReadingPage());
-              break;
-            case '/writing':
-              return SlideLeftRoute(widget: WritingPage());
-              break;
-            case '/information':
-              return SlideLeftRoute(widget: InformationPage());
-              break;
-            case '/information/history':
-              return SlideLeftRoute(widget: HistoryPage());
-              break;
-            case '/information/guide':
-              return SlideLeftRoute(widget: WritingGuidePage());
-              break;
-            case '/transcribe':
-              return SlideLeftRoute(widget: TranscribePage());
-              break;
-            case '/about':
-              return SlideLeftRoute(widget: AboutPage());
-              break;
-          }
+        initialRoute: '/',
+        routes: {
+          '/': (context) => HomePage(),
+          '/reading': (context) => ReadingPage(),
+          '/writing': (context) => WritingPage(),
+          '/information': (context) => InformationPage(),
+          '/information/history': (context) => HistoryPage(),
+          '/information/guide': (context) => WritingGuidePage(),
+          '/transcribe': (context) => TranscribePage(),
+          '/about': (context) => AboutPage(),
         });
   }
 }
