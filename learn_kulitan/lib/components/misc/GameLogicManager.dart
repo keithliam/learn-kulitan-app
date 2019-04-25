@@ -30,6 +30,20 @@ class GameLogicManager {
     else await _initTutorial();
   }
 
+  void finishTutorial() async {
+    if (isQuiz) _state.isLoading = true;
+    _isTutorial = false;
+    _state.isTutorial = false;
+    if (isQuiz) {
+      await _pushTutorial();
+      _state.enableAllChoices();
+      _state.startGame();
+    } else {
+      _pushTutorial();
+    }
+    if (isQuiz) _state.isLoading = false;
+  }
+
   Future<void> _initTutorial() async {
     final Map<String, dynamic> _gameData = {
       'current_batch': 1,
@@ -51,10 +65,7 @@ class GameLogicManager {
       _state.disableSwipe = true;
       _state.disableCorrectChoice('la');
     } else {
-      _state.isLoading = true;
-      await _pushTutorial();
-      _state.enableAllChoices();
-      _state.startGame();
+      finishTutorial();
     }
   }
 
@@ -236,10 +247,7 @@ class GameLogicManager {
       _state.disableSwipe = true;
   }
 
-  Future<void> _pushTutorial() async {
-    await _db.update('Tutorial', {'${isQuiz? 'reading' : 'writing'}': 'false'}, where: '${isQuiz? 'reading' : 'writing'} = "true"');
-    _isTutorial = false;
-  }
+  Future<void> _pushTutorial() async => await _db.update('Tutorial', {'${isQuiz? 'reading' : 'writing'}': '${_isTutorial.toString()}'}, where: '${isQuiz? 'reading' : 'writing'} = "true"');
   void _pushCards({bool isTwo: false}) async {
     Map<String, String> _data = {
       'one': _state.cards[0]['answer'],
@@ -344,7 +352,7 @@ class GameLogicManager {
   }
 
   void correctAnswer() async {
-    if (!isQuiz && _isTutorial) _pushTutorial();
+    if (!isQuiz && _isTutorial) finishTutorial();
     if(_batchNumber == 0) {
       _batchNumber = 1;
       if (!_isTutorial || !isQuiz) _pushBatchNumber();

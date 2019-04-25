@@ -212,7 +212,7 @@ class ReadingPageState extends State<ReadingPage> {
             text: 'Skip',
             height: headerIconSize,
             color: headerNavigationColor,
-            onPressed: null,
+            onPressed: _gameLogicManager.finishTutorial,
             width: 80.0,
             alignment: Alignment.centerRight,
           ) : IconButtonNew(
