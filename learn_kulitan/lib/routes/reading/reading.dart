@@ -128,6 +128,8 @@ class ReadingPageState extends State<ReadingPage> {
   void _pressStopAlert() {
     if(_presses > 0)
       setState(() => _presses--);
+    if(_presses == 0 && !_isTutorial)
+      setState(() => _disableSwipe = false);
   }
 
   void _swipingCard() {
@@ -135,7 +137,7 @@ class ReadingPageState extends State<ReadingPage> {
   }
 
   void _swipingCardDone() {
-    setState(() => _disableChoices = false);
+    if (!_isTutorial) setState(() => _disableChoices = false);
   }
 
   void startGame() async {

@@ -50,9 +50,9 @@ class GameLogicManager {
       _state.disableSwipe = true;
       _state.disableCorrectChoice('la');
     } else {
-      _isTutorial = false;
       _state.isLoading = true;
       await _db.update('Tutorial', {'${isQuiz? 'reading' : 'writing'}': 'false'}, where: '${isQuiz? 'reading' : 'drawing'} = "true"');
+      _isTutorial = false;
       _state.enableAllChoices();
       _state.startGame();
     }
