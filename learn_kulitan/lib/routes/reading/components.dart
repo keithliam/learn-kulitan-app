@@ -561,8 +561,6 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
             _cardSwipeLeftX = 0.0;
             _cardTransform = 0.0;
           });
-          await Future.delayed(const Duration(milliseconds: swipeDownSnapDuration));
-          widget.swipingCardDone();
         } else {
           _animateSwipe(_cardTransform, 1.0, isSwipeDown: false);
           setState(() {
