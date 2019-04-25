@@ -63,7 +63,7 @@ class _LoaderState extends State<Loader> with FlareController {
         _animationTime = 0.0;
         _toRemove = false;
       });
-      widget.onFinish();
+      widget?.onFinish();
     }
     return true;
   }
