@@ -10,6 +10,9 @@ const blueColor = Color(0xFFDBF3FF);
 const lightBlueColor = Color(0xFFEDFAFF);
 const whiteColor = Color(0xFFFFFFFF);
 
+const tutorialsOverlayColor = Color(0x88000000);
+const tutorialsOverlayBackgroundColor = primaryColor;
+
 const backgroundColor = primaryColor;
 const headerNavigationColor = whiteColor;
 const circularProgressTextColor = whiteColor;
@@ -196,6 +199,7 @@ const kulitanCursorBlinkDuration = 1000;
 const kulitanCursorBlinkDelay = 500;
 const keyDeleteLongPressFrequency = 150;
 const loaderOpacityDuration = 250;
+const tutorialOverlayDelay = 250;
 
 // Kulitan
 const Map<String, String> kulitanGlyphs = {
@@ -855,5 +859,10 @@ const textAboutSubtitle = TextStyle(
 const textAboutFooter = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 10.0,
+  color: whiteColor,
+);
+const textTutorialOverlay = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 15.0,
   color: whiteColor,
 );

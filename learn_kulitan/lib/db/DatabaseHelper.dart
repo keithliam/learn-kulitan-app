@@ -21,7 +21,7 @@ class DatabaseHelper {
   _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _databaseName);
-    // await deleteDatabase(path); // TODO: remove
+    await deleteDatabase(path); // TODO: remove
     return await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
   }

@@ -9,10 +9,12 @@ class Loader extends StatefulWidget {
   const Loader({
     @required this.isVisible,
     @required this.child,
+    this.onFinish,
   });
 
   final bool isVisible;
   final Widget child;
+  final VoidCallback onFinish;
 
   @override
   _LoaderState createState() => _LoaderState();
@@ -61,6 +63,7 @@ class _LoaderState extends State<Loader> with FlareController {
         _animationTime = 0.0;
         _toRemove = false;
       });
+      widget.onFinish();
     }
     return true;
   }

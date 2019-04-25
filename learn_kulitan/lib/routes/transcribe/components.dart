@@ -693,7 +693,8 @@ class _KeyIconPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Offset _shadowOffset = Offset(2.5 * strokePercent, 2.5 * strokePercent);
+    final Offset _shadowOffset =
+        Offset(2.5 * strokePercent, 2.5 * strokePercent);
     final double _strokeWidth = 3.0 * strokePercent;
     final double _start = _strokeWidth - (_shadowOffset.dx / 2.0);
     final double _end = size.width - _strokeWidth - (_shadowOffset.dx / 2.0);

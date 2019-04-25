@@ -16,6 +16,12 @@ class ReadingPage extends StatefulWidget {
 
 class ReadingPageState extends State<ReadingPage> {
   final GameLogicManager _gameLogicManager = GameLogicManager();
+  final _tutorialKey1 = GlobalKey();
+  final _tutorialKey2 = GlobalKey();
+  final _tutorialKey3 = GlobalKey();
+  final _tutorialKey4 = GlobalKey();
+  final _tutorialKey5 = GlobalKey();
+  int _tutorialNo = -1;
   bool _isLoading = true;
   bool _isTutorial = true;
   int _overallProgressCount = 0;
@@ -89,6 +95,7 @@ class ReadingPageState extends State<ReadingPage> {
   set disableChoices(bool i) => setState(() => _disableChoices = i);
   set isLoading(bool i) => setState(() => _isLoading = i);
   set isTutorial(bool i) => setState(() => _isTutorial = i);
+  set tutorialNo(int i) => setState(() => _tutorialNo = i);
   void setCard(Map<String, dynamic> card, int i) => setState(() => _cards[i] = card);
   void setCardStackNo(int i, int sNum) => setState(() => _cards[i]['stackNumber'] = sNum);
   void setChoice(Map<String, dynamic> choice, int i) => setState(() => _choices[i] = choice);
@@ -145,8 +152,12 @@ class ReadingPageState extends State<ReadingPage> {
     await _gameLogicManager.init(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getQuizCardsSize();
-      setState(() => _isLoading = false);
+      setState(() => _isLoading = false); 
     });
+  }
+
+  void _doneLoading() {
+    setState(() => _tutorialNo = 0);
   }
 
   @override
@@ -364,28 +375,107 @@ class ReadingPageState extends State<ReadingPage> {
       ),
     );
 
-    final List<Widget> _pageStack = [
-      _header,
-      _progressBar,
-      Container(
-        height: _quizCardStackHeight,
+    List<Widget> _pageStack = [
+      Column(
+        children: [
+          _header,
+          _progressBar,
+          Container(
+            height: _quizCardStackHeight,
+          ),
+          _buttonChoices,
+        ],
       ),
-      _buttonChoices,
+      _quizCards,
     ];
+
+    if (_isTutorial) {
+      if (_tutorialNo == 0) _pageStack.add(
+        IgnorePointer(
+          child: TutorialOverlay(
+            key: _tutorialKey1,
+            quizCardTop: _heightToQuizCardTop + quizCardStackTopSpace,
+            quizCardBottom: _heightToCardStackBottom,
+            width: _quizCardWidth,
+            flare: 'swipe_down.flr',
+            animation: 'down',
+            tutorialNo: _tutorialNo,
+          ),
+        ),
+      );
+      else if (_tutorialNo == 1) _pageStack.add(
+        IgnorePointer(
+          child: TutorialOverlay(
+            key: _tutorialKey2,
+            quizCardTop: _heightToQuizCardTop + quizCardStackTopSpace,
+            quizCardBottom: _heightToCardStackBottom,
+            width: _quizCardWidth,
+            flare: 'swipe_down.flr',
+            animation: 'left',
+            tutorialNo: _tutorialNo,
+          ),
+        ),
+      );
+      else if (_tutorialNo == 2) _pageStack.add(
+        IgnorePointer(
+          child: TutorialOverlay(
+            key: _tutorialKey3,
+            quizCardTop: _heightToQuizCardTop + quizCardStackTopSpace,
+            quizCardBottom: _heightToCardStackBottom,
+            width: _quizCardWidth,
+            flare: 'shaking_pointer.flr',
+            animation: 'shake',
+            tutorialNo: _tutorialNo,
+          ),
+        ),
+      );
+      else if (_tutorialNo == 3) _pageStack.add(
+        IgnorePointer(
+          child: TutorialOverlay(
+            key: _tutorialKey4,
+            quizCardTop: _heightToQuizCardTop + quizCardStackTopSpace,
+            quizCardBottom: _heightToCardStackBottom,
+            width: _quizCardWidth,
+            flare: 'shaking_pointer.flr',
+            animation: 'shake',
+            tutorialNo: _tutorialNo,
+          ),
+        ),
+      );
+      else if (_tutorialNo == 4) _pageStack.add(
+        IgnorePointer(
+          child: TutorialOverlay(
+            key: _tutorialKey5,
+            quizCardTop: _heightToQuizCardTop + quizCardStackTopSpace,
+            quizCardBottom: _heightToCardStackBottom,
+            width: _quizCardWidth,
+            flare: 'shaking_pointer.flr',
+            animation: 'shake',
+            tutorialNo: _tutorialNo,
+          ),
+        ),
+      );
+      else if (_tutorialNo == 5) _pageStack.add(
+        IgnorePointer(
+          child: TutorialSuccess(
+            text: 'You\'re good to go! 👌\nYou may replay this tutorial anytime in the settings menu 😁\n\nTap anywhere to continue',
+            onTap: _gameLogicManager.finishTutorial,
+            setLoader: () => setState(() => _isLoading = true),
+          ),
+        ),
+      );
+    }
+    
 
     return Material(
       color: backgroundColor,
       child: SafeArea(
         child: Loader(
+          onFinish: _doneLoading,
           isVisible: _isLoading,
           child: Stack(
             key: _pageKey,
-            children: <Widget>[
-              Column(
-                children: _pageStack,
-              ),
-              _quizCards,
-            ],
+            children: _pageStack,
           ),
         ),
       ),

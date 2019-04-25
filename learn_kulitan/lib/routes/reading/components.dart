@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'dart:math' as math;
 import 'dart:async';
 import '../../components/buttons/CustomButton.dart';
 import '../../components/misc/LinearProgressBar.dart';
 import '../../components/misc/CustomCard.dart';
+import '../../components/misc/Paragraphs.dart';
+import 'reading.dart';
 import '../../styles/theme.dart';
 
 class ChoiceButton extends StatefulWidget {
@@ -619,5 +622,319 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
         ),
       ),
     );
+  }
+}
+
+class TutorialOverlay extends StatefulWidget {
+  const TutorialOverlay({
+    Key key,
+    @required this.quizCardTop,
+    @required this.quizCardBottom,
+    @required this.width,
+    @required this.animation,
+    @required this.flare,
+    @required this.tutorialNo,
+  }) : super(key: key);
+
+  final double width;
+  final double quizCardTop;
+  final double quizCardBottom;
+  final String animation;
+  final String flare;
+  final int tutorialNo;
+
+  @override
+  _TutorialOverlayState createState() => _TutorialOverlayState();
+}
+
+class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  OverlayEntry _overlay;
+  bool _pageTwo = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showOverlay());
+  }
+
+  void _showOverlay() async {
+    if (_overlay == null) {
+      if (widget.tutorialNo == 0) await Future.delayed(const Duration(milliseconds: tutorialOverlayDelay));
+      _overlay = _createOverlay();
+      Overlay.of(context).insert(_overlay);
+      _controller.forward();
+    }
+  }
+
+  void _showNextOverlay() {
+    _pageTwo = true;
+    _overlay = _createOverlay();
+    Overlay.of(context).insert(_overlay);
+    _controller.forward();
+  }
+
+  void _dismissOverlay(_) async {
+    _controller.reverse();
+    await Future.delayed(const Duration(milliseconds: 500));
+    _overlay?.remove();
+    _overlay = null;
+    if (widget.tutorialNo == 2 && !_pageTwo) _showNextOverlay();
+  }
+
+  Widget _flare({top, left, height, right, animation, flipH = false, flipV = false}) {
+    final Widget _flare = FlareActor(
+      'assets/flares/${widget.flare}',
+      color: accentColor,
+      animation: animation ?? widget.animation,
+    );
+
+
+    Widget _widget;
+    if (flipH || flipV) {
+      _widget = Transform(
+        transform: Matrix4.identity()..scale(flipH ? -1.0 : 1.0, flipV ? -1.0 : 1.0, 1.0),
+        alignment: FractionalOffset.center,
+        child: _flare,
+      );
+    } else _widget = _flare;
+
+    return Positioned(
+      top: top,
+      left: left,
+      height: height,
+      right: right,
+      child: IgnorePointer(
+        child: _widget,
+      ),
+    );
+  }
+
+  Widget _text({top, left, height, right, text}) {
+    return Positioned(
+      top: top,
+      left: left,
+      right: right,
+      height: height,
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0),
+            color: tutorialsOverlayColor,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+          child: IgnorePointer(
+            child: Material(
+              color: Colors.transparent,
+              child: Text(text, style: textTutorialOverlay),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  OverlayEntry _createOverlay() {
+    return OverlayEntry(
+      builder: (context) {
+        double top = 0.0;
+        double left = 50.0;
+        double right = 50.0;
+        double height = widget.quizCardTop;
+        String text;
+        List<Widget> _elements = [];
+
+        if (widget.tutorialNo == 0)
+          text = 'Swipe vertically to reveal the answer.';
+        else if (widget.tutorialNo == 1)
+          text = 'Swipe left to dismiss the card.';
+        else if (widget.tutorialNo == 2) {
+          if (!_pageTwo) text = 'This shows the number of glyphs you have already mastered.';
+          else text = 'Choose the correct answer below to increase your mastery. Hint: \'ga\'';
+        } else if (widget.tutorialNo == 3) {
+          text = 'Increase your total mastery by answering this card. Hint: \'da\'';
+        } else if (widget.tutorialNo == 4) {
+          text = 'Mastered glyphs may occassionally show up. These cards can\'t be skipped. Total mastery will decrease when these aren\'t answered correctly!';
+        }
+
+        if (widget.tutorialNo == 2) {
+          if (!_pageTwo) {
+            top = widget.quizCardTop - 50.0;
+            _elements.add(_text(
+              top: widget.quizCardBottom + 30.0,
+              left: left,
+              right: right,
+              height: height,
+              text: 'This progress bar shows your mastery of the current glyph.',
+            ));
+          } else top = widget.quizCardBottom - 200.0;
+        } else if (widget.tutorialNo > 2) {
+          top = widget.quizCardTop - 50.0;
+        }
+        _elements.add(_text(top: top, left: left, right: right, height: height, text: text));
+      
+        double topF = widget.quizCardTop;
+        double leftF = quizHorizontalScreenPadding;
+        double rightF = 0.0;
+        double heightF = widget.width;
+
+        if (widget.tutorialNo == 2) {
+          heightF = 100.0;
+          if (!_pageTwo) {
+            leftF = quizHorizontalScreenPadding + 45.0;
+            topF = widget.quizCardTop - 55.0;
+            _elements.add(_flare(top: widget.quizCardBottom + 10.0, height: heightF, left: 50.0, right: 100.0, flipH: true));
+          } else {
+            topF = widget.quizCardBottom - 50.0;
+            leftF = 0.0;
+          }
+        } else if (widget.tutorialNo == 3 || widget.tutorialNo == 4) {
+          heightF = 100.0;
+          leftF = quizHorizontalScreenPadding + 45.0;
+          topF = widget.quizCardTop - 55.0;
+        }
+        final bool flipV = widget.tutorialNo == 2 && _pageTwo;
+
+        _elements.add(_flare(top: topF, left: leftF, right: rightF, height: heightF, flipV: flipV));
+
+        HitTestBehavior hitTest = HitTestBehavior.translucent;
+
+        if (widget.tutorialNo > 1) hitTest = HitTestBehavior.opaque;
+
+        return Positioned.fill(
+          child: GestureDetector(
+            onTapDown: _dismissOverlay,
+            behavior: hitTest,
+            child: FadeTransition(
+              opacity: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: _controller,
+                curve: Curves.easeInOut,
+              )),
+              child: Stack(children: _elements),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _overlay?.remove();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class TutorialSuccess extends StatefulWidget {
+  const TutorialSuccess({
+    @required this.text,
+    @required this.onTap,
+    @required this.setLoader,
+  });
+
+  final String text;
+  final VoidCallback onTap;
+  final VoidCallback setLoader;
+
+  @override
+  _TutorialSuccessState createState() => _TutorialSuccessState();
+}
+
+class _TutorialSuccessState extends State<TutorialSuccess> with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  OverlayEntry _overlay;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showOverlay());
+  }
+
+  void _showOverlay() async {
+    if (_overlay == null) {
+      _overlay = _createOverlay();
+      Overlay.of(context).insert(_overlay);
+      _controller.forward();
+    }
+  }
+
+  void _dismissOverlay() async {
+    _controller?.reverse();
+    widget.setLoader();
+    await Future.delayed(const Duration(milliseconds: 500));
+    widget.onTap();
+    _overlay?.remove();
+    _overlay = null;
+  }
+
+  OverlayEntry _createOverlay() {
+    return OverlayEntry(
+      builder: (context) {
+        return Positioned.fill(
+          child: GestureDetector(
+            onTap: _dismissOverlay,
+            behavior: HitTestBehavior.opaque,
+            child: FadeTransition(
+              opacity: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: _controller,
+                curve: Curves.easeInOut,
+              )),
+              child: Container(
+                color: tutorialsOverlayBackgroundColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      width: 175.0,
+                      height: 175.0,
+                      child: FlareActor(
+                        'assets/flares/success_check.flr',
+                        animation: 'Untitled',
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                        vertical: 20.0,
+                      ),
+                      child: Paragraphs(
+                        textAlign: TextAlign.center,
+                        paragraphs: [TextSpan(
+                          text: widget.text,
+                          style: textTutorialOverlay,
+                        )],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _overlay?.remove();
+    _overlay = null;
+    _controller.dispose();
+    _controller = null;
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }

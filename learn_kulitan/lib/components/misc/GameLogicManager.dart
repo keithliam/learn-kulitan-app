@@ -58,14 +58,17 @@ class GameLogicManager {
     if (_tutorialNo == 1) {
       _state.disableSwipe = true;
       _state.disableWrongChoices('ga');
+      _state.tutorialNo = 2;
     } else if (_tutorialNo == 2) {
       _state.disableSwipe = true;
       _state.disableWrongChoices('da');
+      _state.tutorialNo = 3;
     } else if (_tutorialNo == 3) {
       _state.disableSwipe = true;
       _state.disableCorrectChoice('la');
-    } else {
-      finishTutorial();
+      _state.tutorialNo = 4;
+    } else if (_tutorialNo == 4) {
+      _state.tutorialNo = 5;
     }
   }
 
@@ -428,6 +431,8 @@ class GameLogicManager {
     if (!_isTutorial) {
       _pushRemovedCards();
       _pushRemovedChoices();
+    } else if (isQuiz) {
+      _state.tutorialNo = 1;
     }
   }
   void swipedLeft() async {
