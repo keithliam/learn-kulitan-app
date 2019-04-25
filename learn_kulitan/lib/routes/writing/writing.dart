@@ -15,6 +15,7 @@ class WritingPage extends StatefulWidget {
 class WritingPageState extends State<WritingPage> with SingleTickerProviderStateMixin { 
   final GameLogicManager _gameLogicManager = GameLogicManager(isQuiz: false);
   bool _isLoading = true;
+  bool _isTutorial = true;
   int _overallProgressCount = 0;
   List<Map<String, dynamic>> _cards = [
     {
@@ -34,6 +35,8 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
   AnimationController _panController;
   Animation<double> _panAnimation;
 
+  set isLoading(bool i) => setState(() => _isLoading = i);
+  set isTutorial(bool i) => setState(() => _isTutorial = i);
   set overallProgressCount(int n) => setState(() => _overallProgressCount = n);
   void setCard(Map<String, dynamic> card, int i) => setState(() => _cards[i] = card);
   void setCardStackNo(int i, int sNum) => setState(() => _cards[i]['stackNumber'] = sNum);

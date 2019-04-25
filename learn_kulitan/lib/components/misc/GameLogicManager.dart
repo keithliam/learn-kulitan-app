@@ -25,7 +25,8 @@ class GameLogicManager {
     _state = _pageState;
     _db = await DatabaseHelper.instance.database;
     _isTutorial = (await _db.query('Tutorial', columns: [isQuiz ? 'reading' : 'writing']))[0][isQuiz ? 'reading' : 'writing'] == 'true';
-    if (!_isTutorial) await _initGame();
+    _state.isTutorial = _isTutorial;
+    if (!_isTutorial || !isQuiz) await _initGame();
     else await _initTutorial();
   }
 
@@ -51,8 +52,7 @@ class GameLogicManager {
       _state.disableCorrectChoice('la');
     } else {
       _state.isLoading = true;
-      await _db.update('Tutorial', {'${isQuiz? 'reading' : 'writing'}': 'false'}, where: '${isQuiz? 'reading' : 'drawing'} = "true"');
-      _isTutorial = false;
+      await _pushTutorial();
       _state.enableAllChoices();
       _state.startGame();
     }
@@ -60,7 +60,7 @@ class GameLogicManager {
 
   void _setFourthTutorialCard() {
     _state.setCard({
-      'kulitan': 'la',
+      'kulitan': 'l',
       'answer': 'la',
       'progress': _glyphProgresses['la'],
       'stackNumber': 3,
@@ -71,15 +71,17 @@ class GameLogicManager {
     final Map<String, dynamic> _gameData = (await _db.query('Page', where: 'name = "${isQuiz? 'reading' : 'writing'}"'))[0];
     await _initData(_gameData);
     _pushCards();
-    _state.disableSwipe = false;
-    _state.enableAllChoices();
-    if(isQuiz) _pushChoices();
+    if(isQuiz) {
+      _state.disableSwipe = false;
+      _state.enableAllChoices();
+      _pushChoices();
+    }
   }
 
   Future<void> _initData(Map<String, dynamic> gameData) async {
     _batchNumber = gameData['current_batch'];
     _state.overallProgressCount = gameData['overall_progress'];
-    if (_isTutorial) {
+    if (_isTutorial && isQuiz) {
       _glyphProgresses = {
         'nga': isQuiz ? maxQuizGlyphProgress ~/ 2 : maxWritingGlyphProgress ~/ 2,
         'ga': 0,
@@ -99,25 +101,35 @@ class GameLogicManager {
       await _fillUpPool();
     }
     if(gameData['current_batch'] == 0) {
-      _getNewCards();
-      if(isQuiz) _getNewChoices();
-    } else {
       if (_isTutorial) {
         _state.setCard({
-          'kulitan': 'nga',
+          'kulitan': kulitanGlyphs['nga'],
+          'answer': 'nga',
+          'progress': _glyphProgresses['nga'],
+          'stackNumber': 1,
+        }, 0);
+        _getNewCards(index: 1);
+      } else {
+        _getNewCards();
+      }
+      if(isQuiz) _getNewChoices();
+    } else {
+      if (_isTutorial && isQuiz) {
+        _state.setCard({
+          'kulitan': 'ng',
           'answer': 'nga',
           'progress': _glyphProgresses['nga'],
           'stackNumber': 1,
         }, 0);
         _state.setCard({
-          'kulitan': 'ga',
+          'kulitan': 'g',
           'answer': 'ga',
           'progress': _glyphProgresses['ga'],
           'stackNumber': 2,
         }, 1);
         if (isQuiz) {
           _state.setCard({
-            'kulitan': 'da',
+            'kulitan': 'd',
             'answer': 'da',
             'progress': _glyphProgresses['da'],
             'stackNumber': 3,
@@ -154,15 +166,25 @@ class GameLogicManager {
     }
   }
   Future<void> _pullCards() async {
-    final Map<String, dynamic> _pulledCards = (await _db.query('Current${isQuiz? 'Quiz' : 'Draw'}', where: 'type = "cards"'))[0];
-    final int _cardOneProgress = await _getGlyphProgress(_pulledCards['one']);
+    Map<String, dynamic> _pulledCards = (await _db.query('Current${isQuiz? 'Quiz' : 'Draw'}', where: 'type = "cards"'))[0];
+    if (!isQuiz && _isTutorial) {
+      final int _cardOneProgress = await _getGlyphProgress('nga');
+      _state.setCard({
+        'kulitan': kulitanGlyphs['nga'],
+        'answer': 'nga',
+        'progress': _cardOneProgress,
+        'stackNumber': 1,
+      }, 0);
+    } else {
+      final int _cardOneProgress = await _getGlyphProgress(_pulledCards['one']);
+      _state.setCard({
+        'kulitan': kulitanGlyphs[_pulledCards['one']],
+        'answer': _pulledCards['one'],
+        'progress': _cardOneProgress,
+        'stackNumber': 1,
+      }, 0);
+    }
     final int _cardTwoProgress = await _getGlyphProgress(_pulledCards['two']);
-    _state.setCard({
-      'kulitan': kulitanGlyphs[_pulledCards['one']],
-      'answer': _pulledCards['one'],
-      'progress': _cardOneProgress,
-      'stackNumber': 1,
-    }, 0);
     _state.setCard({
       'kulitan': kulitanGlyphs[_pulledCards['two']],
       'answer': _pulledCards['two'],
@@ -214,6 +236,10 @@ class GameLogicManager {
       _state.disableSwipe = true;
   }
 
+  Future<void> _pushTutorial() async {
+    await _db.update('Tutorial', {'${isQuiz? 'reading' : 'writing'}': 'false'}, where: '${isQuiz? 'reading' : 'writing'} = "true"');
+    _isTutorial = false;
+  }
   void _pushCards({bool isTwo: false}) async {
     Map<String, String> _data = {
       'one': _state.cards[0]['answer'],
@@ -318,9 +344,10 @@ class GameLogicManager {
   }
 
   void correctAnswer() async {
+    if (!isQuiz && _isTutorial) _pushTutorial();
     if(_batchNumber == 0) {
       _batchNumber = 1;
-      if (!_isTutorial) _pushBatchNumber();
+      if (!_isTutorial || !isQuiz) _pushBatchNumber();
     }
     if(isQuiz) {
       _state.disableSwipe = true;
@@ -336,7 +363,7 @@ class GameLogicManager {
     bool _isFullProgress = false;
     if(_state.cards[0]['progress'] == (isQuiz? maxQuizGlyphProgress : maxWritingGlyphProgress) - 1) {
       _state.incOverallProgressCount();
-      if (!_isTutorial) _pushOverallProgress();
+      if (!_isTutorial || !isQuiz) _pushOverallProgress();
       _removeFromGlyphPool();
       _isFullProgress = true;
     } else if(_state.cards[0]['progress'] == (isQuiz? maxQuizGlyphProgress : maxWritingGlyphProgress)) {
@@ -345,13 +372,13 @@ class GameLogicManager {
     if(_state.cards[0]['progress'] < (isQuiz? maxQuizGlyphProgress : maxWritingGlyphProgress)) {
       _state.incCurrCardProgress();
       _glyphProgresses[_state.cards[0]['answer']]++;
-      if (!_isTutorial) _pushGlyphProgress();
+      if (!_isTutorial || !isQuiz) _pushGlyphProgress();
     }
-    if(_isFullProgress && !_isTutorial)
+    if(_isFullProgress && (!_isTutorial || !isQuiz))
       _addNextBatchIfGlyphsDone();
     await Future.delayed(const Duration(milliseconds: showAnswerToEnableSwipeDuration));
     if(isQuiz) _state.disableSwipe = false;
-    if (!_isTutorial) {
+    if (!_isTutorial || !isQuiz) {
       _pushRemovedCards();
       if(isQuiz) _pushRemovedChoices();
       else swipedLeft();
@@ -361,7 +388,7 @@ class GameLogicManager {
     _state.disableSwipe = true;
     if(_batchNumber == 0) {
       _batchNumber = 1;
-      if (!_isTutorial) _pushBatchNumber();
+      if (!_isTutorial || !isQuiz) _pushBatchNumber();
     }
     _state.disableChoices = true;
     await Future.delayed(const Duration(milliseconds: showAnswerChoiceDuration + revealAnswerOffset));
@@ -371,17 +398,17 @@ class GameLogicManager {
     await Future.delayed(const Duration(milliseconds: showAnswerChoiceDuration));
     if(_state.cards[0]['progress'] == (isQuiz? maxQuizGlyphProgress : maxWritingGlyphProgress)) {
       _state.decOverallProgressCount();
-      if (!_isTutorial) _pushOverallProgress();
+      if (!_isTutorial || !isQuiz) _pushOverallProgress();
       _addToGlyphPool();
     }
     if(_state.cards[0]['progress'] > 0) {
       _state.decCurrCardProgress();
       _glyphProgresses[_state.cards[0]['answer']]--;
-      if (!_isTutorial) _pushGlyphProgress();
+      if (!_isTutorial || !isQuiz) _pushGlyphProgress();
     }
     await Future.delayed(const Duration(milliseconds: showAnswerToEnableSwipeDuration));
     _state.disableSwipe = false;
-    if (!_isTutorial) {
+    if (!_isTutorial || !isQuiz) {
       _pushRemovedCards();
       _pushRemovedChoices();
     }
@@ -406,7 +433,7 @@ class GameLogicManager {
     }
     _state.setCard(_state.cards[1], 0);
     if(isQuiz) _state.setCard(_state.cards[2], 1);
-    if (_isTutorial && _tutorialNo == 0) {
+    if (_isTutorial && isQuiz && _tutorialNo == 0) {
       _setFourthTutorialCard();
     } else {
       _getNewCards(index: (isQuiz? 2 : 1));
@@ -418,9 +445,9 @@ class GameLogicManager {
       _state.resetChoices();
       await Future.delayed(const Duration(milliseconds: resetChoicesDuration));
       _getNewChoices();
-      if (!_isTutorial) _pushChoices();
+      if (!_isTutorial || !isQuiz) _pushChoices();
     }
-    if (!_isTutorial) _pushCards();
+    if (!_isTutorial || !isQuiz) _pushCards();
     if(isQuiz) {
       await Future.delayed(const Duration(milliseconds: forwardQuizCardsDuration));
       if(_state.cards[0]['progress'] < maxQuizGlyphProgress)

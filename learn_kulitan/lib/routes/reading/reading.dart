@@ -88,6 +88,7 @@ class ReadingPageState extends State<ReadingPage> {
   set disableSwipe(bool i) => setState(() => _disableSwipe = i);
   set disableChoices(bool i) => setState(() => _disableChoices = i);
   set isLoading(bool i) => setState(() => _isLoading = i);
+  set isTutorial(bool i) => setState(() => _isTutorial = i);
   void setCard(Map<String, dynamic> card, int i) => setState(() => _cards[i] = card);
   void setCardStackNo(int i, int sNum) => setState(() => _cards[i]['stackNumber'] = sNum);
   void setChoice(Map<String, dynamic> choice, int i) => setState(() => _choices[i] = choice);
@@ -142,7 +143,6 @@ class ReadingPageState extends State<ReadingPage> {
 
   void startGame() async {
     await _gameLogicManager.init(this);
-    _isTutorial = _gameLogicManager.isTutorial;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getQuizCardsSize();
       setState(() => _isLoading = false);
