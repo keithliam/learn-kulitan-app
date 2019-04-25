@@ -20,6 +20,7 @@ class Loader extends StatefulWidget {
 
 class _LoaderState extends State<Loader> with FlareController {
   OverlayEntry _overlay;
+  bool _toRemove = false;
   double _animationTime = 0.0;
 
   @override
@@ -32,6 +33,19 @@ class _LoaderState extends State<Loader> with FlareController {
   }
 
   @override
+  void didUpdateWidget(Loader oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!oldWidget.isVisible && widget.isVisible && _overlay == null) {
+      _overlay = _createLoader();
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => Overlay.of(context).insert(_overlay),
+      );
+    } else if (oldWidget.isVisible && !widget.isVisible && _overlay != null) {
+      _toRemove = true;
+    }
+  }
+
+  @override
   void initialize(FlutterActorArtboard artboard) {}
 
   @override
@@ -40,9 +54,13 @@ class _LoaderState extends State<Loader> with FlareController {
   @override
   bool advance(FlutterActorArtboard artboard, double elapsed) {
     _animationTime += elapsed / 2;
-    if (_animationTime >= 3.5167) {
+    if (_animationTime >= 3.5167 && _toRemove) {
       _overlay?.remove();
-      setState(() => _overlay = null);
+      setState(() {
+        _overlay = null;
+        _animationTime = 0.0;
+        _toRemove = false;
+      });
     }
     return true;
   }
