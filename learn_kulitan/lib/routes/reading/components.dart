@@ -552,8 +552,6 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
             _cardRotate = 0.5;
           });
         }
-        await Future.delayed(const Duration(milliseconds: swipeDownSnapDuration));
-        widget.swipingCardDone();
       } else {
         if(_cardSwipeLeftX <= swipeLeftThreshold) {
           _animateSwipe(_cardTransform, 0.0, isSwipeDown: false);
