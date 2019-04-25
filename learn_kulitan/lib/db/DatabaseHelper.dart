@@ -21,7 +21,7 @@ class DatabaseHelper {
   _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _databaseName);
-    // await deleteDatabase(path); // TODO: remove
+    await deleteDatabase(path); // TODO: remove
     return await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
   }
@@ -57,11 +57,20 @@ class DatabaseHelper {
             two text
           )
           ''');
+    await db.execute('''
+          CREATE TABLE Tutorial (
+            intro TEXT PRIMARY KEY,
+            reading text NOT NULL,
+            writing text NOT NULL,
+            transcribe text NOT NULL
+          )
+          ''');
     await db.execute('INSERT INTO Page VALUES ("reading", 0, 0)');
     await db.execute('INSERT INTO Page VALUES ("writing", 0, 0)');
     await db.execute('INSERT INTO CurrentQuiz VALUES ("cards", null, null, null, null)');
     await db.execute('INSERT INTO CurrentQuiz VALUES ("choices", null, null, null, null)');
     await db.execute('INSERT INTO CurrentDraw VALUES ("cards", null, null)');
+    await db.execute('INSERT INTO Tutorial VALUES ("true", "true", "true", "true")');
     await db.execute('INSERT INTO Glyph VALUES ("a", 0, 0)');
     await db.execute('INSERT INTO Glyph VALUES ("i", 0, 0)');
     await db.execute('INSERT INTO Glyph VALUES ("u", 0, 0)');

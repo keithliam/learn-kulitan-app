@@ -674,6 +674,12 @@ const kulitanKeyboard = TextStyle(
 );
 
 // Barlow Fonts
+const textHeaderButton = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 25.0,
+  fontWeight: FontWeight.bold,
+  color: whiteColor,
+);
 const textHomeTitle = TextStyle(
   height: 0.8,
   fontFamily: 'Barlow',

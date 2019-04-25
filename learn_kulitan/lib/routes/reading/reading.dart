@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../styles/theme.dart';
 import '../../components/buttons/IconButtonNew.dart';
+import '../../components/buttons/TextButton.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/CircularProgressBar.dart';
 import '../../components/misc/GameLogicManager.dart';
@@ -16,6 +17,7 @@ class ReadingPage extends StatefulWidget {
 class ReadingPageState extends State<ReadingPage> {
   final GameLogicManager _gameLogicManager = GameLogicManager();
   bool _isLoading = true;
+  bool _isTutorial = true;
   int _overallProgressCount = 0;
   Size _screenSize;
   List<Map<String, dynamic>> _cards = [
@@ -71,15 +73,21 @@ class ReadingPageState extends State<ReadingPage> {
   double _quizCardStackHeight = 100.0;
   double _heightToCardStackBottom = 500.0;
   bool _disableSwipe = false;
+  List<bool> _disableButtons = [false, false, false, false];
 
   final _resetChoicesController = StreamController.broadcast();
   final _showAnswerChoiceController = StreamController.broadcast();
   final _flipStreamController = StreamController.broadcast();
 
+  get cards => _cards;
+  get choices => _choices;
+  get overallProgressCount => _overallProgressCount;
+
   set overallProgressCount(int n) => setState(() => _overallProgressCount = n);
   set choices(List<Map<String, dynamic>> choices) => setState(() => _choices = choices);
   set disableSwipe(bool i) => setState(() => _disableSwipe = i);
   set disableChoices(bool i) => setState(() => _disableChoices = i);
+  set isLoading(bool i) => setState(() => _isLoading = i);
   void setCard(Map<String, dynamic> card, int i) => setState(() => _cards[i] = card);
   void setCardStackNo(int i, int sNum) => setState(() => _cards[i]['stackNumber'] = sNum);
   void setChoice(Map<String, dynamic> choice, int i) => setState(() => _choices[i] = choice);
@@ -91,9 +99,24 @@ class ReadingPageState extends State<ReadingPage> {
   void decOverallProgressCount() => setState(() => _overallProgressCount--);
   void incCurrCardProgress() => setState(() => _cards[0]['progress']++);
   void decCurrCardProgress() => setState(() => _cards[0]['progress']--);
-  get cards => _cards;
-  get choices => _choices;
-  get overallProgressCount => _overallProgressCount;
+  void enableAllChoices() => setState(() {
+    _disableButtons = [false, false, false, false];
+    _disableChoices = false;
+  });
+  void disableWrongChoices(String answer) => setState(() {
+    _disableChoices = false;
+    _disableButtons[0] = _choices[0]['text'] == answer ? false : true;
+    _disableButtons[1] = _choices[1]['text'] == answer ? false : true;
+    _disableButtons[2] = _choices[2]['text'] == answer ? false : true;
+    _disableButtons[3] = _choices[3]['text'] == answer ? false : true;
+  });
+  void disableCorrectChoice(String answer) => setState(() {
+    _disableChoices = false;
+    _disableButtons[0] = _choices[0]['text'] == answer ? true : false;
+    _disableButtons[1] = _choices[1]['text'] == answer ? true : false;
+    _disableButtons[2] = _choices[2]['text'] == answer ? true : false;
+    _disableButtons[3] = _choices[3]['text'] == answer ? true : false;
+  });
 
   void _pressAlert() {
     setState(() {
@@ -115,16 +138,19 @@ class ReadingPageState extends State<ReadingPage> {
     setState(() => _disableChoices = false);
   }
 
-  void _startGame() async {
+  void startGame() async {
     await _gameLogicManager.init(this);
-    setState(() => _isLoading = false);
+    _isTutorial = _gameLogicManager.isTutorial;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getQuizCardsSize();
+      setState(() => _isLoading = false);
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _startGame();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _getQuizCardsSize());
+    startGame();
   }
 
   @override
@@ -157,33 +183,48 @@ class ReadingPageState extends State<ReadingPage> {
   Widget build(BuildContext context) {
     _screenSize = MediaQuery.of(context).size;
 
-    Widget _header = Padding(
-      padding: EdgeInsets.fromLTRB(headerHorizontalPadding, headerVerticalPadding, headerHorizontalPadding, 0.0),
-      child: StaticHeader(
-        left: IconButtonNew(
-          icon: Icons.arrow_back_ios,
-          iconSize: headerIconSize,
-          color: headerNavigationColor,
-          onPressed: () => Navigator.pop(context),
-        ),
-        middle: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            'Glyphs Learned',
-            style: textQuizHeader,
-            textAlign: TextAlign.center,
+    final Widget _header = Padding(
+        padding: EdgeInsets.fromLTRB(headerHorizontalPadding, headerVerticalPadding, headerHorizontalPadding, 0.0),
+        child: StaticHeader(
+          left: IconButtonNew(
+            icon: Icons.arrow_back_ios,
+            iconSize: headerIconSize,
+            color: headerNavigationColor,
+            onPressed: () => Navigator.pop(context),
+            width: 80.0,
+            alignment: Alignment.centerLeft,
+          ),
+          middle: Container(
+            alignment: Alignment.center,
+            height: 48.0,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                _isTutorial ? 'Tutorial' : 'Glyphs Learned',
+                style: textQuizHeader,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          right: _isTutorial ? TextButton(
+            text: 'Skip',
+            height: headerIconSize,
+            color: headerNavigationColor,
+            onPressed: null,
+            width: 80.0,
+            alignment: Alignment.centerRight,
+          ) : IconButtonNew(
+            icon: Icons.settings,
+            iconSize: headerIconSize,
+            color: headerNavigationColor,
+            onPressed: null,
+            width: 80.0,
+            alignment: Alignment.centerRight,
           ),
         ),
-        right: IconButtonNew(
-          icon: Icons.settings,
-          iconSize: headerIconSize,
-          color: headerNavigationColor,
-          onPressed: null,
-        ),
-      ),
-    );
+      );
     
-    Widget _progressBar = Expanded(
+    final Widget _progressBar = Expanded(
       child: Padding(
         padding: MediaQuery.of(context).size.aspectRatio < 0.5 ? const EdgeInsets.symmetric(
           horizontal: quizHorizontalScreenPadding,
@@ -196,7 +237,7 @@ class ReadingPageState extends State<ReadingPage> {
       ),
     );
 
-    Widget _buttonChoices = Padding(
+    final Widget _buttonChoices = Padding(
       padding: const EdgeInsets.fromLTRB(quizHorizontalScreenPadding, 0.0, quizHorizontalScreenPadding, quizVerticalScreenPadding),
       child: Column(
         children: <Widget>[
@@ -207,7 +248,7 @@ class ReadingPageState extends State<ReadingPage> {
                   text: _choices[0]['text'],
                   type: _choices[0]['type'],
                   onTap: _choices[0]['onTap'],
-                  disable: _disableChoices,
+                  disable: _disableChoices || _disableButtons[0],
                   resetStream: _resetChoicesController.stream,
                   showAnswerStream: _showAnswerChoiceController.stream,
                   presses: _presses,
@@ -223,7 +264,7 @@ class ReadingPageState extends State<ReadingPage> {
                   text: _choices[1]['text'],
                   type: _choices[1]['type'],
                   onTap: _choices[1]['onTap'],
-                  disable: _disableChoices,
+                  disable: _disableChoices || _disableButtons[1],
                   resetStream: _resetChoicesController.stream,
                   showAnswerStream: _showAnswerChoiceController.stream,
                   presses: _presses,
@@ -243,7 +284,7 @@ class ReadingPageState extends State<ReadingPage> {
                   text: _choices[2]['text'],
                   type: _choices[2]['type'],
                   onTap: _choices[2]['onTap'],
-                  disable: _disableChoices,
+                  disable: _disableChoices || _disableButtons[2],
                   resetStream: _resetChoicesController.stream,
                   showAnswerStream: _showAnswerChoiceController.stream,
                   presses: _presses,
@@ -259,7 +300,7 @@ class ReadingPageState extends State<ReadingPage> {
                   text: _choices[3]['text'],
                   type: _choices[3]['type'],
                   onTap: _choices[3]['onTap'],
-                  disable: _disableChoices,
+                  disable: _disableChoices || _disableButtons[3],
                   resetStream: _resetChoicesController.stream,
                   showAnswerStream: _showAnswerChoiceController.stream,
                   presses: _presses,
@@ -272,7 +313,7 @@ class ReadingPageState extends State<ReadingPage> {
         ],
       ),
     );
-    Widget _quizCards = Container(
+    final Widget _quizCards = Container(
       height: _heightToCardStackBottom, // TODO: Problem
       child: Stack(
         key: _quizCardsKey,
@@ -321,6 +362,15 @@ class ReadingPageState extends State<ReadingPage> {
       ),
     );
 
+    final List<Widget> _pageStack = [
+      _header,
+      _progressBar,
+      Container(
+        height: _quizCardStackHeight,
+      ),
+      _buttonChoices,
+    ];
+
     return Material(
       color: backgroundColor,
       child: SafeArea(
@@ -330,14 +380,7 @@ class ReadingPageState extends State<ReadingPage> {
             key: _pageKey,
             children: <Widget>[
               Column(
-                children: <Widget>[
-                  _header,
-                  _progressBar,
-                  Container(
-                    height: _quizCardStackHeight,
-                  ),
-                  _buttonChoices,
-                ],
+                children: _pageStack,
               ),
               _quizCards,
             ],

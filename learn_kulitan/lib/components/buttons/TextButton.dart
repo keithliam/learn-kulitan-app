@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
+import '../../styles/theme.dart';
 
-class IconButtonNew extends StatefulWidget {
-  const IconButtonNew({
-    @required this.icon,
+class TextButton extends StatefulWidget {
+  const TextButton({
+    @required this.text,
     @required this.onPressed,
-    @required this.iconSize,
+    @required this.height,
     @required this.color,
     this.width,
     this.alignment = Alignment.center,
   });
 
-  final IconData icon;
+  final String text;
   final VoidCallback onPressed;
-  final double iconSize;
-  final Color color;
+  final double height;
   final double width;
+  final Color color;
   final Alignment alignment;
 
   @override
-  _IconButtonNewState createState() => _IconButtonNewState();
+  _TextButtonState createState() => _TextButtonState();
 }
 
-class _IconButtonNewState extends State<IconButtonNew> {
+class _TextButtonState extends State<TextButton> {
   double _opacity = 1.0;
 
   void _pressDown(details) => setState(() => _opacity = 0.6);
@@ -35,28 +36,20 @@ class _IconButtonNewState extends State<IconButtonNew> {
       onTapUp: (_) => _cancel(),
       onTapCancel: _cancel,
       child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minWidth: widget.width ?? 48.0,
-          minHeight: 48.0,
-        ),
+        constraints: const BoxConstraints(minWidth: 48.0, minHeight: 48.0),
         child: AnimatedOpacity(
           opacity: _opacity,
           curve: Curves.fastOutSlowIn,
           duration: Duration(milliseconds: 250),
           child: Container(
+            alignment: widget.alignment,
             color: Colors.transparent,
+            height: widget.height,
+            width: widget.width,
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: SizedBox(
-              height: widget.iconSize,
-              width: widget.iconSize,
-              child: Align(
-                alignment: widget.alignment,
-                child: Icon(
-                  widget.icon,
-                  size: widget.iconSize,
-                  color: widget.color,
-                ),
-              ),
+            child: FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Text(widget.text, style: textHeaderButton),
             ),
           ),
         ),
