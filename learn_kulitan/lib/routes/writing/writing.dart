@@ -15,6 +15,7 @@ class WritingPage extends StatefulWidget {
 class WritingPageState extends State<WritingPage> with SingleTickerProviderStateMixin { 
   final GameLogicManager _gameLogicManager = GameLogicManager(isQuiz: false);
   bool _isLoading = true;
+  bool _doneLoading = false;
   bool _isTutorial = true;
   int _overallProgressCount = 0;
   List<Map<String, dynamic>> _cards = [
@@ -52,6 +53,10 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
   void _startGame() async {
     await _gameLogicManager.init(this);
     setState(() => _isLoading = false);
+  }
+
+  void _finishLoading() {
+    setState(() => _doneLoading = true);
   }
 
   @override
@@ -135,25 +140,40 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
       ),
     );
 
+    List<Widget> _pageStack = [
+        Column(
+        children: <Widget>[
+          _header,
+          Expanded(
+            child: Stack(
+              fit: StackFit.expand,
+              children: <Positioned>[
+                _mainCard,
+                _secCard,
+              ],
+            ),
+          ),
+        ],
+      ),
+    ];
+
+    if (_isTutorial && _doneLoading) {
+      _pageStack.add(
+        IgnorePointer(
+          child: Tutorial(
+            onTap: _gameLogicManager.finishTutorial,
+          ),
+        ),  
+      );
+    }
+
     return Material(
       color: backgroundColor,
       child: SafeArea(
         child: Loader(
+          onFinish: _finishLoading,
           isVisible: _isLoading,
-            child: Column(
-            children: <Widget>[
-              _header,
-              Expanded(
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: <Positioned>[
-                    _mainCard,
-                    _secCard,
-                  ],
-                ),
-              ),
-            ],
-          ),
+          child: Stack(children: _pageStack),
         ),
       ),
     );

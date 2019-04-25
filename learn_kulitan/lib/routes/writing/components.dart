@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'dart:math' show pow, sqrt;
 import '../../components/misc/CustomCard.dart';
 import '../../components/misc/LinearProgressBar.dart';
@@ -781,5 +782,136 @@ class _AnimatedTextState extends State<_AnimatedText> {
         ),
       ),
     );
+  }
+}
+
+class Tutorial extends StatefulWidget {
+  const Tutorial({@required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  _TutorialState createState() => _TutorialState();
+}
+
+class _TutorialState extends State<Tutorial> with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  OverlayEntry _overlay;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showOverlay());
+  }
+
+  void _showOverlay() async {
+    if (_overlay == null) {
+      await Future.delayed(const Duration(milliseconds: tutorialOverlayDelay));
+      _overlay = _createOverlay();
+      Overlay.of(context).insert(_overlay);
+      _controller.forward();
+    }
+  }
+
+  void _dismissOverlay(_) async {
+    _controller.reverse();
+    await Future.delayed(const Duration(milliseconds: 500));
+    widget.onTap();
+    _overlay?.remove();
+    _overlay = null;
+  }
+
+  Widget _flare({bottom, left, height, right}) {
+    final Widget _flare = FlareActor(
+      'assets/flares/shaking_pointer.flr',
+      color: accentColor,
+      animation: 'shake',
+    );
+
+    return Positioned(
+      bottom: bottom,
+      left: left,
+      height: height,
+      right: right,
+      child: IgnorePointer(
+        child: Transform(
+          transform: Matrix4.identity()..scale(1.0,  -1.0, 1.0),
+          alignment: FractionalOffset.center,
+          child: _flare,
+        ),
+      ),
+    );
+  }
+
+  Widget _text({bottom, left, right}) {
+    return Positioned(
+      bottom: bottom,
+      left: left,
+      right: right,
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0),
+            color: tutorialsOverlayColor,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+          child: IgnorePointer(
+            child: Material(
+              color: Colors.transparent,
+              child: Text('Trace the glyph by following the guide lines and stroke orders.', style: textTutorialOverlay),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  OverlayEntry _createOverlay() {
+    return OverlayEntry(
+      builder: (context) {
+        final Size _dimensions = MediaQuery.of(context).size;
+        final List<Widget> _elements = [
+          _flare(
+            bottom: (_dimensions.aspectRatio * 775) - 50.0,
+            left: 0.0,
+            right: 165.0,
+            height: 100.0
+          ),
+          _text(
+            bottom: (_dimensions.aspectRatio * 1225) - 150.0,
+            left: 50.0,
+            right: 50.0,
+          )
+        ];
+
+        return Positioned.fill(
+          child: GestureDetector(
+            onTapDown: _dismissOverlay,
+            behavior: HitTestBehavior.translucent,
+            child: FadeTransition(
+              opacity: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: _controller,
+                curve: Curves.easeInOut,
+              )),
+              child: Stack(children: _elements),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _overlay?.remove();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
