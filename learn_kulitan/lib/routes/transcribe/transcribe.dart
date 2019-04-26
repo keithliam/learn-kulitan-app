@@ -620,12 +620,12 @@ class _TranscribePageState extends State<TranscribePage>
             ),
           ),
         ),
-        right: IconButtonNew(
-          icon: Icons.settings,
-          iconSize: headerIconSize,
-          color: headerNavigationColor,
-          onPressed: null,
-        ),
+        // right: IconButtonNew(
+        //   icon: Icons.settings,
+        //   iconSize: headerIconSize,
+        //   color: headerNavigationColor,
+        //   onPressed: null,
+        // ),
       ),
     );
 

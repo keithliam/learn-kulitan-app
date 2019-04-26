@@ -226,14 +226,15 @@ class ReadingPageState extends State<ReadingPage> {
             onPressed: _gameLogicManager.finishTutorial,
             width: 80.0,
             alignment: Alignment.centerRight,
-          ) : IconButtonNew(
-            icon: Icons.settings,
-            iconSize: headerIconSize,
-            color: headerNavigationColor,
-            onPressed: null,
-            width: 80.0,
-            alignment: Alignment.centerRight,
-          ),
+          ) : Spacer(),
+          // IconButtonNew(
+          //   icon: Icons.settings,
+          //   iconSize: headerIconSize,
+          //   color: headerNavigationColor,
+          //   onPressed: null,
+          //   width: 80.0,
+          //   alignment: Alignment.centerRight,
+          // ),
         ),
       );
     

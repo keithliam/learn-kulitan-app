@@ -101,12 +101,13 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
             )
           ],
         ),
-        right: IconButtonNew(
-          icon: Icons.settings,
-          iconSize: headerIconSize,
-          color: headerNavigationColor,
-          onPressed: null,
-        ),
+        // right: IconButtonNew(
+        //   icon: Icons.settings,
+        //   iconSize: headerIconSize,
+        //   color: headerNavigationColor,
+        //   onPressed: null,
+        // ),
+        right: SizedBox(width: 56.0, height: 48.0),
       ),
     );
 
