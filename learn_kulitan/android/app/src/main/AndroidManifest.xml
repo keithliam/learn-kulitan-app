@@ -5,7 +5,7 @@
          flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- <uses-permission android:name="android.permission.INTERNET"/> -->
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -14,8 +14,11 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="learn_kulitan"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Learn Kulitan"
+        android:icon="@mipmap/ic_launcher"
+        android:isGame="true"
+        android:persistent="true"
+        android:resizeableActivity="false">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
