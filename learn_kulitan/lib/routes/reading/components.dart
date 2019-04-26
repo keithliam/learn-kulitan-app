@@ -678,8 +678,10 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
   void _dismissOverlay(_) async {
     _controller.reverse();
     await Future.delayed(const Duration(milliseconds: 500));
-    _overlay?.remove();
-    _overlay = null;
+    if (_overlay != null) {
+      _overlay.remove();
+      _overlay = null;
+    }
     if (widget.tutorialNo == 2 && !_pageTwo) _showNextOverlay();
   }
 
@@ -826,6 +828,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
   @override
   void dispose() {
     _overlay?.remove();
+    _overlay = null;
     _controller.dispose();
     super.dispose();
   }
