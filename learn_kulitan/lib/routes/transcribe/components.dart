@@ -1,5 +1,6 @@
 import 'dart:async' show Timer;
 import 'package:flutter/material.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import '../../styles/theme.dart';
 import '../../components/misc/DividerNew.dart';
 
@@ -977,5 +978,189 @@ class _BlinkerState extends State<Blinker> {
       curve: kulitanCursorBlinkCurve,
       child: widget.child,
     );
+  }
+}
+
+class Tutorial extends StatefulWidget {
+  const Tutorial({@required this.onTap, @required this.tutorialNo});
+
+  final VoidCallback onTap;
+  final int tutorialNo;
+
+  @override
+  _TutorialState createState() => _TutorialState();
+}
+
+class _TutorialState extends State<Tutorial>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  OverlayEntry _overlay;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showOverlay());
+  }
+
+  @override
+  void didUpdateWidget(Tutorial oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.tutorialNo != widget.tutorialNo) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _showOverlay());
+    }
+  }
+
+  void _showOverlay() async {
+    if (_overlay == null) {
+      await Future.delayed(const Duration(milliseconds: tutorialOverlayDelay));
+      _overlay = _createOverlay();
+      Overlay.of(context).insert(_overlay);
+      _controller.forward();
+    }
+  }
+
+  void _dismissOverlay(_) async {
+    _controller.reverse();
+    await Future.delayed(const Duration(milliseconds: 500));
+    widget.onTap();
+    _overlay?.remove();
+    _overlay = null;
+  }
+
+  Widget _flare({top, left, height, right, flipV = false, arrowUp = false}) {
+    final Widget _flare = FlareActor(
+      'assets/flares/${arrowUp ? 'swipe_down' : 'shaking_pointer'}.flr',
+      color: accentColor,
+      animation: 'shake',
+    );
+
+    Widget _widget;
+    if (flipV) {
+      _widget = Transform(
+        transform: Matrix4.identity()..scale(1.0, -1.0, 1.0),
+        child: _flare,
+      );
+    } else
+      _widget = _flare;
+
+    return Positioned(
+      top: top,
+      left: left,
+      height: height,
+      right: right,
+      child: IgnorePointer(
+        child: _widget,
+      ),
+    );
+  }
+
+  Widget _text({top, left, right}) {
+    return Positioned(
+      top: top,
+      left: left,
+      right: right,
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0),
+            color: tutorialsOverlayColor,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+          child: IgnorePointer(
+            child: Material(
+              color: Colors.transparent,
+              child: Text(
+                  widget.tutorialNo == 1
+                  ? 'Editing the text above transcribes it to Kulitan, while editing the Kulitan glyphs below shows their approximate romanized text counterparts.'
+                  : widget.tutorialNo == 2
+                    ? 'Swipe up to reveal the Kulitan keyboard ⌨️'
+                    : 'Some keys can be swiped up or down. These swipes put diacritical marks on the top or bottom of the glyphs.',
+                  style: textTutorialOverlay),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  OverlayEntry _createOverlay() {
+    return OverlayEntry(
+      builder: (context) {
+        final Size _dimensions = MediaQuery.of(context).size;
+        final double _relHeight = _dimensions.height / 896.0;
+        List<Widget> _elements = [];
+        if (widget.tutorialNo == 1) {
+          _elements.addAll([
+            _flare(
+              top: (_dimensions.height / 2) - (115.0 * _relHeight),
+              left: 0.0,
+              right: 0.0,
+              height: 100.0 * _relHeight,
+            ),
+            _flare(
+              top: (_dimensions.height / 2) + (240.0 * _relHeight),
+              left: 0.0,
+              right: 0.0,
+              height: 100.0 * _relHeight,
+              flipV: true,
+            ),
+          ]);
+        } else {
+          double _vectorSize;
+          if (widget.tutorialNo == 2) _vectorSize = 700.0;
+          else _vectorSize = 100.0;
+          double _topOffset;
+          if (widget.tutorialNo == 2) _topOffset = ((_dimensions.height + (_vectorSize * _relHeight)) / 2) + (100 * _relHeight);
+          else _topOffset = _dimensions.height - (250.0 * _relHeight);
+          _elements.add(
+            _flare(
+              top: _topOffset,
+              left: 0.0,
+              right: 0.0,
+              height: _vectorSize * _relHeight,
+              flipV: true,
+              arrowUp: widget.tutorialNo == 2 ? true : false,
+            ),
+          );
+        }
+        _elements.add(
+          _text(
+            top: _dimensions.height / 2,
+            left: 25.0,
+            right: 25.0,
+          ),
+        );
+
+        return Positioned.fill(
+          child: GestureDetector(
+            onTapDown: _dismissOverlay,
+            behavior: HitTestBehavior.translucent,
+            child: FadeTransition(
+              opacity:
+                  Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                parent: _controller,
+                curve: Curves.easeInOut,
+              )),
+              child: Stack(children: _elements),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _overlay?.remove();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }

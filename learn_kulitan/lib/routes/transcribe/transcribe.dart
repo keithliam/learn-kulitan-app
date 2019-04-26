@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 import '../../styles/theme.dart';
 import '../../components/buttons/IconButtonNew.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/CustomCard.dart';
 import '../../components/misc/DividerNew.dart';
+import '../../components/animations/Loader.dart';
+import '../../db/DatabaseHelper.dart';
 import './components.dart';
 import 'kulitan_combinations.dart';
 
@@ -14,6 +17,30 @@ class TranscribePage extends StatefulWidget {
 
 class _TranscribePageState extends State<TranscribePage>
     with SingleTickerProviderStateMixin {
+  bool _isLoading = true;
+  bool _isTutorial = true;
+  int _tutorialNo = 1;
+  bool _doneLoading = false;
+  Database _db;
+
+  void _pullTutorialData() async {
+    setState(() => _isLoading = true);
+    _db = await DatabaseHelper.instance.database;
+    _isTutorial = (await _db.query('Tutorial', columns: ['transcribe']))[0]['transcribe'] == 'true';
+    setState(() => _isLoading = false);
+  }
+
+  void _finishLoading() {
+    setState(() => _doneLoading = true);
+  }
+
+  void _nextTutorial() {
+    if (_tutorialNo == 3) {
+      setState(() => _isTutorial = false);
+      _db.update('Tutorial', {'transcribe': 'false'}, where: 'transcribe = "true"');
+    } else setState(() => _tutorialNo++);
+  }
+
   static final SizedBox _kulitanCursor = SizedBox(
     height: kulitanCursorHeight + kulitanCursorTopPadding,
     width: 75.0 * transcribeRelativeFontSize,
@@ -58,6 +85,7 @@ class _TranscribePageState extends State<TranscribePage>
   @override
   void initState() {
     super.initState();
+    _pullTutorialData();
     _keyboardController = AnimationController(
         duration: Duration(milliseconds: keyboardAnimateDuration), vsync: this);
     final CurvedAnimation _keyboardCurve = CurvedAnimation(
@@ -685,21 +713,40 @@ class _TranscribePageState extends State<TranscribePage>
       ),
     );
 
+    List<Widget> _pageStack = [
+      Column(
+        children: <Widget>[
+          _header,
+          Expanded(
+            child: KulitanKeyboard(
+              getGlyph: _getLastKulitanGlyph,
+              visibility: _keyboardOffset,
+              onKeyPress: _kulitanKeyPressed,
+              child: _page,
+            ),
+          ),
+        ],
+      )
+    ];
+
+    if (_isTutorial && _doneLoading) {
+      _pageStack.add(
+        IgnorePointer(
+          child: Tutorial(
+            tutorialNo: _tutorialNo,
+            onTap: _nextTutorial,
+          ),
+        ),  
+      );
+    }
+
     return Material(
       color: backgroundColor,
       child: SafeArea(
-        child: Column(
-          children: <Widget>[
-            _header,
-            Expanded(
-              child: KulitanKeyboard(
-                getGlyph: _getLastKulitanGlyph,
-                visibility: _keyboardOffset,
-                onKeyPress: _kulitanKeyPressed,
-                child: _page,
-              ),
-            ),
-          ],
+        child: Loader(
+          onFinish: _finishLoading,
+          isVisible: _isLoading,
+          child: Stack(children: _pageStack)
         ),
       ),
     );
