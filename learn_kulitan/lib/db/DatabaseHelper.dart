@@ -59,7 +59,8 @@ class DatabaseHelper {
           ''');
     await db.execute('''
           CREATE TABLE Tutorial (
-            intro TEXT PRIMARY KEY,
+            key TEXT PRIMARY KEY,
+            intro text NOT NULL,
             reading text NOT NULL,
             writing text NOT NULL,
             transcribe text NOT NULL
@@ -70,7 +71,7 @@ class DatabaseHelper {
     await db.execute('INSERT INTO CurrentQuiz VALUES ("cards", null, null, null, null)');
     await db.execute('INSERT INTO CurrentQuiz VALUES ("choices", null, null, null, null)');
     await db.execute('INSERT INTO CurrentDraw VALUES ("cards", null, null)');
-    await db.execute('INSERT INTO Tutorial VALUES ("true", "true", "true", "true")');
+    await db.execute('INSERT INTO Tutorial VALUES ("key", "true", "true", "true", "true")');
     await db.execute('INSERT INTO Glyph VALUES ("a", 0, 0)');
     await db.execute('INSERT INTO Glyph VALUES ("i", 0, 0)');
     await db.execute('INSERT INTO Glyph VALUES ("u", 0, 0)');

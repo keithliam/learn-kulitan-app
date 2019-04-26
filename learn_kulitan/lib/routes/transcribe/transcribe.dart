@@ -26,7 +26,7 @@ class _TranscribePageState extends State<TranscribePage>
   void _pullTutorialData() async {
     setState(() => _isLoading = true);
     _db = await DatabaseHelper.instance.database;
-    _isTutorial = (await _db.query('Tutorial', columns: ['transcribe']))[0]['transcribe'] == 'true';
+    _isTutorial = (await _db.query('Tutorial', where: 'key = "key"', columns: ['transcribe']))[0]['transcribe'] == 'true';
     setState(() => _isLoading = false);
   }
 

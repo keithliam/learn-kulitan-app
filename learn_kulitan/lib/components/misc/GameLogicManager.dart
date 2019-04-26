@@ -24,7 +24,7 @@ class GameLogicManager {
   Future<void> init(dynamic _pageState) async {
     _state = _pageState;
     _db = await DatabaseHelper.instance.database;
-    _isTutorial = (await _db.query('Tutorial', columns: [isQuiz ? 'reading' : 'writing']))[0][isQuiz ? 'reading' : 'writing'] == 'true';
+    _isTutorial = (await _db.query('Tutorial', where: 'key = "key"', columns: [isQuiz ? 'reading' : 'writing']))[0][isQuiz ? 'reading' : 'writing'] == 'true';
     _state.isTutorial = _isTutorial;
     if (!_isTutorial || !isQuiz) await _initGame();
     else await _initTutorial();

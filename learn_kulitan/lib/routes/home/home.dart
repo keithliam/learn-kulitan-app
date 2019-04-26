@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
     final Database _db = await DatabaseHelper.instance.database;
     final int _reading = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "reading"'))[0]['overall_progress'];
     final int _writing = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "writing"'))[0]['overall_progress'];
-    final String _result = (await _db.query('Tutorial', columns: ['intro']))[0]['intro'];
+    final String _result = (await _db.query('Tutorial', where: 'key = "key"', columns: ['intro']))[0]['intro'];
     setState(() {
       _readingProgress = _reading;
       _writingProgress = _writing;
