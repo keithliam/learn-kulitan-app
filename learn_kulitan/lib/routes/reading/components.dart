@@ -739,42 +739,16 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
   OverlayEntry _createOverlay() {
     return OverlayEntry(
       builder: (context) {
+        final Size _dimensions = MediaQuery.of(context).size;
+        final double _relWidth = _dimensions.width / 414.0;
+
         double top = 0.0;
         double left = 50.0;
         double right = 50.0;
-        double height = widget.quizCardTop;
+        double height = widget.quizCardTop + (_relWidth * 40.0);
         String text;
         List<Widget> _elements = [];
 
-        if (widget.tutorialNo == 0)
-          text = 'Swipe vertically to reveal the answer.';
-        else if (widget.tutorialNo == 1)
-          text = 'Swipe left to dismiss the card.';
-        else if (widget.tutorialNo == 2) {
-          if (!_pageTwo) text = 'This shows the number of glyphs you have already mastered.';
-          else text = 'Choose the correct answer below to increase your mastery. Hint: \'ga\'';
-        } else if (widget.tutorialNo == 3) {
-          text = 'Increase your total mastery by answering this card. Hint: \'da\'';
-        } else if (widget.tutorialNo == 4) {
-          text = 'Mastered glyphs may occassionally show up. These cards can\'t be skipped. Total mastery will decrease when these aren\'t answered correctly!';
-        }
-
-        if (widget.tutorialNo == 2) {
-          if (!_pageTwo) {
-            top = widget.quizCardTop - 50.0;
-            _elements.add(_text(
-              top: widget.quizCardBottom + 30.0,
-              left: left,
-              right: right,
-              height: height,
-              text: 'This progress bar shows your mastery of the current glyph.',
-            ));
-          } else top = widget.quizCardBottom - 200.0;
-        } else if (widget.tutorialNo > 2) {
-          top = widget.quizCardTop - 50.0;
-        }
-        _elements.add(_text(top: top, left: left, right: right, height: height, text: text));
-      
         double topF = widget.quizCardTop;
         double leftF = quizHorizontalScreenPadding;
         double rightF = 0.0;
@@ -785,7 +759,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
           if (!_pageTwo) {
             leftF = quizHorizontalScreenPadding + 45.0;
             topF = widget.quizCardTop - 55.0;
-            _elements.add(_flare(top: widget.quizCardBottom + 10.0, height: heightF, left: 50.0, right: 100.0, flipH: true));
+            _elements.add(_flare(top: widget.quizCardBottom + 10.0, height: heightF * _relWidth, left: 50.0, right: 100.0, flipH: true));
           } else {
             topF = widget.quizCardBottom - 50.0;
             leftF = 0.0;
@@ -797,8 +771,37 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
         }
         final bool flipV = widget.tutorialNo == 2 && _pageTwo;
 
-        _elements.add(_flare(top: topF, left: leftF, right: rightF, height: heightF, flipV: flipV));
+        _elements.add(_flare(top: topF, left: leftF, right: rightF, height: heightF * _relWidth, flipV: flipV));
 
+        if (widget.tutorialNo == 0)
+          text = 'Swipe vertically to reveal the answer 👀';
+        else if (widget.tutorialNo == 1)
+          text = 'Swipe left to dismiss the card 👈';
+        else if (widget.tutorialNo == 2) {
+          if (!_pageTwo) text = 'This shows the number of glyphs you have already mastered 💯';
+          else text = 'Choose the correct answer below to increase your mastery 💪 Hint: \'ga\' ';
+        } else if (widget.tutorialNo == 3) {
+          text = 'Increase your total mastery by answering this card ✔️ Hint: \'da\'';
+        } else if (widget.tutorialNo == 4) {
+          text = 'Mastered glyphs may occassionally show up. These cards can\'t be skipped. Total mastery will decrease when these aren\'t answered correctly! ❌ Try it out!';
+        }
+
+        if (widget.tutorialNo == 2) {
+          if (!_pageTwo) {
+            top = widget.quizCardTop - 50.0;
+            _elements.add(_text(
+              top: widget.quizCardBottom + 30.0,
+              left: left,
+              right: right,
+              height: height * _relWidth,
+              text: 'This progress bar shows your mastery of the current glyph.',
+            ));
+          } else top = widget.quizCardBottom - 200.0;
+        } else if (widget.tutorialNo > 2) {
+          top = widget.quizCardTop - 50.0;
+        }
+        _elements.add(_text(top: top, left: left, right: right, height: height * _relWidth, text: text));
+      
         HitTestBehavior hitTest = HitTestBehavior.translucent;
 
         if (widget.tutorialNo > 1) hitTest = HitTestBehavior.opaque;

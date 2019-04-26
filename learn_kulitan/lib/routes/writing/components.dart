@@ -872,15 +872,16 @@ class _TutorialState extends State<Tutorial> with SingleTickerProviderStateMixin
     return OverlayEntry(
       builder: (context) {
         final Size _dimensions = MediaQuery.of(context).size;
+        final double _relWidth = _dimensions.width / 414.0;
         final List<Widget> _elements = [
           _flare(
-            bottom: (_dimensions.aspectRatio * 775) - 50.0,
+            bottom: 370.0 * _relWidth,
             left: 0.0,
-            right: 165.0,
-            height: 100.0
+            right: 200.0 * _relWidth,
+            height: 100.0 * _relWidth,
           ),
           _text(
-            bottom: (_dimensions.aspectRatio * 1225) - 150.0,
+            bottom: 480.0 * _relWidth,
             left: 50.0,
             right: 50.0,
           )
