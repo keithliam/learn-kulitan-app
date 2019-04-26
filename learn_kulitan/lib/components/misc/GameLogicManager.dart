@@ -31,7 +31,10 @@ class GameLogicManager {
   }
 
   void finishTutorial() async {
-    if (isQuiz) _state.isLoading = true;
+    if (isQuiz) {
+      _state.isLoading = true;
+      _state.resetChoices();
+    }
     _isTutorial = false;
     _state.isTutorial = false;
     if (isQuiz) {
@@ -41,7 +44,6 @@ class GameLogicManager {
     } else {
       _pushTutorial();
     }
-    if (isQuiz) _state.isLoading = false;
   }
 
   Future<void> _initTutorial() async {
