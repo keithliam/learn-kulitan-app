@@ -31,10 +31,7 @@ class GameLogicManager {
   }
 
   void finishTutorial() async {
-    if (isQuiz) {
-      _state.isLoading = true;
-      _state.resetChoices();
-    }
+    if (isQuiz) _state.isLoading = true;
     _isTutorial = false;
     _state.isTutorial = false;
     if (isQuiz) {
