@@ -459,7 +459,7 @@ class ReadingPageState extends State<ReadingPage> {
       else if (_tutorialNo == 5) _pageStack.add(
         IgnorePointer(
           child: TutorialSuccess(
-            text: 'You\'re good to go! 👌\nYou may replay this tutorial anytime in the settings menu 😁\n\nTap anywhere to continue',
+            text: 'Congratulations, you have just finished the tutorial! 😁\nYou\'re good to go! 👌\n\nTap anywhere to continue',
             onTap: _gameLogicManager.finishTutorial,
             setLoader: () => setState(() => _isLoading = true),
           ),
