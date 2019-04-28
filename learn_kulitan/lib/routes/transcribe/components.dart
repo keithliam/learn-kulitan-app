@@ -1033,7 +1033,7 @@ class _TutorialState extends State<Tutorial>
     final Widget _flare = FlareActor(
       'assets/flares/${arrowUp ? 'swipe_down' : 'shaking_pointer'}.flr',
       color: accentColor,
-      animation: 'shake',
+      animation: widget.tutorialNo == 2 ? 'down' : 'shake',
     );
 
     Widget _widget;
