@@ -29,21 +29,21 @@ class DatabaseHelper {
   Future _onCreate(Database db, int version) async {
     await db.execute('''
           CREATE TABLE Page (
-            name TEXT PRIMARY KEY,
+            name TEXT(10) PRIMARY KEY,
             overall_progress INTEGER NOT NULL,
             current_batch INTEGER NOT NULL
           )
           ''');
     await db.execute('''
           CREATE TABLE Glyph (
-            name TEXT PRIMARY KEY,
+            name TEXT(10) PRIMARY KEY,
             progress_count_reading INTEGER NOT NULL,
             progress_count_writing INTEGER NOT NULL
           )
           ''');
     await db.execute('''
           CREATE TABLE CurrentQuiz (
-            type TEXT PRIMARY KEY,
+            type TEXT(10) PRIMARY KEY,
             one text,
             two text,
             three text,
@@ -52,14 +52,14 @@ class DatabaseHelper {
           ''');
     await db.execute('''
           CREATE TABLE CurrentDraw (
-            type TEXT PRIMARY KEY,
+            type TEXT(10) PRIMARY KEY,
             one text,
             two text
           )
           ''');
     await db.execute('''
           CREATE TABLE Tutorial (
-            key TEXT PRIMARY KEY,
+            key TEXT(10) PRIMARY KEY,
             intro text NOT NULL,
             reading text NOT NULL,
             writing text NOT NULL,
