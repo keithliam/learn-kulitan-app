@@ -626,6 +626,7 @@ class _TranscribePageState extends State<TranscribePage>
         //   color: headerNavigationColor,
         //   onPressed: null,
         // ),
+        right: SizedBox(width: 56.0, height: 48.0),
       ),
     );
 
