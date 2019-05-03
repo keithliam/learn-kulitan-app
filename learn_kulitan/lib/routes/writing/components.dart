@@ -336,9 +336,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
       final Offset _touchLoc = Offset(_localOffset.dx, _localOffset.dy - 20.0);
       if(_isWithinTouchArea(_touchLoc)){
         _animateTouchPoint();
-        setState(() {
-          _hitTarget = true;
-        });
+        _hitTarget = true;
       }
     }
   }
@@ -347,9 +345,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
     if(!_disableTouch) {
       if(_hitTarget) {
         _animateTouchPoint(isScaleUp: false);
-        setState(() {
-          _hitTarget = false;
-        });
+        _hitTarget = false;
       }
       if(_currBezierT == 1.0)
         getNextPath();
@@ -407,52 +403,50 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
     if(_hasNextSubStroke()) {
       final List<double> _tempPath = _tempGlyph[_currPathNo];
       final int _prevSubPathNo = _currSubPathNo;
-      setState(() => _currSubPathNo += 6);
-      setState(() {
-        _prevDrawPaths.add(Path()..moveTo(_tempPath[_prevSubPathNo - 2] * _canvasWidth, _tempPath[_prevSubPathNo - 1] * _canvasWidth)..cubicTo(_tempPath[_prevSubPathNo] * _canvasWidth, _tempPath[_prevSubPathNo + 1] * _canvasWidth, _tempPath[_prevSubPathNo + 2] * _canvasWidth, _tempPath[_prevSubPathNo + 3] * _canvasWidth, _tempPath[_prevSubPathNo + 4] * _canvasWidth, _tempPath[_prevSubPathNo + 5] * _canvasWidth));
-        _currPoint = Offset(_tempPath[_currSubPathNo - 2] * _canvasWidth, _tempPath[_currSubPathNo - 1] * _canvasWidth);
-        _currBezierT = 0.0;
-        _cubicBezier = _getCubicBezier(_tempPath[_currSubPathNo - 2], _tempPath[_currSubPathNo - 1], _tempPath[_currSubPathNo], _tempPath[_currSubPathNo + 1], _tempPath[_currSubPathNo + 2], _tempPath[_currSubPathNo + 3], _tempPath[_currSubPathNo + 4], _tempPath[_currSubPathNo + 5]);
-        _splitCubicBezier = _getSplitCubicBezier(_tempPath[_currSubPathNo - 2], _tempPath[_currSubPathNo - 1], _tempPath[_currSubPathNo], _tempPath[_currSubPathNo + 1], _tempPath[_currSubPathNo + 2], _tempPath[_currSubPathNo + 3], _tempPath[_currSubPathNo + 4], _tempPath[_currSubPathNo + 5]);
-      });
+      _currSubPathNo += 6;
+      _prevDrawPaths.add(Path()..moveTo(_tempPath[_prevSubPathNo - 2] * _canvasWidth, _tempPath[_prevSubPathNo - 1] * _canvasWidth)..cubicTo(_tempPath[_prevSubPathNo] * _canvasWidth, _tempPath[_prevSubPathNo + 1] * _canvasWidth, _tempPath[_prevSubPathNo + 2] * _canvasWidth, _tempPath[_prevSubPathNo + 3] * _canvasWidth, _tempPath[_prevSubPathNo + 4] * _canvasWidth, _tempPath[_prevSubPathNo + 5] * _canvasWidth));
+      _currPoint = Offset(_tempPath[_currSubPathNo - 2] * _canvasWidth, _tempPath[_currSubPathNo - 1] * _canvasWidth);
+      _currBezierT = 0.0;
+      _cubicBezier = _getCubicBezier(_tempPath[_currSubPathNo - 2], _tempPath[_currSubPathNo - 1], _tempPath[_currSubPathNo], _tempPath[_currSubPathNo + 1], _tempPath[_currSubPathNo + 2], _tempPath[_currSubPathNo + 3], _tempPath[_currSubPathNo + 4], _tempPath[_currSubPathNo + 5]);
+      _splitCubicBezier = _getSplitCubicBezier(_tempPath[_currSubPathNo - 2], _tempPath[_currSubPathNo - 1], _tempPath[_currSubPathNo], _tempPath[_currSubPathNo + 1], _tempPath[_currSubPathNo + 2], _tempPath[_currSubPathNo + 3], _tempPath[_currSubPathNo + 4], _tempPath[_currSubPathNo + 5]);
     // Next stroke
     } else if(_currPathNo + 1 < _tempGlyph.length) {
-      setState(() => _disableTouch = true);
+      _disableTouch = true;
       await Future.delayed(const Duration(milliseconds: nextDrawPathDelay));
+      _touchPointOpacityCurve = drawTouchPointOpacityDownCurve;
+      _guideOpacityCurve = drawGuidesOpacityDownCurve;
       setState(() {
-        _touchPointOpacityCurve = drawTouchPointOpacityDownCurve;
         _touchPointOpacity = 0.0;
         _guideOpacity = 0.0;
-        _guideOpacityCurve = drawGuidesOpacityDownCurve;
       });
       await Future.delayed(const Duration(milliseconds: drawGuidesOpacityChangeDuration * 2));
       final List<double> _prevPath = _tempGlyph[_currPathNo];
       final List<double> _tempPath = _tempGlyph[_currPathNo + 1];
       final int _prevSubPathNo = _currSubPathNo;
+      _currSubPathNo = 2;
+      _cubicBezier = _getCubicBezier(_tempPath[0], _tempPath[1], _tempPath[2], _tempPath[3], _tempPath[4], _tempPath[5], _tempPath[6], _tempPath[7]); 
+      _splitCubicBezier = _getSplitCubicBezier(_tempPath[0], _tempPath[1], _tempPath[2], _tempPath[3], _tempPath[4], _tempPath[5], _tempPath[6], _tempPath[7]); 
+      _prevDrawPaths.add(Path()..moveTo(_prevPath[_prevSubPathNo - 2] * _canvasWidth, _prevPath[_prevSubPathNo - 1] * _canvasWidth)..cubicTo(_prevPath[_prevSubPathNo] * _canvasWidth, _prevPath[_prevSubPathNo + 1] * _canvasWidth, _prevPath[_prevSubPathNo + 2] * _canvasWidth, _prevPath[_prevSubPathNo + 3] * _canvasWidth, _prevPath[_prevSubPathNo + 4] * _canvasWidth, _prevPath[_prevSubPathNo + 5] * _canvasWidth));
+      _currPoint = Offset(_tempPath[0] * _canvasWidth, _tempPath[1] * _canvasWidth);
+      _currBezierT = 0.0;
+      _currPathNo++;
+      _touchPointOpacityCurve = drawTouchPointOpacityUpCurve;
+      _guideOpacityCurve = drawGuidesOpacityUpCurve;
       setState(() {
-        _cubicBezier = _getCubicBezier(_tempPath[0], _tempPath[1], _tempPath[2], _tempPath[3], _tempPath[4], _tempPath[5], _tempPath[6], _tempPath[7]); 
-        _splitCubicBezier = _getSplitCubicBezier(_tempPath[0], _tempPath[1], _tempPath[2], _tempPath[3], _tempPath[4], _tempPath[5], _tempPath[6], _tempPath[7]); 
-        _prevDrawPaths.add(Path()..moveTo(_prevPath[_prevSubPathNo - 2] * _canvasWidth, _prevPath[_prevSubPathNo - 1] * _canvasWidth)..cubicTo(_prevPath[_prevSubPathNo] * _canvasWidth, _prevPath[_prevSubPathNo + 1] * _canvasWidth, _prevPath[_prevSubPathNo + 2] * _canvasWidth, _prevPath[_prevSubPathNo + 3] * _canvasWidth, _prevPath[_prevSubPathNo + 4] * _canvasWidth, _prevPath[_prevSubPathNo + 5] * _canvasWidth));
-        _currPoint = Offset(_tempPath[0] * _canvasWidth, _tempPath[1] * _canvasWidth);
-        _currBezierT = 0.0;
-        _currPathNo++;
-        _currSubPathNo = 2;
-        _touchPointOpacityCurve = drawTouchPointOpacityUpCurve;
         _touchPointOpacity = 1.0;
         _guideOpacity = 1.0;
-        _guideOpacityCurve = drawGuidesOpacityUpCurve;
       });
       await Future.delayed(const Duration(milliseconds: drawGuidesOpacityChangeDuration));
-      setState(() => _disableTouch = false);
+      _disableTouch = false;
     // Finished writing
     } else {
-      setState(() => _disableTouch = true);
+      _disableTouch = true;
       await Future.delayed(const Duration(milliseconds: drawGuidesOpacityChangeDelay));
+      _guideOpacityCurve = drawGuidesOpacityDownCurve;
+      _touchPointOpacityCurve = drawTouchPointOpacityDownCurve;
       setState(() {
         _guideOpacity = 0.0;
         _touchPointOpacity = 0.0;
-        _guideOpacityCurve = drawGuidesOpacityDownCurve;
-        _touchPointOpacityCurve = drawTouchPointOpacityDownCurve;
       });
       await Future.delayed(const Duration(milliseconds: drawGuidesOpacityChangeDuration));
       widget.writingDone();
@@ -492,19 +486,17 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
           if(_touchDetails['point'] >= _currBezierT) {
             final Map<String, Offset> _points = _splitCubicBezier(_touchDetails['point']);
             final _anchor0 = _adjustAnchor0(_points['p0'], _points['a0'], _touchDetails['point']);
+            _currBezierT = _touchDetails['point'];
             setState(() {
               _drawPath = Path()..moveTo(_points['p0'].dx, _points['p0'].dy)..cubicTo(_anchor0.dx, _anchor0.dy, _points['a1'].dx, _points['a1'].dy, _points['p1'].dx, _points['p1'].dy);
               _currPoint = _points['p1'];
-              _currBezierT = _touchDetails['point'];
             });
             if(_currBezierT == 1.0 && _hasNextSubStroke())
               getNextPath();
           }
         } else {
           _animateTouchPoint(isScaleUp: false);
-          setState(() {
-            _hitTarget = false;
-          });
+          _hitTarget = false;
         }
       }
     }
@@ -518,18 +510,16 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
 
   void _showPaths() async {
     await Future.delayed(const Duration(milliseconds: writingInitDelay));
+    _disableTouch = false;
+    _guideOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
+    _touchPointOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
     setState(() {
-      _guideOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
-      _touchPointOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
       _touchPointOpacity = 1.0;
       _guideOpacity = 1.0;
-      _disableTouch = false;
     });
     await Future.delayed(const Duration(milliseconds: writingInitOpacityDuration));
-    setState(() {
-      _guideOpacityDuration = const Duration(milliseconds: drawGuidesOpacityChangeDuration);
-      _touchPointOpacityDuration = const Duration(milliseconds: drawGuidesOpacityChangeDuration);
-    });
+    _guideOpacityDuration = const Duration(milliseconds: drawGuidesOpacityChangeDuration);
+    _touchPointOpacityDuration = const Duration(milliseconds: drawGuidesOpacityChangeDuration);
   }
 
   void _getPaths({ first: false }) async {
@@ -541,19 +531,17 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
     }
 
     List<double> _path = kulitanPaths[widget.kulitan][0];
-    setState(() => _currPoint = Offset(_path[0] * _canvasWidth, _path[1] * _canvasWidth));
+    _currPoint = Offset(_path[0] * _canvasWidth, _path[1] * _canvasWidth);
     _path = _thisKulitanPaths[0];
-    setState(() {
-      if(first) {
-        _guideOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
-        _touchPointOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
-      }
-      _cubicBezier = _getCubicBezier(_path[0], _path[1], _path[2], _path[3], _path[4], _path[5], _path[6], _path[7]);
-      _splitCubicBezier = _getSplitCubicBezier(_path[0], _path[1], _path[2], _path[3], _path[4], _path[5], _path[6], _path[7]);
-      _shadowPaths = _manyPaths;
-      _currSubPathNo = 2;
-    });
-    if(first) await Future.delayed(const Duration(milliseconds:  writingInitDelay));
+    _currSubPathNo = 2;
+    _cubicBezier = _getCubicBezier(_path[0], _path[1], _path[2], _path[3], _path[4], _path[5], _path[6], _path[7]);
+    _splitCubicBezier = _getSplitCubicBezier(_path[0], _path[1], _path[2], _path[3], _path[4], _path[5], _path[6], _path[7]);
+    _shadowPaths = _manyPaths;
+    if(first) {
+      _guideOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
+      _touchPointOpacityDuration = const Duration(milliseconds: writingInitOpacityDuration);
+      await Future.delayed(const Duration(milliseconds:  writingInitDelay));
+    }
     if(widget.stackNumber == 1) _showPaths();
     await Future.delayed(const Duration(milliseconds: drawShadowOffsetChangeDuration));
     setState(() => _animateShadowAndProgress = true);
