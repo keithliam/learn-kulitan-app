@@ -39,55 +39,48 @@ class CustomButton extends StatefulWidget {
 class _CustomButtonState extends State<CustomButton> {
   final GlobalKey _key = GlobalKey();
   double _height = 0.0;
-  double _elevation = 0.0;
-  bool _doneTapping = true;
+  bool _isPressed = false;
 
-  bool _checkIfPressNum({int num = 0}) {
-    return (widget.presses != null && widget.presses == num) || widget.presses == null;
-  }
+  bool _checkIfPressMany() => widget.presses == null || widget.presses > 1;
+  bool _checkIfPressNum({int nums = 0}) => widget.presses == null || widget.presses == nums;
 
-  void buttonPressed() {
-    if(!widget.disable)
-      setState(() => _elevation = widget.elevation);
-      if(_doneTapping)
-        setState(() => _elevation = 0.0);
-  }
-
-  void buttonHoldDown() async {
-    if(!widget.disable && _checkIfPressNum()) {
-      setState(() {
-        _elevation = widget.elevation;
-        _doneTapping = false;
-      });
-      if(widget.pressAlert != null) {
-        widget.pressAlert();
+  void _buttonTapped() async {
+    if (_checkIfPressMany()) {
+      setState(() => _isPressed = false);
+      await Future.delayed(Duration(milliseconds: widget.pressDelay));
+      if(_checkIfPressNum(nums: 1)) widget.onPressed();
+      if(widget.pressStopAlert != null) widget.pressStopAlert();
+    } else if (
+      !widget.disable &&
+      (
+        (_isPressed && _checkIfPressNum(nums: 1)) ||
+        (!_isPressed && _checkIfPressNum())
+      )
+    ) {
+      if (!_isPressed) {
+        setState(() => _isPressed = true);
+        if(widget.pressAlert != null) widget.pressAlert();
       }
       await Future.delayed(Duration(milliseconds: widget.pressDelay));
-      setState(() => _doneTapping = true);        
+      setState(() => _isPressed = false);
+      await Future.delayed(Duration(milliseconds: widget.pressDelay));
+      if(_checkIfPressNum(nums: 1)) widget.onPressed();
+      if(widget.pressStopAlert != null) widget.pressStopAlert();
     }
   }
 
-  void buttonHoldUp() async {
-    if(!widget.disable || _elevation == widget.elevation) {
-      double _elev = _elevation;
-      if(!_doneTapping)
-        await Future.delayed(Duration(milliseconds: widget.pressDelay));
-      setState(() => _elevation = 0);
-      await Future.delayed(Duration(milliseconds: widget.pressDelay));
-      if(_elev == widget.elevation && _checkIfPressNum(num: 1))
-        widget.onPressed();
-      if(widget.pressStopAlert != null && _elev == widget.elevation)
-        widget.pressStopAlert();
+  void _buttonHoldDown() async {
+    if (!widget.disable && _checkIfPressNum()) {
+      setState(() => _isPressed = true);
+      if(widget.pressAlert != null) widget.pressAlert();
     }
   }
 
-  void buttonCancel() async {
-    if(!widget.disable && _elevation == widget.elevation) {
-      setState(() => _elevation = 0);
-      if(widget.pressStopAlert != null) {
-        await Future.delayed(Duration(milliseconds: widget.pressDelay));
-        widget.pressStopAlert();
-      }
+  void _cancelHold() async {
+    if (!widget.disable && _isPressed) {
+      setState(() => _isPressed = false);
+      await Future.delayed(Duration(milliseconds: widget.pressDelay));
+      if(widget.pressStopAlert != null) widget.pressStopAlert();
     }
   }
 
@@ -107,14 +100,13 @@ class _CustomButtonState extends State<CustomButton> {
         milliseconds: widget.pressDelay,
       ),
       curve: customButtonPressCurve,
-      top: _elevation,
+      top: _isPressed ? widget.elevation : 0.0,
       left: 0,
       right: 0,
       child: GestureDetector(
-        onTap: buttonPressed,
-        onTapDown: (_) => buttonHoldDown(),
-        onTapUp: (_) => buttonHoldUp(),
-        onTapCancel: buttonCancel,
+        onTap: _buttonTapped,
+        onTapDown: (_) => _buttonHoldDown(),
+        onTapCancel: _cancelHold,
         child: Container(
           key: _key,
           height: widget.height,
