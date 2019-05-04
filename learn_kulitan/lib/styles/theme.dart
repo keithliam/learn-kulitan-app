@@ -31,8 +31,11 @@ const cardQuizColor1 = whiteColor;
 const cardQuizColor2 = lightBlueColor;
 const cardQuizColor3 = blueColor;
 const cardChoicesColor = whiteColor;
+const cardChoicesTextColor = grayColor;
 const cardChoicesRightColor = blueGreenColor;
+const cardChoicesRightTextColor = grayColor;
 const cardChoicesWrongColor = accentColor;
+const cardChoicesWrongTextColor = whiteColor;
 
 const writingGuideColor = accentColor;
 const writingDrawColor = grayColor;
@@ -1756,12 +1759,6 @@ const textQuizChoice = TextStyle(
   fontSize: 30.0,
   fontWeight: FontWeight.w600,
   color: grayColor,
-);
-const textQuizChoiceWrong = TextStyle(
-  fontFamily: 'Barlow',
-  fontSize: 30.0,
-  fontWeight: FontWeight.w600,
-  color: whiteColor,
 );
 const textWritingProgressBar = TextStyle(
   fontFamily: 'Barlow',
