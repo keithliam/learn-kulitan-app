@@ -21,21 +21,21 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: this.height,
-      width: this.width,
-      padding: this.padding,
+      height: height,
+      width: width,
+      padding: padding,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.0),
-        boxShadow: this.hasShadow? [
+        boxShadow: hasShadow? [
           BoxShadow(
             color: customCardShadowColor,
             blurRadius: 30.0,
             offset: Offset(0.0, 20.0),
           ),
         ] : null,
-        color: this.color,
+        color: color,
       ),
-      child: this.child,
+      child: child,
     );
   }
 }

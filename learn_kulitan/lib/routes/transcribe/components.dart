@@ -631,7 +631,7 @@ class _KeyboardKeyContainer extends StatelessWidget {
         child: CustomPaint(
           painter: _KeyIconPainter(
             strokePercent: MediaQuery.of(context).size.width / 414.0,
-            keyType: this.keyType,
+            keyType: keyType,
           ),
         ),
       );
@@ -642,7 +642,7 @@ class _KeyboardKeyContainer extends StatelessWidget {
           FittedBox(
             fit: BoxFit.fitHeight,
             child: Text(
-              this.keyType,
+              keyType,
               textAlign: TextAlign.center,
               style: kulitanKeyboard.copyWith(shadows: <Shadow>[
                 Shadow(
@@ -656,8 +656,8 @@ class _KeyboardKeyContainer extends StatelessWidget {
             child: Opacity(
               opacity: 0.55,
               child: Text(
-                this.keyType != 'i'
-                    ? this.keyType != 'u' ? this.keyType + 'i' : 'wi'
+                keyType != 'i'
+                    ? keyType != 'u' ? keyType + 'i' : 'wi'
                     : 'yi',
                 textAlign: TextAlign.center,
                 style: kulitanKeyboard,
@@ -669,8 +669,8 @@ class _KeyboardKeyContainer extends StatelessWidget {
             child: Opacity(
               opacity: 0.55,
               child: Text(
-                this.keyType != 'i'
-                    ? this.keyType != 'u' ? this.keyType + 'u' : 'wu'
+                keyType != 'i'
+                    ? keyType != 'u' ? keyType + 'u' : 'wu'
                     : 'yu',
                 textAlign: TextAlign.center,
                 style: kulitanKeyboard,

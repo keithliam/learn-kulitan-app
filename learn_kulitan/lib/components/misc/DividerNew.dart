@@ -15,12 +15,12 @@ class DividerNew extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Container(
-      height: this.height,
-      width: this.width < 0? MediaQuery.of(context).size.width : this.width,
+      height: height,
+      width: width < 0? MediaQuery.of(context).size.width : width,
       decoration: BoxDecoration(
-        color: this.color,
+        color: color,
         borderRadius: BorderRadius.circular(100.0),
-        boxShadow: this.boxShadow != null ? [this.boxShadow] : null,
+        boxShadow: boxShadow != null ? [boxShadow] : null,
       ),
     );
   }

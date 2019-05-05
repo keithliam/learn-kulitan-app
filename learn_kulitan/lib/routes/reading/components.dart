@@ -188,7 +188,7 @@ class QuizCard extends StatelessWidget {
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            this.kulitan,
+            kulitan,
             style: kulitanQuiz,
             textAlign: TextAlign.center,
           ),
@@ -199,8 +199,8 @@ class QuizCard extends StatelessWidget {
     Widget _progressBar = Padding(
       padding: const EdgeInsets.only(top: 10.0),
       child: LinearProgressBar(
-        progress: this.progress,
-        animate: this.animateProgressBar,
+        progress: progress,
+        animate: animateProgressBar,
       ),
     );
 
@@ -209,13 +209,13 @@ class QuizCard extends StatelessWidget {
       _progressBar,
     ];
 
-    if(this.showAnswer)
+    if(showAnswer)
       _cardContents.insert(1,
         Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
             child: Text(
-              this.answer,
+              answer,
               style: textQuizAnswer,
             ),
           ),
@@ -225,15 +225,15 @@ class QuizCard extends StatelessWidget {
       _cardContents.removeAt(1);
 
     return CustomCard(
-      color: this.color,
-      height: this.width,
-      width: this.width,
+      color: color,
+      height: width,
+      width: width,
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: cardQuizHorizontalPadding, vertical: cardQuizVerticalPadding),
-          height: this.originalWidth,
-          width: this.originalWidth,
+          height: originalWidth,
+          width: originalWidth,
           child: Column(
             children: _cardContents,
           ),
