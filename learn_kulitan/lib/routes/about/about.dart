@@ -52,10 +52,11 @@ class _AboutPageState extends State<AboutPage> {
         _flutterLogoStyle = FlutterLogoStyle.horizontal;
         _flutterLogoSize = 150.0;
       });
+      await Future.delayed(const Duration(milliseconds: 500));
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: informationPageScrollDuration),
-        curve: Curves.ease,
+        curve: Curves.easeInOut,
       );
     }
   }
