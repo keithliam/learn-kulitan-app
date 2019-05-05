@@ -1,6 +1,28 @@
 import 'package:flutter/material.dart';
 import '../../styles/theme.dart';
 
+class CustomButtonGroup {
+  CustomButtonGroup({ this.onTapDown, this.onTapUp });
+  
+  final VoidCallback onTapDown;
+  final VoidCallback onTapUp;
+  
+  int _presses = 0;
+
+  get presses => _presses;
+
+  void press() {
+    _presses++;
+    if (onTapDown != null) onTapDown();
+  }
+
+  void unpress() {
+    if(_presses > 0) _presses--;
+    if(_presses == 0) onTapUp();
+  }
+}
+
+
 class CustomButton extends StatefulWidget {
   CustomButton({
     @required this.onPressed,
@@ -13,9 +35,7 @@ class CustomButton extends StatefulWidget {
     this.marginTop = 0.0,
     this.disable = false,
     this.pressDelay = 250,
-    this.presses,
-    this.pressAlert,
-    this.pressStopAlert,
+    this.buttonGroup,
   });
 
   final VoidCallback onPressed;
@@ -27,10 +47,8 @@ class CustomButton extends StatefulWidget {
   final EdgeInsetsGeometry padding;
   final double marginTop;
   final bool disable;
-  final int presses;
   final int pressDelay;
-  final VoidCallback pressAlert;
-  final VoidCallback pressStopAlert;
+  final CustomButtonGroup buttonGroup;
 
   @override
   _CustomButtonState createState() => _CustomButtonState();
@@ -41,15 +59,15 @@ class _CustomButtonState extends State<CustomButton> {
   double _height = 0.0;
   bool _isPressed = false;
 
-  bool _checkIfPressMany() => widget.presses == null || widget.presses > 1;
-  bool _checkIfPressNum({int nums = 0}) => widget.presses == null || widget.presses == nums;
+  bool _checkIfPressMany() => widget.buttonGroup == null || widget.buttonGroup.presses > 1;
+  bool _checkIfPressNum({int nums = 0}) => widget.buttonGroup == null || widget.buttonGroup.presses == nums;
 
   void _buttonTapped() async {
     if (_checkIfPressMany()) {
       setState(() => _isPressed = false);
       await Future.delayed(Duration(milliseconds: widget.pressDelay));
       if(_checkIfPressNum(nums: 1)) widget.onPressed();
-      if(widget.pressStopAlert != null) widget.pressStopAlert();
+      if(widget.buttonGroup != null) widget.buttonGroup.unpress();
     } else if (
       !widget.disable &&
       (
@@ -59,20 +77,20 @@ class _CustomButtonState extends State<CustomButton> {
     ) {
       if (!_isPressed) {
         setState(() => _isPressed = true);
-        if(widget.pressAlert != null) widget.pressAlert();
+        if(widget.buttonGroup != null) widget.buttonGroup.press();
       }
       await Future.delayed(Duration(milliseconds: widget.pressDelay));
       setState(() => _isPressed = false);
       await Future.delayed(Duration(milliseconds: widget.pressDelay));
       if(_checkIfPressNum(nums: 1)) widget.onPressed();
-      if(widget.pressStopAlert != null) widget.pressStopAlert();
+      if(widget.buttonGroup != null) widget.buttonGroup.unpress();
     }
   }
 
   void _buttonHoldDown() async {
     if (!widget.disable && _checkIfPressNum()) {
       setState(() => _isPressed = true);
-      if(widget.pressAlert != null) widget.pressAlert();
+      if(widget.buttonGroup != null) widget.buttonGroup.press();
     }
   }
 
@@ -80,7 +98,7 @@ class _CustomButtonState extends State<CustomButton> {
     if (!widget.disable && _isPressed) {
       setState(() => _isPressed = false);
       await Future.delayed(Duration(milliseconds: widget.pressDelay));
-      if(widget.pressStopAlert != null) widget.pressStopAlert();
+      if(widget.buttonGroup != null) widget.buttonGroup.unpress();
     }
   }
 

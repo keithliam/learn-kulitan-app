@@ -17,9 +17,7 @@ class ChoiceButton extends StatefulWidget {
     @required this.disable,
     @required this.resetStream,
     @required this.showAnswerStream,
-    @required this.presses,
-    @required this.pressAlert,
-    @required this.pressStopAlert,
+    @required this.buttonGroup,
   });
 
   static const int right = 0;
@@ -31,9 +29,7 @@ class ChoiceButton extends StatefulWidget {
   final bool disable;
   final Stream resetStream;
   final Stream showAnswerStream;
-  final int presses;
-  final VoidCallback pressAlert;
-  final VoidCallback pressStopAlert;
+  final CustomButtonGroup buttonGroup;
 
   @override
   _ChoiceButtonState createState() => _ChoiceButtonState();
@@ -143,9 +139,7 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
       borderRadius: 15.0,
       padding: const EdgeInsets.all(12.0),
       pressDelay: quizChoicePressDuration,
-      presses: widget.presses,
-      pressAlert: widget.pressAlert,
-      pressStopAlert: widget.pressStopAlert,
+      buttonGroup: widget.buttonGroup,
       child: Center(
         child: AnimatedOpacity(
           opacity: _opacity,

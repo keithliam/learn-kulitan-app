@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../styles/theme.dart';
+import '../../components/buttons/CustomButton.dart';
 import '../../components/buttons/IconButtonNew.dart';
 import '../../components/buttons/TextButton.dart';
 import '../../components/misc/StaticHeader.dart';
@@ -21,6 +22,7 @@ class ReadingPageState extends State<ReadingPage> {
   final _tutorialKey3 = GlobalKey();
   final _tutorialKey4 = GlobalKey();
   final _tutorialKey5 = GlobalKey();
+  CustomButtonGroup _buttonGroup;
   int _tutorialNo = -1;
   bool _isLoading = true;
   bool _isTutorial = true;
@@ -70,7 +72,6 @@ class ReadingPageState extends State<ReadingPage> {
   ];
 
   bool _disableChoices = false;
-  int _presses = 0;
 
   GlobalKey _pageKey = GlobalKey();
   GlobalKey _quizCardsKey = GlobalKey();
@@ -126,20 +127,6 @@ class ReadingPageState extends State<ReadingPage> {
     _disableButtons[3] = _choices[3]['text'] == answer ? true : false;
   });
 
-  void _pressAlert() {
-    setState(() {
-      _presses++;
-      _disableSwipe = true;
-    });
-  }
-
-  void _pressStopAlert() {
-    if(_presses > 0)
-      setState(() => _presses--);
-    if(_presses == 0 && !_isTutorial)
-      setState(() => _disableSwipe = false);
-  }
-
   void _swipingCard() {
     setState(() => _disableChoices = true);
   }
@@ -163,6 +150,12 @@ class ReadingPageState extends State<ReadingPage> {
   @override
   void initState() {
     super.initState();
+    _buttonGroup = CustomButtonGroup(
+      onTapDown: () => setState(() => _disableSwipe = true),
+      onTapUp: () {
+        if(!_isTutorial) setState(() => _disableSwipe = false);
+      },
+    );
     startGame();
   }
 
@@ -265,9 +258,7 @@ class ReadingPageState extends State<ReadingPage> {
                   disable: _disableChoices || _disableButtons[0],
                   resetStream: _resetChoicesController.stream,
                   showAnswerStream: _showAnswerChoiceController.stream,
-                  presses: _presses,
-                  pressAlert: _pressAlert,
-                  pressStopAlert: _pressStopAlert,
+                  buttonGroup: _buttonGroup,
                 ),
               ),
               Container(
@@ -281,9 +272,7 @@ class ReadingPageState extends State<ReadingPage> {
                   disable: _disableChoices || _disableButtons[1],
                   resetStream: _resetChoicesController.stream,
                   showAnswerStream: _showAnswerChoiceController.stream,
-                  presses: _presses,
-                  pressAlert: _pressAlert,
-                  pressStopAlert: _pressStopAlert,
+                  buttonGroup: _buttonGroup,                  
                 ),
               ),
             ],
@@ -301,9 +290,7 @@ class ReadingPageState extends State<ReadingPage> {
                   disable: _disableChoices || _disableButtons[2],
                   resetStream: _resetChoicesController.stream,
                   showAnswerStream: _showAnswerChoiceController.stream,
-                  presses: _presses,
-                  pressAlert: _pressAlert,
-                  pressStopAlert: _pressStopAlert,
+                  buttonGroup: _buttonGroup,                  
                 ),
               ),
               Container(
@@ -317,9 +304,7 @@ class ReadingPageState extends State<ReadingPage> {
                   disable: _disableChoices || _disableButtons[3],
                   resetStream: _resetChoicesController.stream,
                   showAnswerStream: _showAnswerChoiceController.stream,
-                  presses: _presses,
-                  pressAlert: _pressAlert,
-                  pressStopAlert: _pressStopAlert,
+                  buttonGroup: _buttonGroup,                  
                 ),
               ),
             ],
