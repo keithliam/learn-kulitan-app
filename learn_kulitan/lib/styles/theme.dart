@@ -10,7 +10,7 @@ const blueColor = Color(0xFFDBF3FF);
 const lightBlueColor = Color(0xFFEDFAFF);
 const whiteColor = Color(0xFFFFFFFF);
 
-const tutorialsOverlayColor = Color(0x88000000);
+const tutorialsOverlayColor = Color(0xAA000000);
 const tutorialsOverlayBackgroundColor = primaryColor;
 
 const backgroundColor = primaryColor;
@@ -1874,6 +1874,6 @@ const textAboutFooter = TextStyle(
 );
 const textTutorialOverlay = TextStyle(
   fontFamily: 'Barlow',
-  fontSize: 15.0,
+  fontSize: 18.0,
   color: whiteColor,
 );
