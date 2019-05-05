@@ -13,12 +13,12 @@ class CustomButtonGroup {
 
   void press() {
     _presses++;
-    if (onTapDown != null) onTapDown();
+    if (onTapDown != null && onTapDown != null) onTapDown();
   }
 
   void unpress() {
     if(_presses > 0) _presses--;
-    if(_presses == 0) onTapUp();
+    if(_presses == 0 && onTapUp != null) onTapUp();
   }
 }
 
