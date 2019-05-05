@@ -12,6 +12,7 @@ class HomeButton extends StatelessWidget {
     @required this.buttonGroup,
     @required this.disabled,
     @required this.onPressedImmediate,
+    this.reload,
     this.height,
     this.progress = -1,
     this.padRight,
@@ -25,8 +26,17 @@ class HomeButton extends StatelessWidget {
   final double progress;
   final double padRight;
   final bool disabled;
+  final VoidCallback reload;
   final VoidCallback onPressedImmediate;
   final CustomButtonGroup buttonGroup;
+
+  void _onPressed(BuildContext context) {
+    if (reload != null) {
+      Navigator.pushNamed(context, route).then((_) => reload());
+    } else {
+      Navigator.pushNamed(context, route);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +71,7 @@ class HomeButton extends StatelessWidget {
       );
 
     return CustomButton(
-      onPressed: () => Navigator.pushNamed(context, route),
+      onPressed: () => _onPressed(context),
       elevation: MediaQuery.of(context).size.height > 600.0 ? 10.0 : 7.0,
       borderRadius: 30.0,
       height: 100.0,

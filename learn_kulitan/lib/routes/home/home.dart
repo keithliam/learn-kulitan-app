@@ -30,6 +30,18 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _loadProgresses() async {
+    setState(() => _isLoading = true);
+    final Database _db = await DatabaseHelper.instance.database;
+    final int _reading = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "reading"'))[0]['overall_progress'];
+    final int _writing = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "writing"'))[0]['overall_progress'];
+    setState(() {
+      _readingProgress = _reading;
+      _writingProgress = _writing;
+      _isLoading = false;
+    });
+  }
+
   void _disableButtons() async {
     setState(() => _disabled = true);
     await Future.delayed(const Duration(milliseconds: 2 * defaultCustomButtonPressDuration));
@@ -68,6 +80,7 @@ class _HomePageState extends State<HomePage> {
       subtitle: 'READING',
       route: '/reading',
       progress: _readingProgress / totalGlyphCount,
+      reload: _loadProgresses,
     );
 
     Widget _writingButton = HomeButton(
@@ -85,6 +98,7 @@ class _HomePageState extends State<HomePage> {
       subtitle: 'WRITING',
       route: '/writing',
       progress: _writingProgress / totalGlyphCount,
+      reload: _loadProgresses,
     );
 
     Widget _transcribeButton = HomeButton(
