@@ -170,6 +170,7 @@ const informationPageScrollCurve = Curves.easeInOutCubic;
 const loaderOpacityCurve = Curves.fastOutSlowIn;
 
 // Durations
+const defaultCustomButtonPressDuration = 250;
 const linearProgressBarChangeDuration = 1000;
 const showAnswerChoiceDuration = 250;
 const resetQuizDuration = 750;

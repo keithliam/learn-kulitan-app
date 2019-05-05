@@ -27,6 +27,7 @@ class CustomButton extends StatefulWidget {
   CustomButton({
     @required this.onPressed,
     @required this.child,
+    this.onPressedImmediate,
     this.height,
     this.color = customButtonDefaultColor,
     this.borderRadius = 0.0,
@@ -34,11 +35,12 @@ class CustomButton extends StatefulWidget {
     this.padding = const EdgeInsets.all(0.0),
     this.marginTop = 0.0,
     this.disable = false,
-    this.pressDelay = 250,
+    this.pressDelay = defaultCustomButtonPressDuration,
     this.buttonGroup,
   });
 
   final VoidCallback onPressed;
+  final VoidCallback onPressedImmediate;
   final Widget child;
   final double height;
   final Color color;
@@ -63,11 +65,13 @@ class _CustomButtonState extends State<CustomButton> {
   bool _checkIfPressNum({int nums = 0}) => widget.buttonGroup == null || widget.buttonGroup.presses == nums;
 
   void _buttonTapped() async {
+    final bool _toPress = _checkIfPressNum(nums: 1);
     if (_checkIfPressMany()) {
+      if (_toPress && widget.onPressedImmediate != null) widget.onPressedImmediate();
       setState(() => _isPressed = false);
       await Future.delayed(Duration(milliseconds: widget.pressDelay));
-      if(_checkIfPressNum(nums: 1)) widget.onPressed();
-      if(widget.buttonGroup != null) widget.buttonGroup.unpress();
+      if (_toPress) widget.onPressed();
+      if (widget.buttonGroup != null) widget.buttonGroup.unpress();
     } else if (
       !widget.disable &&
       (
@@ -79,11 +83,12 @@ class _CustomButtonState extends State<CustomButton> {
         setState(() => _isPressed = true);
         if(widget.buttonGroup != null) widget.buttonGroup.press();
       }
+      if (_toPress && widget.onPressedImmediate != null) widget.onPressedImmediate();
       await Future.delayed(Duration(milliseconds: widget.pressDelay));
       setState(() => _isPressed = false);
       await Future.delayed(Duration(milliseconds: widget.pressDelay));
-      if(_checkIfPressNum(nums: 1)) widget.onPressed();
-      if(widget.buttonGroup != null) widget.buttonGroup.unpress();
+      if (_toPress) widget.onPressed();
+      if (widget.buttonGroup != null) widget.buttonGroup.unpress();
     }
   }
 

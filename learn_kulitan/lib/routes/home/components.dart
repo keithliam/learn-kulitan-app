@@ -9,6 +9,9 @@ class HomeButton extends StatelessWidget {
     @required this.route,
     @required this.kulitanText,
     @required this.subtitle,
+    @required this.buttonGroup,
+    @required this.disabled,
+    @required this.onPressedImmediate,
     this.height,
     this.progress = -1,
     this.padRight,
@@ -21,6 +24,9 @@ class HomeButton extends StatelessWidget {
   final String subtitle;
   final double progress;
   final double padRight;
+  final bool disabled;
+  final VoidCallback onPressedImmediate;
+  final CustomButtonGroup buttonGroup;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +67,9 @@ class HomeButton extends StatelessWidget {
       height: 100.0,
       padding: const EdgeInsets.only(right: 20.0),
       marginTop: 7.0,
+      buttonGroup: buttonGroup,
+      disable: disabled,
+      onPressedImmediate: onPressedImmediate,
       child: Row(
         children: <Widget>[
           SizedBox(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../components/animations/Loader.dart';
+import '../../components/buttons/CustomButton.dart';
 import './components.dart';
 import '../../styles/theme.dart';
 import '../../db/DatabaseHelper.dart';
@@ -11,6 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final CustomButtonGroup _buttonGroup = CustomButtonGroup();
+  bool _disabled = false;
   bool _isLoading = true;  
   int _readingProgress = -1;
   int _writingProgress = -1;
@@ -25,6 +28,12 @@ class _HomePageState extends State<HomePage> {
       _writingProgress = _writing;
       _isLoading = false;
     });
+  }
+
+  void _disableButtons() async {
+    setState(() => _disabled = true);
+    await Future.delayed(const Duration(milliseconds: 2 * defaultCustomButtonPressDuration));
+    setState(() => _disabled = false);
   }
 
   @override
@@ -46,6 +55,9 @@ class _HomePageState extends State<HomePage> {
     );
 
     Widget _readingButton = HomeButton(
+      buttonGroup: _buttonGroup,
+      disabled: _disabled,
+      onPressedImmediate: _disableButtons,
       kulitanText: <Widget>[
         Text('paa', textAlign: TextAlign.center, style: kulitanHome),
         Text('ma', textAlign: TextAlign.center, style: kulitanHome),
@@ -59,6 +71,9 @@ class _HomePageState extends State<HomePage> {
     );
 
     Widget _writingButton = HomeButton(
+      buttonGroup: _buttonGroup,
+      disabled: _disabled,
+      onPressedImmediate: _disableButtons,
       kulitanText: <Widget>[
         Text('paa', textAlign: TextAlign.center, style: kulitanHome),
         Text(' man ', textAlign: TextAlign.center, style: kulitanHome),
@@ -73,6 +88,9 @@ class _HomePageState extends State<HomePage> {
     );
 
     Widget _transcribeButton = HomeButton(
+      buttonGroup: _buttonGroup,
+      disabled: _disabled,
+      onPressedImmediate: _disableButtons,
       kulitanText: <Widget>[
         Text('paa', textAlign: TextAlign.center, style: kulitanHome),
         Text('man  ', textAlign: TextAlign.center, style: kulitanHome),
@@ -85,6 +103,9 @@ class _HomePageState extends State<HomePage> {
     );
 
     Widget _infoButton = HomeButton(
+      buttonGroup: _buttonGroup,
+      disabled: _disabled,
+      onPressedImmediate: _disableButtons,
       kulitanText: <Widget>[
         Text('k ', textAlign: TextAlign.center, style: kulitanHome.copyWith(height: 0.7)),
         Text('p ', textAlign: TextAlign.center, style: kulitanHome.copyWith(height: 0.9)),
@@ -97,6 +118,9 @@ class _HomePageState extends State<HomePage> {
     );
 
     Widget _aboutButton = HomeButton(
+      buttonGroup: _buttonGroup,
+      disabled: _disabled,
+      onPressedImmediate: _disableButtons,
       kulitanText: <Widget>[
         Text('reng    ', textAlign: TextAlign.center, style: kulitanHome),
         Text('gii', textAlign: TextAlign.center, style: kulitanHome),
