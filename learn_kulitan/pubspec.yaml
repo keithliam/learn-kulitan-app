@@ -47,9 +47,6 @@ flutter:
           style: italic
         - asset: assets/fonts/Barlow-SemiBold.otf
           weight: 600
-        - asset: assets/fonts/Barlow-SemiBoldItalic.otf
-          style: italic
-          weight: 600
         - asset: assets/fonts/Barlow-Bold.otf
           weight: 700
         - asset: assets/fonts/Barlow-BoldItalic.otf
