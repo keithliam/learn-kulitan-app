@@ -16,9 +16,11 @@ class InformationPage extends StatefulWidget {
 
 class _InformationPageState extends State<InformationPage> {
   final ScrollController _scrollController = ScrollController();
+  final CustomButtonGroup _buttonGroup = CustomButtonGroup();
   final AutoSizeGroup _textGroup = AutoSizeGroup();
 
   bool _showBackToStartFAB = false;
+  bool _disabled = false;
 
   @override
   void initState() {
@@ -33,6 +35,12 @@ class _InformationPageState extends State<InformationPage> {
         else if (_position > _threshold && !_showBackToStartFAB)
           setState(() => _showBackToStartFAB = true);
       });
+  }
+
+  void _disableButtons() async {
+    setState(() => _disabled = true);
+    await Future.delayed(const Duration(milliseconds: 2 * defaultCustomButtonPressDuration));
+    setState(() => _disabled = false);
   }
 
   @override
@@ -75,6 +83,9 @@ class _InformationPageState extends State<InformationPage> {
         0.0,
       ),
       child: CustomButton(
+        buttonGroup: _buttonGroup,
+        disable: _disabled,
+        onPressedImmediate: _disableButtons,
         onPressed: () => Navigator.pushNamed(context, '/information/history'),
         height: MediaQuery.of(context).size.height > 600 ? 60.0 : 50.0,
         borderRadius: 30.0,
@@ -108,6 +119,9 @@ class _InformationPageState extends State<InformationPage> {
         informationVerticalScreenPadding - headerVerticalPadding + 8.0,
       ),
       child: CustomButton(
+        buttonGroup: _buttonGroup,
+        disable: _disabled,
+        onPressedImmediate: _disableButtons,
         onPressed: () => Navigator.pushNamed(context, '/information/guide'),
         height: 60.0,
         borderRadius: 30.0,

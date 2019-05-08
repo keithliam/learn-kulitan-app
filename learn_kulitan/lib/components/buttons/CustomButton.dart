@@ -60,31 +60,29 @@ class _CustomButtonState extends State<CustomButton> {
   final GlobalKey _key = GlobalKey();
   double _height = 0.0;
   bool _isPressed = false;
+  bool _pressing = false;
 
   bool _checkIfPressMany() => widget.buttonGroup == null || widget.buttonGroup.presses > 1;
   bool _checkIfPressNum({int nums = 0}) => widget.buttonGroup == null || widget.buttonGroup.presses == nums;
 
   void _buttonTapped() async {
     final bool _toPress = _checkIfPressNum(nums: 1);
-    if (_checkIfPressMany()) {
-      if (_toPress && widget.onPressedImmediate != null) widget.onPressedImmediate();
-      setState(() => _isPressed = false);
-      await Future.delayed(Duration(milliseconds: widget.pressDelay));
-      if (_toPress) widget.onPressed();
-      if (widget.buttonGroup != null) widget.buttonGroup.unpress();
-    } else if (
+    final bool _pressedMany = _checkIfPressMany();
+    if (
+      _pressedMany || (
       !widget.disable &&
       (
         (_isPressed && _checkIfPressNum(nums: 1)) ||
         (!_isPressed && _checkIfPressNum())
-      )
+      ))
     ) {
+      if (_toPress && widget.onPressedImmediate != null) widget.onPressedImmediate();
+      final bool _pressed = _isPressed;
       if (!_isPressed) {
         setState(() => _isPressed = true);
         if(widget.buttonGroup != null) widget.buttonGroup.press();
       }
-      if (_toPress && widget.onPressedImmediate != null) widget.onPressedImmediate();
-      await Future.delayed(Duration(milliseconds: widget.pressDelay));
+      if (!_pressedMany || _pressed || _pressing) await Future.delayed(Duration(milliseconds: widget.pressDelay));
       setState(() => _isPressed = false);
       await Future.delayed(Duration(milliseconds: widget.pressDelay));
       if (_toPress) widget.onPressed();
@@ -94,8 +92,13 @@ class _CustomButtonState extends State<CustomButton> {
 
   void _buttonHoldDown() async {
     if (!widget.disable && _checkIfPressNum()) {
-      setState(() => _isPressed = true);
+      setState(() {
+        _isPressed = true;
+        _pressing = true;
+      });
       if(widget.buttonGroup != null) widget.buttonGroup.press();
+      await Future.delayed(Duration(milliseconds: widget.pressDelay));
+      setState(() => _pressing = false);
     }
   }
 
