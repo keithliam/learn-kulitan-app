@@ -184,7 +184,9 @@ class GameLogicManager {
     _state.mode = (await _db.query('CurrentQuiz', columns: ['kulitanMode'], where: 'type = "mode"'))[0]['kulitanMode'] == 'true';
   }
   Future<void> _pullCards() async {
-    Map<String, dynamic> _pulledCards = (await _db.query('Current${isQuiz? 'Quiz' : 'Draw'}', columns: ['one', 'two', 'three'], where: 'type = "cards"'))[0];
+    final List<String> _columns = ['one', 'two'];
+    if (isQuiz) _columns.add('three');
+    Map<String, dynamic> _pulledCards = (await _db.query('Current${isQuiz? 'Quiz' : 'Draw'}', columns: _columns, where: 'type = "cards"'))[0];
     if (!isQuiz && _isTutorial) {
       final int _cardOneProgress = await _getGlyphProgress('nga');
       _state.setCard({
