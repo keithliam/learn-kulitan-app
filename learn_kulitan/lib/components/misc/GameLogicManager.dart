@@ -30,10 +30,15 @@ class GameLogicManager {
     else await _initTutorial();
   }
 
+  void _hideTutorial() async {
+    await Future.delayed(const Duration(milliseconds: loaderOpacityDuration));
+    _state.isTutorial = false;
+    _isTutorial = false;
+  }
+
   void finishTutorial() async {
     if (isQuiz) _state.isLoading = true;
-    _isTutorial = false;
-    _state.isTutorial = false;
+    _hideTutorial();
     if (isQuiz) {
       await _pushTutorial();
       _state.enableAllChoices();
