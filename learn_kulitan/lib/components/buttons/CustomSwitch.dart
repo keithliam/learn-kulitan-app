@@ -5,10 +5,12 @@ class CustomSwitch extends StatefulWidget {
   const CustomSwitch({
     @required this.value,
     @required this.onChanged,
+    this.disabled = false,
   });
 
   final bool value;
   final Function(bool) onChanged;
+  final bool disabled;
 
   @override
   _CustomSwitchState createState() => _CustomSwitchState();
@@ -99,11 +101,11 @@ class _CustomSwitchState extends State<CustomSwitch>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => widget.onChanged(!widget.value),
-      onHorizontalDragStart: _dragStart,
-      onHorizontalDragUpdate: _dragUpdate,
-      onHorizontalDragCancel: _dragEnd,
-      onHorizontalDragEnd: (_) => _dragEnd(),
+      onTap: !widget.disabled ? (() => widget.onChanged(!widget.value)) : null,
+      onHorizontalDragStart: !widget.disabled ? _dragStart : null,
+      onHorizontalDragUpdate: !widget.disabled ? _dragUpdate : null,
+      onHorizontalDragCancel: !widget.disabled ? _dragEnd : null,
+      onHorizontalDragEnd: !widget.disabled ? (_) => _dragEnd() : null,
       child: Container(
         padding: const EdgeInsets.only(right: 10.0),
         height: 48.0,

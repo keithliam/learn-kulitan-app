@@ -30,15 +30,11 @@ class GameLogicManager {
     else await _initTutorial();
   }
 
-  void _hideTutorial() async {
+  void finishTutorial() async {
+    if (isQuiz) _state.isLoading = true;
     await Future.delayed(const Duration(milliseconds: loaderOpacityDuration));
     _state.isTutorial = false;
     _isTutorial = false;
-  }
-
-  void finishTutorial() async {
-    if (isQuiz) _state.isLoading = true;
-    _hideTutorial();
     if (isQuiz) {
       await _pushTutorial();
       _state.enableAllChoices();
@@ -97,6 +93,7 @@ class GameLogicManager {
   }
 
   Future<void> _initData(Map<String, dynamic> gameData) async {
+    if (isQuiz) await _pullQuizMode();
     _batchNumber = gameData['current_batch'];
     _state.overallProgressCount = gameData['overall_progress'];
     if (_isTutorial && isQuiz) {
@@ -183,8 +180,11 @@ class GameLogicManager {
       }
     }
   }
+  Future<void> _pullQuizMode() async {
+    _state.mode = (await _db.query('CurrentQuiz', columns: ['kulitanMode'], where: 'type = "mode"'))[0]['kulitanMode'] == 'true';
+  }
   Future<void> _pullCards() async {
-    Map<String, dynamic> _pulledCards = (await _db.query('Current${isQuiz? 'Quiz' : 'Draw'}', where: 'type = "cards"'))[0];
+    Map<String, dynamic> _pulledCards = (await _db.query('Current${isQuiz? 'Quiz' : 'Draw'}', columns: ['one', 'two', 'three'], where: 'type = "cards"'))[0];
     if (!isQuiz && _isTutorial) {
       final int _cardOneProgress = await _getGlyphProgress('nga');
       _state.setCard({
@@ -255,6 +255,7 @@ class GameLogicManager {
   }
 
   Future<void> _pushTutorial() async => await _db.update('Tutorial', {'${isQuiz? 'reading' : 'writing'}': '${_isTutorial.toString()}'}, where: '${isQuiz? 'reading' : 'writing'} = "true"');
+  void _pushQuizMode() async => await _db.update('CurrentQuiz', { 'kulitanMode': _state.mode }, where: 'type = "mode"');
   void _pushCards({bool isTwo: false}) async {
     Map<String, String> _data = {
       'one': _state.cards[0]['answer'],
@@ -359,6 +360,10 @@ class GameLogicManager {
   }
 
   void correctAnswer() async {
+    if (isQuiz && _state.modeChanged) {
+      _state.changeMode();
+      _pushQuizMode();
+    }
     if (!isQuiz && _isTutorial) finishTutorial();
     if(_batchNumber == 0) {
       _batchNumber = 1;
@@ -400,6 +405,10 @@ class GameLogicManager {
     }
   }
   void wrongAnswer() async {
+    if (isQuiz && _state.modeChanged) {
+      _state.changeMode();
+      _pushQuizMode();
+    }
     _state.disableSwipe = true;
     if(_batchNumber == 0) {
       _batchNumber = 1;
@@ -429,6 +438,10 @@ class GameLogicManager {
     }
   }
   void revealAnswer({int delay: 0}) async {
+    if (isQuiz && _state.modeChanged) {
+      _state.changeMode();
+      _pushQuizMode();
+    }
     _state.disableChoices = true;
     await Future.delayed(Duration(milliseconds: delay + revealAnswerOffset));
     _state.showAnswer();

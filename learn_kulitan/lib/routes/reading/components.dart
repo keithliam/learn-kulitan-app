@@ -6,11 +6,11 @@ import '../../components/buttons/CustomButton.dart';
 import '../../components/misc/LinearProgressBar.dart';
 import '../../components/misc/CustomCard.dart';
 import '../../components/misc/Paragraphs.dart';
-import 'reading.dart';
 import '../../styles/theme.dart';
 
 class ChoiceButton extends StatefulWidget {
   ChoiceButton({
+    @required this.isKulitan,
     @required this.text,
     @required this.type,
     @required this.onTap,
@@ -23,6 +23,7 @@ class ChoiceButton extends StatefulWidget {
   static const int right = 0;
   static const int wrong = 1;
 
+  final bool isKulitan;
   final String text;
   final int type;
   final VoidCallback onTap;
@@ -47,8 +48,10 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
   AnimationController _controllerText;
   ColorTween _tweenText;
   
-  TextStyle _textStyle;
   bool _isTapped = false;
+  bool _isKulitan;
+  bool _isInit = true;
+  bool _changeMode = false;
   double _opacity = 1.0;
 
   _initColors() {
@@ -65,7 +68,7 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    _textStyle = textQuizChoice;
+    _isKulitan = widget.isKulitan;
     _controller = AnimationController(duration: Duration(milliseconds: showAnswerChoiceDuration), vsync: this);
     _controllerText = AnimationController(duration: Duration(milliseconds: showAnswerChoiceDuration), vsync: this);
     _initColors();
@@ -96,6 +99,10 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
     if(_isTapped || widget.type == ChoiceButton.right)
       _toggleColor(isReset: true);
     await Future.delayed(const Duration(milliseconds: resetChoicesDuration));
+    if (_changeMode) {
+      _changeMode = false;
+      setState(() => _isKulitan = widget.isKulitan);
+    }
     setState(() => _opacity = 1.0);
     await Future.delayed(const Duration(milliseconds: resetChoicesDuration));
     _isTapped = false;
@@ -104,6 +111,12 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
   @override
   void didUpdateWidget(ChoiceButton oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (_isInit) {
+        _isInit = false;
+        _isKulitan = widget.isKulitan;
+    } else if (widget.isKulitan != oldWidget.isKulitan) {
+      _changeMode = true;
+    }
     if(widget.type != oldWidget.type) _initColors();
     if(widget.showAnswerStream != oldWidget.showAnswerStream)
       _showAnswerStreamSubscription = widget.showAnswerStream.listen((_) => _showAnswer());
@@ -148,10 +161,16 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              '${widget.text}',
-              style: _textStyle.copyWith(
-                color: widget.type == ChoiceButton.wrong? _animationText.value : textQuizChoice.color,
-              ),
+              _isKulitan ? widget.text : kulitanGlyphs[widget.text],
+              textAlign: TextAlign.center,
+              style: _isKulitan
+                ? textQuizChoice.copyWith(
+                  color: widget.type == ChoiceButton.wrong? _animationText.value : textQuizChoice.color,
+                ) : textQuizChoice.copyWith(
+                  fontFamily: 'Kulitan Semi Bold',
+                  fontSize: 100.0,
+                  color: widget.type == ChoiceButton.wrong? _animationText.value : textQuizChoice.color,
+                ),
             ),
           ),
         ),
@@ -162,6 +181,7 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
 
 class QuizCard extends StatelessWidget {
   QuizCard({
+    @required this.isKulitan,
     @required this.kulitan,
     @required this.answer,
     @required this.progress,
@@ -172,6 +192,7 @@ class QuizCard extends StatelessWidget {
     this.animateProgressBar = true,
   });
 
+  final bool isKulitan;
   final String kulitan;
   final String answer;
   final double progress;
@@ -188,8 +209,14 @@ class QuizCard extends StatelessWidget {
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            kulitan,
-            style: kulitanQuiz,
+            isKulitan ? kulitan : answer,
+            style: isKulitan
+              ? kulitanQuiz
+              : kulitanQuiz.copyWith(
+                fontFamily: 'Barlow',
+                fontSize: 100.0,
+                fontWeight: FontWeight.w500,
+              ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -215,8 +242,14 @@ class QuizCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
             child: Text(
-              answer,
-              style: textQuizAnswer,
+              isKulitan ? answer : kulitan,
+              textAlign: TextAlign.center,
+              style: isKulitan
+                ? textQuizAnswer
+                : textQuizAnswer.copyWith(
+                  fontFamily: 'Kulitan Semi Bold',
+                  fontSize: 130.0,
+                ),
             ),
           ),
         )
@@ -245,6 +278,7 @@ class QuizCard extends StatelessWidget {
 
 class AnimatedQuizCard extends StatefulWidget {
   AnimatedQuizCard({
+    @required this.isKulitan,
     @required this.kulitan,
     @required this.answer,
     @required this.progress,
@@ -259,6 +293,7 @@ class AnimatedQuizCard extends StatefulWidget {
     this.disableSwipe = true,
   });
 
+  final bool isKulitan;
   final String kulitan;
   final String answer;
   final double progress;
@@ -305,10 +340,14 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   bool _hasSeenAnswer = false;
   bool _animateProgressBar = true;
   bool _disableSwipe = false;
+  bool _isKulitan;
+  bool _isInit = true;
+  bool _changeMode = false;
 
   @override
   void initState() {
     super.initState();
+    _isKulitan = widget.isKulitan;
     _controller = AnimationController(duration: Duration(milliseconds: swipeDownSnapDuration), vsync: this);
     _curveAnimation = CurvedAnimation(parent: _controller, curve: _swipeDownCurve);
     _tween = Tween<double>(begin: 0.0, end: 1.0);
@@ -356,6 +395,16 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   @override
   void didUpdateWidget(AnimatedQuizCard oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.stackNumber == 1 && _isInit) {
+      _isInit = false;
+      _isKulitan = widget.isKulitan;
+    }
+    if (widget.isKulitan != oldWidget.isKulitan) {
+      if (widget.stackNumber == 1)
+        _changeMode = true;
+      else
+        setState(() => _isKulitan = widget.isKulitan);
+    }
     if(widget.flipStream != oldWidget.flipStream) {
       _flipStreamSubscription.cancel();
       _flipStreamSubscription = widget.flipStream.listen((_) {
@@ -495,6 +544,10 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
             _cardTransform = 1.0;
             _disableSwipe = true;
           });
+          if (_changeMode) {
+            _changeMode = false;
+            setState(() => _isKulitan = widget.isKulitan);
+          }
           widget.swipedLeft();
           _updatedStackNumber();
         } else if(_slideValue < 0.0) {
@@ -563,6 +616,10 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
             _disableSwipe = true;
           });      
           await Future.delayed(Duration(milliseconds: swipeLeftSnapDuration));
+          if (_changeMode) {
+            _changeMode = false;
+            setState(() => _isKulitan = widget.isKulitan);
+          }
           widget.swipingCardDone();
           widget.swipedLeft();
           _updatedStackNumber();
@@ -599,6 +656,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
               transform: _showBackCard? Matrix4.inverted(_matrix) : Matrix4.identity(),
               alignment: FractionalOffset.center,
               child: QuizCard(
+                isKulitan: _isKulitan,
                 kulitan: widget.kulitan,
                 answer: widget.answer,
                 progress: widget.progress,

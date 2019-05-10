@@ -61,7 +61,7 @@ class ReadingPageState extends State<ReadingPage> {
       'onTap': null,
     },
     {
-      'text': 'ro',
+      'text': 'ko',
       'type': ChoiceButton.wrong,
       'onTap': null,
     },
@@ -80,7 +80,9 @@ class ReadingPageState extends State<ReadingPage> {
   double _heightToQuizCardTop = 200.0;
   double _quizCardStackHeight = 100.0;
   double _heightToCardStackBottom = 500.0;
+  bool _kulitanSwitch = true;
   bool _isKulitan = true;
+  bool _disableSwitch = false;
   bool _disableSwipe = false;
   List<bool> _disableButtons = [false, false, false, false];
 
@@ -91,6 +93,8 @@ class ReadingPageState extends State<ReadingPage> {
   get cards => _cards;
   get choices => _choices;
   get overallProgressCount => _overallProgressCount;
+  get mode => _kulitanSwitch;
+  get modeChanged => _kulitanSwitch != _isKulitan;
 
   set overallProgressCount(int n) => setState(() => _overallProgressCount = n);
   set choices(List<Map<String, dynamic>> choices) => setState(() => _choices = choices);
@@ -99,6 +103,8 @@ class ReadingPageState extends State<ReadingPage> {
   set isLoading(bool i) => setState(() => _isLoading = i);
   set isTutorial(bool i) => setState(() => _isTutorial = i);
   set tutorialNo(int i) => setState(() => _tutorialNo = i);
+  set mode(bool i) => setState(() { _kulitanSwitch = i; _isKulitan = i; });
+  void changeMode() => setState(() => _isKulitan = _kulitanSwitch);
   void setCard(Map<String, dynamic> card, int i) => setState(() => _cards[i] = card);
   void setCardStackNo(int i, int sNum) => setState(() => _cards[i]['stackNumber'] = sNum);
   void setChoice(Map<String, dynamic> choice, int i) => setState(() => _choices[i] = choice);
@@ -130,11 +136,17 @@ class ReadingPageState extends State<ReadingPage> {
   });
 
   void _swipingCard() {
-    setState(() => _disableChoices = true);
+    setState(() {
+      _disableSwitch = true;
+      _disableChoices = true;
+    });
   }
 
   void _swipingCardDone() {
-    if (!_isTutorial) setState(() => _disableChoices = false);
+    setState(() {
+      _disableSwitch = false;
+      if (!_isTutorial) _disableChoices = false;
+    });
   }
 
   void startGame() async {
@@ -222,8 +234,9 @@ class ReadingPageState extends State<ReadingPage> {
             width: 80.0,
             alignment: Alignment.centerRight,
           ) : CustomSwitch(
-            value: _isKulitan,
-            onChanged: (bool val) => setState(() => _isKulitan = val),
+            value: _kulitanSwitch,
+            onChanged: (bool val) => setState(() => _kulitanSwitch = val),
+            disabled: _disableSwitch,
           ),
           // right: _isTutorial ? TextButton(
           //   text: 'Skip',
@@ -265,6 +278,7 @@ class ReadingPageState extends State<ReadingPage> {
             children: <Widget>[
               Expanded(
                 child: ChoiceButton(
+                  isKulitan: _isKulitan,
                   text: _choices[0]['text'],
                   type: _choices[0]['type'],
                   onTap: _choices[0]['onTap'],
@@ -279,6 +293,7 @@ class ReadingPageState extends State<ReadingPage> {
               ),
               Expanded(
                 child: ChoiceButton(
+                  isKulitan: _isKulitan,
                   text: _choices[1]['text'],
                   type: _choices[1]['type'],
                   onTap: _choices[1]['onTap'],
@@ -297,6 +312,7 @@ class ReadingPageState extends State<ReadingPage> {
             children: <Widget>[
               Expanded(
                 child: ChoiceButton(
+                  isKulitan: _isKulitan,
                   text: _choices[2]['text'],
                   type: _choices[2]['type'],
                   onTap: _choices[2]['onTap'],
@@ -311,6 +327,7 @@ class ReadingPageState extends State<ReadingPage> {
               ),
               Expanded(
                 child: ChoiceButton(
+                  isKulitan: _isKulitan,
                   text: _choices[3]['text'],
                   type: _choices[3]['type'],
                   onTap: _choices[3]['onTap'],
@@ -331,6 +348,7 @@ class ReadingPageState extends State<ReadingPage> {
         key: _quizCardsKey,
         children: <Widget>[
           AnimatedQuizCard(
+            isKulitan: _isKulitan,
             kulitan: _cards[2]['kulitan'],
             answer: _cards[2]['answer'],
             progress: _cards[2]['progress'] / maxQuizGlyphProgress,
@@ -344,6 +362,7 @@ class ReadingPageState extends State<ReadingPage> {
             swipingCardDone: _swipingCardDone,
           ),
           AnimatedQuizCard(
+            isKulitan: _isKulitan,
             kulitan: _cards[1]['kulitan'],
             answer: _cards[1]['answer'],
             progress: _cards[1]['progress'] / maxQuizGlyphProgress,
@@ -357,6 +376,7 @@ class ReadingPageState extends State<ReadingPage> {
             swipingCardDone: _swipingCardDone,
           ),
           AnimatedQuizCard(
+            isKulitan: _isKulitan,
             kulitan: _cards[0]['kulitan'],
             answer: _cards[0]['answer'],
             progress: _cards[0]['progress'] / maxQuizGlyphProgress,

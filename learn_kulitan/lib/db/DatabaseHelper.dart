@@ -47,7 +47,8 @@ class DatabaseHelper {
             one text,
             two text,
             three text,
-            four text
+            four text,
+            kulitanMode text
           )
           ''');
     await db.execute('''
@@ -68,8 +69,9 @@ class DatabaseHelper {
           ''');
     await db.execute('INSERT INTO Page VALUES ("reading", 0, 0)');
     await db.execute('INSERT INTO Page VALUES ("writing", 0, 0)');
-    await db.execute('INSERT INTO CurrentQuiz VALUES ("cards", null, null, null, null)');
-    await db.execute('INSERT INTO CurrentQuiz VALUES ("choices", null, null, null, null)');
+    await db.execute('INSERT INTO CurrentQuiz VALUES ("mode", null, null, null, null, "true")');
+    await db.execute('INSERT INTO CurrentQuiz VALUES ("cards", null, null, null, null, null)');
+    await db.execute('INSERT INTO CurrentQuiz VALUES ("choices", null, null, null, null, null)');
     await db.execute('INSERT INTO CurrentDraw VALUES ("cards", null, null)');
     await db.execute('INSERT INTO Tutorial VALUES ("key", "true", "true", "true", "true")');
     await db.execute('INSERT INTO Glyph VALUES ("a", 0, 0)');
