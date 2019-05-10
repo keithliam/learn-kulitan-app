@@ -22,6 +22,9 @@ const linearProgressForegroundColor = accentColor;
 const linearProgressBackgroundColor = snowColor;
 const writingHeaderProgressBGColor = whiteColor;
 
+const customSwitchColor = whiteColor;
+const customSwitchToggleColor = accentColor;
+
 const customCardDefaultColor = whiteColor;
 const customCardShadowColor = Color(0x21000000);
 const customButtonDefaultColor = whiteColor;
@@ -111,6 +114,7 @@ const aboutSubtitleTopPadding = 25.0;
 // Sizes
 const homeTitleHeight = 110.0;
 const headerIconSize = 32.0;
+const customSwitchThreshold = 32.0;
 const quizChoiceButtonHeight = 62.0;
 const quizCardStackTopSpace = 32.0;
 const writingCardTouchRadius = 40.0;
@@ -146,6 +150,7 @@ const quizCardRotateVelocity = 1.0;
 // Curves
 const customButtonPressCurve = Curves.easeOutQuart;
 const progressBarCurve = Curves.fastOutSlowIn;
+const customSwitchCurve = Curves.easeInOut;
 const quizCardSwipeDownCurve = Curves.easeInOut;  // 0.5 -> 0.5 curves only
 const quizCardAutoSwipeDownCurve = Curves.decelerate;
 const quizCardSwipeLeftCurve = Curves.fastOutSlowIn;
@@ -172,6 +177,8 @@ const loaderOpacityCurve = Curves.fastOutSlowIn;
 // Durations
 const defaultCustomButtonPressDuration = 200;
 const linearProgressBarChangeDuration = 1000;
+const customSwitchChangeDuration = 250;
+const customSwitchSnapDuration = 150;
 const showAnswerChoiceDuration = 250;
 const resetQuizDuration = 750;
 const quizChoicePressDuration = 250;
@@ -1670,6 +1677,11 @@ const kulitanHome = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
   color: grayColor,
 );
+const kulitanSwitch = TextStyle(
+  fontFamily: 'Kulitan Semi Bold',
+  fontSize: 20.0,
+  color: customSwitchColor,
+);
 const kulitanQuiz = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
   fontSize: 150.0,
@@ -1742,6 +1754,12 @@ const textPageTitle = TextStyle(
   shadows: <Shadow>[
     Shadow(color: accentColor, offset: Offset(4.0, 4.0))
   ]
+);
+const textSwitch = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 20.0,
+  fontWeight: FontWeight.w600,
+  color: customSwitchToggleColor,
 );
 const textQuizHeader = TextStyle(
   fontFamily: 'Barlow',

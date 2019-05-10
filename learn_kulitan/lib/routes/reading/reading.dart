@@ -4,6 +4,7 @@ import '../../styles/theme.dart';
 import '../../components/buttons/CustomButton.dart';
 import '../../components/buttons/IconButtonNew.dart';
 import '../../components/buttons/TextButton.dart';
+import '../../components/buttons/CustomSwitch.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/CircularProgressBar.dart';
 import '../../components/misc/GameLogicManager.dart';
@@ -79,6 +80,7 @@ class ReadingPageState extends State<ReadingPage> {
   double _heightToQuizCardTop = 200.0;
   double _quizCardStackHeight = 100.0;
   double _heightToCardStackBottom = 500.0;
+  bool _isKulitan = true;
   bool _disableSwipe = false;
   List<bool> _disableButtons = [false, false, false, false];
 
@@ -219,7 +221,18 @@ class ReadingPageState extends State<ReadingPage> {
             onPressed: _gameLogicManager.finishTutorial,
             width: 80.0,
             alignment: Alignment.centerRight,
-          ) : SizedBox(width: 56.0, height: 48.0),
+          ) : CustomSwitch(
+            value: _isKulitan,
+            onChanged: (bool val) => setState(() => _isKulitan = val),
+          ),
+          // right: _isTutorial ? TextButton(
+          //   text: 'Skip',
+          //   height: headerIconSize,
+          //   color: headerNavigationColor,
+          //   onPressed: _gameLogicManager.finishTutorial,
+          //   width: 80.0,
+          //   alignment: Alignment.centerRight,
+          // ) : SizedBox(width: 56.0, height: 48.0),
           // IconButtonNew(
           //   icon: Icons.settings,
           //   iconSize: headerIconSize,
