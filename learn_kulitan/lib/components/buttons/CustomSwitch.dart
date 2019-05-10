@@ -85,10 +85,13 @@ class _CustomSwitchState extends State<CustomSwitch>
 
   void _dragEnd() {
     if (_dragged) {
-      _snap();
       if (!widget.value && _position >= 0.5)
         widget.onChanged(true);
-      else if (widget.value && _position < 0.5) widget.onChanged(false);
+      else if (widget.value && _position < 0.5)
+        widget.onChanged(false);
+      else
+        _dragged = false;
+      _snap();
     }
   }
 

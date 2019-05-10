@@ -93,7 +93,7 @@ class ReadingPageState extends State<ReadingPage> {
   get cards => _cards;
   get choices => _choices;
   get overallProgressCount => _overallProgressCount;
-  get mode => _kulitanSwitch;
+  get mode => _isKulitan;
   get modeChanged => _kulitanSwitch != _isKulitan;
 
   set overallProgressCount(int n) => setState(() => _overallProgressCount = n);
