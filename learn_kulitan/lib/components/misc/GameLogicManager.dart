@@ -256,7 +256,7 @@ class GameLogicManager {
       _state.disableSwipe = true;
   }
 
-  Future<void> _pushTutorial() async => await _db.update('Tutorial', {'${isQuiz? 'reading' : 'writing'}': '${_isTutorial.toString()}'}, where: '${isQuiz? 'reading' : 'writing'} = "true"');
+  Future<void> _pushTutorial() async => await _db.update('Tutorial', {'${isQuiz? 'reading' : 'writing'}': '${_isTutorial.toString()}'}, where: '${isQuiz? 'reading' : 'writing'} = "${_state.mode}"');
   void _pushQuizMode() async => await _db.update('CurrentQuiz', { 'kulitanMode': _state.mode }, where: 'type = "mode"');
   void _pushCards({bool isTwo: false}) async {
     Map<String, String> _data = {
