@@ -73,7 +73,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
     } else if (_intro == 4) {
       setState(() {
         _animation = 'Cards To Info';
-        _messageOpacity = 1.0;
+        _messageOpacity = 0.0;
       });
       await Future.delayed(const Duration(milliseconds: introTextOpacityDuration));
       setState(() {
