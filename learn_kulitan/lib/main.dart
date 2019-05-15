@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import './routes/home/home.dart';
+import './routes/introduction/introduction.dart';
 import './routes/reading/reading.dart';
 import './routes/writing/writing.dart';
 import './routes/information/information.dart';
@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       builder: (context, child) {
         return ScrollConfiguration(
           behavior: CustomScrollBehavior(),
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
       title: 'Learn Kulitan',
       initialRoute: '/',
       routes: {
-        '/': (context) => HomePage(),
+        '/': (context) => IntroductionPage(),
         '/reading': (context) => ReadingPage(),
         '/writing': (context) => WritingPage(),
         '/information': (context) => InformationPage(),

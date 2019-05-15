@@ -148,6 +148,7 @@ const quizCardMoveLeftVelocity = 1.0;
 const quizCardRotateVelocity = 1.0;
 
 // Curves
+const introTextOpacityCurve = Curves.easeInOut;
 const customButtonPressCurve = Curves.easeOutQuart;
 const progressBarCurve = Curves.fastOutSlowIn;
 const customSwitchCurve = Curves.easeInOut;
@@ -175,6 +176,7 @@ const informationPageScrollCurve = Curves.easeInOutCubic;
 const loaderOpacityCurve = Curves.fastOutSlowIn;
 
 // Durations
+const introTextOpacityDuration = 250;
 const defaultCustomButtonPressDuration = 200;
 const linearProgressBarChangeDuration = 1000;
 const customSwitchChangeDuration = 250;
@@ -359,10 +361,10 @@ const Map<String, String> kulitanGlyphs = {
   'ngang': 'ngng',
 };
 const List<List<String>> kulitanBatches = [
-  // ['ga', 'ka', 'ta', 'da', 'na', 'la', 'ma', 'pa', 'sa', 'ba', 'nga'],
-  // ['a', 'i', 'u', 'e', 'o'],
-  // ['gá', 'ká', 'tá', 'dá', 'ná', 'lá', 'má', 'pá', 'sá', 'bá', 'ngá'],
-  // ['gi', 'ki', 'ti', 'di', 'ni', 'li', 'mi', 'pi', 'si', 'bi', 'ngi'],
+  ['ga', 'ka', 'ta', 'da', 'na', 'la', 'ma', 'pa', 'sa', 'ba', 'nga'],
+  ['a', 'i', 'u', 'e', 'o'],
+  ['gá', 'ká', 'tá', 'dá', 'ná', 'lá', 'má', 'pá', 'sá', 'bá', 'ngá'],
+  ['gi', 'ki', 'ti', 'di', 'ni', 'li', 'mi', 'pi', 'si', 'bi', 'ngi'],
   ['gí', 'kí', 'tí', 'dí', 'ní', 'lí', 'mí', 'pí', 'sí', 'bí', 'ngí'],
   ['gu', 'ku', 'tu', 'du', 'nu', 'lu', 'mu', 'pu', 'su', 'bu', 'ngu'],
   ['gú', 'kú', 'tú', 'dú', 'nú', 'lú', 'mú', 'pú', 'sú', 'bú', 'ngú'],
@@ -3990,7 +3992,7 @@ int _getSumOfLengths() {
 
 // Limits
 const maxQuizGlyphProgress = 5;
-const maxWritingGlyphProgress = 1;
+const maxWritingGlyphProgress = 5;
 final totalGlyphCount = _getSumOfLengths();
 const quizCardPoolMinCount = 5;
 const drawCardPoolMinCount = 5;

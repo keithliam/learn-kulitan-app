@@ -7,6 +7,11 @@ import '../../styles/theme.dart';
 import '../../db/DatabaseHelper.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage(this.reading, this.writing);
+
+  final int reading;
+  final int writing;
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -14,31 +19,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final CustomButtonGroup _buttonGroup = CustomButtonGroup();
   bool _disabled = false;
-  bool _isLoading = true;  
   int _readingProgress = -1;
   int _writingProgress = -1;
 
-  void _initDB() async {
-    final Database _db = await DatabaseHelper.instance.database;
-    final int _reading = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "reading"'))[0]['overall_progress'];
-    final int _writing = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "writing"'))[0]['overall_progress'];
-    final String _result = (await _db.query('Tutorial', where: 'key = "key"', columns: ['intro']))[0]['intro'];
-    setState(() {
-      _readingProgress = _reading;
-      _writingProgress = _writing;
-      _isLoading = false;
-    });
-  }
-
   void _loadProgresses() async {
-    setState(() => _isLoading = true);
     final Database _db = await DatabaseHelper.instance.database;
     final int _reading = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "reading"'))[0]['overall_progress'];
     final int _writing = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "writing"'))[0]['overall_progress'];
     setState(() {
       _readingProgress = _reading;
       _writingProgress = _writing;
-      _isLoading = false;
     });
   }
 
@@ -51,7 +41,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _initDB();
+    _readingProgress = widget.reading;
+    _writingProgress = widget.writing;
   }
 
   @override
@@ -150,25 +141,22 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         color: backgroundColor,
         child: SafeArea(
-          child: Loader(
-            isVisible: _isLoading,
-            child: ListView(
-              physics: BouncingScrollPhysics(),
-              padding: const EdgeInsets.fromLTRB(
-                homeHorizontalScreenPadding,
-                0.0,
-                homeHorizontalScreenPadding,
-                homeVerticalScreenPadding - quizChoiceButtonElevation,
-              ),
-              children: <Widget>[
-                _appTitle,
-                _readingButton,
-                _writingButton,
-                _transcribeButton,
-                _infoButton,
-                _aboutButton,
-              ],
+          child: ListView(
+            physics: BouncingScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(
+              homeHorizontalScreenPadding,
+              0.0,
+              homeHorizontalScreenPadding,
+              homeVerticalScreenPadding - quizChoiceButtonElevation,
             ),
+            children: <Widget>[
+              _appTitle,
+              _readingButton,
+              _writingButton,
+              _transcribeButton,
+              _infoButton,
+              _aboutButton,
+            ],
           ),
         ),
       ),
