@@ -403,7 +403,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
       if (widget.stackNumber == 1)
         _changeMode = true;
       else
-        setState(() => _isKulitan = widget.isKulitan);
+        _isKulitan = widget.isKulitan;
     }
     if(widget.flipStream != oldWidget.flipStream) {
       _flipStreamSubscription.cancel();
@@ -414,25 +414,22 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
     }
     if(widget.heightToStackTop != oldWidget.heightToStackTop) {
       if(widget.stackNumber == 1)
-        setState(() => _topOffset = widget.heightToStackTop + quizCardStackTopSpace);
+        _topOffset = widget.heightToStackTop + quizCardStackTopSpace;
       else if(widget.stackNumber == 2)
-        setState(() => _topOffset = widget.heightToStackTop + (quizCardStackTopSpace / 2));
+        _topOffset = widget.heightToStackTop + (quizCardStackTopSpace / 2);
       else
-        setState(() => _topOffset = widget.heightToStackTop);
+        _topOffset = widget.heightToStackTop;
     }
     if(widget.stackWidth != oldWidget.stackWidth) {
       if(widget.stackNumber == 1) {
-        setState(() => _cardWidth = widget.stackWidth);
-      } else if(widget.stackNumber == 2)
-        setState(() {
-          _leftOffset += widget.stackWidth * 0.05;
-          _cardWidth = widget.stackWidth * 0.9;
-        });
-      else if(widget.stackNumber == 3)
-        setState(() {
-          _leftOffset += widget.stackWidth * 0.1;
-          _cardWidth = widget.stackWidth * 0.8;
-        });
+        _cardWidth = widget.stackWidth;
+      } else if(widget.stackNumber == 2) {
+        _leftOffset += widget.stackWidth * 0.05;
+        _cardWidth = widget.stackWidth * 0.9;
+      } else if(widget.stackNumber == 3) {
+        _leftOffset += widget.stackWidth * 0.1;
+        _cardWidth = widget.stackWidth * 0.8;
+      }
     }
   }
   
