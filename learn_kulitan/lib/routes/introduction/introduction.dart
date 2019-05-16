@@ -19,7 +19,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
   int _reading;
   int _writing;
   int _intro = 0;
-  bool _disabled = false;
+  bool _disabled = true;
   bool _isLoading = true;
   double _opacity = 0.0;
   double _messageOpacity = 0.0;
@@ -39,6 +39,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
     _intro++;
     if (_intro == 1) {
       setState(() {
+        _disabled = true;
         _animation = 'Cards Initialize';
         _message = 'Learn to recognize the glyphs of Kulitan using flash cards that become more difficult to answer over time!';
         _opacity = 1.0;
@@ -46,8 +47,11 @@ class _IntroductionPageState extends State<IntroductionPage> {
       });
       await Future.delayed(const Duration(milliseconds: 1833));
       setState(() => _animation = 'Cards Swipe');
+      await Future.delayed(const Duration(milliseconds: 1000));
+      setState(() => _disabled = false);
     } else if (_intro == 2) {
       setState(() {
+        _disabled = true;
         _animation = 'Cards To Trace';
         _messageOpacity = 0.0;
       });
@@ -58,8 +62,11 @@ class _IntroductionPageState extends State<IntroductionPage> {
       });
       await Future.delayed(const Duration(milliseconds: 1000 - introTextOpacityDuration));
       setState(() => _animation = 'Cards Trace');
+      await Future.delayed(const Duration(milliseconds: 333));
+      setState(() => _disabled = false);
     } else if (_intro == 3) {
       setState(() {
+        _disabled = true;
         _animation = 'Cards To Transcribe';
         _messageOpacity = 0.0;
       });
@@ -70,8 +77,11 @@ class _IntroductionPageState extends State<IntroductionPage> {
       });
       await Future.delayed(const Duration(milliseconds: 1283 - introTextOpacityDuration));
       setState(() => _animation = 'Cards Transcribe');
+      await Future.delayed(const Duration(milliseconds: 567));
+      setState(() => _disabled = false);
     } else if (_intro == 4) {
       setState(() {
+        _disabled = true;
         _animation = 'Cards To Info';
         _messageOpacity = 0.0;
       });
@@ -82,6 +92,8 @@ class _IntroductionPageState extends State<IntroductionPage> {
       });
       await Future.delayed(const Duration(milliseconds: 2216 - introTextOpacityDuration));
       setState(() => _animation = 'Cards Info');
+      await Future.delayed(const Duration(milliseconds: 500));
+      setState(() => _disabled = false);
     } else {
       _db.update('Tutorial', {'intro': 'true'}, where: 'key = "key"');
       _goToHomePage();

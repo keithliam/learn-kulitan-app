@@ -38,9 +38,16 @@ class _HomePageState extends State<HomePage> {
     setState(() => _disabled = false);
   }
 
+  void _preventAccidentalPresses() async {
+    setState(() => _disabled = true);
+    await Future.delayed(const Duration(milliseconds: 1000));
+    setState(() => _disabled = false);
+  }
+
   @override
   void initState() {
     super.initState();
+    _preventAccidentalPresses();
     _readingProgress = widget.reading;
     _writingProgress = widget.writing;
   }
