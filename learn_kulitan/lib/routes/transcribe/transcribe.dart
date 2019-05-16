@@ -11,6 +11,7 @@ import './components.dart';
 import 'kulitan_combinations.dart';
 
 class TranscribePage extends StatefulWidget {
+  const TranscribePage();
   @override
   _TranscribePageState createState() => _TranscribePageState();
 }

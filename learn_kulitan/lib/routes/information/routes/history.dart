@@ -12,6 +12,7 @@ import '../../../components/misc/ImageWithCaption.dart';
 import '../../../components/misc/Paragraphs.dart';
 
 class HistoryPage extends StatefulWidget {
+  const HistoryPage();
   @override
   _HistoryPageState createState() => _HistoryPageState();
 }

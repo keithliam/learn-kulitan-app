@@ -145,25 +145,28 @@ class _HomePageState extends State<HomePage> {
     );
 
     return Material(
-      child: Container(
-        color: backgroundColor,
-        child: SafeArea(
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(
-              homeHorizontalScreenPadding,
-              0.0,
-              homeHorizontalScreenPadding,
-              homeVerticalScreenPadding - quizChoiceButtonElevation,
+      child: Scaffold(
+        resizeToAvoidBottomPadding: true,
+        body:  Container(
+          color: backgroundColor,
+          child: SafeArea(
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(
+                homeHorizontalScreenPadding,
+                0.0,
+                homeHorizontalScreenPadding,
+                homeVerticalScreenPadding - quizChoiceButtonElevation,
+              ),
+              children: <Widget>[
+                _appTitle,
+                _readingButton,
+                _writingButton,
+                _transcribeButton,
+                _infoButton,
+                _aboutButton,
+              ],
             ),
-            children: <Widget>[
-              _appTitle,
-              _readingButton,
-              _writingButton,
-              _transcribeButton,
-              _infoButton,
-              _aboutButton,
-            ],
           ),
         ),
       ),

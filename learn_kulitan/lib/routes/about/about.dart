@@ -13,6 +13,7 @@ import '../../components/misc/Paragraphs.dart';
 import './components.dart';
 
 class AboutPage extends StatefulWidget {
+  const AboutPage();
   @override
   _AboutPageState createState() => _AboutPageState();
 }

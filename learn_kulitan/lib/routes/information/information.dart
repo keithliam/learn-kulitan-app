@@ -10,6 +10,7 @@ import '../../components/misc/StickyHeading.dart';
 import './components.dart';
 
 class InformationPage extends StatefulWidget {
+  const InformationPage();
   @override
   _InformationPageState createState() => _InformationPageState();
 }

@@ -12,6 +12,7 @@ import '../../components/animations/Loader.dart';
 import './components.dart';
 
 class ReadingPage extends StatefulWidget {
+  const ReadingPage();
   @override
   ReadingPageState createState() => ReadingPageState();
 }
@@ -201,7 +202,9 @@ class ReadingPageState extends State<ReadingPage> {
 
   @override
   Widget build(BuildContext context) {
-    _screenSize = MediaQuery.of(context).size;
+    final Size _size = MediaQuery.of(context).size;
+    if ((_screenSize.height - _size.height).abs() < 80) WidgetsBinding.instance.addPostFrameCallback((_) => _getQuizCardsSize());
+    _screenSize = _size;
 
     final Widget _header = Padding(
         padding: EdgeInsets.fromLTRB(headerHorizontalPadding, headerVerticalPadding, headerHorizontalPadding, 0.0),

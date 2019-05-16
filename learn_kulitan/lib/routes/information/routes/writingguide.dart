@@ -11,6 +11,7 @@ import '../../../components/misc/ImageWithCaption.dart';
 import '../../../components/misc/Paragraphs.dart';
 
 class WritingGuidePage extends StatefulWidget {
+  const WritingGuidePage();
   @override
   _WritingGuidePageState createState() => _WritingGuidePageState();
 }

@@ -8,6 +8,7 @@ import '../../components/animations/Loader.dart';
 import './components.dart';
 
 class WritingPage extends StatefulWidget {
+  const WritingPage();
   @override
   WritingPageState createState() => WritingPageState();
 }
