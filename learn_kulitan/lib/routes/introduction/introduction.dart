@@ -5,7 +5,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import '../../components/animations/Loader.dart';
 import '../../components/buttons/CustomButton.dart';
 import '../../routes/home/home.dart';
-import './components.dart';
 import '../../styles/theme.dart';
 import '../../db/DatabaseHelper.dart';
 

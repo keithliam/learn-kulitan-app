@@ -9,7 +9,7 @@ import '../../components/misc/Paragraphs.dart';
 import '../../styles/theme.dart';
 
 class ChoiceButton extends StatefulWidget {
-  ChoiceButton({
+  const ChoiceButton({
     @required this.isKulitan,
     @required this.text,
     @required this.type,
@@ -180,7 +180,7 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
 }
 
 class QuizCard extends StatelessWidget {
-  QuizCard({
+  const QuizCard({
     @required this.isKulitan,
     @required this.kulitan,
     @required this.answer,
@@ -277,7 +277,7 @@ class QuizCard extends StatelessWidget {
 }
 
 class AnimatedQuizCard extends StatefulWidget {
-  AnimatedQuizCard({
+  const AnimatedQuizCard({
     @required this.isKulitan,
     @required this.kulitan,
     @required this.answer,

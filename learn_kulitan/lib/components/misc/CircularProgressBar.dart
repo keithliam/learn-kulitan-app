@@ -5,7 +5,7 @@ import '../../styles/theme.dart';
 import './DividerNew.dart';
 
 class _CircularProgressBarPainter extends CustomPainter {
-  _CircularProgressBarPainter({
+  const _CircularProgressBarPainter({
     @required this.progress,
   });
 
@@ -42,7 +42,7 @@ class _CircularProgressBarPainter extends CustomPainter {
 }
 
 class CircularProgressBar extends StatefulWidget {
-  CircularProgressBar({
+  const CircularProgressBar({
     this.height = 15.0,
     this.numerator,
     this.denominator,

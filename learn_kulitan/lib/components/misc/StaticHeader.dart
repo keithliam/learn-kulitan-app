@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class StaticHeader extends StatefulWidget {
-  StaticHeader({
+  const StaticHeader({
     this.left = const Spacer(),
     this.middle,
     this.right = const Spacer(),

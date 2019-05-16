@@ -3,7 +3,7 @@ import 'package:flutter/animation.dart';
 import '../../styles/theme.dart';
 
 class LinearProgressBar extends StatefulWidget {
-  LinearProgressBar({
+  const LinearProgressBar({
     @required this.progress,
     this.height = 15.0,
     this.animate = true,

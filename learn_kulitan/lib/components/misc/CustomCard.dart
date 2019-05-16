@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../styles/theme.dart';
 
 class CustomCard extends StatelessWidget {
-  CustomCard({
+  const CustomCard({
     @required this.child,
     this.color = customCardDefaultColor,
     this.hasShadow = false,

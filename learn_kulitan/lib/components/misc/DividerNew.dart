@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DividerNew extends StatelessWidget {
-  DividerNew({
+  const DividerNew({
     @required this.height,
     @required this.color,
     this.boxShadow,

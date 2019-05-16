@@ -5,7 +5,7 @@ import '../../styles/theme.dart';
 import '../../components/misc/DividerNew.dart';
 
 class _KeyHint extends StatefulWidget {
-  _KeyHint({this.hint, this.visible, this.child});
+  const _KeyHint({this.hint, this.visible, this.child});
 
   final String hint;
   final bool visible;
@@ -191,7 +191,7 @@ class _KeyHintState extends State<_KeyHint>
 }
 
 class _KeyboardKey extends StatefulWidget {
-  _KeyboardKey({this.keyType, this.height, this.keyPressed});
+  const _KeyboardKey({this.keyType, this.height, this.keyPressed});
 
   final String keyType;
   final double height;
@@ -437,7 +437,7 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
 }
 
 class _KeyboardAddKey extends StatefulWidget {
-  _KeyboardAddKey({this.height, this.getGlyph, this.keyPressed});
+  const _KeyboardAddKey({this.height, this.getGlyph, this.keyPressed});
 
   final double height;
   final String Function() getGlyph;
@@ -684,7 +684,7 @@ class _KeyboardKeyContainer extends StatelessWidget {
 }
 
 class _KeyIconPainter extends CustomPainter {
-  _KeyIconPainter({this.keyType, this.strokePercent});
+  const _KeyIconPainter({this.keyType, this.strokePercent});
 
   final String keyType;
   final double strokePercent;
@@ -763,7 +763,7 @@ class _KeyIconPainter extends CustomPainter {
 }
 
 class KulitanKeyboard extends StatelessWidget {
-  KulitanKeyboard(
+  const KulitanKeyboard(
       {this.visibility, this.getGlyph, this.onKeyPress, this.child});
 
   final String Function() getGlyph;
@@ -927,7 +927,7 @@ class KulitanKeyboard extends StatelessWidget {
 }
 
 class Blinker extends StatefulWidget {
-  Blinker({@required this.child});
+  const Blinker({@required this.child});
 
   final Widget child;
 

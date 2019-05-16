@@ -7,7 +7,7 @@ import '../../components/misc/LinearProgressBar.dart';
 import '../../styles/theme.dart';
 
 class _ShadowPainter extends CustomPainter {
-  _ShadowPainter({
+  const _ShadowPainter({
     this.paths,
   });
 
@@ -34,7 +34,7 @@ class _ShadowPainter extends CustomPainter {
 }
 
 class _CurrPathPainter extends CustomPainter {
-  _CurrPathPainter({
+  const _CurrPathPainter({
     this.paths,
   });
 
@@ -61,7 +61,7 @@ class _CurrPathPainter extends CustomPainter {
 }
 
 class _CurrPointPainter extends CustomPainter {
-  _CurrPointPainter({
+  const _CurrPointPainter({
     this.point,
     this.pointSize,
   });
@@ -88,7 +88,7 @@ class _CurrPointPainter extends CustomPainter {
 }
 
 class _KulitanPainter extends CustomPainter {
-  _KulitanPainter({
+  const _KulitanPainter({
     this.path,
   });
 
@@ -114,7 +114,7 @@ class _KulitanPainter extends CustomPainter {
 }
 
 class _GuideLinePainter extends CustomPainter {
-  _GuideLinePainter({
+  const _GuideLinePainter({
     this.path,
     this.getCubicBezier
   });
@@ -214,7 +214,7 @@ class _GuideLinePainter extends CustomPainter {
 }
 
 class _GuideLabelPainter extends CustomPainter {
-  _GuideLabelPainter({
+  const _GuideLabelPainter({
     this.offset,
   });
 
@@ -235,7 +235,7 @@ class _GuideLabelPainter extends CustomPainter {
 }
 
 class _AnimatedWritingCard extends StatefulWidget {
-  _AnimatedWritingCard({
+  const _AnimatedWritingCard({
     @required this.kulitan,
     @required this.progress,
     @required this.stackNumber,
@@ -685,7 +685,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
 }
 
 class WritingCard extends StatelessWidget {
-  WritingCard({
+  const WritingCard({
     @required this.displayText,
     @required this.kulitan,
     @required this.progress,
@@ -734,7 +734,7 @@ class WritingCard extends StatelessWidget {
 }
 
 class _AnimatedText extends StatefulWidget {
-  _AnimatedText({ @required this.text });
+  const _AnimatedText({ @required this.text });
 
   final String text;
 
