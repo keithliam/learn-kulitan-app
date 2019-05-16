@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 import '../../components/buttons/IconButtonNew.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/CustomCard.dart';
 import '../../components/misc/DividerNew.dart';
-import '../../components/animations/Loader.dart';
-import '../../db/DatabaseHelper.dart';
 import './components.dart';
 import 'kulitan_combinations.dart';
 
@@ -18,27 +16,14 @@ class TranscribePage extends StatefulWidget {
 
 class _TranscribePageState extends State<TranscribePage>
     with SingleTickerProviderStateMixin {
-  bool _isLoading = true;
+  static final GameData _gameData = GameData();
   bool _isTutorial = true;
   int _tutorialNo = 1;
-  bool _doneLoading = false;
-  Database _db;
-
-  void _pullTutorialData() async {
-    setState(() => _isLoading = true);
-    _db = await DatabaseHelper.instance.database;
-    _isTutorial = (await _db.query('Tutorial', where: 'key = "key"', columns: ['transcribe']))[0]['transcribe'] == 'true';
-    setState(() => _isLoading = false);
-  }
-
-  void _finishLoading() {
-    setState(() => _doneLoading = true);
-  }
 
   void _nextTutorial() {
     if (_tutorialNo == 3) {
       setState(() => _isTutorial = false);
-      _db.update('Tutorial', {'transcribe': 'false'}, where: 'transcribe = "true"');
+      _gameData.setTutorial('transcribe', false);
     } else setState(() => _tutorialNo++);
   }
 
@@ -86,7 +71,7 @@ class _TranscribePageState extends State<TranscribePage>
   @override
   void initState() {
     super.initState();
-    _pullTutorialData();
+    _isTutorial = _gameData.getTutorial('transcribe');
     _keyboardController = AnimationController(
         duration: Duration(milliseconds: keyboardAnimateDuration), vsync: this);
     final CurvedAnimation _keyboardCurve = CurvedAnimation(
@@ -731,7 +716,7 @@ class _TranscribePageState extends State<TranscribePage>
       )
     ];
 
-    if (_isTutorial && _doneLoading) {
+    if (_isTutorial) {
       _pageStack.add(
         IgnorePointer(
           child: Tutorial(
@@ -745,11 +730,7 @@ class _TranscribePageState extends State<TranscribePage>
     return Material(
       color: backgroundColor,
       child: SafeArea(
-        child: Loader(
-          onFinish: _finishLoading,
-          isVisible: _isLoading,
-          child: Stack(children: _pageStack)
-        ),
+        child: Stack(children: _pageStack)
       ),
     );
   }

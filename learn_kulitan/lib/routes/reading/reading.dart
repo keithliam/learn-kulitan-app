@@ -8,7 +8,6 @@ import '../../components/buttons/CustomSwitch.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/CircularProgressBar.dart';
 import '../../components/misc/GameLogicManager.dart';
-import '../../components/animations/Loader.dart';
 import './components.dart';
 
 class ReadingPage extends StatefulWidget {
@@ -25,8 +24,7 @@ class ReadingPageState extends State<ReadingPage> {
   final _tutorialKey4 = GlobalKey();
   final _tutorialKey5 = GlobalKey();
   CustomButtonGroup _buttonGroup;
-  int _tutorialNo = -1;
-  bool _isLoading = true;
+  int _tutorialNo = 0;
   bool _isTutorial = true;
   int _overallProgressCount = 0;
   Size _screenSize;
@@ -81,6 +79,7 @@ class ReadingPageState extends State<ReadingPage> {
   double _heightToQuizCardTop = 200.0;
   double _quizCardStackHeight = 100.0;
   double _heightToCardStackBottom = 500.0;
+  bool _updatedHeights = false;
   bool _kulitanSwitch = true;
   bool _isKulitan = true;
   bool _disableSwitch = false;
@@ -101,7 +100,6 @@ class ReadingPageState extends State<ReadingPage> {
   set choices(List<Map<String, dynamic>> choices) => setState(() => _choices = choices);
   set disableSwipe(bool i) => setState(() => _disableSwipe = i);
   set disableChoices(bool i) => setState(() => _disableChoices = i);
-  set isLoading(bool i) => setState(() => _isLoading = i);
   set isTutorial(bool i) => setState(() => _isTutorial = i);
   set tutorialNo(int i) => setState(() => _tutorialNo = i);
   set mode(bool i) => setState(() { _kulitanSwitch = i; _isKulitan = i; });
@@ -150,14 +148,7 @@ class ReadingPageState extends State<ReadingPage> {
     });
   }
 
-  void startGame() async {
-    await _gameLogicManager.init(this);
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => _isLoading = false));
-  }
-
-  void _doneLoading() {
-    setState(() => _tutorialNo = 0);
-  }
+  void startGame() => _gameLogicManager.init(this);
 
   @override
   void initState() {
@@ -200,9 +191,14 @@ class ReadingPageState extends State<ReadingPage> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if ((_screenSize.height - _size.height).abs() < 80) _getQuizCardsSize();
-    });
+    if (!_updatedHeights) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if ((_screenSize.height - _size.height).abs() < 80) {
+          _getQuizCardsSize();
+          _updatedHeights = true;
+        }
+      });
+    } else _updatedHeights = false;
     _screenSize = _size;
 
     final Widget _header = Padding(
@@ -481,7 +477,6 @@ class ReadingPageState extends State<ReadingPage> {
           child: TutorialSuccess(
             text: 'Congratulations, you have just finished the tutorial! 😁\nYou\'re good to go! 👌\n\nTap anywhere to continue',
             onTap: _gameLogicManager.finishTutorial,
-            setLoader: () => setState(() => _isLoading = true),
           ),
         ),
       );
@@ -491,13 +486,9 @@ class ReadingPageState extends State<ReadingPage> {
     return Material(
       color: backgroundColor,
       child: SafeArea(
-        child: Loader(
-          onFinish: _doneLoading,
-          isVisible: _isLoading,
-          child: Stack(
-            key: _pageKey,
-            children: _pageStack,
-          ),
+        child: Stack(
+          key: _pageKey,
+          children: _pageStack,
         ),
       ),
     );

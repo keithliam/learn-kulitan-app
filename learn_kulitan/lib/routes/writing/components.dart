@@ -565,7 +565,17 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
     _pointTween = Tween<double>(begin: writingDrawPointIdleWidth / 2, end: writingDrawPointTouchWidth / 2);
     _pointAnimation = _pointTween.animate(_pointCurve)
       ..addListener(() => setState(() {}));
-    WidgetsBinding.instance.addPostFrameCallback((_) => _getWidth()); 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getWidth();
+      _animateShadowAndProgress = false;
+      _currPathNo = 0;
+      _currSubPathNo = 0;
+      _currBezierT = 0.0;
+      _shadowOffset = 0.0;
+      _prevDrawPaths = [];
+      _drawPath = null;
+      _getPaths();
+    });
   }
 
   @override
@@ -749,11 +759,11 @@ class _AnimatedTextState extends State<_AnimatedText> {
     await Future.delayed(const Duration(milliseconds: writingTextOpacityChangeDelay));
     setState(() => _opacity = 1.0);
   }
-
+  
   @override
-  void didUpdateWidget(_AnimatedText oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if(oldWidget.text.length == 0) _incOpacity();
+  void initState() {
+    super.initState();
+    _incOpacity();
   }
 
   @override

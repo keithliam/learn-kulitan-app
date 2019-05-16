@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import './routes/introduction/introduction.dart';
+import './routes/home/home.dart';
 import './routes/reading/reading.dart';
 import './routes/writing/writing.dart';
 import './routes/information/information.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => IntroductionPage(),
+        '/home': (context) => HomePage(),
         '/reading': (context) => ReadingPage(),
         '/writing': (context) => WritingPage(),
         '/information': (context) => InformationPage(),

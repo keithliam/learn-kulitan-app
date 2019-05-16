@@ -16,6 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
   sqflite: ^1.1.1
+  shared_preferences: ^0.5.2
   path_provider: ^0.5.0+1
   auto_size_text: ^1.1.1
   sticky_headers: ^0.1.7

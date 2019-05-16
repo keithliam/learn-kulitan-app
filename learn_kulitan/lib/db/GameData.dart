@@ -1,12 +1,115 @@
 import 'dart:io' show Directory;
 import 'package:path/path.dart' show join;
 import 'package:sqflite/sqflite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
 
-class DatabaseHelper {
-  DatabaseHelper._constructor();
-  static final DatabaseHelper instance = DatabaseHelper._constructor();
+class GameData {
+  static final GameData _instance = GameData._internal();
+  factory GameData() => _instance;
+  GameData._internal();
+
+  Future<void> initStorage() async {
+    _db = await _DatabaseHelper.instance.database;
+    _prefs = await _PreferencesHelper.instance.preferences;
+    if (_prefs.getBool('introTutorial') == null) await _initPrefs();
+    await _getGameData();
+  }
+
+  Database _db;
+  SharedPreferences _prefs;
+  Map<String, dynamic> _data = {};
+
+  bool getTutorial(String page) => _data[page]['tutorial'];
+  int getOverallProgress(String page) => _data[page]['progress']['overall_progress'];
+  int getBatch(String page) => _data[page]['progress']['current_batch'];
+  bool getReadingMode() => _data['reading']['mode'];
+  Map<String, String> getCards(String page) => _data[page]['cards'];
+  Map<String, String> getChoices() => _data['reading']['choices'];
+  int getGlyphProgress(String page, String glyph) => _data[page]['glyphs'][glyph];
+  Map<String, int> getGlyphProgressList(String page) => _data[page]['glyphs'];
+  
+  void setTutorial(String page, bool i) {
+    _data[page]['tutorial'] = i;
+    _prefs.setBool('${page}Tutorial', i);
+  }
+  void setBatch(String page, int batch) {
+    _db.update('Page', { 'current_batch': batch }, where: 'name = "$page"');
+    _data[page]['progress']['current_batch'] = batch;
+  }
+  void setOverallProgress(String page, int progress) {
+    _db.update('Page', { 'overall_progress': progress }, where: 'name = "$page"');
+    _data[page]['progress']['overall_progress'] = progress;
+  }
+  void setMode(bool mode) {
+    _db.update('CurrentQuiz', { 'kulitanMode': mode }, where: 'type = "mode"');
+    _data['reading']['mode'] = mode;
+  }
+  void setGlyphProgress(String page, String glyph, int progress) {
+    _db.update('Glyph', { 'progress_count_$page': progress }, where: 'name = "$glyph"');
+    _data[page]['glyphs'][glyph] = progress;
+  }
+  void setCards(String page, Map<String, String> _cards) {
+    _db.update('Current${page == 'reading'? 'Quiz' : 'Draw'}', _cards, where: 'type = "cards"');
+    _cards.forEach((String key, String value) => _data[page]['cards'][key] = value);
+  }
+  void setChoices(Map<String, String> _choices) {
+    _db.update('CurrentQuiz', _choices, where: 'type = "choices"');
+    _choices.forEach((String key, String value) => _data['reading']['choices'][key] = value);
+  }
+
+  Future<void> _getGameData() async {
+    _data['intro'] = {};
+    _data['reading'] = {};
+    _data['writing'] = {};
+    _data['transcribe'] = {};
+    _data['intro']['tutorial'] = _prefs.getBool('introTutorial');
+    _data['reading']['tutorial'] = _prefs.getBool('readingTutorial');
+    _data['writing']['tutorial'] = _prefs.getBool('writingTutorial');
+    _data['transcribe']['tutorial'] = _prefs.getBool('transcribeTutorial');
+    _data['reading']['progress'] = Map<String, int>.from((await _db.query('Page', columns: ['overall_progress', 'current_batch'], where: 'name = "reading"'))[0]);
+    _data['writing']['progress'] = Map<String, int>.from((await _db.query('Page', columns: ['overall_progress', 'current_batch'], where: 'name = "writing"'))[0]);
+    _data['reading']['mode'] = (await _db.query('CurrentQuiz', columns: ['kulitanMode'], where: 'type = "mode"'))[0]['kulitanMode'] == 'true';
+    _data['reading']['cards'] = Map<String, String>.from((await _db.query('CurrentQuiz', where: 'type = "cards"'))[0]);
+    _data['writing']['cards'] = Map<String, String>.from((await _db.query('CurrentDraw', where: 'type = "cards"'))[0]);
+    _data['reading']['choices'] = Map<String, String>.from((await _db.query('CurrentQuiz', where: 'type = "choices"'))[0]);
+    final List<Map<String, dynamic>> _glyphData = await _db.query('Glyph');
+    _data['reading']['glyphs'] = Map<String, int>.fromIterable(_glyphData, key: (glyph) => glyph['name'], value: (glyph) => glyph['progress_count_reading']);
+    _data['writing']['glyphs'] = Map<String, int>.fromIterable(_glyphData, key: (glyph) => glyph['name'], value: (glyph) => glyph['progress_count_writing']);
+  }
+
+  Future<void> _initPrefs() async {
+    await _prefs.setBool('introTutorial', false);
+    await _prefs.setBool('readingTutorial', false);
+    await _prefs.setBool('writingTutorial', false);
+    await _prefs.setBool('transcribeTutorial', false);
+  }
+}
+
+class _PreferencesHelper {
+  const _PreferencesHelper._constructor();
+  static final _PreferencesHelper instance = _PreferencesHelper._constructor();
+
+  static SharedPreferences _preferences;
+  Future<SharedPreferences> get preferences async {
+    if (_preferences != null) return _preferences;
+    else _preferences = await SharedPreferences.getInstance();
+    if (_preferences.getBool('IntroTutorial') == null) await _initPrefs();
+    return _preferences;
+  }
+
+  Future<void> _initPrefs() async {
+    await _preferences.setBool('IntroTutorial', true);
+    await _preferences.setBool('ReadingTutorial', true);
+    await _preferences.setBool('WritingTutorial', true);
+    await _preferences.setBool('TranscribeTutorial', true);
+  }
+}
+
+class _DatabaseHelper {
+  const _DatabaseHelper._constructor();
+  static final _DatabaseHelper instance = _DatabaseHelper._constructor();
 
   static final _databaseName = "LearnKulitan.db";
   static final _databaseVersion = 1;
@@ -21,7 +124,6 @@ class DatabaseHelper {
   _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _databaseName);
-    await deleteDatabase(path); // TODO: remove
     return await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
   }
@@ -58,22 +160,12 @@ class DatabaseHelper {
             two text
           )
           ''');
-    await db.execute('''
-          CREATE TABLE Tutorial (
-            key TEXT(10) PRIMARY KEY,
-            intro text NOT NULL,
-            reading text NOT NULL,
-            writing text NOT NULL,
-            transcribe text NOT NULL
-          )
-          ''');
     await db.execute('INSERT INTO Page VALUES ("reading", 0, 0)');
     await db.execute('INSERT INTO Page VALUES ("writing", 0, 0)');
     await db.execute('INSERT INTO CurrentQuiz VALUES ("mode", null, null, null, null, "true")');
     await db.execute('INSERT INTO CurrentQuiz VALUES ("cards", null, null, null, null, null)');
     await db.execute('INSERT INTO CurrentQuiz VALUES ("choices", null, null, null, null, null)');
     await db.execute('INSERT INTO CurrentDraw VALUES ("cards", null, null)');
-    await db.execute('INSERT INTO Tutorial VALUES ("key", "true", "true", "true", "true")');
     await db.execute('INSERT INTO Glyph VALUES ("a", 0, 0)');
     await db.execute('INSERT INTO Glyph VALUES ("i", 0, 0)');
     await db.execute('INSERT INTO Glyph VALUES ("u", 0, 0)');

@@ -889,12 +889,10 @@ class TutorialSuccess extends StatefulWidget {
   const TutorialSuccess({
     @required this.text,
     @required this.onTap,
-    @required this.setLoader,
   });
 
   final String text;
   final VoidCallback onTap;
-  final VoidCallback setLoader;
 
   @override
   _TutorialSuccessState createState() => _TutorialSuccessState();
@@ -921,7 +919,6 @@ class _TutorialSuccessState extends State<TutorialSuccess> with SingleTickerProv
 
   void _dismissOverlay() async {
     _controller?.reverse();
-    widget.setLoader();
     await Future.delayed(const Duration(milliseconds: 500));
     widget.onTap();
     _overlay?.remove();

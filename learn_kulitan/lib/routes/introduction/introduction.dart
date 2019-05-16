@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import '../../db/GameData.dart';
 import '../../components/animations/Loader.dart';
 import '../../components/buttons/CustomButton.dart';
-import '../../routes/home/home.dart';
 import '../../styles/theme.dart';
-import '../../db/DatabaseHelper.dart';
 
 class IntroductionPage extends StatefulWidget {
   const IntroductionPage();
@@ -15,9 +13,7 @@ class IntroductionPage extends StatefulWidget {
 }
 
 class _IntroductionPageState extends State<IntroductionPage> {
-  Database _db;
-  int _reading;
-  int _writing;
+  static final GameData _gameData = GameData();
   int _intro = 0;
   bool _disabled = true;
   bool _isLoading = true;
@@ -26,13 +22,14 @@ class _IntroductionPageState extends State<IntroductionPage> {
   String _animation;
   String _message = '';
 
-  void _initDB() async {
-    _db = await DatabaseHelper.instance.database;
-    _reading = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "reading"'))[0]['overall_progress'];
-    _writing = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "writing"'))[0]['overall_progress'];
-    final bool _result = (await _db.query('Tutorial', where: 'key = "key"', columns: ['intro']))[0]['intro'] == 'true';
+  void _initData() async {
+    await _gameData.initStorage();
     setState(() => _isLoading = false);
-    if (!_result) _goToHomePage();
+  }
+
+  void _onLoaderFinish() {
+    if (_gameData.getTutorial('intro')) _nextIntro();
+    else Navigator.pushReplacementNamed(context, '/home');
   }
 
   void _nextIntro() async {
@@ -95,24 +92,15 @@ class _IntroductionPageState extends State<IntroductionPage> {
       await Future.delayed(const Duration(milliseconds: 500));
       setState(() => _disabled = false);
     } else {
-      _db.update('Tutorial', {'intro': 'true'}, where: 'key = "key"');
-      _goToHomePage();
+      _gameData.setTutorial('intro', false);
+      Navigator.pushReplacementNamed(context, '/home');
     }
-  }
-
-  void _goToHomePage() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomePage(_reading, _writing),
-      ),
-    );
   }
 
   @override
   void initState() {
     super.initState();
-    _initDB();
+    _initData();
   }
 
   @override
@@ -125,7 +113,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
           child: SafeArea(
             child: Loader(
               isVisible: _isLoading,
-              onFinish: this.mounted ? _nextIntro : null,
+              onFinish: this.mounted ? _onLoaderFinish : null,
               child: Column(
                 children: <Widget>[
                   Expanded(

@@ -1,17 +1,20 @@
-import 'package:sqflite/sqflite.dart';
 import 'dart:math';
-import '../../db/DatabaseHelper.dart';
+import '../../db/GameData.dart';
 import '../../routes/reading/components.dart' show ChoiceButton;
 import '../../styles/theme.dart';
 
 class GameLogicManager {
   GameLogicManager({ this.isQuiz: true });
+  static final GameData _gameData = GameData();
+  static final Map<String, dynamic> defaults = {
+    'batch': 1,
+    'progress': 2,
+  };
 
   final bool isQuiz;
   bool _isTutorial = false;
   int _tutorialNo = 0;
 
-  Database _db;
   dynamic _state;
 
   Map<String, int> _glyphProgresses = {};
@@ -21,22 +24,19 @@ class GameLogicManager {
 
   get isTutorial => _isTutorial;
 
-  Future<void> init(dynamic _pageState) async {
+  void init(dynamic _pageState) {
     _state = _pageState;
-    _db = await DatabaseHelper.instance.database;
-    _isTutorial = (await _db.query('Tutorial', where: 'key = "key"', columns: [isQuiz ? 'reading' : 'writing']))[0][isQuiz ? 'reading' : 'writing'] == 'true';
+    _isTutorial = _gameData.getTutorial(isQuiz ? 'reading' : 'writing');
     _state.isTutorial = _isTutorial;
-    if (!_isTutorial || !isQuiz) await _initGame();
-    else await _initTutorial();
+    if (!_isTutorial || !isQuiz) _initGame();
+    else _initTutorial();
   }
 
   void finishTutorial() async {
-    if (isQuiz) _state.isLoading = true;
-    await Future.delayed(const Duration(milliseconds: loaderOpacityDuration));
     _state.isTutorial = false;
     _isTutorial = false;
     if (isQuiz) {
-      await _pushTutorial();
+      _pushTutorial();
       _state.enableAllChoices();
       _state.startGame();
     } else {
@@ -44,16 +44,12 @@ class GameLogicManager {
     }
   }
 
-  Future<void> _initTutorial() async {
-    final Map<String, dynamic> _gameData = {
-      'current_batch': 1,
-      'overall_progress': 8,
-    };
-    await _initData(_gameData);
+  void _initTutorial() {
+    _initData(progress: defaults['progress'], batch: defaults['batch']);
     if (isQuiz) _state.disableChoices = true;
   }
 
-  void _nextTutorial() async {
+  void _nextTutorial() {
     _tutorialNo++;
     if (_tutorialNo == 1) {
       _state.disableSwipe = true;
@@ -81,9 +77,10 @@ class GameLogicManager {
     }, 2);
   }
 
-  Future<void> _initGame() async {
-    final Map<String, dynamic> _gameData = (await _db.query('Page', where: 'name = "${isQuiz? 'reading' : 'writing'}"'))[0];
-    await _initData(_gameData);
+  void _initGame() {
+    final int _progress = _gameData.getOverallProgress(isQuiz ? 'reading' : 'writing');
+    final int _batch = _gameData.getBatch(isQuiz ? 'reading' : 'writing');
+    _initData(progress: _progress, batch: _batch);
     _pushCards();
     if(isQuiz) {
       _state.disableSwipe = false;
@@ -92,10 +89,10 @@ class GameLogicManager {
     }
   }
 
-  Future<void> _initData(Map<String, dynamic> gameData) async {
-    if (isQuiz) await _pullQuizMode();
-    _batchNumber = gameData['current_batch'];
-    _state.overallProgressCount = gameData['overall_progress'];
+  void _initData({int progress, int batch}) {
+    if (isQuiz) _pullQuizMode();
+    _batchNumber = batch;
+    _state.overallProgressCount = progress;
     if (_isTutorial && isQuiz) {
       _glyphProgresses = {
         'nga': isQuiz ? maxQuizGlyphProgress ~/ 2 : maxWritingGlyphProgress ~/ 2,
@@ -113,9 +110,9 @@ class GameLogicManager {
       if (isQuiz) _choicePool.addAll(kulitanBatches[0]);
       _glyphPool.addAll(kulitanBatches[0]);
     } else {
-      await _fillUpPool();
+      _fillUpPool();
     }
-    if(gameData['current_batch'] == 0) {
+    if(batch == 0) {
       if (_isTutorial) {
         _state.setCard({
           'kulitan': kulitanGlyphs['nga'],
@@ -173,22 +170,20 @@ class GameLogicManager {
           ];
         }
       } else {
-        await _pullCards();
-        if(isQuiz) await _pullChoices();
+        _pullCards();
+        if(isQuiz) _pullChoices();
         if(_glyphPool.length < quizCardPoolMinCount)
           _getNewCards(index: (isQuiz? 3 : 2));
       }
     }
   }
-  Future<void> _pullQuizMode() async {
-    _state.mode = (await _db.query('CurrentQuiz', columns: ['kulitanMode'], where: 'type = "mode"'))[0]['kulitanMode'] == 'true';
+  void _pullQuizMode() {
+    _state.mode = _gameData.getReadingMode();
   }
-  Future<void> _pullCards() async {
-    final List<String> _columns = ['one', 'two'];
-    if (isQuiz) _columns.add('three');
-    Map<String, dynamic> _pulledCards = (await _db.query('Current${isQuiz? 'Quiz' : 'Draw'}', columns: _columns, where: 'type = "cards"'))[0];
+  void _pullCards() {
+    Map<String, dynamic> _pulledCards = _gameData.getCards(isQuiz ? 'reading' : 'writing');
     if (!isQuiz && _isTutorial) {
-      final int _cardOneProgress = await _getGlyphProgress('nga');
+      final int _cardOneProgress = _getGlyphProgress('nga');
       _state.setCard({
         'kulitan': kulitanGlyphs['nga'],
         'answer': 'nga',
@@ -196,7 +191,7 @@ class GameLogicManager {
         'stackNumber': 1,
       }, 0);
     } else {
-      final int _cardOneProgress = await _getGlyphProgress(_pulledCards['one']);
+      final int _cardOneProgress = _getGlyphProgress(_pulledCards['one']);
       _state.setCard({
         'kulitan': kulitanGlyphs[_pulledCards['one']],
         'answer': _pulledCards['one'],
@@ -204,7 +199,7 @@ class GameLogicManager {
         'stackNumber': 1,
       }, 0);
     }
-    final int _cardTwoProgress = await _getGlyphProgress(_pulledCards['two']);
+    final int _cardTwoProgress = _getGlyphProgress(_pulledCards['two']);
     _state.setCard({
       'kulitan': kulitanGlyphs[_pulledCards['two']],
       'answer': _pulledCards['two'],
@@ -213,7 +208,7 @@ class GameLogicManager {
     }, 1);
     if(isQuiz) {
       if(_pulledCards['three'] != null) {
-        final int _cardThreeProgress = await _getGlyphProgress(_pulledCards['three']);
+        final int _cardThreeProgress = _getGlyphProgress(_pulledCards['three']);
         _state.setCard({
           'kulitan': kulitanGlyphs[_pulledCards['three']],
           'answer': _pulledCards['three'],
@@ -225,8 +220,8 @@ class GameLogicManager {
       }
     }
   }
-  Future<void> _pullChoices() async {
-    final Map<String, dynamic> _pulledChoices = (await _db.query('CurrentQuiz', where: 'type = "choices"'))[0];
+  void _pullChoices() {
+    final Map<String, dynamic> _pulledChoices = _gameData.getChoices();
     if(_pulledChoices['one'] != null)
       _state.choices = [
         {
@@ -256,9 +251,9 @@ class GameLogicManager {
       _state.disableSwipe = true;
   }
 
-  Future<void> _pushTutorial() async => await _db.update('Tutorial', {'${isQuiz? 'reading' : 'writing'}': '${_isTutorial.toString()}'}, where: '${isQuiz? 'reading' : 'writing'} = "${_state.mode}"');
-  void _pushQuizMode() async => await _db.update('CurrentQuiz', { 'kulitanMode': _state.mode }, where: 'type = "mode"');
-  void _pushCards({bool isTwo: false}) async {
+  void _pushTutorial() => _gameData.setTutorial(isQuiz ? 'reading' : 'writing', _isTutorial);
+  void _pushQuizMode() => _gameData.setMode(_state.mode);
+  void _pushCards({bool isTwo: false}) {
     Map<String, String> _data = {
       'one': _state.cards[0]['answer'],
       'two': _state.cards[1]['answer'],
@@ -267,17 +262,17 @@ class GameLogicManager {
       _data['three'] = isTwo? null : _state.cards[2]['answer'];
       _data['four'] = null;
     }
-    await _db.update('Current${isQuiz? 'Quiz' : 'Draw'}', _data, where: 'type = "cards"');
+    _gameData.setCards(isQuiz ? 'reading' : 'writing', _data);
   }
-  void _pushChoices({bool isTwo: false}) async {
-    await _db.update('CurrentQuiz', {
+  void _pushChoices({bool isTwo: false}) {
+    _gameData.setChoices({
       'one': isTwo? null : _state.choices[0]['text'],
       'two': isTwo? null : _state.choices[1]['text'],
       'three': isTwo? null : _state.choices[2]['text'],
       'four': isTwo? null : _state.choices[3]['text'],
-    }, where: 'type = "choices"');
+    });
   }
-  void _pushRemovedCards() async {
+  void _pushRemovedCards() {
     Map<String, String> _data = {
       'one': _state.cards[1]['answer'],
       'two': isQuiz? _state.cards[2]['answer'] : null,
@@ -286,34 +281,28 @@ class GameLogicManager {
       _data['three'] = null;
       _data['four'] = null;
     }
-    await _db.update('Current${isQuiz? 'Quiz' : 'Draw'}', _data, where: 'type = "cards"');
+    _gameData.setCards(isQuiz ? 'reading' : 'writing', _data);
   }
-  void _pushRemovedChoices() async {
-    await _db.update('CurrentQuiz', {
+  void _pushRemovedChoices() {
+    _gameData.setChoices({
       'one': null,
       'two': null,
       'three': null,
       'four': null,
-    }, where: 'type = "choices"');
+    });
   }
-  void _pushBatchNumber() async {
-    await _db.update('Page', {
-      'current_batch': _batchNumber
-    }, where: 'name = "${isQuiz? 'reading' : 'writing'}"');
+  void _pushBatchNumber() {
+    _gameData.setBatch(isQuiz ? 'reading' : 'writing', _batchNumber);
   }
-  void _pushOverallProgress() async {
-    await _db.update('Page', {
-      'overall_progress': _state.overallProgressCount,
-    }, where: 'name = "${isQuiz? 'reading' : 'writing'}"');
+  void _pushOverallProgress() {
+    _gameData.setOverallProgress(isQuiz ? 'reading' : 'writing', _state.overallProgressCount);
   }
-  void _pushGlyphProgress() async {
-    await _db.update('Glyph', {
-      'progress_count_${isQuiz? 'reading' : 'writing'}': _state.cards[0]['progress'],
-    }, where: 'name = "${_state.cards[0]['answer']}"');
+  void _pushGlyphProgress() {
+    _gameData.setGlyphProgress(isQuiz ? 'reading' : 'writing', _state.cards[0]['answer'], _state.cards[0]['progress']);
   }
 
-  Future<int> _getGlyphProgress(String glyph) async {
-    return (await _db.query('Glyph', where: 'name = "$glyph"'))[0]['progress_count_${isQuiz? 'reading' : 'writing'}'];
+  int _getGlyphProgress(String glyph) {
+    return _gameData.getGlyphProgress(isQuiz ? 'reading' : 'writing', glyph);
   }
   void _getNewCards({int index = 0}) {
     Random _random = Random();
@@ -493,11 +482,9 @@ class GameLogicManager {
     if (isTutorial && isQuiz) _nextTutorial();
   }
 
-  Future<void> _fillUpPool() async {
-    final List<Map<String, dynamic>> _pulledProgressList = await _db.query('Glyph', columns: ['name', 'progress_count_${isQuiz? 'reading' : 'writing'}']);
+  void _fillUpPool() {
+    _glyphProgresses = _gameData.getGlyphProgressList(isQuiz ? 'reading' : 'writing');
     final int _actualBatch = _batchNumber == 0? 1 : _batchNumber;
-    for(Map<String, dynamic> _glyph in _pulledProgressList)
-      _glyphProgresses[_glyph['name']] = _glyph['progress_count_${isQuiz? 'reading' : 'writing'}'];
     for(int i = 0; i < _actualBatch; i++) {
       if(isQuiz) _choicePool.addAll(kulitanBatches[i]); 
       for(int j = 0; j < kulitanBatches[i].length; j++)

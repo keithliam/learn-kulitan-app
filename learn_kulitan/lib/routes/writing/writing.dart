@@ -4,7 +4,6 @@ import '../../components/buttons/IconButtonNew.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/LinearProgressBar.dart';
 import '../../components/misc/GameLogicManager.dart';
-import '../../components/animations/Loader.dart';
 import './components.dart';
 
 class WritingPage extends StatefulWidget {
@@ -15,21 +14,19 @@ class WritingPage extends StatefulWidget {
 
 class WritingPageState extends State<WritingPage> with SingleTickerProviderStateMixin { 
   final GameLogicManager _gameLogicManager = GameLogicManager(isQuiz: false);
-  bool _isLoading = true;
-  bool _doneLoading = false;
   bool _isTutorial = true;
   int _overallProgressCount = 0;
   List<Map<String, dynamic>> _cards = [
     {
       'kulitan': '',
       'answer': '',
-      'progress': 9,
+      'progress': 0,
       'stackNumber': 1,
     },
     {
       'kulitan': '',
       'answer': '',
-      'progress': 10,
+      'progress': 0,
       'stackNumber': 2,
     },
   ];
@@ -37,7 +34,6 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
   AnimationController _panController;
   Animation<double> _panAnimation;
 
-  set isLoading(bool i) => setState(() => _isLoading = i);
   set isTutorial(bool i) => setState(() => _isTutorial = i);
   set overallProgressCount(int n) => setState(() => _overallProgressCount = n);
   void setCard(Map<String, dynamic> card, int i) => setState(() => _cards[i] = card);
@@ -51,19 +47,10 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
   get cards => _cards;
   get overallProgressCount => _overallProgressCount;
 
-  void _startGame() async {
-    await _gameLogicManager.init(this);
-    setState(() => _isLoading = false);
-  }
-
-  void _finishLoading() {
-    setState(() => _doneLoading = true);
-  }
-
   @override
   void initState() {
     super.initState();   
-    _startGame();
+    _gameLogicManager.init(this);
     _panController = AnimationController(duration: const Duration(milliseconds: writingNextCardDuration), vsync: this);
     final CurvedAnimation _panCurve = CurvedAnimation(parent: _panController, curve: writingCardPanLeftCurve);
     final Tween<double> _panTween = Tween<double>(begin: 0.0, end: 1.0);
@@ -159,7 +146,7 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
       ),
     ];
 
-    if (_isTutorial && _doneLoading) {
+    if (_isTutorial) {
       _pageStack.add(
         IgnorePointer(
           child: Tutorial(
@@ -172,11 +159,7 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
     return Material(
       color: backgroundColor,
       child: SafeArea(
-        child: Loader(
-          onFinish: _finishLoading,
-          isVisible: _isLoading,
-          child: Stack(children: _pageStack),
-        ),
+        child: Stack(children: _pageStack),
       ),
     );
   }

@@ -1,34 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import '../../components/animations/Loader.dart';
+import '../../db/GameData.dart';
 import '../../components/buttons/CustomButton.dart';
 import './components.dart';
 import '../../styles/theme.dart';
-import '../../db/DatabaseHelper.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage(this.reading, this.writing);
-
-  final int reading;
-  final int writing;
-
+  const HomePage();
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  static final GameData _gameData = GameData();
   final CustomButtonGroup _buttonGroup = CustomButtonGroup();
   bool _disabled = false;
   int _readingProgress = -1;
   int _writingProgress = -1;
 
-  void _loadProgresses() async {
-    final Database _db = await DatabaseHelper.instance.database;
-    final int _reading = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "reading"'))[0]['overall_progress'];
-    final int _writing = (await _db.query('Page', columns: ['overall_progress'], where: 'name = "writing"'))[0]['overall_progress'];
+  void _loadProgresses() {
     setState(() {
-      _readingProgress = _reading;
-      _writingProgress = _writing;
+      _readingProgress = _gameData.getOverallProgress('reading');
+      _writingProgress = _gameData.getOverallProgress('writing');
     });
   }
 
@@ -48,8 +40,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _preventAccidentalPresses();
-    _readingProgress = widget.reading;
-    _writingProgress = widget.writing;
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadProgresses());
   }
 
   @override
