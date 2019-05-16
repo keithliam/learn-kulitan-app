@@ -152,10 +152,7 @@ class ReadingPageState extends State<ReadingPage> {
 
   void startGame() async {
     await _gameLogicManager.init(this);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getQuizCardsSize();
-      setState(() => _isLoading = false); 
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => _isLoading = false));
   }
 
   void _doneLoading() {
@@ -203,7 +200,9 @@ class ReadingPageState extends State<ReadingPage> {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    if ((_screenSize.height - _size.height).abs() < 80) WidgetsBinding.instance.addPostFrameCallback((_) => _getQuizCardsSize());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if ((_screenSize.height - _size.height).abs() < 80) _getQuizCardsSize();
+    });
     _screenSize = _size;
 
     final Widget _header = Padding(
