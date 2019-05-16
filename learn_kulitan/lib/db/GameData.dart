@@ -59,6 +59,11 @@ class GameData {
     _choices.forEach((String key, String value) => _data['reading']['choices'][key] = value);
   }
 
+  void clearGameData() {
+    _prefs.clear();
+    _DatabaseHelper.clearDatabase();
+  }
+
   Future<void> _getGameData() async {
     _data['intro'] = {};
     _data['reading'] = {};
@@ -121,11 +126,17 @@ class _DatabaseHelper {
     return _database;
   }
 
-  _initDatabase() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, _databaseName);
+  Future<Database> _initDatabase() async {
+    final Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    final String path = join(documentsDirectory.path, _databaseName);
     return await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
+  }
+
+  static Future<void> clearDatabase() async {
+    final Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    final String _path = join(documentsDirectory.path, _databaseName);
+    await deleteDatabase(_path);
   }
 
   Future _onCreate(Database db, int version) async {
