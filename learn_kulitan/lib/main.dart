@@ -13,8 +13,9 @@ import './components/misc/CustomScrollBehavior.dart';
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-    statusBarColor: Colors.transparent,
-    systemNavigationBarColor: Color(0x44AAAAAA),
+    statusBarColor: Color(0xFFFABF40),
+    systemNavigationBarColor: Color(0xFFFABF40),
+    systemNavigationBarIconBrightness: Brightness.dark,
   ));
   runApp(MyApp());
 }
