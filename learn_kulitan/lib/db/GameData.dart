@@ -80,10 +80,10 @@ class GameData {
   }
 
   Future<void> _initPrefs() async {
-    await _prefs.setBool('introTutorial', false);
-    await _prefs.setBool('readingTutorial', false);
-    await _prefs.setBool('writingTutorial', false);
-    await _prefs.setBool('transcribeTutorial', false);
+    await _prefs.setBool('introTutorial', true);
+    await _prefs.setBool('readingTutorial', true);
+    await _prefs.setBool('writingTutorial', true);
+    await _prefs.setBool('transcribeTutorial', true);
   }
 }
 
