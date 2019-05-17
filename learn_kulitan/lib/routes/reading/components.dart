@@ -300,7 +300,7 @@ class AnimatedQuizCard extends StatefulWidget {
   final int stackNumber;
   final double stackWidth;
   final double heightToStackTop;
-  final Stream flipStream;
+  final Stream<bool> flipStream;
   final Function revealAnswer;
   final VoidCallback swipedLeft;
   final VoidCallback swipingCard;
@@ -312,7 +312,7 @@ class AnimatedQuizCard extends StatefulWidget {
 }
 
 class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProviderStateMixin {
-  StreamSubscription _flipStreamSubscription;
+  StreamSubscription<bool> _flipStreamSubscription;
   Animation<double> _animation;
   AnimationController _controller;
   Tween<double> _tween;
@@ -356,8 +356,8 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
     _animation = _tween.animate(_curveAnimation)
       ..addListener(_noneListener);
     if (widget.flipStream != null) {
-      _flipStreamSubscription = widget.flipStream.listen((_) {
-        _animateSwipe(_cardRotate, 1.0);
+      _flipStreamSubscription = widget.flipStream.listen((bool flip) {
+        _animateSwipe(_cardRotate, flip ? 1.0 : 0.5);
       });
     }
   }
@@ -446,6 +446,8 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   void _swipeDownListener() {
     if(_animation.value < 0.25 || 0.75 < _animation.value)
       setState(() => _showBackCard = true);
+    else
+      setState(() => _showBackCard = false);
   }
 
   void _forwardCardListener() {
@@ -477,6 +479,11 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
         setState(() {
           _isFlipped = true;
           _cardRotate = toValue;
+        });
+      else if (toValue == 0.5)
+        setState(() {
+          _isFlipped = false;
+          _cardRotate = 0.5;
         });
     } else if(!isForward) {
       _duration = Duration(milliseconds: swipeLeftSnapDuration);

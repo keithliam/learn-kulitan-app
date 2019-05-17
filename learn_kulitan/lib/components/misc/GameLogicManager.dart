@@ -37,8 +37,12 @@ class GameLogicManager {
     _isTutorial = false;
     if (isQuiz) {
       _pushTutorial();
-      _state.enableAllChoices();
+      _state.unflipCard();
+      await Future.delayed(const Duration(milliseconds: autoSwipeDownDuration ~/ 2.0));
       _state.startGame();
+      _state.resetChoices();
+      await Future.delayed(const Duration(milliseconds: resetQuizDuration));
+      _state.enableAllChoices();
     } else {
       _pushTutorial();
     }

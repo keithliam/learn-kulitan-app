@@ -88,7 +88,7 @@ class ReadingPageState extends State<ReadingPage> {
 
   final _resetChoicesController = StreamController.broadcast();
   final _showAnswerChoiceController = StreamController.broadcast();
-  final _flipStreamController = StreamController.broadcast();
+  final _flipStreamController = StreamController<bool>.broadcast();
 
   get cards => _cards;
   get choices => _choices;
@@ -108,7 +108,8 @@ class ReadingPageState extends State<ReadingPage> {
   void setCardStackNo(int i, int sNum) => setState(() => _cards[i]['stackNumber'] = sNum);
   void setChoice(Map<String, dynamic> choice, int i) => setState(() => _choices[i] = choice);
   void shuffleChoices() => setState(() => _choices.shuffle());
-  void flipCard() => _flipStreamController.sink.add(null);
+  void flipCard() => _flipStreamController.sink.add(true);
+  void unflipCard() => _flipStreamController.sink.add(false);
   void showAnswer() => _showAnswerChoiceController.sink.add(null);
   void resetChoices() => _resetChoicesController.sink.add(null);
   void incOverallProgressCount() => setState(() => _overallProgressCount++);
