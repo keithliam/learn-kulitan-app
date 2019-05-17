@@ -352,12 +352,7 @@ class ReadingPageState extends State<ReadingPage> {
             progress: _cards[2]['progress'] / maxQuizGlyphProgress,
             stackNumber: _cards[2]['stackNumber'],
             stackWidth: _quizCardWidth,
-            heightToStackTop: _heightToQuizCardTop, // TODO: Problem
-            flipStream: _flipStreamController.stream,
-            revealAnswer: _gameLogicManager.revealAnswer,
-            swipedLeft: _gameLogicManager.swipedLeft,
-            swipingCard: _swipingCard,
-            swipingCardDone: _swipingCardDone,
+            heightToStackTop: _heightToQuizCardTop,
           ),
           AnimatedQuizCard(
             isKulitan: _isKulitan,
@@ -367,11 +362,6 @@ class ReadingPageState extends State<ReadingPage> {
             stackNumber: _cards[1]['stackNumber'],
             stackWidth: _quizCardWidth,
             heightToStackTop: _heightToQuizCardTop,
-            flipStream: _flipStreamController.stream,
-            revealAnswer: _gameLogicManager.revealAnswer,
-            swipedLeft: _gameLogicManager.swipedLeft,
-            swipingCard: _swipingCard,
-            swipingCardDone: _swipingCardDone,
           ),
           AnimatedQuizCard(
             isKulitan: _isKulitan,

@@ -285,11 +285,11 @@ class AnimatedQuizCard extends StatefulWidget {
     @required this.stackNumber,
     @required this.stackWidth,
     @required this.heightToStackTop,
-    @required this.flipStream,
-    @required this.revealAnswer,
-    @required this.swipedLeft,
-    @required this.swipingCard,
-    @required this.swipingCardDone,
+    this.revealAnswer,
+    this.swipedLeft,
+    this.swipingCard,
+    this.swipingCardDone,
+    this.flipStream,
     this.disableSwipe = true,
   });
 
@@ -355,10 +355,11 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
     _colorAnimation = _colorTween.animate(_curveAnimation);
     _animation = _tween.animate(_curveAnimation)
       ..addListener(_noneListener);
-    _flipStreamSubscription = widget.flipStream.listen((_) {
-      if(widget.stackNumber == 1)
+    if (widget.flipStream != null) {
+      _flipStreamSubscription = widget.flipStream.listen((_) {
         _animateSwipe(_cardRotate, 1.0);
-    });
+      });
+    }
   }
 
   void _animateColor() {
@@ -436,7 +437,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   @override
   void dispose() {
     _controller.dispose();
-    _flipStreamSubscription.cancel();
+    if (_flipStreamSubscription != null) _flipStreamSubscription.cancel();
     super.dispose();
   }
 
@@ -636,10 +637,22 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
       ..rotateX(_getRotation(_isSwipeDownSnapping? _animation.value : _cardRotate));
     double _swipeRatio = _isSwipeLeftSnapping? _animation.value : _cardTransform;
 
+    final Widget _card = QuizCard(
+      isKulitan: _isKulitan,
+      kulitan: widget.kulitan,
+      answer: widget.answer,
+      progress: widget.progress,
+      color: _isColorTweening? _colorAnimation.value : widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 : cardQuizColor3,
+      showAnswer: _showBackCard,
+      width: _cardWidth,
+      originalWidth: widget.stackWidth,
+      animateProgressBar: _animateProgressBar,
+    );
+
     return Positioned(
       top: _topOffset - (_swipeRatio * quizCardMoveUpVelocity * 150.0),
       left: _leftOffset - (_swipeRatio * quizCardMoveLeftVelocity * ((widget.stackWidth + quizHorizontalScreenPadding) * 1.2)),
-      child: Transform.rotate(
+      child: widget.stackNumber != 1 ? _card : Transform.rotate(
         angle: (_swipeRatio * quizCardRotateVelocity * (-math.pi / 4)),
         alignment: FractionalOffset.center,
         child: Transform(
@@ -652,17 +665,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
             child: Transform(
               transform: _showBackCard? Matrix4.inverted(_matrix) : Matrix4.identity(),
               alignment: FractionalOffset.center,
-              child: QuizCard(
-                isKulitan: _isKulitan,
-                kulitan: widget.kulitan,
-                answer: widget.answer,
-                progress: widget.progress,
-                color: _isColorTweening? _colorAnimation.value : widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 : cardQuizColor3,
-                showAnswer: _showBackCard,
-                width: _cardWidth,
-                originalWidth: widget.stackWidth,
-                animateProgressBar: _animateProgressBar,
-              ), 
+              child: _card,
             ),
           ),
         ),
