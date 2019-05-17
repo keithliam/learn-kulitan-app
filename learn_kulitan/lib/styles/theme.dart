@@ -4138,6 +4138,12 @@ const textGuideButton = TextStyle(
   fontWeight: FontWeight.w600,
   color: grayColor,
 );
+const textAboutButton = TextStyle(
+  fontFamily: 'Barlow',
+  fontSize: 25.0,
+  fontWeight: FontWeight.bold,
+  color: whiteColor,
+);
 const textInfoCaption = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 20.0,
@@ -4203,7 +4209,7 @@ const textTranscribe = TextStyle(
 );
 const textAboutSubtitle = TextStyle(
   fontFamily: 'Barlow',
-  fontSize: 30.0,
+  fontSize: 40.0,
   fontWeight: FontWeight.bold,
   color: whiteColor,
   shadows: <Shadow>[

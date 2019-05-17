@@ -11,6 +11,8 @@ class ImageWithCaption extends StatelessWidget {
     this.hasPadding = true,
     this.orientation = Axis.vertical,
     this.borderRadius = 0.03623,
+    this.percentWidth,
+    this.hasBorder = false,
   });
 
   final String filename;
@@ -21,9 +23,31 @@ class ImageWithCaption extends StatelessWidget {
   final bool hasPadding;
   final Axis orientation;
   final double borderRadius;
+  final double percentWidth;
+  final bool hasBorder;
 
   @override
   Widget build(BuildContext context) {
+    Widget _image = ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius * screenWidth),
+      child: Image.asset(
+        'assets/images/$filename',
+        width: screenWidth *
+            (percentWidth ?? (orientation == Axis.vertical ? 0.5 : 0.75)),
+        fit: BoxFit.fitWidth,
+      ),
+    );
+
+    if (hasBorder)
+      _image = Container(
+        padding: const EdgeInsets.all(1.0),
+        decoration: BoxDecoration(
+            borderRadius:
+                BorderRadius.circular((borderRadius * screenWidth) + 1.0),
+            color: accentColor),
+        child: _image,
+      );
+
     List<Widget> _list = [
       ConstrainedBox(
         constraints: BoxConstraints(
@@ -34,14 +58,7 @@ class ImageWithCaption extends StatelessWidget {
         ),
         child: FittedBox(
           fit: BoxFit.fitWidth,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(borderRadius * screenWidth),
-            child: Image.asset(
-              'assets/images/$filename',
-              width: screenWidth * (orientation == Axis.vertical ? 0.5 : 0.75),
-              fit: BoxFit.fitWidth,
-            ),
-          ),
+          child: _image,
         ),
       ),
     ];
