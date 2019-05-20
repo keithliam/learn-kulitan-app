@@ -780,7 +780,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
-            color: tutorialsOverlayColor,
+            color: tutorialsBackgroundColor,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
           child: IgnorePointer(

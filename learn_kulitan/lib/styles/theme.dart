@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 // Colors
 const primaryColor = Color(0xFFFABF40);
 const accentColor = Color(0xFFFF4546);
-const grayColor = Color(0xFF626262);
-const snowColor = Color(0xFFE5E5E5);
-const blueGreenColor = Color(0xFF00FFD8);
-const blueColor = Color(0xFFDBF3FF);
-const lightBlueColor = Color(0xFFEDFAFF);
+const foregroundColor = Color(0xFF626262);
+const emptyColor = Color(0xFFE5E5E5);
+const correctAnswerColor = Color(0xFF00FFD8);
+const quizCardLastColor = Color(0xFFDBF3FF);
+const quizCardMiddleColor = Color(0xFFEDFAFF);
 const whiteColor = Color(0xFFFFFFFF);
 
-const tutorialsOverlayColor = Color(0xAA000000);
+const tutorialsBackgroundColor = Color(0xAA000000);
 const tutorialsOverlayBackgroundColor = primaryColor;
 
 const backgroundColor = primaryColor;
@@ -19,40 +19,40 @@ const circularProgressTextColor = whiteColor;
 const circularProgressForegroundColor = accentColor;
 const circularProgressBackgroundColor = whiteColor;
 const linearProgressForegroundColor = accentColor;
-const linearProgressBackgroundColor = snowColor;
+const linearProgressBackgroundColor = emptyColor;
 const writingHeaderProgressBGColor = whiteColor;
 
 const customSwitchColor = whiteColor;
 const customSwitchToggleColor = accentColor;
 
-const customCardDefaultColor = whiteColor;
-const customCardShadowColor = Color(0x21000000);
-const customButtonDefaultColor = whiteColor;
-const customButtonShadowColor = Color(0x22000000);
+const cardDefaultColor = whiteColor;
+const cardShadowColor = Color(0x21000000);
+const buttonDefaultColor = whiteColor;
+const buttonShadowColor = Color(0x22000000);
 
 const cardQuizColor1 = whiteColor;
-const cardQuizColor2 = lightBlueColor;
-const cardQuizColor3 = blueColor;
+const cardQuizColor2 = quizCardMiddleColor;
+const cardQuizColor3 = quizCardLastColor;
 const cardChoicesColor = whiteColor;
-const cardChoicesTextColor = grayColor;
-const cardChoicesRightColor = blueGreenColor;
-const cardChoicesRightTextColor = grayColor;
+const cardChoicesTextColor = foregroundColor;
+const cardChoicesRightColor = correctAnswerColor;
+const cardChoicesRightTextColor = foregroundColor;
 const cardChoicesWrongColor = accentColor;
 const cardChoicesWrongTextColor = whiteColor;
 
 const writingGuideColor = accentColor;
-const writingDrawColor = grayColor;
-const writingShadowColor = snowColor;
+const writingDrawColor = foregroundColor;
+const writingShadowColor = emptyColor;
 
-const transcribeDividerColor = snowColor;
+const transcribeDividerColor = emptyColor;
 const transcribeCursorColor = accentColor;
 
 const informationDividerColor = accentColor;
-const informationDividerShadowColor = customButtonShadowColor;
+const informationDividerShadowColor = buttonShadowColor;
 
 const backToStartFABColor = whiteColor;
-const backToStartFABShadowColor = customButtonShadowColor;
-final backToStartFABPressedColor = Color.lerp(whiteColor, grayColor, 0.2);
+const backToStartFABShadowColor = buttonShadowColor;
+final backToStartFABPressedColor = Color.lerp(whiteColor, foregroundColor, 0.2);
 const backToStartFABIconColor = accentColor;
 
 const keyboardStrokeColor = whiteColor;
@@ -4000,7 +4000,7 @@ const drawCardPoolMinCount = 5;
 // Kulitan Fonts
 const kulitanHome = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
-  color: grayColor,
+  color: foregroundColor,
 );
 const kulitanSwitch = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
@@ -4010,7 +4010,7 @@ const kulitanSwitch = TextStyle(
 const kulitanQuiz = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
   fontSize: 150.0,
-  color: grayColor,
+  color: foregroundColor,
 );
 const kulitanInfo = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
@@ -4024,7 +4024,7 @@ const kulitanInfoText = TextStyle(
 );
 const kulitanTranscribe = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
-  color: grayColor,
+  color: foregroundColor,
 );
 const kulitanKeyboard = TextStyle(
   fontFamily: 'Kulitan Semi Bold',
@@ -4061,14 +4061,14 @@ const textHomeButton = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 40.0,
   fontWeight: FontWeight.w600,
-  color: grayColor,
+  color: foregroundColor,
   height: 0.7,
 );
 const textHomeButtonSub = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 10.0,
   fontWeight: FontWeight.w600,
-  color: grayColor,
+  color: foregroundColor,
 );
 const textPageTitle = TextStyle(
   fontFamily: 'Barlow',
@@ -4095,14 +4095,14 @@ const textQuizHeader = TextStyle(
 const textQuizAnswer = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 110.0,
-  color: grayColor,
+  color: foregroundColor,
   height: 0.8,
 );
 const textQuizChoice = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 30.0,
   fontWeight: FontWeight.w600,
-  color: grayColor,
+  color: foregroundColor,
 );
 const textWritingProgressBar = TextStyle(
   fontFamily: 'Barlow',
@@ -4130,13 +4130,13 @@ const textInfoButton = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 30.0,
   fontWeight: FontWeight.w600,
-  color: grayColor,
+  color: foregroundColor,
 );
 const textGuideButton = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 20.0,
   fontWeight: FontWeight.w600,
-  color: grayColor,
+  color: foregroundColor,
 );
 const textAboutButton = TextStyle(
   fontFamily: 'Barlow',
@@ -4148,7 +4148,7 @@ const textInfoCaption = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 20.0,
   fontWeight: FontWeight.bold,
-  color: grayColor,
+  color: foregroundColor,
 );
 const textInfoCredits = TextStyle(
   fontFamily: 'Barlow',
@@ -4205,7 +4205,7 @@ const textTranscribe = TextStyle(
   fontFamily: 'Barlow',
   fontSize: 40.0,
   fontWeight: FontWeight.bold,
-  color: grayColor,
+  color: foregroundColor,
 );
 const textAboutSubtitle = TextStyle(
   fontFamily: 'Barlow',

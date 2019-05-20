@@ -432,7 +432,7 @@ class _AboutPageState extends State<AboutPage> {
                     alignment: Alignment.center,
                     child: Text(
                       'SHARE',
-                      style: textAboutButton.copyWith(color: grayColor),
+                      style: textAboutButton.copyWith(color: foregroundColor),
                     ),
                   ),
                   Icon(Icons.share, color: accentColor),

@@ -29,7 +29,7 @@ class CustomButton extends StatefulWidget {
     @required this.child,
     this.onPressedImmediate,
     this.height,
-    this.color = customButtonDefaultColor,
+    this.color = buttonDefaultColor,
     this.borderRadius = 0.0,
     this.elevation = 0.0,
     this.padding = const EdgeInsets.all(0.0),
@@ -157,7 +157,7 @@ class _CustomButtonState extends State<CustomButton> {
         height: _height,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(widget.borderRadius),
-          color: customButtonShadowColor,
+          color: buttonShadowColor,
         ),
       ),
     );

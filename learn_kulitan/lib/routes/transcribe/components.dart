@@ -1066,7 +1066,7 @@ class _TutorialState extends State<Tutorial>
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
-            color: tutorialsOverlayColor,
+            color: tutorialsBackgroundColor,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
           child: IgnorePointer(

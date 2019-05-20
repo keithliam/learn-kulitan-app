@@ -4,7 +4,7 @@ import '../../styles/theme.dart';
 class CustomCard extends StatelessWidget {
   const CustomCard({
     @required this.child,
-    this.color = customCardDefaultColor,
+    this.color = cardDefaultColor,
     this.hasShadow = false,
     this.padding,
     this.height,
@@ -28,7 +28,7 @@ class CustomCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(30.0),
         boxShadow: hasShadow? [
           BoxShadow(
-            color: customCardShadowColor,
+            color: cardShadowColor,
             blurRadius: 30.0,
             offset: Offset(0.0, 20.0),
           ),
