@@ -1356,7 +1356,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                 _italicRomanText('Anak Súlat'),
                 _romanText(' ~ the medial KÍ ('),
                 _kulitanText('kii'),
-                _romanText(') or final KÎ'),
+                _romanText(') or final KÎ ('),
                 _kulitanText('kii'),
                 _romanText('), by placing '),
                 _italicRomanText('Indúng Súlat'),
