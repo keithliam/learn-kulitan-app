@@ -4,6 +4,7 @@ import '../../components/buttons/IconButtonNew.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/LinearProgressBar.dart';
 import '../../components/misc/GameLogicManager.dart';
+import '../../db/GameData.dart';
 import './components.dart';
 
 class WritingPage extends StatefulWidget {
@@ -13,6 +14,7 @@ class WritingPage extends StatefulWidget {
 }
 
 class WritingPageState extends State<WritingPage> with SingleTickerProviderStateMixin { 
+  static final GameData _gameData = GameData();
   final GameLogicManager _gameLogicManager = GameLogicManager(isQuiz: false);
   bool _isTutorial = true;
   int _overallProgressCount = 0;
@@ -71,7 +73,7 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
         left: IconButtonNew(
           icon: Icons.arrow_back_ios,
           iconSize: headerIconSize,
-          color: headerNavigationColor,
+          color: _gameData.getColor('headerNavigation'),
           onPressed: () => Navigator.pop(context),
         ),
         middle: Column(
@@ -80,19 +82,19 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
               padding: const EdgeInsets.fromLTRB(headerHorizontalPadding, headerIconSize / 2, headerHorizontalPadding, 5.0),
               child: LinearProgressBar(
                 progress: _overallProgressCount / totalGlyphCount,
-                color: writingHeaderProgressBGColor,
+                color: _gameData.getColor('writingHeaderProgressBG'),
               ),
             ),
             Text(
               'GLYPHS LEARNED',
-              style: textWritingProgressBar
+              style: _gameData.getStyle('textWritingProgressBar')
             )
           ],
         ),
         // right: IconButtonNew(
         //   icon: Icons.settings,
         //   iconSize: headerIconSize,
-        //   color: headerNavigationColor,
+        //   color: _gameData.getColor('headerNavigation'),
         //   onPressed: null,
         // ),
         right: SizedBox(width: 56.0, height: 48.0),
@@ -157,7 +159,7 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
     }
 
     return Material(
-      color: backgroundColor,
+      color: _gameData.getColor('background'),
       child: SafeArea(
         child: Stack(children: _pageStack),
       ),

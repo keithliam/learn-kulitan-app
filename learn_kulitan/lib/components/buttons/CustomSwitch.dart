@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class CustomSwitch extends StatefulWidget {
   const CustomSwitch({
@@ -18,6 +19,7 @@ class CustomSwitch extends StatefulWidget {
 
 class _CustomSwitchState extends State<CustomSwitch>
     with SingleTickerProviderStateMixin {
+  static final GameData _gameData = GameData();
   double _position = 0.0;
   double _touchPosition;
   bool _dragged = false;
@@ -123,8 +125,8 @@ class _CustomSwitchState extends State<CustomSwitch>
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100.0),
                   color: Color.lerp(
-                    customSwitchColor,
-                    customSwitchToggleColor,
+                    _gameData.getColor('customSwitch'),
+                    _gameData.getColor('customSwitchToggle'),
                     _position,
                   ),
                 ),
@@ -132,9 +134,9 @@ class _CustomSwitchState extends State<CustomSwitch>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('A', style: kulitanSwitch),
+                      Text('A', style: _gameData.getStyle('kulitanSwitch')),
                       SizedBox(width: 8.0),
-                      Text('A', style: textSwitch),
+                      Text('A', style: _gameData.getStyle('textSwitch')),
                     ],
                   ),
                 ),
@@ -147,8 +149,8 @@ class _CustomSwitchState extends State<CustomSwitch>
                   width: 25.0,
                   decoration: BoxDecoration(
                     color: Color.lerp(
-                      customSwitchToggleColor,
-                      customSwitchColor,
+                      _gameData.getColor('customSwitchToggle'),
+                      _gameData.getColor('customSwitch'),
                       _position,
                     ),
                     borderRadius: BorderRadius.circular(100.0),

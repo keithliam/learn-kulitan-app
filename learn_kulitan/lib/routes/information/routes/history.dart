@@ -10,6 +10,7 @@ import '../../../components/misc/StaticHeader.dart';
 import '../../../components/misc/StickyHeading.dart';
 import '../../../components/misc/ImageWithCaption.dart';
 import '../../../components/misc/Paragraphs.dart';
+import '../../../db/GameData.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage();
@@ -18,6 +19,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+  static final GameData _gameData = GameData();
   final _scrollController = ScrollController();
 
   bool _showBackToStartFAB = false;
@@ -62,16 +64,16 @@ class _HistoryPageState extends State<HistoryPage> {
   TextSpan _romanText(String text, [GestureRecognizer recognizer]) {
     return TextSpan(
       text: text,
-      style: recognizer == null ? textInfoText : textInfoLink,
+      style: recognizer == null ? _gameData.getStyle('textInfoText') : _gameData.getStyle('textInfoText'),
       recognizer: recognizer,
     );
   }
 
   TextSpan _italicRomanText(String text) =>
-      TextSpan(text: text, style: textInfoTextItalic);
+      TextSpan(text: text, style: _gameData.getStyle('textInfoTextItalic'));
 
   TextSpan _kulitanText(String text) =>
-      TextSpan(text: text, style: kulitanInfoText);
+      TextSpan(text: text, style: _gameData.getStyle('kulitanInfoText'));
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +86,13 @@ class _HistoryPageState extends State<HistoryPage> {
         left: IconButtonNew(
           icon: Icons.arrow_back_ios,
           iconSize: headerIconSize,
-          color: headerNavigationColor,
+          color: _gameData.getColor('headerNavigation'),
           onPressed: () => Navigator.pop(context),
         ),
         // right: IconButtonNew(
         //   icon: Icons.settings,
         //   iconSize: headerIconSize,
-        //   color: headerNavigationColor,
+        //   color: _gameData.getColor('headerNavigation'),
         //   onPressed: null,
         // ),
         right: SizedBox(width: 56.0, height: 48.0),
@@ -101,7 +103,7 @@ class _HistoryPageState extends State<HistoryPage> {
       children: <Widget>[
         ImageWithCaption(
           filename: 'history_kulitan.png',
-          caption: TextSpan(text: 'KASALÉSAYAN', style: textInfoImageCaption),
+          caption: TextSpan(text: 'KASALÉSAYAN', style: _gameData.getStyle('textInfoImageCaption')),
           subcaption: 'HISTORY',
           screenWidth: _width,
           hasPadding: false,
@@ -124,18 +126,18 @@ class _HistoryPageState extends State<HistoryPage> {
           screenWidth: _width,
           orientation: Axis.horizontal,
           caption: TextSpan(
-            style: textInfoImageCaption,
+            style: _gameData.getStyle('textInfoImageCaption'),
             children: <TextSpan>[
               TextSpan(
                   text: 'Figure 1.',
-                  style: textInfoImageCaption.copyWith(
+                  style: _gameData.getStyle('textInfoImageCaption').copyWith(
                       fontStyle: FontStyle.italic)),
               TextSpan(
                   text:
                       ' The Kingdom of Luzon (呂宋國) as it appears on a Japanese map during the Ming dynasty (1368 to 1644). From “A look at history based on Ming dynasty maps” (從大明坤輿萬國 圖看歷史) posted by zhaijia1987 in '),
               TextSpan(
                   text: 'Baidu Tieba (百度贴吧)',
-                  style: textInfoImageCaption.copyWith(
+                  style: _gameData.getStyle('textInfoImageCaption').copyWith(
                       fontStyle: FontStyle.italic)),
               TextSpan(text: ' on 2010 November 11.'),
             ],
@@ -146,17 +148,17 @@ class _HistoryPageState extends State<HistoryPage> {
           screenWidth: _width,
           orientation: Axis.horizontal,
           caption: TextSpan(
-            style: textInfoImageCaption,
+            style: _gameData.getStyle('textInfoImageCaption'),
             children: <TextSpan>[
               TextSpan(
                   text: 'Figure 2.',
-                  style: textInfoImageCaption.copyWith(
+                  style: _gameData.getStyle('textInfoImageCaption').copyWith(
                       fontStyle: FontStyle.italic)),
               TextSpan(
                   text: ' Map of Pampanga from Pedro Murillo Velarde’s 1744 '),
               TextSpan(
                   text: 'Mapa de las Islas Filipinas.',
-                  style: textInfoImageCaption.copyWith(
+                  style: _gameData.getStyle('textInfoImageCaption').copyWith(
                       fontStyle: FontStyle.italic)),
               TextSpan(
                   text:
@@ -184,11 +186,11 @@ class _HistoryPageState extends State<HistoryPage> {
           filename: 'luzon_jar.jpeg',
           screenWidth: _width,
           caption: TextSpan(
-            style: textInfoImageCaption,
+            style: _gameData.getStyle('textInfoImageCaption'),
             children: <TextSpan>[
               TextSpan(
                   text: 'Figure 3.',
-                  style: textInfoImageCaption.copyWith(
+                  style: _gameData.getStyle('textInfoImageCaption').copyWith(
                       fontStyle: FontStyle.italic)),
               TextSpan(
                   text:
@@ -200,18 +202,18 @@ class _HistoryPageState extends State<HistoryPage> {
           filename: 'tokiko.jpeg',
           screenWidth: _width,
           caption: TextSpan(
-            style: textInfoImageCaption,
+            style: _gameData.getStyle('textInfoImageCaption'),
             children: <TextSpan>[
               TextSpan(
                   text: 'Figure 4.',
-                  style: textInfoImageCaption.copyWith(
+                  style: _gameData.getStyle('textInfoImageCaption').copyWith(
                       fontStyle: FontStyle.italic)),
               TextSpan(
                   text:
                       ' A page in Faye-Cooper Cole’s English translation of Tauchi Yonesaburo’s '),
               TextSpan(
                   text: 'Tokiko',
-                  style: textInfoImageCaption.copyWith(
+                  style: _gameData.getStyle('textInfoImageCaption').copyWith(
                       fontStyle: FontStyle.italic)),
               TextSpan(
                   text:
@@ -311,7 +313,7 @@ class _HistoryPageState extends State<HistoryPage> {
               ],
             ),
             TextSpan(
-              style: textInfoText,
+              style: _gameData.getStyle('textInfoText'),
               children: <TextSpan>[
                 _romanText('Cole, Fay–Cooper. (1912) '),
                 _italicRomanText('Chinese Pottery in the Philippines.'),
@@ -612,7 +614,7 @@ class _HistoryPageState extends State<HistoryPage> {
     }
 
     return Material(
-      color: backgroundColor,
+      color: _gameData.getColor('background'),
       child: SafeArea(
         child: Stack(
           children: _pageStack,

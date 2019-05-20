@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class ImageWithCaption extends StatelessWidget {
   const ImageWithCaption({
@@ -26,6 +27,8 @@ class ImageWithCaption extends StatelessWidget {
   final double percentWidth;
   final bool hasBorder;
 
+  static final GameData _gameData = GameData();
+
   @override
   Widget build(BuildContext context) {
     Widget _image = ClipRRect(
@@ -44,7 +47,7 @@ class ImageWithCaption extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius:
                 BorderRadius.circular((borderRadius * screenWidth) + 1.0),
-            color: accentColor),
+            color: _gameData.getColor('accent')),
         child: _image,
       );
 
@@ -83,7 +86,7 @@ class ImageWithCaption extends StatelessWidget {
 
     if (subcaption != null)
       _list
-          .add(Center(child: Text(subcaption, style: textInfoImageSubCaption)));
+          .add(Center(child: Text(subcaption, style: _gameData.getStyle('textInfoImageSubCaption'))));
 
     final Widget _widget = Column(children: _list);
 

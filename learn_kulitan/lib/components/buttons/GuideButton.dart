@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../styles/theme.dart';
 import '../../components/buttons/CustomButton.dart';
+import '../../db/GameData.dart';
 
 class GuideButton extends StatelessWidget {
   const GuideButton({
@@ -12,6 +13,8 @@ class GuideButton extends StatelessWidget {
   final String text;
   final PageController controller;
   final int pageNumber;
+
+  static final GameData _gameData = GameData();
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +30,10 @@ class GuideButton extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Expanded(
-              child: Text(text, style: textGuideButton),
+              child: Text(text, style: _gameData.getStyle('textGuideButton')),
             ),
             Container(width: 5.0),
-            Text('>', style: textGuideButton.copyWith(color: accentColor)),
+            Text('>', style: _gameData.getStyle('textGuideButton').copyWith(color: _gameData.getColor('accent'))),
           ],
         ),
       ),

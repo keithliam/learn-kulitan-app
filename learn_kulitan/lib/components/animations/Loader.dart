@@ -4,14 +4,17 @@ import 'package:flare_flutter/flare.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controller.dart';
 import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class Loader extends StatefulWidget {
   const Loader({
     @required this.isVisible,
     @required this.child,
+    this.isStartup = false,
     this.onFinish,
   });
 
+  final bool isStartup;
   final bool isVisible;
   final Widget child;
   final VoidCallback onFinish;
@@ -21,6 +24,7 @@ class Loader extends StatefulWidget {
 }
 
 class _LoaderState extends State<Loader> with FlareController {
+  static final _gameData = GameData();
   OverlayEntry _overlay;
   bool _toRemove = false;
   double _animationTime = 0.0;
@@ -84,7 +88,7 @@ class _LoaderState extends State<Loader> with FlareController {
                   child: FlareActor(
                     'assets/flares/loader.flr',
                     animation: 'load',
-                    color: loaderStrokeShadowColor,
+                    color: widget.isStartup ? Color(defaultColors['accent']) : _gameData.getColor('loaderStrokeShadow'),
                     controller: this,
                   ),
                 ),
@@ -97,7 +101,7 @@ class _LoaderState extends State<Loader> with FlareController {
                   child: FlareActor(
                     'assets/flares/loader.flr',
                     animation: 'load',
-                    color: loaderStrokeColor,
+                    color: widget.isStartup ? Color(defaultColors['white']) : _gameData.getColor('loaderStroke'),
                     controller: this,
                   ),
                 ),
@@ -125,7 +129,7 @@ class _LoaderState extends State<Loader> with FlareController {
             opacity: _overlay == null ? 0.0 : 1.0,
             duration: const Duration(milliseconds: loaderOpacityDuration),
             curve: loaderOpacityCurve,
-            child: Container(color: loaderBackgroundColor),
+            child: Container(color: widget.isStartup ? Color(defaultColors['primary']) : _gameData.getColor('loaderBackground')),
           ),
         ),
       ],

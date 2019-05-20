@@ -1,9 +1,12 @@
 import 'dart:io' show Directory;
+import 'dart:collection' show HashSet;
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' show join;
 import 'package:sqflite/sqflite.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
+import '../styles/theme.dart';
 
 class GameData {
   static final GameData _instance = GameData._internal();
@@ -20,7 +23,296 @@ class GameData {
   Database _db;
   SharedPreferences _prefs;
   Map<String, dynamic> _data = {};
+  static final HashSet<String> _colorset = HashSet.from(['primary', 'accent', 'foreground', 'empty', 'correctAnswer', 'wrongAnswer', 'quizCardMiddle', 'quizCardLast', 'white', 'tutorialsOverlayBackground', 'cardShadow', 'buttonShadow']);
 
+  Color getColor(String color) {
+    if (_colorset.contains(color))
+      return Color(_data['colors'][color]);
+    else if (color == 'backToStartFABPressed')
+      return Color.lerp(Color(_data['colors']['white']), Color(_data['colors']['foreground']), 0.2);
+    else {
+      if (color == 'background') return Color(_data['colors']['primary']);
+      else if (color == 'loaderStroke') return Color(_data['colors']['white']);
+      else if (color == 'loaderStrokeShadow') return Color(_data['colors']['accent']);
+      else if (color == 'loaderBackground') return Color(_data['colors']['primary']);
+      else if (color == 'headerNavigation') return Color(_data['colors']['white']);
+      else if (color == 'circularProgressText') return Color(_data['colors']['white']);
+      else if (color == 'circularProgressForeground') return Color(_data['colors']['accent']);
+      else if (color == 'circularProgressBackground') return Color(_data['colors']['white']);
+      else if (color == 'linearProgressForeground') return Color(_data['colors']['accent']);
+      else if (color == 'linearProgressBackground') return Color(_data['colors']['empty']);
+      else if (color == 'writingHeaderProgressBG') return Color(_data['colors']['white']);
+      else if (color == 'customSwitch') return Color(_data['colors']['white']);
+      else if (color == 'customSwitchToggle') return Color(_data['colors']['accent']);
+      else if (color == 'cardDefault') return Color(_data['colors']['white']);
+      else if (color == 'buttonDefault') return Color(_data['colors']['white']);
+      else if (color == 'cardQuiz1') return Color(_data['colors']['white']);
+      else if (color == 'cardQuiz2') return Color(_data['colors']['quizCardMiddle']);
+      else if (color == 'cardQuiz3') return Color(_data['colors']['quizCardLast']);
+      else if (color == 'cardChoices') return Color(_data['colors']['white']);
+      else if (color == 'cardChoicesText') return Color(_data['colors']['foreground']);
+      else if (color == 'cardChoicesRight') return Color(_data['colors']['correctAnswer']);
+      else if (color == 'cardChoicesRightText') return Color(_data['colors']['foreground']);
+      else if (color == 'cardChoicesWrong') return Color(_data['colors']['wrongAnswer']);
+      else if (color == 'cardChoicesWrongText') return Color(_data['colors']['white']);
+      else if (color == 'writingGuide') return Color(_data['colors']['accent']);
+      else if (color == 'writingDraw') return Color(_data['colors']['foreground']);
+      else if (color == 'writingShadow') return Color(_data['colors']['empty']);
+      else if (color == 'transcribeDivider') return Color(_data['colors']['empty']);
+      else if (color == 'transcribeCursor') return Color(_data['colors']['accent']);
+      else if (color == 'informationDivider') return Color(_data['colors']['accent']);
+      else if (color == 'informationDividerShadow') return Color(_data['colors']['buttonShadow']);
+      else if (color == 'backToStartFAB') return Color(_data['colors']['white']);
+      else if (color == 'backToStartFABShadow') return Color(_data['colors']['buttonShadow']);
+      else if (color == 'backToStartFABIcon') return Color(_data['colors']['accent']);
+      else if (color == 'keyboardStroke') return Color(_data['colors']['white']);
+      else if (color == 'keyboardStrokeShadow') return Color(_data['colors']['accent']);
+      else if (color == 'keyboardPress') return Color(_data['colors']['white']);
+      else if (color == 'keyboardMainPress') return Color(_data['colors']['white']);
+      else if (color == 'keyboardKeyHint') return Color(_data['colors']['accent']);
+      else if (color == 'links') return Color(_data['colors']['accent']);
+      else if (color == 'paragraphText') return Color(_data['colors']['white']);
+      else return Color(_data['colors']['accent']);  // fallback color
+    }
+  }
+  
+  TextStyle getStyle(String style) {
+    // Kulitan Fonts
+    if (style == 'kulitanHome') return TextStyle(
+      fontFamily: 'Kulitan Semi Bold',
+      color: getColor('foreground'),
+    );
+    else if (style == 'kulitanSwitch') return TextStyle(
+      fontFamily: 'Kulitan Semi Bold',
+      fontSize: 20.0,
+      color: getColor('customSwitch'),
+    );
+    else if (style == 'kulitanQuiz') return TextStyle(
+      fontFamily: 'Kulitan Semi Bold',
+      fontSize: 150.0,
+      color: getColor('foreground'),
+    );
+    else if (style == 'kulitanInfo') return TextStyle(
+      fontFamily: 'Kulitan Semi Bold',
+      fontSize: 45.0,
+      color: getColor('white'),
+    );
+    else if (style == 'kulitanInfoText') return TextStyle(
+      fontFamily: 'Kulitan Semi Bold',
+      fontSize: 15.0,
+      color: getColor('white'),
+    );
+    else if (style == 'kulitanTranscribe') return TextStyle(
+      fontFamily: 'Kulitan Semi Bold',
+      color: getColor('foreground'),
+    );
+    else if (style == 'kulitanKeyboard') return TextStyle(
+      fontFamily: 'Kulitan Semi Bold',
+      color: getColor('keyboardStroke'),
+    );
+
+    // Barlow Fonts
+    else if (style == 'textHeaderButton') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 25.0,
+      fontWeight: FontWeight.bold,
+      color: getColor('white'),
+    );
+    else if (style == 'textHomeTitle') return TextStyle(
+      height: 0.8,
+      fontFamily: 'Barlow',
+      fontSize: 75.0,
+      fontWeight: FontWeight.bold,
+      color: getColor('white'),
+      shadows: <Shadow>[
+        Shadow(color: getColor('accent'), offset: Offset(5.0, 7.0))
+      ]
+    );
+    else if (style == 'textHomeSubtitle') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 50.0,
+      fontWeight: FontWeight.bold,
+      color: getColor('white'),
+      shadows: <Shadow>[
+        Shadow(color: getColor('accent'), offset: Offset(4.0, 4.0))
+      ]
+    );
+    else if (style == 'textHomeButton') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 40.0,
+      fontWeight: FontWeight.w600,
+      color: getColor('foreground'),
+      height: 0.7,
+    );
+    else if (style == 'textHomeButtonSub') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 10.0,
+      fontWeight: FontWeight.w600,
+      color: getColor('foreground'),
+    );
+    else if (style == 'textPageTitle') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 50.0,
+      fontWeight: FontWeight.bold,
+      fontStyle: FontStyle.italic,
+      color: getColor('white'),
+      shadows: <Shadow>[
+        Shadow(color: getColor('accent'), offset: Offset(4.0, 4.0))
+      ]
+    );
+    else if (style == 'textSwitch') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 20.0,
+      fontWeight: FontWeight.w600,
+      color: getColor('customSwitchToggle'),
+    );
+    else if (style == 'textQuizHeader') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 25.0,
+      fontWeight: FontWeight.bold,
+      color: getColor('white'),
+    );
+    else if (style == 'textQuizAnswer') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 110.0,
+      color: getColor('foreground'),
+      height: 0.8,
+    );
+    else if (style == 'textQuizChoice') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 30.0,
+      fontWeight: FontWeight.w600,
+      color: getColor('foreground'),
+    );
+    else if (style == 'textWritingProgressBar') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 14.0,
+      color: getColor('white'),
+    );
+    else if (style == 'textWriting') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 100.0,
+      fontWeight: FontWeight.bold,
+      color: getColor('white'),
+      height: 0.7,
+      shadows: <Shadow>[
+        Shadow(color: getColor('accent'), offset: Offset(7.0, 7.0))
+      ]
+    );
+    else if (style == 'textWritingGuide') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 100.0,
+      fontWeight: FontWeight.bold,
+      color: getColor('accent'),
+      height: 0.9,
+    );
+    else if (style == 'textInfoButton') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 30.0,
+      fontWeight: FontWeight.w600,
+      color: getColor('foreground'),
+    );
+    else if (style == 'textGuideButton') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 20.0,
+      fontWeight: FontWeight.w600,
+      color: getColor('foreground'),
+    );
+    else if (style == 'textAboutButton') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 25.0,
+      fontWeight: FontWeight.bold,
+      color: getColor('white'),
+    );
+    else if (style == 'textInfoCaption') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 20.0,
+      fontWeight: FontWeight.bold,
+      color: getColor('foreground'),
+    );
+    else if (style == 'textInfoCredits') return TextStyle(
+      fontFamily: 'Barlow',
+      fontStyle: FontStyle.italic,
+      color: getColor('white'),
+    );
+    else if (style == 'textInfoCreditsLink') return TextStyle(
+      fontFamily: 'Barlow',
+      fontWeight: FontWeight.bold,
+      fontStyle: FontStyle.italic,
+      decoration: TextDecoration.underline,
+      color: getColor('links'),
+    );
+    else if (style == 'textInfoImageCaption') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 13.0,
+      color: getColor('white'),
+    );
+    else if (style == 'textInfoImageCaptionItalic') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 13.0,
+      fontStyle: FontStyle.italic,
+      color: getColor('white'),
+    );
+    else if (style == 'textInfoImageCaptionKulitan') return TextStyle(
+      fontFamily: 'Kulitan Semi Bold',
+      fontSize: 13.0,
+      color: getColor('white'),
+    );
+    else if (style == 'textInfoImageSubCaption') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 9.0,
+      color: getColor('white'),
+    );
+    else if (style == 'textInfoText') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 15.0,
+      color: getColor('white'),
+    );
+    else if (style == 'textInfoTextItalic') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 15.0,
+      fontStyle: FontStyle.italic,
+      color: getColor('white'),
+    );
+    else if (style == 'textInfoLink') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 15.0,
+      fontStyle: FontStyle.italic,
+      decoration: TextDecoration.underline,
+      color: getColor('links'),
+    );
+    else if (style == 'textTranscribe') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 40.0,
+      fontWeight: FontWeight.bold,
+      color: getColor('foreground'),
+    );
+    else if (style == 'textAboutSubtitle') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 40.0,
+      fontWeight: FontWeight.bold,
+      color: getColor('white'),
+      shadows: <Shadow>[
+        Shadow(color: getColor('accent'), offset: Offset(3.0, 3.0))
+      ]
+    );
+    else if (style == 'textAboutFooter') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 10.0,
+      color: getColor('white'),
+    );
+    else if (style == 'textTutorialOverlay') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 18.0,
+      color: getColor('white'),
+    );
+    else return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 15.0,
+      color: getColor('foreground'),
+    );
+  }
+  
   bool getTutorial(String page) => _data[page]['tutorial'];
   int getOverallProgress(String page) => _data[page]['progress']['overall_progress'];
   int getBatch(String page) => _data[page]['progress']['current_batch'];
@@ -65,10 +357,23 @@ class GameData {
   }
 
   Future<void> _getGameData() async {
+    _data['colors'] = {};
     _data['intro'] = {};
     _data['reading'] = {};
     _data['writing'] = {};
     _data['transcribe'] = {};
+    _data['colors']['primary'] = _prefs.getInt('primary');
+    _data['colors']['accent'] = _prefs.getInt('accent');
+    _data['colors']['foreground'] = _prefs.getInt('foreground');
+    _data['colors']['empty'] = _prefs.getInt('empty');
+    _data['colors']['correctAnswer'] = _prefs.getInt('correctAnswer');
+    _data['colors']['wrongAnswer'] = _prefs.getInt('wrongAnswer');
+    _data['colors']['quizCardMiddle'] = _prefs.getInt('quizCardMiddle');
+    _data['colors']['quizCardLast'] = _prefs.getInt('quizCardLast');
+    _data['colors']['white'] = _prefs.getInt('white');
+    _data['colors']['tutorialsOverlayBackground'] = _prefs.getInt('tutorialsOverlayBackground');
+    _data['colors']['cardShadow'] = _prefs.getInt('cardShadow');
+    _data['colors']['buttonShadow'] = _prefs.getInt('buttonShadow');
     _data['intro']['tutorial'] = _prefs.getBool('introTutorial');
     _data['reading']['tutorial'] = _prefs.getBool('readingTutorial');
     _data['writing']['tutorial'] = _prefs.getBool('writingTutorial');
@@ -85,6 +390,18 @@ class GameData {
   }
 
   Future<void> _initPrefs() async {
+    await _prefs.setInt('primary', defaultColors['primary']);
+    await _prefs.setInt('accent', defaultColors['accent']);
+    await _prefs.setInt('foreground', defaultColors['foreground']);
+    await _prefs.setInt('empty', defaultColors['empty']);
+    await _prefs.setInt('correctAnswer', defaultColors['correctAnswer']);
+    await _prefs.setInt('wrongAnswer', defaultColors['wrongAnswer']);
+    await _prefs.setInt('quizCardMiddle', defaultColors['quizCardMiddle']);
+    await _prefs.setInt('quizCardLast', defaultColors['quizCardLast']);
+    await _prefs.setInt('white', defaultColors['white']);
+    await _prefs.setInt('tutorialsOverlayBackground', defaultColors['tutorialsOverlayBackground']);
+    await _prefs.setInt('cardShadow', defaultColors['cardShadow']);
+    await _prefs.setInt('buttonShadow', defaultColors['buttonShadow']);
     await _prefs.setBool('introTutorial', true);
     await _prefs.setBool('readingTutorial', true);
     await _prefs.setBool('writingTutorial', true);

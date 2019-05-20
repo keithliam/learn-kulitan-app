@@ -38,7 +38,7 @@ class _TranscribePageState extends State<TranscribePage>
           width: 50.0 * transcribeRelativeFontSize,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
-            color: transcribeCursorColor,
+            color: _gameData.getColor('transcribeCursor'),
           ),
         ),
       ),
@@ -129,8 +129,8 @@ class _TranscribePageState extends State<TranscribePage>
                     _glyph == 'ka' ||
                     _glyph == 'ki' ||
                     _glyph == 'ku'
-                ? kulitanTranscribe.copyWith(height: 0.8 * _fontSizePercent)
-                : kulitanTranscribe,
+                ? _gameData.getStyle('kulitanTranscribe').copyWith(height: 0.8 * _fontSizePercent)
+                : _gameData.getStyle('kulitanTranscribe'),
           );
           double _width = 75.0 * transcribeRelativeFontSize * _fontSizePercent;
           if (_glyph == 'nu' || _glyph == 'lu')
@@ -594,7 +594,7 @@ class _TranscribePageState extends State<TranscribePage>
         left: IconButtonNew(
           icon: Icons.arrow_back_ios,
           iconSize: headerIconSize,
-          color: headerNavigationColor,
+          color: _gameData.getColor('headerNavigation'),
           onPressed: () => Navigator.pop(context),
         ),
         middle: Padding(
@@ -602,14 +602,14 @@ class _TranscribePageState extends State<TranscribePage>
           child: Center(
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text('Pámanlíkas', style: textPageTitle),
+              child: Text('Pámanlíkas', style: _gameData.getStyle('textPageTitle')),
             ),
           ),
         ),
         // right: IconButtonNew(
         //   icon: Icons.settings,
         //   iconSize: headerIconSize,
-        //   color: headerNavigationColor,
+        //   color: _gameData.getColor('headerNavigation'),
         //   onPressed: null,
         // ),
         right: SizedBox(width: 56.0, height: 48.0),
@@ -625,9 +625,9 @@ class _TranscribePageState extends State<TranscribePage>
           maxLines: null,
           keyboardType: TextInputType.multiline,
           style: MediaQuery.of(context).size.height > 600
-              ? textTranscribe
-              : textTranscribe.copyWith(fontSize: 25.0),
-          cursorColor: transcribeCursorColor,
+              ? _gameData.getStyle('textTranscribe')
+              : _gameData.getStyle('textTranscribe').copyWith(fontSize: 25.0),
+          cursorColor: _gameData.getColor('transcribeCursor'),
           cursorRadius: Radius.circular(15.0),
           cursorWidth: transcribeCursorWidth,
           decoration: null,
@@ -660,7 +660,7 @@ class _TranscribePageState extends State<TranscribePage>
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: DividerNew(
         height: 8.0,
-        color: transcribeDividerColor,
+        color: _gameData.getColor('transcribeDivider'),
       ),
     );
 
@@ -728,7 +728,7 @@ class _TranscribePageState extends State<TranscribePage>
     }
 
     return Material(
-      color: backgroundColor,
+      color: _gameData.getColor('background'),
       child: SafeArea(
         child: Stack(children: _pageStack)
       ),

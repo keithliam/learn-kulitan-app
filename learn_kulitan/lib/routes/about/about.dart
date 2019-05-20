@@ -14,6 +14,7 @@ import '../../components/misc/StickyHeading.dart';
 import '../../components/misc/ImageWithCaption.dart';
 import '../../components/misc/Paragraphs.dart';
 import '../../components/misc/DividerNew.dart';
+import '../../db/GameData.dart';
 import './components.dart';
 
 class AboutPage extends StatefulWidget {
@@ -23,6 +24,7 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
+  static final GameData _gameData = GameData();
   final _scrollController = ScrollController();
   FlutterLogoStyle _flutterLogoStyle = FlutterLogoStyle.markOnly;
   double _flutterLogoSize = 50.0;
@@ -138,7 +140,7 @@ class _AboutPageState extends State<AboutPage> {
   TextSpan _romanText(String text, [GestureRecognizer recognizer]) {
     return TextSpan(
       text: text,
-      style: recognizer == null ? textInfoText : textInfoLink,
+      style: recognizer == null ? _gameData.getStyle('textInfoText') : _gameData.getStyle('textInfoLink'),
       recognizer: recognizer,
     );
   }
@@ -146,7 +148,7 @@ class _AboutPageState extends State<AboutPage> {
   TextSpan _boldRomanText(String text) {
     return TextSpan(
       text: text,
-      style: textInfoTextItalic.copyWith(fontWeight: FontWeight.w600),
+      style: _gameData.getStyle('textInfoTextItalic').copyWith(fontWeight: FontWeight.w600),
     );
   }
 
@@ -161,13 +163,13 @@ class _AboutPageState extends State<AboutPage> {
         left: IconButtonNew(
           icon: Icons.arrow_back_ios,
           iconSize: headerIconSize,
-          color: headerNavigationColor,
+          color: _gameData.getColor('headerNavigation'),
           onPressed: () => Navigator.pop(context),
         ),
         // right: IconButtonNew(
         //   icon: Icons.settings,
         //   iconSize: headerIconSize,
-        //   color: headerNavigationColor,
+        //   color: _gameData.getColor('headerNavigation'),
         //   onPressed: null,
         // ),
         right: SizedBox(width: 56.0, height: 48.0),
@@ -187,7 +189,7 @@ class _AboutPageState extends State<AboutPage> {
           padding: const EdgeInsets.only(top: aboutSubtitleTopPadding),
           child: FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text('The Developer', style: textAboutSubtitle),
+            child: Text('The Developer', style: _gameData.getStyle('textAboutSubtitle')),
           ),
         ),
         ImageWithCaption(
@@ -239,7 +241,7 @@ class _AboutPageState extends State<AboutPage> {
           padding: const EdgeInsets.only(top: aboutSubtitleTopPadding),
           child: FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text('Acknowledgements', style: textAboutSubtitle),
+            child: Text('Acknowledgements', style: _gameData.getStyle('textAboutSubtitle')),
           ),
         ),
         ImageWithCaption(
@@ -281,7 +283,7 @@ class _AboutPageState extends State<AboutPage> {
           padding: const EdgeInsets.only(top: aboutSubtitleTopPadding),
           child: FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text('Resources', style: textAboutSubtitle),
+            child: Text('Resources', style: _gameData.getStyle('textAboutSubtitle')),
           ),
         ),
         Paragraphs(
@@ -329,10 +331,10 @@ class _AboutPageState extends State<AboutPage> {
           ),
           child: DividerNew(
             height: 3.0,
-            color: informationDividerColor,
+            color: _gameData.getColor('informationDivider'),
             boxShadow: BoxShadow(
               offset: Offset(2.0, 2.0),
-              color: informationDividerShadowColor,
+              color: _gameData.getColor('informationDividerShadow'),
             ),
           ),
         ),
@@ -358,9 +360,9 @@ class _AboutPageState extends State<AboutPage> {
             padding:
                 const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
             elevation: 10.0,
-            color: accentColor,
+            color: _gameData.getColor('accent'),
             child: Center(
-              child: Text('DONATE', style: textAboutButton),
+              child: Text('DONATE', style: _gameData.getStyle('textAboutButton')),
             ),
           ),
         ),
@@ -373,10 +375,10 @@ class _AboutPageState extends State<AboutPage> {
           ),
           child: DividerNew(
             height: 3.0,
-            color: informationDividerColor,
+            color: _gameData.getColor('informationDivider'),
             boxShadow: BoxShadow(
               offset: Offset(2.0, 2.0),
-              color: informationDividerShadowColor,
+              color: _gameData.getColor('informationDividerShadow'),
             ),
           ),
         ),
@@ -384,7 +386,7 @@ class _AboutPageState extends State<AboutPage> {
           padding: const EdgeInsets.only(top: paragraphTopPadding),
           child: RichText(
             text: TextSpan(
-              style: textAboutFooter,
+              style: _gameData.getStyle('textAboutFooter'),
               children: <TextSpan>[
                 _romanText('This application was developed using '),
                 _romanText(
@@ -402,7 +404,7 @@ class _AboutPageState extends State<AboutPage> {
           child: FlutterLogo(
             size: _flutterLogoSize,
             style: _flutterLogoStyle,
-            textColor: paragraphTextColor,
+            textColor: _gameData.getColor('paragraphText'),
           ),
         ),
         Paragraphs(
@@ -422,7 +424,7 @@ class _AboutPageState extends State<AboutPage> {
               vertical: 10.0,
             ),
             elevation: 10.0,
-            color: whiteColor,
+            color: _gameData.getColor('white'),
             child: Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -432,10 +434,10 @@ class _AboutPageState extends State<AboutPage> {
                     alignment: Alignment.center,
                     child: Text(
                       'SHARE',
-                      style: textAboutButton.copyWith(color: foregroundColor),
+                      style: _gameData.getStyle('textAboutButton').copyWith(color: _gameData.getColor('foreground')),
                     ),
                   ),
-                  Icon(Icons.share, color: accentColor),
+                  Icon(Icons.share, color: _gameData.getColor('accent')),
                 ],
               ),
             ),
@@ -486,7 +488,7 @@ class _AboutPageState extends State<AboutPage> {
     }
 
     return Material(
-      color: backgroundColor,
+      color: _gameData.getColor('background'),
       child: SafeArea(
         child: Stack(
           children: _pageStack,

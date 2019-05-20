@@ -109,68 +109,71 @@ class _IntroductionPageState extends State<IntroductionPage> {
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         body: Container(
-          color: backgroundColor,
+          color: Color(defaultColors['primary']),
           child: SafeArea(
             child: Loader(
+              isStartup: true,
               isVisible: _isLoading,
               onFinish: this.mounted ? _onLoaderFinish : null,
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: MediaQuery.of(context).size.height > 600 ? 50.0: 16.0),
-                      child: Center(
-                        child: AnimatedOpacity(
-                          opacity: _opacity,
-                          curve: Curves.easeInOut,
-                          duration: const Duration(milliseconds: loaderOpacityDuration),
-                          child: Container(
-                            child: Transform.scale(
-                              scale: 487.0 / (MediaQuery.of(context).size.width - 64.0),
-                              child: FlareActor(
-                                'assets/flares/introduction.flr',
-                                fit: BoxFit.fitWidth,
-                                animation: _animation,
-                                // controller: _controller,
+              child: _isLoading
+                ? Container()
+                : Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height > 600 ? 50.0: 16.0),
+                        child: Center(
+                          child: AnimatedOpacity(
+                            opacity: _opacity,
+                            curve: Curves.easeInOut,
+                            duration: const Duration(milliseconds: loaderOpacityDuration),
+                            child: Container(
+                              child: Transform.scale(
+                                scale: 487.0 / (MediaQuery.of(context).size.width - 64.0),
+                                child: FlareActor(
+                                  'assets/flares/introduction.flr',
+                                  fit: BoxFit.fitWidth,
+                                  animation: _animation,
+                                  // controller: _controller,
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: MediaQuery.of(context).size.height > 600
-                      ? const EdgeInsets.symmetric(horizontal: 32.0, vertical: 20.0)
-                      : const EdgeInsets.symmetric(horizontal: 32.0 / 2.0, vertical : 20.0 / 2.0),
-                    height: MediaQuery.of(context).size.height > 600 ? 125.0 : 80.0,
-                    child: AnimatedOpacity(
-                      opacity: _messageOpacity,
-                      curve: introTextOpacityCurve,
-                      duration: const Duration(milliseconds: introTextOpacityDuration),
-                      child: Center(
-                        child: AutoSizeText(_message, textAlign: TextAlign.center, style: textTutorialOverlay),
+                    Container(
+                      padding: MediaQuery.of(context).size.height > 600
+                        ? const EdgeInsets.symmetric(horizontal: 32.0, vertical: 20.0)
+                        : const EdgeInsets.symmetric(horizontal: 32.0 / 2.0, vertical : 20.0 / 2.0),
+                      height: MediaQuery.of(context).size.height > 600 ? 125.0 : 80.0,
+                      child: AnimatedOpacity(
+                        opacity: _messageOpacity,
+                        curve: introTextOpacityCurve,
+                        duration: const Duration(milliseconds: introTextOpacityDuration),
+                        child: Center(
+                          child: AutoSizeText(_message, textAlign: TextAlign.center, style: _gameData.getStyle('textTutorialOverlay')),
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: MediaQuery.of(context).size.height > 600
-                      ? const EdgeInsets.fromLTRB(32.0, 0.0, 32.0, 32.0)
-                      : const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-                    child: CustomButton(
-                      disable: _disabled,
-                      onPressed: _nextIntro,
-                      height: MediaQuery.of(context).size.height > 600 ? 60.0 : 50.0,
-                      borderRadius: 30.0,
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                      elevation: 10.0,
-                      child: Center(
-                        child: Text('Next', style: textInfoButton),
+                    Padding(
+                      padding: MediaQuery.of(context).size.height > 600
+                        ? const EdgeInsets.fromLTRB(32.0, 0.0, 32.0, 32.0)
+                        : const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                      child: CustomButton(
+                        disable: _disabled,
+                        onPressed: _nextIntro,
+                        height: MediaQuery.of(context).size.height > 600 ? 60.0 : 50.0,
+                        borderRadius: 30.0,
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        elevation: 10.0,
+                        child: Center(
+                          child: Text('Next', style: _gameData.getStyle('textInfoButton')),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
             ),
           ),
         ),

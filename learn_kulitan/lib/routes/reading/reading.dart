@@ -8,6 +8,7 @@ import '../../components/buttons/CustomSwitch.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/CircularProgressBar.dart';
 import '../../components/misc/GameLogicManager.dart';
+import '../../db/GameData.dart';
 import './components.dart';
 
 class ReadingPage extends StatefulWidget {
@@ -17,6 +18,7 @@ class ReadingPage extends StatefulWidget {
 }
 
 class ReadingPageState extends State<ReadingPage> {
+  static final GameData _gameData = GameData();
   final GameLogicManager _gameLogicManager = GameLogicManager();
   final _tutorialKey1 = GlobalKey();
   final _tutorialKey2 = GlobalKey();
@@ -208,7 +210,7 @@ class ReadingPageState extends State<ReadingPage> {
           left: IconButtonNew(
             icon: Icons.arrow_back_ios,
             iconSize: headerIconSize,
-            color: headerNavigationColor,
+            color: _gameData.getColor('headerNavigation'),
             onPressed: () => Navigator.pop(context),
             width: 80.0,
             alignment: Alignment.centerLeft,
@@ -220,7 +222,7 @@ class ReadingPageState extends State<ReadingPage> {
               fit: BoxFit.scaleDown,
               child: Text(
                 _isTutorial ? 'Tutorial' : 'Glyphs Learned',
-                style: textQuizHeader,
+                style: _gameData.getStyle('textQuizHeader'),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -228,7 +230,7 @@ class ReadingPageState extends State<ReadingPage> {
           right: _isTutorial ? TextButton(
             text: 'Skip',
             height: headerIconSize,
-            color: headerNavigationColor,
+            color: _gameData.getColor('headerNavigation'),
             onPressed: _gameLogicManager.finishTutorial,
             width: 80.0,
             alignment: Alignment.centerRight,
@@ -240,7 +242,7 @@ class ReadingPageState extends State<ReadingPage> {
           // right: _isTutorial ? TextButton(
           //   text: 'Skip',
           //   height: headerIconSize,
-          //   color: headerNavigationColor,
+          //   color: _gameData.getColor('headerNavigation'),
           //   onPressed: _gameLogicManager.finishTutorial,
           //   width: 80.0,
           //   alignment: Alignment.centerRight,
@@ -248,7 +250,7 @@ class ReadingPageState extends State<ReadingPage> {
           // IconButtonNew(
           //   icon: Icons.settings,
           //   iconSize: headerIconSize,
-          //   color: headerNavigationColor,
+          //   color: _gameData.getColor('headerNavigation'),
           //   onPressed: null,
           //   width: 80.0,
           //   alignment: Alignment.centerRight,
@@ -342,7 +344,7 @@ class ReadingPageState extends State<ReadingPage> {
       ),
     );
     final Widget _quizCards = Container(
-      height: _heightToCardStackBottom, // TODO: Problem
+      height: _heightToCardStackBottom,
       child: Stack(
         key: _quizCardsKey,
         children: <Widget>[
@@ -475,7 +477,7 @@ class ReadingPageState extends State<ReadingPage> {
     
 
     return Material(
-      color: backgroundColor,
+      color: _gameData.getColor('background'),
       child: SafeArea(
         child: Stack(
           key: _pageKey,

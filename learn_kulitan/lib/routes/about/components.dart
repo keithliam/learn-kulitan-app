@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart'
-    show TapGestureRecognizer, GestureRecognizer;
+    show TapGestureRecognizer;
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class SocialMediaLink extends StatelessWidget {
   const SocialMediaLink({
@@ -20,6 +21,8 @@ class SocialMediaLink extends StatelessWidget {
   final double topPadding;
   final String link;
   final String emailAddress;
+
+  static final GameData _gameData = GameData();
 
   void _openURL(String url) async {
     String _message;
@@ -78,8 +81,8 @@ class SocialMediaLink extends StatelessWidget {
               text: TextSpan(
                 text: name,
                 style: link == null && emailAddress == null
-                    ? textInfoText
-                    : textInfoText.copyWith(
+                    ? _gameData.getStyle('textInfoText')
+                    : _gameData.getStyle('textInfoText').copyWith(
                         decoration: TextDecoration.underline),
                 recognizer: link == null && emailAddress == null
                     ? null

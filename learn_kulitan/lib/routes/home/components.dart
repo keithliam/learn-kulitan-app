@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../components/buttons/CustomButton.dart';
 import '../../components/misc/LinearProgressBar.dart';
-import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class HomeButton extends StatelessWidget {
   const HomeButton({
@@ -30,6 +30,8 @@ class HomeButton extends StatelessWidget {
   final VoidCallback onPressedImmediate;
   final CustomButtonGroup buttonGroup;
 
+  static final GameData _gameData = GameData();
+
   void _onPressed(BuildContext context) {
     if (reload != null) {
       Navigator.pushNamed(context, route).then((_) => reload());
@@ -50,11 +52,11 @@ class HomeButton extends StatelessWidget {
             children: <Widget>[
               FittedBox(
                 fit: BoxFit.contain,
-                child: Text(title, style: textHomeButton),
+                child: Text(title, style: _gameData.getStyle('textHomeButton')),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 2.0),
-                child: Text(subtitle, style: textHomeButtonSub),
+                child: Text(subtitle, style: _gameData.getStyle('textHomeButtonSub')),
               ),
             ],
           ),

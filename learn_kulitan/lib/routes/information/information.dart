@@ -7,6 +7,7 @@ import '../../components/buttons/BackToStartButton.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/DividerNew.dart';
 import '../../components/misc/StickyHeading.dart';
+import '../../db/GameData.dart';
 import './components.dart';
 
 class InformationPage extends StatefulWidget {
@@ -16,6 +17,7 @@ class InformationPage extends StatefulWidget {
 }
 
 class _InformationPageState extends State<InformationPage> {
+  static final GameData _gameData = GameData();
   final ScrollController _scrollController = ScrollController();
   final CustomButtonGroup _buttonGroup = CustomButtonGroup();
   final AutoSizeGroup _textGroup = AutoSizeGroup();
@@ -63,13 +65,13 @@ class _InformationPageState extends State<InformationPage> {
         left: IconButtonNew(
           icon: Icons.arrow_back_ios,
           iconSize: headerIconSize,
-          color: headerNavigationColor,
+          color: _gameData.getColor('headerNavigation'),
           onPressed: () => Navigator.pop(context),
         ),
         // right: IconButtonNew(
         //   icon: Icons.settings,
         //   iconSize: headerIconSize,
-        //   color: headerNavigationColor,
+        //   color: _gameData.getColor('headerNavigation'),
         //   onPressed: null,
         // ),
         right: SizedBox(width: 56.0, height: 48.0),
@@ -101,12 +103,12 @@ class _InformationPageState extends State<InformationPage> {
                   child: AutoSizeText(
                     'History of Kulitan',
                     group: _textGroup,
-                    style: textInfoButton,
+                    style: _gameData.getStyle('textInfoButton'),
                   ),
                 ),
               ),
               SizedBox(width: 10.0),
-              Text('>', style: textInfoButton.copyWith(color: accentColor)),
+              Text('>', style: _gameData.getStyle('textInfoButton').copyWith(color: _gameData.getColor('accent'))),
             ],
           ),
         ),
@@ -138,12 +140,12 @@ class _InformationPageState extends State<InformationPage> {
                   child: AutoSizeText(
                     'Writing Guide',
                     group: _textGroup,
-                    style: textInfoButton,
+                    style: _gameData.getStyle('textInfoButton'),
                   ),
                 ),
               ),
               SizedBox(width: 10.0),
-              Text('>', style: textInfoButton.copyWith(color: accentColor)),
+              Text('>', style: _gameData.getStyle('textInfoButton').copyWith(color: _gameData.getColor('accent'))),
             ],
           ),
         ),
@@ -350,10 +352,10 @@ class _InformationPageState extends State<InformationPage> {
       ),
       child: DividerNew(
         height: 3.0,
-        color: informationDividerColor,
+        color: _gameData.getColor('informationDivider'),
         boxShadow: BoxShadow(
           offset: Offset(2.0, 2.0),
-          color: informationDividerShadowColor,
+          color: _gameData.getColor('informationDividerShadow'),
         ),
       ),
     );
@@ -412,7 +414,7 @@ class _InformationPageState extends State<InformationPage> {
     }
 
     return Material(
-      color: backgroundColor,
+      color: _gameData.getColor('background'),
       child: SafeArea(
         child: Stack(
           children: _pageStack,

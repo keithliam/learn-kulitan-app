@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class CustomCard extends StatelessWidget {
+  static final GameData _gameData = GameData();
+
   const CustomCard({
     @required this.child,
-    this.color = cardDefaultColor,
+    this.color,
     this.hasShadow = false,
     this.padding,
     this.height,
@@ -28,12 +30,12 @@ class CustomCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(30.0),
         boxShadow: hasShadow? [
           BoxShadow(
-            color: cardShadowColor,
+            color: _gameData.getColor('cardShadow'),
             blurRadius: 30.0,
             offset: Offset(0.0, 20.0),
           ),
         ] : null,
-        color: color,
+        color: color ?? _gameData.getColor('cardDefault'),
       ),
       child: child,
     );

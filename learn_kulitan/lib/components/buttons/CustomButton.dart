@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class CustomButtonGroup {
   CustomButtonGroup({ this.onTapDown, this.onTapUp });
@@ -29,7 +30,7 @@ class CustomButton extends StatefulWidget {
     @required this.child,
     this.onPressedImmediate,
     this.height,
-    this.color = buttonDefaultColor,
+    this.color,
     this.borderRadius = 0.0,
     this.elevation = 0.0,
     this.padding = const EdgeInsets.all(0.0),
@@ -57,6 +58,7 @@ class CustomButton extends StatefulWidget {
 }
 
 class _CustomButtonState extends State<CustomButton> {
+  static final GameData _gameData = GameData();
   final GlobalKey _key = GlobalKey();
   double _height = 0.0;
   bool _isPressed = false;
@@ -142,7 +144,7 @@ class _CustomButtonState extends State<CustomButton> {
           padding: widget.padding,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(widget.borderRadius),
-            color: widget.color,
+            color: widget.color ?? _gameData.getColor('buttonDefault'),
           ),
           child: widget.child,
         ),
@@ -157,7 +159,7 @@ class _CustomButtonState extends State<CustomButton> {
         height: _height,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(widget.borderRadius),
-          color: buttonShadowColor,
+          color: _gameData.getColor('buttonShadow'),
         ),
       ),
     );

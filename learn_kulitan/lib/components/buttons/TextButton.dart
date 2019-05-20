@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class TextButton extends StatefulWidget {
   const TextButton({
@@ -23,6 +23,8 @@ class TextButton extends StatefulWidget {
 }
 
 class _TextButtonState extends State<TextButton> {
+  static final GameData _gameData = GameData();
+
   double _opacity = 1.0;
 
   void _pressDown(details) => setState(() => _opacity = 0.6);
@@ -49,7 +51,7 @@ class _TextButtonState extends State<TextButton> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: FittedBox(
               fit: BoxFit.fitHeight,
-              child: Text(widget.text, style: textHeaderButton),
+              child: Text(widget.text, style: _gameData.getStyle('textHeaderButton')),
             ),
           ),
         ),

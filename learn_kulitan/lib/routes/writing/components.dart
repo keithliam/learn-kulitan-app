@@ -5,6 +5,7 @@ import 'dart:math' show pow, sqrt;
 import '../../components/misc/CustomCard.dart';
 import '../../components/misc/LinearProgressBar.dart';
 import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class _ShadowPainter extends CustomPainter {
   const _ShadowPainter({
@@ -12,6 +13,8 @@ class _ShadowPainter extends CustomPainter {
   });
 
   final List<Path> paths;
+
+  static final GameData _gameData = GameData();
 
   @override
   bool shouldRepaint(_ShadowPainter oldDelegate) {
@@ -23,7 +26,7 @@ class _ShadowPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if(this.paths.length > 0) {
       Paint _shadowPaint = Paint()
-        ..color = writingShadowColor
+        ..color = _gameData.getColor('writingShadow')
         ..strokeCap = StrokeCap.round
         ..style = PaintingStyle.stroke
         ..strokeWidth = writingDrawPointIdleWidth;
@@ -40,6 +43,8 @@ class _CurrPathPainter extends CustomPainter {
 
   final List<Path> paths;
 
+  static final GameData _gameData = GameData();
+
   @override
   bool shouldRepaint(_CurrPathPainter oldDelegate) {
     if(oldDelegate.paths != this.paths) return true;
@@ -50,7 +55,7 @@ class _CurrPathPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if(this.paths.length > 0) {
       Paint _pathPaint = Paint()
-        ..color = writingDrawColor
+        ..color = _gameData.getColor('writingDraw')
         ..strokeCap = StrokeCap.round
         ..style = PaintingStyle.stroke
         ..strokeWidth = writingDrawPointIdleWidth;
@@ -69,6 +74,8 @@ class _CurrPointPainter extends CustomPainter {
   final Offset point;
   final double pointSize;
 
+  static final GameData _gameData = GameData();
+
   @override
   bool shouldRepaint(_CurrPointPainter oldDelegate) {
     if(oldDelegate.point != this.point || oldDelegate.pointSize != this.pointSize) return true;
@@ -79,7 +86,7 @@ class _CurrPointPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if(this.point != null) {
       Paint _strokeStartPaint = Paint()
-        ..color = writingGuideColor
+        ..color = _gameData.getColor('writingGuide')
         ..strokeCap = StrokeCap.round
         ..style = PaintingStyle.fill;
       canvas.drawCircle(this.point, this.pointSize, _strokeStartPaint);
@@ -94,6 +101,8 @@ class _KulitanPainter extends CustomPainter {
 
   final Path path;
 
+  static final GameData _gameData = GameData();
+
   @override
   bool shouldRepaint(_KulitanPainter oldDelegate) {
     if(oldDelegate.path != this.path) return true;
@@ -104,7 +113,7 @@ class _KulitanPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if(this.path != null) {
       Paint _strokePaint = Paint()
-        ..color = writingDrawColor
+        ..color = _gameData.getColor('writingDraw')
         ..strokeCap = StrokeCap.round
         ..style = PaintingStyle.stroke
         ..strokeWidth = writingDrawPointIdleWidth;
@@ -122,6 +131,8 @@ class _GuideLinePainter extends CustomPainter {
   final List<Offset> path;
   final dynamic getCubicBezier;
 
+  static final GameData _gameData = GameData();
+
   @override
   bool shouldRepaint(_GuideLinePainter oldDelegate) {
     if(oldDelegate.path != this.path) return true;
@@ -132,7 +143,7 @@ class _GuideLinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if(this.path.length > 0) {
       Paint _strokePaint = Paint()
-        ..color = writingGuideColor
+        ..color = _gameData.getColor('writingGuide')
         ..strokeCap = StrokeCap.round
         ..strokeJoin = StrokeJoin.round
         ..style = PaintingStyle.stroke
@@ -220,13 +231,15 @@ class _GuideLabelPainter extends CustomPainter {
 
   final Offset offset;
 
+  static final GameData _gameData = GameData();
+
   @override
-  bool shouldRepaint(_GuideLabelPainter oldDelegate) => false; // TODO: check
+  bool shouldRepaint(_GuideLabelPainter oldDelegate) => false;
   
   @override
   void paint(Canvas canvas, Size size) {
     Paint _strokePaint = Paint()
-      ..color = writingGuideColor
+      ..color = _gameData.getColor('writingGuide')
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..strokeWidth = writingGuideCircleStrokeWidth * size.width;
@@ -254,6 +267,8 @@ class _AnimatedWritingCard extends StatefulWidget {
 double getPointsDist(Offset p1, Offset p2) => sqrt(pow(p2.dx - p1.dx, 2) + pow(p2.dy - p1.dy, 2));  
 
 class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleTickerProviderStateMixin {
+  static final GameData _gameData = GameData();
+
   Offset _currPoint;
   Path _drawPath;
   List<Path> _prevDrawPaths = [];
@@ -643,7 +658,7 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
                             child: Center(
                               child: AutoSizeText(
                                 '${_currPathNo + 1}',
-                                style: textWritingGuide,
+                                style: _gameData.getStyle('textWritingGuide'),
                               ),
                             ),
                           ),
@@ -753,6 +768,8 @@ class _AnimatedText extends StatefulWidget {
 }
 
 class _AnimatedTextState extends State<_AnimatedText> {
+  static final GameData _gameData = GameData();
+
   double _opacity = 0.0;
 
   void _incOpacity() async {
@@ -776,7 +793,7 @@ class _AnimatedTextState extends State<_AnimatedText> {
         padding: const EdgeInsets.all(24.0),
         child: Text(
           widget.text.isNotEmpty? widget.text : ' ',
-          style: textWriting,
+          style: _gameData.getStyle('textWriting'),
         ),
       ),
     );
@@ -793,6 +810,8 @@ class Tutorial extends StatefulWidget {
 }
 
 class _TutorialState extends State<Tutorial> with SingleTickerProviderStateMixin {
+  static final GameData _gameData = GameData();
+
   AnimationController _controller;
   OverlayEntry _overlay;
 
@@ -823,7 +842,7 @@ class _TutorialState extends State<Tutorial> with SingleTickerProviderStateMixin
   Widget _flare({bottom, left, height, right}) {
     final Widget _flare = FlareActor(
       'assets/flares/shaking_pointer.flr',
-      color: accentColor,
+      color: _gameData.getColor('accent'),
       animation: 'shake',
     );
 
@@ -852,13 +871,13 @@ class _TutorialState extends State<Tutorial> with SingleTickerProviderStateMixin
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
-            color: tutorialsBackgroundColor,
+            color: _gameData.getColor('tutorialsOverlayBackground'),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
           child: IgnorePointer(
             child: Material(
               color: Colors.transparent,
-              child: Text('Trace the glyph by following the guide lines and stroke orders.', style: textTutorialOverlay),
+              child: Text('Trace the glyph by following the guide lines and stroke orders.', style: _gameData.getStyle('textTutorialOverlay')),
             ),
           ),
         ),

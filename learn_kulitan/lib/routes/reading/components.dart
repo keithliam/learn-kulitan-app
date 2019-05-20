@@ -7,6 +7,7 @@ import '../../components/misc/LinearProgressBar.dart';
 import '../../components/misc/CustomCard.dart';
 import '../../components/misc/Paragraphs.dart';
 import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class ChoiceButton extends StatefulWidget {
   const ChoiceButton({
@@ -37,6 +38,8 @@ class ChoiceButton extends StatefulWidget {
 }
 
 class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMixin {
+  static final GameData _gameData = GameData();
+
   StreamSubscription _resetStreamSubscription;
   StreamSubscription _showAnswerStreamSubscription;
 
@@ -55,10 +58,10 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
   double _opacity = 1.0;
 
   _initColors() {
-    final Color _buttonColor = widget.type == ChoiceButton.right ? cardChoicesRightColor : cardChoicesWrongColor;
-    final Color _textColor = widget.type == ChoiceButton.right ? cardChoicesRightTextColor : cardChoicesWrongTextColor;
-    _tween = ColorTween(begin: cardChoicesColor, end: _buttonColor);
-    _tweenText = ColorTween(begin: cardChoicesTextColor, end: _textColor);
+    final Color _buttonColor = widget.type == ChoiceButton.right ? _gameData.getColor('cardChoicesRight') : _gameData.getColor('cardChoicesWrong');
+    final Color _textColor = widget.type == ChoiceButton.right ? _gameData.getColor('cardChoicesRightText') : _gameData.getColor('cardChoicesWrongText');
+    _tween = ColorTween(begin: _gameData.getColor('cardChoices'), end: _buttonColor);
+    _tweenText = ColorTween(begin: _gameData.getColor('cardChoicesText'), end: _textColor);
     _animation = _tween.animate(_controller)
       ..addListener(() => setState(() {}));
     _animationText = _tweenText.animate(_controllerText)
@@ -164,12 +167,12 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
               _isKulitan ? widget.text : kulitanGlyphs[widget.text],
               textAlign: TextAlign.center,
               style: _isKulitan
-                ? textQuizChoice.copyWith(
-                  color: widget.type == ChoiceButton.wrong? _animationText.value : textQuizChoice.color,
-                ) : textQuizChoice.copyWith(
+                ? _gameData.getStyle('textQuizChoice').copyWith(
+                  color: widget.type == ChoiceButton.wrong? _animationText.value : _gameData.getColor('foreground'),
+                ) : _gameData.getStyle('textQuizChoice').copyWith(
                   fontFamily: 'Kulitan Semi Bold',
                   fontSize: 100.0,
-                  color: widget.type == ChoiceButton.wrong? _animationText.value : textQuizChoice.color,
+                  color: widget.type == ChoiceButton.wrong? _animationText.value : _gameData.getColor('foreground'),
                 ),
             ),
           ),
@@ -202,6 +205,8 @@ class QuizCard extends StatelessWidget {
   final double originalWidth;
   final bool animateProgressBar;
 
+  static final GameData _gameData = GameData();
+
   @override
   Widget build(BuildContext context) {
     Widget _kulitan = Expanded(
@@ -211,8 +216,8 @@ class QuizCard extends StatelessWidget {
           child: Text(
             isKulitan ? kulitan : answer,
             style: isKulitan
-              ? kulitanQuiz
-              : kulitanQuiz.copyWith(
+              ? _gameData.getStyle('kulitanQuiz')
+              : _gameData.getStyle('kulitanQuiz').copyWith(
                 fontFamily: 'Barlow',
                 fontSize: 100.0,
                 fontWeight: FontWeight.w500,
@@ -245,8 +250,8 @@ class QuizCard extends StatelessWidget {
               isKulitan ? answer : kulitan,
               textAlign: TextAlign.center,
               style: isKulitan
-                ? textQuizAnswer
-                : textQuizAnswer.copyWith(
+                ? _gameData.getStyle('textQuizAnswer')
+                : _gameData.getStyle('textQuizAnswer').copyWith(
                   fontFamily: 'Kulitan Semi Bold',
                   fontSize: 130.0,
                 ),
@@ -312,6 +317,7 @@ class AnimatedQuizCard extends StatefulWidget {
 }
 
 class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProviderStateMixin {
+  static final GameData _gameData = GameData();
   StreamSubscription<bool> _flipStreamSubscription;
   Animation<double> _animation;
   AnimationController _controller;
@@ -364,8 +370,8 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
 
   void _animateColor() {
     _colorTween
-      ..begin = widget.stackNumber == 1? cardQuizColor2 : cardQuizColor3
-      ..end = widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 : cardQuizColor3;
+      ..begin = widget.stackNumber == 1? _gameData.getColor('cardQuiz2') : _gameData.getColor('cardQuiz3')
+      ..end = widget.stackNumber == 1? _gameData.getColor('cardQuiz1') : widget.stackNumber == 2? _gameData.getColor('cardQuiz2') : _gameData.getColor('cardQuiz3');
     _controller
       ..value = 0.0
       ..forward();
@@ -649,7 +655,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
       kulitan: widget.kulitan,
       answer: widget.answer,
       progress: widget.progress,
-      color: _isColorTweening? _colorAnimation.value : widget.stackNumber == 1? cardQuizColor1 : widget.stackNumber == 2? cardQuizColor2 : cardQuizColor3,
+      color: _isColorTweening? _colorAnimation.value : widget.stackNumber == 1? _gameData.getColor('cardQuiz1') : widget.stackNumber == 2? _gameData.getColor('cardQuiz2') : _gameData.getColor('cardQuiz3'),
       showAnswer: _showBackCard,
       width: _cardWidth,
       originalWidth: widget.stackWidth,
@@ -704,6 +710,8 @@ class TutorialOverlay extends StatefulWidget {
 }
 
 class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProviderStateMixin {
+  static final GameData _gameData = GameData();
+
   AnimationController _controller;
   OverlayEntry _overlay;
   bool _pageTwo = false;
@@ -744,7 +752,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
   Widget _flare({top, left, height, right, animation, flipH = false, flipV = false}) {
     final Widget _flare = FlareActor(
       'assets/flares/${widget.flare}',
-      color: accentColor,
+      color: _gameData.getColor('accent'),
       animation: animation ?? widget.animation,
     );
 
@@ -780,13 +788,13 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
-            color: tutorialsBackgroundColor,
+            color: _gameData.getColor('tutorialsOverlayBackground'),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
           child: IgnorePointer(
             child: Material(
               color: Colors.transparent,
-              child: Text(text, style: textTutorialOverlay),
+              child: Text(text, style: _gameData.getStyle('textTutorialOverlay')),
             ),
           ),
         ),
@@ -909,6 +917,8 @@ class TutorialSuccess extends StatefulWidget {
 }
 
 class _TutorialSuccessState extends State<TutorialSuccess> with SingleTickerProviderStateMixin {
+  static final GameData _gameData = GameData();
+
   AnimationController _controller;
   OverlayEntry _overlay;
 
@@ -948,7 +958,7 @@ class _TutorialSuccessState extends State<TutorialSuccess> with SingleTickerProv
                 curve: Curves.easeInOut,
               )),
               child: Container(
-                color: tutorialsOverlayBackgroundColor,
+                color: _gameData.getColor('background'),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -969,7 +979,7 @@ class _TutorialSuccessState extends State<TutorialSuccess> with SingleTickerProv
                         textAlign: TextAlign.center,
                         paragraphs: [TextSpan(
                           text: widget.text,
-                          style: textTutorialOverlay,
+                          style: _gameData.getStyle('textTutorialOverlay'),
                         )],
                       ),
                     )

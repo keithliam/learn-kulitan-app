@@ -4,6 +4,7 @@ import 'package:sticky_headers/sticky_headers.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class StickyHeading extends StatelessWidget {
   const StickyHeading({
@@ -15,6 +16,8 @@ class StickyHeading extends StatelessWidget {
   final String headingText;
   final Widget content;
   final bool showCredits;
+
+  static final GameData _gameData = GameData();
 
   void _openURL(String url) async {
     if (await canLaunch(url)) {
@@ -44,7 +47,7 @@ class StickyHeading extends StatelessWidget {
       ),
       child: FittedBox(
         fit: BoxFit.scaleDown,
-        child: Text(headingText, style: textPageTitle),
+        child: Text(headingText, style: _gameData.getStyle('textPageTitle')),
       ),
     );
 
@@ -52,7 +55,7 @@ class StickyHeading extends StatelessWidget {
       return StickyHeader(
         header: Container(
           padding: const EdgeInsets.only(bottom: headerVerticalPadding),
-          color: backgroundColor,
+          color: _gameData.getColor('background'),
           child: _header,
         ),
         content: content,
@@ -60,7 +63,7 @@ class StickyHeading extends StatelessWidget {
     } else {
       return StickyHeader(
         header: Container(
-          color: backgroundColor,
+          color: _gameData.getColor('background'),
           child: Column(
             children: <Widget>[
               _header,
@@ -78,12 +81,12 @@ class StickyHeading extends StatelessWidget {
                     fit: BoxFit.contain,
                     child: RichText(
                       text: TextSpan(
-                        style: textInfoCredits,
+                        style: _gameData.getStyle('textInfoCredits'),
                         children: <TextSpan>[
                           TextSpan(text: 'Written by Siuálâ ding Meángûbié. '),
                           TextSpan(
                             text: 'Learn more',
-                            style: textInfoCreditsLink,
+                            style: _gameData.getStyle('textInfoCreditsLink'),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () => _openURL('http://siuala.com'),
                           ),

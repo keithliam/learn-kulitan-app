@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class BackToStartButton extends StatefulWidget {
   const BackToStartButton({
@@ -15,6 +15,7 @@ class BackToStartButton extends StatefulWidget {
 }
 
 class _BackToStartButtonState extends State<BackToStartButton> {
+  static final GameData _gameData = GameData();
   bool _isPressed = false;
 
   @override
@@ -34,19 +35,19 @@ class _BackToStartButtonState extends State<BackToStartButton> {
             borderRadius: BorderRadius.circular(100.0),
             boxShadow: [
               BoxShadow(
-                color: backToStartFABShadowColor,
+                color: _gameData.getColor('backToStartFABShadow'),
                 offset: Offset(3.0, 3.0),
               ),
             ],
             color:
-                _isPressed ? backToStartFABPressedColor : backToStartFABColor,
+                _isPressed ? _gameData.getColor('backToStartFABPressed') : _gameData.getColor('backToStartFAB'),
           ),
           child: Center(
             child: Icon(
               widget.direction == Axis.vertical
                   ? Icons.arrow_upward
                   : Icons.arrow_back,
-              color: backToStartFABIconColor,
+              color: _gameData.getColor('backToStartFABIcon'),
             ),
           ),
         ),

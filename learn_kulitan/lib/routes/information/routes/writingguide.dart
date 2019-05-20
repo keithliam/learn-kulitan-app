@@ -9,6 +9,7 @@ import '../../../components/buttons/GuideButton.dart';
 import '../../../components/misc/StaticHeader.dart';
 import '../../../components/misc/ImageWithCaption.dart';
 import '../../../components/misc/Paragraphs.dart';
+import '../../../db/GameData.dart';
 
 class WritingGuidePage extends StatefulWidget {
   const WritingGuidePage();
@@ -17,6 +18,7 @@ class WritingGuidePage extends StatefulWidget {
 }
 
 class _WritingGuidePageState extends State<WritingGuidePage> {
+  static final GameData _gameData = GameData();
   final PageController _pageController = PageController();
 
   bool _showBackToStartFAB = false;
@@ -58,17 +60,17 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
   TextSpan _romanText(String text, [TapGestureRecognizer recognizer]) {
     return TextSpan(
       text: text,
-      style: recognizer == null ? textInfoText : textInfoLink,
+      style: recognizer == null ? _gameData.getStyle('textInfoText') : _gameData.getStyle('textInfoLink'),
       recognizer: recognizer,
     );
   }
 
   TextSpan _italicRomanText(String text) {
-    return TextSpan(text: text, style: textInfoTextItalic);
+    return TextSpan(text: text, style: _gameData.getStyle('textInfoTextItalic'));
   }
 
   TextSpan _kulitanText(String text) {
-    return TextSpan(text: text, style: kulitanInfoText);
+    return TextSpan(text: text, style: _gameData.getStyle('kulitanInfoText'));
   }
 
   @override
@@ -82,13 +84,13 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
         left: IconButtonNew(
           icon: Icons.arrow_back_ios,
           iconSize: headerIconSize,
-          color: headerNavigationColor,
+          color: _gameData.getColor('headerNavigation'),
           onPressed: () => Navigator.pop(context),
         ),
         // right: IconButtonNew(
         //   icon: Icons.settings,
         //   iconSize: headerIconSize,
-        //   color: headerNavigationColor,
+        //   color: _gameData.getColor('headerNavigation'),
         //   onPressed: null,
         // ),
         right: SizedBox(width: 56.0, height: 48.0),
@@ -108,12 +110,12 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           fit: BoxFit.contain,
           child: RichText(
             text: TextSpan(
-              style: textInfoCredits,
+              style: _gameData.getStyle('textInfoCredits'),
               children: <TextSpan>[
                 TextSpan(text: 'Written by Siuálâ Ding Meángûbié. '),
                 TextSpan(
                   text: 'Learn more',
-                  style: textInfoCreditsLink,
+                  style: _gameData.getStyle('textInfoCreditsLink'),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => _openURL('http://siuala.com'),
                 ),
@@ -131,7 +133,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
       child: Text(
         'Anting Aldó síslag banua,\nKéti súlip áslagan na.\nSisílang ya king Aláya,\nKing Pinatúbû lulbug ya.',
         textAlign: TextAlign.center,
-        style: textInfoTextItalic,
+        style: _gameData.getStyle('textInfoTextItalic'),
       ),
     );
 
@@ -141,7 +143,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
       child: Text(
         'Like the Sun that shines from heaven,\nIts radiance reaches down on earth.\nRising from Bunduk Aláya,\nIt descends on Mount Pinatubo.',
         textAlign: TextAlign.center,
-        style: textInfoTextItalic,
+        style: _gameData.getStyle('textInfoTextItalic'),
       ),
     );
 
@@ -245,11 +247,11 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             screenWidth: _width,
             hasPadding: false,
             caption: TextSpan(
-              style: textInfoImageCaption,
+              style: _gameData.getStyle('textInfoImageCaption'),
               children: <TextSpan>[
-                TextSpan(text: 'Figure 1. ', style: textInfoImageCaptionItalic),
+                TextSpan(text: 'Figure 1. ', style: _gameData.getStyle('textInfoImageCaptionItalic')),
                 TextSpan(text: 'The Kapampangan verse that explains why '),
-                TextSpan(text: 'Kulitan', style: textInfoImageCaptionItalic),
+                TextSpan(text: 'Kulitan', style: _gameData.getStyle('textInfoImageCaptionItalic')),
                 TextSpan(text: ' is written top to bottom, right to left.'),
               ],
             ),
@@ -277,7 +279,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
         ),
         ImageWithCaption(
           filename: 'pamagkulit.png',
-          caption: TextSpan(text: 'PÁMAGKULIT', style: textInfoImageCaption),
+          caption: TextSpan(text: 'PÁMAGKULIT', style: _gameData.getStyle('textInfoImageCaption')),
           subcaption: 'WRITING RULES',
           screenWidth: _width,
         ),
@@ -293,7 +295,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             hasPadding: false,
             orientation: Axis.horizontal,
             caption:
-                TextSpan(text: 'INDÛ AT ANAK', style: textInfoImageCaption),
+                TextSpan(text: 'INDÛ AT ANAK', style: _gameData.getStyle('textInfoImageCaption')),
             subcaption: 'Mother and Child',
             screenWidth: _width,
           ),
@@ -301,7 +303,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
         Paragraphs(
           paragraphs: [
             TextSpan(
-              style: textInfoText,
+              style: _gameData.getStyle('textInfoText'),
               children: <TextSpan>[
                 _romanText('Kulitan is basically made up of '),
                 _italicRomanText('Indûng Súlat'),
@@ -381,7 +383,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             orientation: Axis.horizontal,
             caption: TextSpan(
                 text: 'INDÛNG SÚLAT: KULIT A MÁGKAS',
-                style: textInfoImageCaption),
+                style: _gameData.getStyle('textInfoImageCaption')),
             subcaption: 'The Consonantal Characters',
             screenWidth: _width,
           ),
@@ -389,7 +391,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
         Paragraphs(
           paragraphs: [
             TextSpan(
-              style: textInfoText,
+              style: _gameData.getStyle('textInfoText'),
               children: <TextSpan>[
                 _romanText('There are eleven '),
                 _italicRomanText('Kulit a Mágkas'),
@@ -404,12 +406,12 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           orientation: Axis.horizontal,
           screenWidth: _width,
           caption: TextSpan(
-            style: textInfoImageCaption,
+            style: _gameData.getStyle('textInfoImageCaption'),
             children: <TextSpan>[
-              TextSpan(text: 'Table 1.', style: textInfoImageCaptionItalic),
+              TextSpan(text: 'Table 1.', style: _gameData.getStyle('textInfoImageCaptionItalic')),
               TextSpan(text: ' The '),
               TextSpan(
-                  text: 'kulit a mágkas', style: textInfoImageCaptionItalic),
+                  text: 'kulit a mágkas', style: _gameData.getStyle('textInfoImageCaptionItalic')),
               TextSpan(
                   text:
                       ' or Kulitan consonantal characters in their natural arrangement, read from the right column going to the left.'),
@@ -566,7 +568,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             orientation: Axis.horizontal,
             caption: TextSpan(
                 text: 'INDÛNG SÚLAT: KULIT A SISIUÁLÂ',
-                style: textInfoImageCaption),
+                style: _gameData.getStyle('textInfoImageCaption')),
             subcaption: 'The Vowel Characters',
             screenWidth: _width,
           ),
@@ -609,11 +611,11 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           filename: 'kulit_a_sisiuala_table.png',
           orientation: Axis.horizontal,
           caption: TextSpan(
-            style: textInfoImageCaption,
+            style: _gameData.getStyle('textInfoImageCaption'),
             children: <TextSpan>[
               TextSpan(
                 text: 'Table 2',
-                style: textInfoImageCaptionItalic,
+                style: _gameData.getStyle('textInfoImageCaptionItalic'),
               ),
               TextSpan(text: '. The '),
               TextSpan(text: 'kulit a siuálâ'),
@@ -692,7 +694,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             filename: 'anak_sulat.png',
             hasPadding: false,
             orientation: Axis.horizontal,
-            caption: TextSpan(text: 'ANAK SÚLAT', style: textInfoImageCaption),
+            caption: TextSpan(text: 'ANAK SÚLAT', style: _gameData.getStyle('textInfoImageCaption')),
             subcaption: 'The offspring character',
             screenWidth: _width,
           ),
@@ -725,26 +727,26 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             children: <TextSpan>[
               TextSpan(
                 text: 'Table 3a',
-                style: textInfoImageCaptionItalic,
+                style: _gameData.getStyle('textInfoImageCaptionItalic'),
               ),
-              TextSpan(text: '. The ', style: textInfoImageCaption),
+              TextSpan(text: '. The ', style: _gameData.getStyle('textInfoImageCaption')),
               TextSpan(
                 text: 'anak súlat',
-                style: textInfoImageCaptionItalic,
+                style: _gameData.getStyle('textInfoImageCaptionItalic'),
               ),
               TextSpan(
                   text: ' or offspring characters of the ',
-                  style: textInfoImageCaption),
+                  style: _gameData.getStyle('textInfoImageCaption')),
               TextSpan(
                 text: 'indûng súlat',
-                style: textInfoImageCaptionItalic,
+                style: _gameData.getStyle('textInfoImageCaptionItalic'),
               ),
-              TextSpan(text: ' SA (', style: textInfoImageCaption),
+              TextSpan(text: ' SA (', style: _gameData.getStyle('textInfoImageCaption')),
               TextSpan(
                 text: 'sa',
-                style: textInfoImageCaptionKulitan,
+                style: _gameData.getStyle('textInfoImageCaptionKulitan'),
               ),
-              TextSpan(text: ').', style: textInfoImageCaption),
+              TextSpan(text: ').', style: _gameData.getStyle('textInfoImageCaption')),
             ],
           ),
           screenWidth: _width,
@@ -756,19 +758,19 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             children: <TextSpan>[
               TextSpan(
                 text: 'Table 3b',
-                style: textInfoImageCaptionItalic,
+                style: _gameData.getStyle('textInfoImageCaptionItalic'),
               ),
-              TextSpan(text: '. Table of ', style: textInfoImageCaption),
+              TextSpan(text: '. Table of ', style: _gameData.getStyle('textInfoImageCaption')),
               TextSpan(
                 text: 'Indûng Súlat',
-                style: textInfoImageCaptionItalic,
+                style: _gameData.getStyle('textInfoImageCaptionItalic'),
               ),
-              TextSpan(text: ' and their ', style: textInfoImageCaption),
+              TextSpan(text: ' and their ', style: _gameData.getStyle('textInfoImageCaption')),
               TextSpan(
                 text: 'Anak Súlat',
-                style: textInfoImageCaptionItalic,
+                style: _gameData.getStyle('textInfoImageCaptionItalic'),
               ),
-              TextSpan(text: '.', style: textInfoImageCaption),
+              TextSpan(text: '.', style: _gameData.getStyle('textInfoImageCaption')),
             ],
           ),
           screenWidth: _width,
@@ -787,7 +789,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             captionAlignment: TextAlign.center,
             caption: TextSpan(
                 text: 'PÁMANGANAK NING INDÛNG SÚLAT\nKING SIUÁLÂNG ‘I’',
-                style: textInfoImageCaption),
+                style: _gameData.getStyle('textInfoImageCaption')),
             subcaption: 'Changing the default vowel sound `A` to `I`',
             screenWidth: _width,
           ),
@@ -834,7 +836,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             captionAlignment: TextAlign.center,
             caption: TextSpan(
                 text: 'PÁMANGANAK NING INDÛNG SÚLAT\nKING SIUÁLÂNG ‘U’',
-                style: textInfoImageCaption),
+                style: _gameData.getStyle('textInfoImageCaption')),
             subcaption: 'Changing the default vowel sound `A` to `U`',
             screenWidth: _width,
           ),
@@ -882,12 +884,12 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
               children: <TextSpan>[
                 TextSpan(
                     text: 'DING ÁNAK NING INDÛNG SÚLAT A `I` (',
-                    style: textInfoImageCaption),
+                    style: _gameData.getStyle('textInfoImageCaption')),
                 TextSpan(
                     text: 'i',
-                    style: textInfoImageCaption.copyWith(
+                    style: _gameData.getStyle('textInfoImageCaption').copyWith(
                         fontFamily: 'Kulitan Semi Bold')),
-                TextSpan(text: ')', style: textInfoImageCaption),
+                TextSpan(text: ')', style: _gameData.getStyle('textInfoImageCaption')),
               ],
             ),
             subcaption: 'Altering the vowel glyph I as the consonant Y',
@@ -949,23 +951,23 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             children: <TextSpan>[
               TextSpan(
                 text: 'Table 4',
-                style: textInfoImageCaptionItalic,
+                style: _gameData.getStyle('textInfoImageCaptionItalic'),
               ),
-              TextSpan(text: '. The ', style: textInfoImageCaption),
+              TextSpan(text: '. The ', style: _gameData.getStyle('textInfoImageCaption')),
               TextSpan(
                 text: 'anak kulit',
-                style: textInfoImageCaptionItalic,
+                style: _gameData.getStyle('textInfoImageCaptionItalic'),
               ),
               TextSpan(
                   text: ' or offspring characters of the ',
-                  style: textInfoImageCaption),
-              TextSpan(text: 'indung kulit', style: textInfoImageCaptionItalic),
-              TextSpan(text: ' I (', style: textInfoImageCaption),
+                  style: _gameData.getStyle('textInfoImageCaption')),
+              TextSpan(text: 'indung kulit', style: _gameData.getStyle('textInfoImageCaptionItalic')),
+              TextSpan(text: ' I (', style: _gameData.getStyle('textInfoImageCaption')),
               TextSpan(
                 text: 'i',
-                style: textInfoImageCaptionKulitan,
+                style: _gameData.getStyle('textInfoImageCaptionKulitan'),
               ),
-              TextSpan(text: ').', style: textInfoImageCaption),
+              TextSpan(text: ').', style: _gameData.getStyle('textInfoImageCaption')),
             ],
           ),
         ),
@@ -984,12 +986,12 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
               children: <TextSpan>[
                 TextSpan(
                     text: 'DING ÁNAK NING INDÛNG SÚLAT A `U` (',
-                    style: textInfoImageCaption),
+                    style: _gameData.getStyle('textInfoImageCaption')),
                 TextSpan(
                     text: 'u',
-                    style: textInfoImageCaption.copyWith(
+                    style: _gameData.getStyle('textInfoImageCaption').copyWith(
                         fontFamily: 'Kulitan Semi Bold')),
-                TextSpan(text: ')', style: textInfoImageCaption),
+                TextSpan(text: ')', style: _gameData.getStyle('textInfoImageCaption')),
               ],
             ),
             subcaption: 'Altering the vowel glyph U as the consonant W',
@@ -1069,23 +1071,23 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             children: <TextSpan>[
               TextSpan(
                 text: 'Table 5',
-                style: textInfoImageCaptionItalic,
+                style: _gameData.getStyle('textInfoImageCaptionItalic'),
               ),
-              TextSpan(text: '. The ', style: textInfoImageCaption),
+              TextSpan(text: '. The ', style: _gameData.getStyle('textInfoImageCaption')),
               TextSpan(
                 text: 'anak kulit',
-                style: textInfoImageCaptionItalic,
+                style: _gameData.getStyle('textInfoImageCaptionItalic'),
               ),
               TextSpan(
                   text: ' or offspring characters of the ',
-                  style: textInfoImageCaption),
-              TextSpan(text: 'indung kulit', style: textInfoImageCaptionItalic),
-              TextSpan(text: ' U (', style: textInfoImageCaption),
+                  style: _gameData.getStyle('textInfoImageCaption')),
+              TextSpan(text: 'indung kulit', style: _gameData.getStyle('textInfoImageCaptionItalic')),
+              TextSpan(text: ' U (', style: _gameData.getStyle('textInfoImageCaption')),
               TextSpan(
                 text: 'u',
-                style: textInfoImageCaptionKulitan,
+                style: _gameData.getStyle('textInfoImageCaptionKulitan'),
               ),
-              TextSpan(text: ').', style: textInfoImageCaption),
+              TextSpan(text: ').', style: _gameData.getStyle('textInfoImageCaption')),
             ],
           ),
         ),
@@ -1103,7 +1105,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             captionAlignment: TextAlign.center,
             caption: TextSpan(
                 text: 'PÁMANGANAK NING INDÛNG SÚLAT\nKING SIUÁLÂNG ‘E’',
-                style: textInfoImageCaption),
+                style: _gameData.getStyle('textInfoImageCaption')),
             subcaption: 'Changing the default vowel sound `A` to `E`',
             screenWidth: _width,
           ),
@@ -1151,7 +1153,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             captionAlignment: TextAlign.center,
             caption: TextSpan(
                 text: 'PÁMANGANAK NING INDÛNG SÚLAT\nKING SIUÁLÂNG ‘O’',
-                style: textInfoImageCaption),
+                style: _gameData.getStyle('textInfoImageCaption')),
             subcaption: 'Changing the default vowel sound ‘A’ to ‘O’',
             screenWidth: _width,
           ),
@@ -1197,7 +1199,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             hasPadding: false,
             orientation: Axis.horizontal,
             caption: TextSpan(
-                text: 'DING KAMBAL SIUÁLÂ', style: textInfoImageCaption),
+                text: 'DING KAMBAL SIUÁLÂ', style: _gameData.getStyle('textInfoImageCaption')),
             subcaption: 'Stress and Accents in Kulitan',
             screenWidth: _width,
           ),
@@ -1227,16 +1229,16 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                 children: <Widget>[
                   Expanded(
                     child: Text('masákit\nmásakit\nmasakit',
-                        style: textInfoTextItalic),
+                        style: _gameData.getStyle('textInfoTextItalic')),
                   ),
                   Expanded(
                     child: Text('‘difficult’\n‘infirm’\n‘painful’',
-                        style: textInfoText),
+                        style: _gameData.getStyle('textInfoText')),
                   ),
                   Expanded(
                     child: Text(
                       '(ADJ.)\n(N.)\n(ADJ.)',
-                      style: textInfoText,
+                      style: _gameData.getStyle('textInfoText'),
                     ),
                   ),
                 ],
@@ -1286,7 +1288,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             hasPadding: false,
             orientation: Axis.horizontal,
             caption: TextSpan(
-                text: 'KAMBAL SIUÁLÂ ‘A’', style: textInfoImageCaption),
+                text: 'KAMBAL SIUÁLÂ ‘A’', style: _gameData.getStyle('textInfoImageCaption')),
             subcaption: 'Lengthening the inherent vowel ‘A’',
             screenWidth: _width,
           ),
@@ -1330,7 +1332,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             hasPadding: false,
             orientation: Axis.horizontal,
             caption: TextSpan(
-                text: 'KAMBAL SIUÁLÂ ‘I’', style: textInfoImageCaption),
+                text: 'KAMBAL SIUÁLÂ ‘I’', style: _gameData.getStyle('textInfoImageCaption')),
             subcaption: 'Lengthening the offspring vowel sound ‘I’',
             screenWidth: _width,
           ),
@@ -1383,7 +1385,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             hasPadding: false,
             orientation: Axis.horizontal,
             caption: TextSpan(
-                text: 'KAMBAL SIUÁLÂ ‘U’', style: textInfoImageCaption),
+                text: 'KAMBAL SIUÁLÂ ‘U’', style: _gameData.getStyle('textInfoImageCaption')),
             subcaption: 'Lengthening the offspring vowel sound ‘U’',
             screenWidth: _width,
           ),
@@ -1433,7 +1435,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             filename: 'pamakamate_siuala.png',
             hasPadding: false,
             caption: TextSpan(
-                text: 'PÁMAKAMATÉ SIUÁLÂ', style: textInfoImageCaption),
+                text: 'PÁMAKAMATÉ SIUÁLÂ', style: _gameData.getStyle('textInfoImageCaption')),
             subcaption: 'Terminating the default vowel sound',
             screenWidth: _width,
           ),
@@ -1508,7 +1510,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             children: <TextSpan>[
               TextSpan(
                 text: 'Table 6',
-                style: textInfoImageCaptionItalic,
+                style: _gameData.getStyle('textInfoImageCaptionItalic'),
               ),
               TextSpan(text: '. Terminating the inherent vowel sound ‘A’.'),
             ],
@@ -1631,14 +1633,14 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
       Column(
         children: <Widget>[
           Container(
-            color: backgroundColor,
+            color: _gameData.getColor('background'),
             padding: const EdgeInsets.fromLTRB(
               informationHorizontalScreenPadding,
               headerVerticalPadding - 8.0,
               informationHorizontalScreenPadding,
               0.0,
             ),
-            child: Text('Guide', style: textPageTitle),
+            child: Text('Guide', style: _gameData.getStyle('textPageTitle')),
           ),
           _pageCredits,
           Expanded(
@@ -1666,7 +1668,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
     }
 
     return Material(
-      color: backgroundColor,
+      color: _gameData.getColor('background'),
       child: SafeArea(
         child: Stack(
           children: _pageStack,

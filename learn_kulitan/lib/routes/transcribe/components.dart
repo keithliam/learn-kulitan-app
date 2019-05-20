@@ -1,8 +1,9 @@
 import 'dart:async' show Timer;
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import '../../styles/theme.dart';
 import '../../components/misc/DividerNew.dart';
+import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class _KeyHint extends StatefulWidget {
   const _KeyHint({this.hint, this.visible, this.child});
@@ -17,6 +18,7 @@ class _KeyHint extends StatefulWidget {
 
 class _KeyHintState extends State<_KeyHint>
     with SingleTickerProviderStateMixin {
+  static final GameData _gameData = GameData();
   OverlayEntry _overlay;
   bool _shouldRemove = false;
 
@@ -109,7 +111,7 @@ class _KeyHintState extends State<_KeyHint>
               child: Text(
                 _i,
                 textAlign: TextAlign.center,
-                style: kulitanKeyboard,
+                style: _gameData.getStyle('kulitanKeyboard'),
               ),
             ),
           ),
@@ -121,7 +123,7 @@ class _KeyHintState extends State<_KeyHint>
               child: Text(
                 _hintText,
                 textAlign: TextAlign.center,
-                style: kulitanKeyboard,
+                style: _gameData.getStyle('kulitanKeyboard'),
               ),
             ),
           ),
@@ -131,7 +133,7 @@ class _KeyHintState extends State<_KeyHint>
               child: Text(
                 _u,
                 textAlign: TextAlign.center,
-                style: kulitanKeyboard,
+                style: _gameData.getStyle('kulitanKeyboard'),
               ),
             ),
           ),
@@ -143,7 +145,7 @@ class _KeyHintState extends State<_KeyHint>
         child: Text(
           _hintText,
           textAlign: TextAlign.center,
-          style: kulitanKeyboard,
+          style: _gameData.getStyle('kulitanKeyboard'),
         ),
       );
     }
@@ -173,7 +175,7 @@ class _KeyHintState extends State<_KeyHint>
                 width: keyHintSizeRatio * size.height,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
-                  color: keyboardKeyHintColor,
+                  color: _gameData.getColor('keyboardKeyHint'),
                 ),
                 child: _child,
               ),
@@ -202,6 +204,8 @@ class _KeyboardKey extends StatefulWidget {
 }
 
 class _KeyboardKeyState extends State<_KeyboardKey> {
+  static final GameData _gameData = GameData();
+
   double _startPos = 0.0;
   double _endPos = 0.0;
   bool _half1Pressed = false;
@@ -363,8 +367,8 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
                                 widget.keyType == 'delete' ||
                                 widget.keyType == 'enter') &&
                             (_half1Pressed && !_half2Pressed)
-                        ? keyboardMainPressColor
-                        : keyboardPressColor),
+                        ? _gameData.getColor('keyboardMainPress')
+                        : _gameData.getColor('keyboardPress')),
               ),
             ),
             Flexible(
@@ -377,8 +381,8 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
                 curve: keyboardPressOpacityCurve,
                 child: Container(
                     color: _half2Pressed && !_half1Pressed
-                        ? keyboardMainPressColor
-                        : keyboardPressColor),
+                        ? _gameData.getColor('keyboardMainPress')
+                        : _gameData.getColor('keyboardPress')),
               ),
             ),
           ],
@@ -448,6 +452,7 @@ class _KeyboardAddKey extends StatefulWidget {
 }
 
 class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
+  static final GameData _gameData = GameData();
   static final List<String> _allowedGlyphs = [
     'i',
     'u',
@@ -557,7 +562,7 @@ class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
           opacity: _isPressed ? keyboardPressOpacity : 0.0,
           duration: const Duration(milliseconds: keyboardPressOpacityDuration),
           curve: keyboardPressOpacityCurve,
-          child: Container(color: keyboardPressColor),
+          child: Container(color: _gameData.getColor('keyboardPress')),
         ),
         Container(
           padding: const EdgeInsets.all(keyboardKeyPadding),
@@ -587,6 +592,8 @@ class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
 }
 
 class _KeyboardKeyContainer extends StatelessWidget {
+  static final GameData _gameData = GameData();
+
   const _KeyboardKeyContainer({this.keyType});
 
   final String keyType;
@@ -599,8 +606,8 @@ class _KeyboardKeyContainer extends StatelessWidget {
         child: Text(
           keyType,
           textAlign: TextAlign.center,
-          style: kulitanKeyboard.copyWith(shadows: <Shadow>[
-            Shadow(color: keyboardStrokeShadowColor, offset: Offset(0.75, 0.75))
+          style: _gameData.getStyle('kulitanKeyboard').copyWith(shadows: <Shadow>[
+            Shadow(color: _gameData.getColor('keyboardStrokeShadow'), offset: Offset(0.75, 0.75))
           ]),
         ),
       );
@@ -616,10 +623,10 @@ class _KeyboardKeyContainer extends StatelessWidget {
               height: 0.8,
               fontFamily: 'Barlow',
               fontWeight: FontWeight.w900,
-              color: keyboardStrokeColor,
+              color: _gameData.getColor('keyboardStroke'),
               shadows: <Shadow>[
                 Shadow(
-                    color: keyboardStrokeShadowColor, offset: Offset(1.8, 1.8))
+                    color: _gameData.getColor('keyboardStrokeShadow'), offset: Offset(1.8, 1.8))
               ],
             ),
           ),
@@ -644,9 +651,9 @@ class _KeyboardKeyContainer extends StatelessWidget {
             child: Text(
               keyType,
               textAlign: TextAlign.center,
-              style: kulitanKeyboard.copyWith(shadows: <Shadow>[
+              style: _gameData.getStyle('kulitanKeyboard').copyWith(shadows: <Shadow>[
                 Shadow(
-                    color: keyboardStrokeShadowColor,
+                    color: _gameData.getColor('keyboardStrokeShadow'),
                     offset: Offset(0.75, 0.75))
               ]),
             ),
@@ -660,7 +667,7 @@ class _KeyboardKeyContainer extends StatelessWidget {
                     ? keyType != 'u' ? keyType + 'i' : 'wi'
                     : 'yi',
                 textAlign: TextAlign.center,
-                style: kulitanKeyboard,
+                style: _gameData.getStyle('kulitanKeyboard'),
               ),
             ),
           ),
@@ -673,7 +680,7 @@ class _KeyboardKeyContainer extends StatelessWidget {
                     ? keyType != 'u' ? keyType + 'u' : 'wu'
                     : 'yu',
                 textAlign: TextAlign.center,
-                style: kulitanKeyboard,
+                style: _gameData.getStyle('kulitanKeyboard'),
               ),
             ),
           ),
@@ -684,6 +691,8 @@ class _KeyboardKeyContainer extends StatelessWidget {
 }
 
 class _KeyIconPainter extends CustomPainter {
+  static final GameData _gameData = GameData();
+
   const _KeyIconPainter({this.keyType, this.strokePercent});
 
   final String keyType;
@@ -703,7 +712,7 @@ class _KeyIconPainter extends CustomPainter {
     final double _middle = size.height / 2.0;
 
     Paint _stroke = Paint()
-      ..color = keyboardStrokeShadowColor
+      ..color = _gameData.getColor('keyboardStrokeShadow')
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
       ..style = PaintingStyle.stroke
@@ -728,9 +737,9 @@ class _KeyIconPainter extends CustomPainter {
       canvas.drawPath(_outline.shift(_shadowOffset), _stroke);
       canvas.drawPath(_cross1.shift(_shadowOffset), _stroke);
       canvas.drawPath(_cross2.shift(_shadowOffset), _stroke);
-      canvas.drawPath(_outline, _stroke..color = keyboardStrokeColor);
-      canvas.drawPath(_cross1, _stroke..color = keyboardStrokeColor);
-      canvas.drawPath(_cross2, _stroke..color = keyboardStrokeColor);
+      canvas.drawPath(_outline, _stroke..color = _gameData.getColor('keyboardStroke'));
+      canvas.drawPath(_cross1, _stroke..color = _gameData.getColor('keyboardStroke'));
+      canvas.drawPath(_cross2, _stroke..color = _gameData.getColor('keyboardStroke'));
     } else if (keyType == 'enter') {
       final double _offset1 = _width * 0.26544;
       final Path _head = Path()
@@ -743,8 +752,8 @@ class _KeyIconPainter extends CustomPainter {
         ..lineTo(_end, _middle - (_width * 0.29824));
       canvas.drawPath(_head.shift(_shadowOffset), _stroke);
       canvas.drawPath(_body.shift(_shadowOffset), _stroke);
-      canvas.drawPath(_head, _stroke..color = keyboardStrokeColor);
-      canvas.drawPath(_body, _stroke..color = keyboardStrokeColor);
+      canvas.drawPath(_head, _stroke..color = _gameData.getColor('keyboardStroke'));
+      canvas.drawPath(_body, _stroke..color = _gameData.getColor('keyboardStroke'));
     } else if (keyType == 'add') {
       final double _offset = _width * 0.33391;
       final double _center = (_start + _end) / 2.0;
@@ -756,13 +765,15 @@ class _KeyIconPainter extends CustomPainter {
         ..lineTo(_center + _offset, _middle);
       canvas.drawPath(_topDown.shift(_shadowOffset), _stroke);
       canvas.drawPath(_leftRight.shift(_shadowOffset), _stroke);
-      canvas.drawPath(_topDown, _stroke..color = keyboardStrokeColor);
-      canvas.drawPath(_leftRight, _stroke..color = keyboardStrokeColor);
+      canvas.drawPath(_topDown, _stroke..color = _gameData.getColor('keyboardStroke'));
+      canvas.drawPath(_leftRight, _stroke..color = _gameData.getColor('keyboardStroke'));
     }
   }
 }
 
 class KulitanKeyboard extends StatelessWidget {
+  static final GameData _gameData = GameData();
+
   const KulitanKeyboard(
       {this.visibility, this.getGlyph, this.onKeyPress, this.child});
 
@@ -911,7 +922,7 @@ class KulitanKeyboard extends StatelessWidget {
                   opacity: 0.55,
                   child: DividerNew(
                     height: keyboardDividerHeight,
-                    color: whiteColor,
+                    color: _gameData.getColor('white'),
                   ),
                 ),
                 Expanded(
@@ -993,6 +1004,8 @@ class Tutorial extends StatefulWidget {
 
 class _TutorialState extends State<Tutorial>
     with SingleTickerProviderStateMixin {
+  static final GameData _gameData = GameData();
+
   AnimationController _controller;
   OverlayEntry _overlay;
 
@@ -1032,7 +1045,7 @@ class _TutorialState extends State<Tutorial>
   Widget _flare({top, left, height, right, flipV = false, arrowUp = false}) {
     final Widget _flare = FlareActor(
       'assets/flares/${arrowUp ? 'swipe_down' : 'shaking_pointer'}.flr',
-      color: accentColor,
+      color: _gameData.getColor('accent'),
       animation: widget.tutorialNo == 2 ? 'down' : 'shake',
     );
 
@@ -1066,7 +1079,7 @@ class _TutorialState extends State<Tutorial>
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
-            color: tutorialsBackgroundColor,
+            color: _gameData.getColor('tutorialsOverlayBackground'),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
           child: IgnorePointer(
@@ -1078,7 +1091,7 @@ class _TutorialState extends State<Tutorial>
                   : widget.tutorialNo == 2
                     ? 'Swipe up to reveal the Kulitan keyboard ⌨️'
                     : 'Some keys can be swiped up or down. These swipes put diacritical marks on the top or bottom of the glyphs.',
-                  style: textTutorialOverlay),
+                  style: _gameData.getStyle('textTutorialOverlay')),
             ),
           ),
         ),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 import 'dart:math' as math;
-import '../../styles/theme.dart';
 import './DividerNew.dart';
+import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class _CircularProgressBarPainter extends CustomPainter {
   const _CircularProgressBarPainter({
@@ -10,6 +11,8 @@ class _CircularProgressBarPainter extends CustomPainter {
   });
 
   final double progress;
+
+  static final GameData _gameData = GameData();
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
@@ -19,12 +22,12 @@ class _CircularProgressBarPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint area = Paint()
-      ..color = circularProgressBackgroundColor
+      ..color = _gameData.getColor('circularProgressBackground')
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..strokeWidth = 10.0;
     Paint bar = Paint()
-      ..color = circularProgressForegroundColor
+      ..color = _gameData.getColor('circularProgressForeground')
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..strokeWidth = 10.0;
@@ -58,6 +61,7 @@ class CircularProgressBar extends StatefulWidget {
 
 class _CircularProgressBarState extends State<CircularProgressBar>
     with SingleTickerProviderStateMixin {
+  static final GameData _gameData = GameData();
   Animation<double> _animation;
   AnimationController _controller;
   Tween<double> _tween;
@@ -115,7 +119,7 @@ class _CircularProgressBarState extends State<CircularProgressBar>
                 padding: const EdgeInsets.only(bottom: 45.0),
                 child: Text(
                   '${widget.numerator}',
-                  style: textQuizHeader,
+                  style: _gameData.getStyle('textQuizHeader'),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -123,7 +127,7 @@ class _CircularProgressBarState extends State<CircularProgressBar>
                 child: DividerNew(
                   height: 5.0,
                   width: 64.0,
-                  color: circularProgressTextColor,
+                  color: _gameData.getColor('circularProgressText'),
                 ),
               ),
               Container(
@@ -131,7 +135,7 @@ class _CircularProgressBarState extends State<CircularProgressBar>
                 padding: const EdgeInsets.only(top: 40.0),
                 child: Text(
                   '${widget.denominator}',
-                  style: textQuizHeader,
+                  style: _gameData.getStyle('textQuizHeader'),
                   textAlign: TextAlign.center,
                 ),
               ),

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 import '../../styles/theme.dart';
+import '../../db/GameData.dart';
 
 class LinearProgressBar extends StatefulWidget {
   const LinearProgressBar({
     @required this.progress,
     this.height = 15.0,
     this.animate = true,
-    this.color = linearProgressBackgroundColor,
+    this.color,
   });
 
   final double height;
@@ -21,6 +22,7 @@ class LinearProgressBar extends StatefulWidget {
 
 class _LinearProgressBarState extends State<LinearProgressBar>
     with SingleTickerProviderStateMixin {
+  static final GameData _gameData = GameData();
   Animation<double> _animation;
   AnimationController _controller;
   Tween<double> _tween;
@@ -79,12 +81,12 @@ class _LinearProgressBarState extends State<LinearProgressBar>
         key: _progressBackgroundKey,
         height: widget.height,
         alignment: Alignment.centerLeft,
-        color: widget.color,
+        color: widget.color ?? _gameData.getColor('linearProgressBackground'),
         child: Container(
           width: _backgroundWidth * _animation.value,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100.0),
-            color: linearProgressForegroundColor,
+            color: _gameData.getColor('linearProgressForeground'),
           ),
         )
       ),
