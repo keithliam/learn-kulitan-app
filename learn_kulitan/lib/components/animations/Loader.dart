@@ -88,7 +88,7 @@ class _LoaderState extends State<Loader> with FlareController {
                   child: FlareActor(
                     'assets/flares/loader.flr',
                     animation: 'load',
-                    color: widget.isStartup ? Color(defaultColors['accent']) : _gameData.getColor('loaderStrokeShadow'),
+                    color: widget.isStartup ? Color(colorSchemes['default']['accent']) : _gameData.getColor('loaderStrokeShadow'),
                     controller: this,
                   ),
                 ),
@@ -101,7 +101,7 @@ class _LoaderState extends State<Loader> with FlareController {
                   child: FlareActor(
                     'assets/flares/loader.flr',
                     animation: 'load',
-                    color: widget.isStartup ? Color(defaultColors['white']) : _gameData.getColor('loaderStroke'),
+                    color: widget.isStartup ? Color(colorSchemes['default']['white']) : _gameData.getColor('loaderStroke'),
                     controller: this,
                   ),
                 ),
@@ -129,7 +129,7 @@ class _LoaderState extends State<Loader> with FlareController {
             opacity: _overlay == null ? 0.0 : 1.0,
             duration: const Duration(milliseconds: loaderOpacityDuration),
             curve: loaderOpacityCurve,
-            child: Container(color: widget.isStartup ? Color(defaultColors['primary']) : _gameData.getColor('loaderBackground')),
+            child: Container(color: widget.isStartup ? Color(colorSchemes['default']['primary']) : _gameData.getColor('loaderBackground')),
           ),
         ),
       ],

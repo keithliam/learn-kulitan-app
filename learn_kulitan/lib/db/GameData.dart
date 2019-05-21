@@ -1,6 +1,7 @@
 import 'dart:io' show Directory;
 import 'dart:collection' show HashSet;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart' show join;
 import 'package:sqflite/sqflite.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +24,7 @@ class GameData {
   Database _db;
   SharedPreferences _prefs;
   Map<String, dynamic> _data = {};
-  static final HashSet<String> _colorset = HashSet.from(['primary', 'accent', 'foreground', 'empty', 'correctAnswer', 'wrongAnswer', 'quizCardMiddle', 'quizCardLast', 'white', 'tutorialsOverlayBackground', 'cardShadow', 'buttonShadow']);
+  static final HashSet<String> _colorset = HashSet.from(['primary', 'accent', 'foreground', 'kulitanPath', 'empty', 'correctAnswer', 'wrongAnswer', 'quizCardMiddle', 'quizCardLast', 'white', 'tutorialsOverlayBackground', 'cardShadow', 'buttonShadow']);
 
   Color getColor(String color) {
     if (_colorset.contains(color))
@@ -56,7 +57,7 @@ class GameData {
       else if (color == 'cardChoicesWrong') return Color(_data['colors']['wrongAnswer']);
       else if (color == 'cardChoicesWrongText') return Color(_data['colors']['white']);
       else if (color == 'writingGuide') return Color(_data['colors']['accent']);
-      else if (color == 'writingDraw') return Color(_data['colors']['foreground']);
+      else if (color == 'writingDraw') return Color(_data['colors']['kulitanPath']);
       else if (color == 'writingShadow') return Color(_data['colors']['empty']);
       else if (color == 'transcribeDivider') return Color(_data['colors']['empty']);
       else if (color == 'transcribeCursor') return Color(_data['colors']['accent']);
@@ -301,6 +302,15 @@ class GameData {
       fontSize: 10.0,
       color: getColor('white'),
     );
+    else if (style == 'textSettingsSubtitle') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 40.0,
+      fontWeight: FontWeight.bold,
+      color: getColor('white'),
+      shadows: <Shadow>[
+        Shadow(color: getColor('accent'), offset: Offset(3.0, 3.0))
+      ]
+    );
     else if (style == 'textTutorialOverlay') return TextStyle(
       fontFamily: 'Barlow',
       fontSize: 18.0,
@@ -322,6 +332,41 @@ class GameData {
   int getGlyphProgress(String page, String glyph) => _data[page]['glyphs'][glyph];
   Map<String, int> getGlyphProgressList(String page) => _data[page]['glyphs'];
   
+
+  void setStatusBarColors(String colorScheme) {
+    final Map<String, int> colors = colorSchemes[colorScheme];
+    if (darkColorSchemes.contains(colorScheme)) {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Color(0xFFFABF40),
+        systemNavigationBarColor: Color(0xFFFABF40),
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ));
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Color(colors['primary']),
+        systemNavigationBarColor: Color(colors['primary']),
+        systemNavigationBarIconBrightness: Brightness.light,
+      ));
+    }
+  }
+  Future<void> setColorScheme(String colorScheme) async {
+    final Map<String, int> colors = colorSchemes[colorScheme];
+    await _prefs.setInt('primary', colors['primary']);
+    await _prefs.setInt('accent', colors['accent']);
+    await _prefs.setInt('foreground', colors['foreground']);
+    await _prefs.setInt('kulitanPath', colors['kulitanPath']);
+    await _prefs.setInt('empty', colors['empty']);
+    await _prefs.setInt('correctAnswer', colors['correctAnswer']);
+    await _prefs.setInt('wrongAnswer', colors['wrongAnswer']);
+    await _prefs.setInt('quizCardMiddle', colors['quizCardMiddle']);
+    await _prefs.setInt('quizCardLast', colors['quizCardLast']);
+    await _prefs.setInt('white', colors['white']);
+    await _prefs.setInt('tutorialsOverlayBackground', colors['tutorialsOverlayBackground']);
+    await _prefs.setInt('cardShadow', colors['cardShadow']);
+    await _prefs.setInt('buttonShadow', colors['buttonShadow']);
+    _data['colors'] = colors;
+    setStatusBarColors(colorScheme);
+  }
   void setTutorial(String page, bool i) {
     _data[page]['tutorial'] = i;
     _prefs.setBool('${page}Tutorial', i);
@@ -387,21 +432,23 @@ class GameData {
     final List<Map<String, dynamic>> _glyphData = await _db.query('Glyph');
     _data['reading']['glyphs'] = Map<String, int>.fromIterable(_glyphData, key: (glyph) => glyph['name'], value: (glyph) => glyph['progress_count_reading']);
     _data['writing']['glyphs'] = Map<String, int>.fromIterable(_glyphData, key: (glyph) => glyph['name'], value: (glyph) => glyph['progress_count_writing']);
+    setStatusBarColors(_data['colors']);
   }
 
   Future<void> _initPrefs() async {
-    await _prefs.setInt('primary', defaultColors['primary']);
-    await _prefs.setInt('accent', defaultColors['accent']);
-    await _prefs.setInt('foreground', defaultColors['foreground']);
-    await _prefs.setInt('empty', defaultColors['empty']);
-    await _prefs.setInt('correctAnswer', defaultColors['correctAnswer']);
-    await _prefs.setInt('wrongAnswer', defaultColors['wrongAnswer']);
-    await _prefs.setInt('quizCardMiddle', defaultColors['quizCardMiddle']);
-    await _prefs.setInt('quizCardLast', defaultColors['quizCardLast']);
-    await _prefs.setInt('white', defaultColors['white']);
-    await _prefs.setInt('tutorialsOverlayBackground', defaultColors['tutorialsOverlayBackground']);
-    await _prefs.setInt('cardShadow', defaultColors['cardShadow']);
-    await _prefs.setInt('buttonShadow', defaultColors['buttonShadow']);
+    final Map<String, int> _colors = colorSchemes['default'];
+    await _prefs.setInt('primary', _colors['primary']);
+    await _prefs.setInt('accent', _colors['accent']);
+    await _prefs.setInt('foreground', _colors['foreground']);
+    await _prefs.setInt('empty', _colors['empty']);
+    await _prefs.setInt('correctAnswer', _colors['correctAnswer']);
+    await _prefs.setInt('wrongAnswer', _colors['wrongAnswer']);
+    await _prefs.setInt('quizCardMiddle', _colors['quizCardMiddle']);
+    await _prefs.setInt('quizCardLast', _colors['quizCardLast']);
+    await _prefs.setInt('white', _colors['white']);
+    await _prefs.setInt('tutorialsOverlayBackground', _colors['tutorialsOverlayBackground']);
+    await _prefs.setInt('cardShadow', _colors['cardShadow']);
+    await _prefs.setInt('buttonShadow', _colors['buttonShadow']);
     await _prefs.setBool('introTutorial', true);
     await _prefs.setBool('readingTutorial', true);
     await _prefs.setBool('writingTutorial', true);

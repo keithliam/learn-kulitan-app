@@ -109,7 +109,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         body: Container(
-          color: Color(defaultColors['primary']),
+          color: Color(colorSchemes['default']['primary']),
           child: SafeArea(
             child: Loader(
               isStartup: true,

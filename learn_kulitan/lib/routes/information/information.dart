@@ -68,12 +68,6 @@ class _InformationPageState extends State<InformationPage> {
           color: _gameData.getColor('headerNavigation'),
           onPressed: () => Navigator.pop(context),
         ),
-        // right: IconButtonNew(
-        //   icon: Icons.settings,
-        //   iconSize: headerIconSize,
-        //   color: _gameData.getColor('headerNavigation'),
-        //   onPressed: null,
-        // ),
         right: SizedBox(width: 56.0, height: 48.0),
       ),
     );

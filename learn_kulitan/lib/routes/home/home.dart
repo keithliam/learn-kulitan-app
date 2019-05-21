@@ -135,6 +135,21 @@ class _HomePageState extends State<HomePage> {
       route: '/about',
     );
 
+    Widget _settingsButton = HomeButton(
+      buttonGroup: _buttonGroup,
+      disabled: _disabled,
+      onPressedImmediate: _disableButtons,
+      kulitanText: <Widget>[
+        Text('reng    ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
+        Text('gii', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
+        Text('n  ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.8)),
+        Text('waa', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
+      ],
+      title: 'Reng Gínawá',
+      subtitle: 'SETTINGS',
+      route: '/settings',
+    );
+
     return Material(
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
@@ -156,6 +171,7 @@ class _HomePageState extends State<HomePage> {
                 _transcribeButton,
                 _infoButton,
                 _aboutButton,
+                _settingsButton,
               ],
             ),
           ),

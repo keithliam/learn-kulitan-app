@@ -606,12 +606,6 @@ class _TranscribePageState extends State<TranscribePage>
             ),
           ),
         ),
-        // right: IconButtonNew(
-        //   icon: Icons.settings,
-        //   iconSize: headerIconSize,
-        //   color: _gameData.getColor('headerNavigation'),
-        //   onPressed: null,
-        // ),
         right: SizedBox(width: 56.0, height: 48.0),
       ),
     );

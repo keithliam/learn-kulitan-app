@@ -9,6 +9,7 @@ import './routes/information/routes/history.dart';
 import './routes/information/routes/writingguide.dart';
 import './routes/transcribe/transcribe.dart';
 import './routes/about/about.dart';
+import './routes/settings/settings.dart';
 import './components/misc/CustomScrollBehavior.dart';
 
 void main() {
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
         '/information/guide': (context) => WritingGuidePage(),
         '/transcribe': (context) => TranscribePage(),
         '/about': (context) => AboutPage(),
+        '/settings': (context) => SettingsPage(),
       },
     );
   }

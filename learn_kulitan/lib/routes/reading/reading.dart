@@ -239,22 +239,6 @@ class ReadingPageState extends State<ReadingPage> {
             onChanged: (bool val) => setState(() => _kulitanSwitch = val),
             disabled: _disableSwitch,
           ),
-          // right: _isTutorial ? TextButton(
-          //   text: 'Skip',
-          //   height: headerIconSize,
-          //   color: _gameData.getColor('headerNavigation'),
-          //   onPressed: _gameLogicManager.finishTutorial,
-          //   width: 80.0,
-          //   alignment: Alignment.centerRight,
-          // ) : SizedBox(width: 56.0, height: 48.0),
-          // IconButtonNew(
-          //   icon: Icons.settings,
-          //   iconSize: headerIconSize,
-          //   color: _gameData.getColor('headerNavigation'),
-          //   onPressed: null,
-          //   width: 80.0,
-          //   alignment: Alignment.centerRight,
-          // ),
         ),
       );
     
