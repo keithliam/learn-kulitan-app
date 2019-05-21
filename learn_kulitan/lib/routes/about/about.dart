@@ -410,6 +410,18 @@ class _AboutPageState extends State<AboutPage> {
         Paragraphs(
           padding: 0.0,
           paragraphs: [
+            TextSpan(
+              children: <TextSpan>[
+                _romanText('Found a problem? Report it to '),
+                _romanText(
+                  'keithliamm@gmail.com',
+                  TapGestureRecognizer()
+                    ..onTap = () => _sendEmail('keithliamm@gmail.com'),
+                ),
+                _romanText('. Attach screenshots if applicable. Suggestions are also welcome!')
+              ],
+            ),
+            _romanText(''),
             _romanText('Loved the app? Share it! Promote Kulitan!'),
           ],
         ),
