@@ -54,7 +54,7 @@ class ColorSchemeChoice extends StatelessWidget {
                     border: Border.all(
                         color: _gameData.getColor('white'),
                         width: 8.0),
-                    borderRadius: BorderRadius.circular(50.0),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
               ),

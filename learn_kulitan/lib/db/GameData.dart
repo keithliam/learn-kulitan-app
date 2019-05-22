@@ -323,6 +323,7 @@ class GameData {
     );
   }
   
+  String getColorScheme() => _data['colors']['scheme'];
   bool getTutorial(String page) => _data[page]['tutorial'];
   int getOverallProgress(String page) => _data[page]['progress']['overall_progress'];
   int getBatch(String page) => _data[page]['progress']['current_batch'];
@@ -351,6 +352,7 @@ class GameData {
   }
   Future<void> setColorScheme(String colorScheme) async {
     final Map<String, int> colors = colorSchemes[colorScheme];
+    await _prefs.setString('colorScheme', colorScheme);
     await _prefs.setInt('primary', colors['primary']);
     await _prefs.setInt('accent', colors['accent']);
     await _prefs.setInt('foreground', colors['foreground']);
@@ -364,7 +366,8 @@ class GameData {
     await _prefs.setInt('tutorialsOverlayBackground', colors['tutorialsOverlayBackground']);
     await _prefs.setInt('cardShadow', colors['cardShadow']);
     await _prefs.setInt('buttonShadow', colors['buttonShadow']);
-    _data['colors'] = colors;
+    _data['colors'] = Map.from(colors);
+    _data['colors']['scheme'] = colorScheme;
     setStatusBarColors(colorScheme);
   }
   void setTutorial(String page, bool i) {
@@ -407,9 +410,11 @@ class GameData {
     _data['reading'] = {};
     _data['writing'] = {};
     _data['transcribe'] = {};
+    _data['colors']['scheme'] = _prefs.getString('colorScheme');
     _data['colors']['primary'] = _prefs.getInt('primary');
     _data['colors']['accent'] = _prefs.getInt('accent');
     _data['colors']['foreground'] = _prefs.getInt('foreground');
+    _data['colors']['kulitanPath'] = _prefs.getInt('kulitanPath');
     _data['colors']['empty'] = _prefs.getInt('empty');
     _data['colors']['correctAnswer'] = _prefs.getInt('correctAnswer');
     _data['colors']['wrongAnswer'] = _prefs.getInt('wrongAnswer');
@@ -432,23 +437,10 @@ class GameData {
     final List<Map<String, dynamic>> _glyphData = await _db.query('Glyph');
     _data['reading']['glyphs'] = Map<String, int>.fromIterable(_glyphData, key: (glyph) => glyph['name'], value: (glyph) => glyph['progress_count_reading']);
     _data['writing']['glyphs'] = Map<String, int>.fromIterable(_glyphData, key: (glyph) => glyph['name'], value: (glyph) => glyph['progress_count_writing']);
-    setStatusBarColors(_data['colors']);
   }
 
   Future<void> _initPrefs() async {
-    final Map<String, int> _colors = colorSchemes['default'];
-    await _prefs.setInt('primary', _colors['primary']);
-    await _prefs.setInt('accent', _colors['accent']);
-    await _prefs.setInt('foreground', _colors['foreground']);
-    await _prefs.setInt('empty', _colors['empty']);
-    await _prefs.setInt('correctAnswer', _colors['correctAnswer']);
-    await _prefs.setInt('wrongAnswer', _colors['wrongAnswer']);
-    await _prefs.setInt('quizCardMiddle', _colors['quizCardMiddle']);
-    await _prefs.setInt('quizCardLast', _colors['quizCardLast']);
-    await _prefs.setInt('white', _colors['white']);
-    await _prefs.setInt('tutorialsOverlayBackground', _colors['tutorialsOverlayBackground']);
-    await _prefs.setInt('cardShadow', _colors['cardShadow']);
-    await _prefs.setInt('buttonShadow', _colors['buttonShadow']);
+    setColorScheme('default');
     await _prefs.setBool('introTutorial', true);
     await _prefs.setBool('readingTutorial', true);
     await _prefs.setBool('writingTutorial', true);

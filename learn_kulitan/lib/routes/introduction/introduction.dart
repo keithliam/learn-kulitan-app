@@ -30,6 +30,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
   void _onLoaderFinish() {
     if (_gameData.getTutorial('intro')) _nextIntro();
     else Navigator.pushReplacementNamed(context, '/home');
+    _gameData.setStatusBarColors(_gameData.getColorScheme());
   }
 
   void _nextIntro() async {
