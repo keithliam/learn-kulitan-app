@@ -26,6 +26,7 @@ class GameData {
   Map<String, dynamic> _data = {};
   static final HashSet<String> _colorset = HashSet.from(['primary', 'accent', 'foreground', 'kulitanPath', 'empty', 'correctAnswer', 'wrongAnswer', 'quizCardMiddle', 'quizCardLast', 'white', 'tutorialsOverlayBackground', 'cardShadow', 'buttonShadow']);
 
+  List<String> getUnlockedColorSchemes() => _data['colors']['unlockedSchemes'];
   Color getColor(String color) {
     if (_colorset.contains(color))
       return Color(_data['colors'][color]);
@@ -76,7 +77,6 @@ class GameData {
       else return Color(_data['colors']['accent']);  // fallback color
     }
   }
-  
   TextStyle getStyle(String style) {
     // Kulitan Fonts
     if (style == 'kulitanHome') return TextStyle(
@@ -322,7 +322,6 @@ class GameData {
       color: getColor('foreground'),
     );
   }
-  
   String getColorScheme() => _data['colors']['scheme'];
   bool getTutorial(String page) => _data[page]['tutorial'];
   int getOverallProgress(String page) => _data[page]['progress']['overall_progress'];
@@ -333,7 +332,12 @@ class GameData {
   int getGlyphProgress(String page, String glyph) => _data[page]['glyphs'][glyph];
   Map<String, int> getGlyphProgressList(String page) => _data[page]['glyphs'];
   
-
+  void unlockColor(String colorScheme) {
+    final List<String> _colorSchemeList = _data['colors']['unlockedSchemes']
+      ..add(colorScheme);
+    _data['colors']['unlockedSchemes'] = _colorSchemeList;
+    _db.execute('INSERT INTO UnlockedColorSchemes VALUES ("$colorScheme")');
+  }
   void setStatusBarColors(String colorScheme) {
     final Map<String, int> colors = colorSchemes[colorScheme];
     if (darkColorSchemes.contains(colorScheme)) {
@@ -366,7 +370,7 @@ class GameData {
     await _prefs.setInt('tutorialsOverlayBackground', colors['tutorialsOverlayBackground']);
     await _prefs.setInt('cardShadow', colors['cardShadow']);
     await _prefs.setInt('buttonShadow', colors['buttonShadow']);
-    _data['colors'] = Map.from(colors);
+    _data['colors'].addAll(colors);
     _data['colors']['scheme'] = colorScheme;
     setStatusBarColors(colorScheme);
   }
@@ -410,6 +414,7 @@ class GameData {
     _data['reading'] = {};
     _data['writing'] = {};
     _data['transcribe'] = {};
+    _data['colors']['unlockedSchemes'] = List<String>.from((await _db.query('UnlockedColorSchemes')).map((color) => color['color']));
     _data['colors']['scheme'] = _prefs.getString('colorScheme');
     _data['colors']['primary'] = _prefs.getInt('primary');
     _data['colors']['accent'] = _prefs.getInt('accent');
@@ -527,12 +532,18 @@ class _DatabaseHelper {
             two text
           )
           ''');
+    await db.execute('''
+          CREATE TABLE UnlockedColorSchemes (
+            color TEXT(20) PRIMARY KEY
+          )
+          ''');
     await db.execute('INSERT INTO Page VALUES ("reading", 0, 0)');
     await db.execute('INSERT INTO Page VALUES ("writing", 0, 0)');
     await db.execute('INSERT INTO CurrentQuiz VALUES ("mode", null, null, null, null, "true")');
     await db.execute('INSERT INTO CurrentQuiz VALUES ("cards", null, null, null, null, null)');
     await db.execute('INSERT INTO CurrentQuiz VALUES ("choices", null, null, null, null, null)');
     await db.execute('INSERT INTO CurrentDraw VALUES ("cards", null, null)');
+    await db.execute('INSERT INTO UnlockedColorSchemes VALUES ("default")');
     await db.execute('INSERT INTO Glyph VALUES ("a", 0, 0)');
     await db.execute('INSERT INTO Glyph VALUES ("i", 0, 0)');
     await db.execute('INSERT INTO Glyph VALUES ("u", 0, 0)');

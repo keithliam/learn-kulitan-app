@@ -199,6 +199,7 @@ const keyboardPressOpacityCurve = Curves.fastLinearToSlowEaseIn;
 const keyHintOpacityCurve = Curves.fastLinearToSlowEaseIn;
 const kulitanCursorBlinkCurve = Curves.ease;
 const informationPageScrollCurve = Curves.easeInOutCubic;
+const settingsColorSchemeOpacityCurve = Curves.easeInOut;
 const loaderOpacityCurve = Curves.fastOutSlowIn;
 
 // Durations
@@ -237,6 +238,7 @@ const keyHintOpacityDuration = 350;
 const kulitanCursorBlinkDuration = 1000;
 const kulitanCursorBlinkDelay = 500;
 const keyDeleteLongPressFrequency = 150;
+const settingsColorSchemeOpacityDuration = 750;
 const loaderOpacityDuration = 250;
 const tutorialOverlayDelay = 250;
 

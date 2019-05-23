@@ -33,6 +33,8 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
 
+    final List<String> _unlockedColors = _gameData.getUnlockedColorSchemes();
+
     final Widget _content = Column(
       children: <Widget>[
         Row(
@@ -41,6 +43,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: ColorSchemeChoice(
                 colorScheme: 'default',
                 refreshPage: _refresh,
+                locked: !_unlockedColors.contains('default'),
               ),
             ),
             SizedBox(width: informationHorizontalScreenPadding),
@@ -48,6 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: ColorSchemeChoice(
                 colorScheme: 'blue',
                 refreshPage: _refresh,
+                locked: !_unlockedColors.contains('blue'),
               ),
             ),
           ],
@@ -60,6 +64,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: ColorSchemeChoice(
                   colorScheme: 'pink',
                   refreshPage: _refresh,
+                  locked: !_unlockedColors.contains('pink'),
                 ),
               ),
               SizedBox(width: informationHorizontalScreenPadding),
@@ -67,6 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: ColorSchemeChoice(
                   colorScheme: 'green',
                   refreshPage: _refresh,
+                  locked: !_unlockedColors.contains('green'),
                 ),
               ),
             ],
@@ -80,6 +86,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: ColorSchemeChoice(
                   colorScheme: 'dark',
                   refreshPage: _refresh,
+                  locked: !_unlockedColors.contains('dark'),
                 ),
               ),
               SizedBox(width: informationHorizontalScreenPadding),
@@ -87,6 +94,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: ColorSchemeChoice(
                   colorScheme: 'amoled',
                   refreshPage: _refresh,
+                  locked: !_unlockedColors.contains('amoled'),
                 ),
               ),
             ],
