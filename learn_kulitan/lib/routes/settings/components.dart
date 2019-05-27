@@ -35,9 +35,38 @@ class _ColorSchemeChoiceState extends State<ColorSchemeChoice> {
 
   void _pressedColorScheme() async {
     String _msg = '';
-    if (widget.locked)
-      _msg = 'Color is locked.';
-    else
+    if (widget.locked) {
+      final int _batch1Len = kulitanBatches[0].length;
+      final int _rProgress = _gameData.getOverallProgress('reading');
+      final int _wProgress = _gameData.getOverallProgress('writing');
+      final int _oneMoreR = _batch1Len - _rProgress;
+      final int _oneMoreW = _batch1Len - _wProgress;
+      final int _halfMoreR = halfBatchesLen - _rProgress;
+      final int _halfMoreW = halfBatchesLen - _wProgress;
+      final int _thirdMoreR = threeFourthBatchesLen - _rProgress;
+      final int _thirdMoreW = threeFourthBatchesLen - _wProgress;
+      final String _oneSR = _oneMoreR > 1 ? 's' : '';
+      final String _oneSW = _oneMoreW > 1 ? 's' : '';
+      final String _halfSR = _halfMoreR > 1 ? 's' : '';
+      final String _halfSW = _halfMoreW > 1 ? 's' : '';
+      final String _thirdSR = _thirdMoreR > 1 ? 's' : '';
+      final String _thirdSW = _thirdMoreW > 1 ? 's' : '';
+      if (widget.colorScheme == 'blue')
+        _msg =
+            'Finish $_oneMoreR more glyph$_oneSR in Pámamásâ or $_oneMoreW more glyph$_oneSW in Pámaniúlat to unlock this color scheme.';
+      else if (widget.colorScheme == 'pink')
+        _msg =
+            'Finish ${_oneMoreR > 0 ? '$_oneMoreR more glyph$_oneSR in Pámamásâ' : ''}${_oneMoreR > 0 && _oneMoreW > 0 ? ' and ' : ''}${_oneMoreW > 0 ? '$_oneMoreW more glyph$_oneSW in Pámaniúlat' : ''} to unlock this color scheme.';
+      else if (widget.colorScheme == 'green')
+        _msg =
+            'Finish $_halfMoreR more glyph$_halfSR in Pámamásâ or $_halfMoreW more glyph$_halfSW in Pámaniúlat to unlock this color scheme.';
+      else if (widget.colorScheme == 'dark')
+        _msg =
+            'Finish ${_halfMoreR > 0 ? '$_halfMoreR more glyph$_halfSR in Pámamásâ' : ''}${_halfMoreR > 0 && _halfMoreW > 0 ? ' and ' : ''}${_halfMoreW > 0 ? '$_halfMoreW more glyph$_halfSW in Pámaniúlat' : ''} to unlock this color scheme.';
+      else
+        _msg =
+            'Finish ${_thirdMoreR > 0 ? '$_thirdMoreR more glyph$_thirdSR in Pámamásâ' : ''}${_thirdMoreR > 0 && _thirdMoreW > 0 ? ' and ' : ''}${_thirdMoreW > 0 ? '$_thirdMoreW more glyph$_thirdSW in Pámaniúlat' : ''} to unlock this color scheme.';
+    } else
       _msg = 'Color scheme changed.';
     Fluttertoast.showToast(
       msg: _msg,

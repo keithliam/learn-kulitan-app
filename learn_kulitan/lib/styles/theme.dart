@@ -401,6 +401,11 @@ const List<List<String>> kulitanBatches = [
   // ['gang', 'kang', 'tang', 'dang', 'nang', 'lang', 'mang', 'pang', 'sang', 'bang', 'ngang'],
 ];
 
+final int halfBatch = (kulitanBatches.length * 0.5).ceil();
+final int threeFourthBatch = (kulitanBatches.length * 0.75).ceil();
+final int halfBatchesLen = kulitanBatches.sublist(0, halfBatch).fold(0, (int prev, List<String> batch) => prev + batch.length);
+final int threeFourthBatchesLen = kulitanBatches.sublist(0, threeFourthBatch).fold(0, (int prev, List<String> batch) => prev + batch.length);
+
 // Drawing Paths
 const Map<String, List<List<double>>> kulitanPaths = {
   'g': [
@@ -4011,16 +4016,9 @@ const Map<String, List<Map<String, dynamic>>> kulitanGuides = {
   ],
 };
 
-int _getSumOfLengths() {
-  int sum = 0;
-  for(List<String> _arr in kulitanBatches)
-    sum += _arr.length;
-  return sum;
-}
-
 // Limits
 const maxQuizGlyphProgress = 5;
 const maxWritingGlyphProgress = 5;
-final totalGlyphCount = _getSumOfLengths();
+final int totalGlyphCount = kulitanBatches.fold(0, (int prev, List<String> el) => prev += el.length);
 const quizCardPoolMinCount = 5;
 const drawCardPoolMinCount = 5;

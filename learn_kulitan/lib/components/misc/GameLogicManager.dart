@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../db/GameData.dart';
 import '../../routes/reading/components.dart' show ChoiceButton;
 import '../../styles/theme.dart';
@@ -391,6 +393,12 @@ class GameLogicManager {
     }
     if(_isFullProgress && (!_isTutorial || !isQuiz))
       _addNextBatchIfGlyphsDone();
+    if (_isFullProgress) {
+      final String _unlockedColorScheme = _gameData.checkColorSchemeUnlock();
+      final Map<String, dynamic> _glyphsUntilUnlock = _gameData.checkGlyphsUntilUnlock(isQuiz ? 'reading' : 'writing');
+      if (_unlockedColorScheme != 'none') _toastMessage('$_unlockedColorScheme color scheme unlocked! Go to Settings to change the color scheme 🎨');
+      else if (_glyphsUntilUnlock['number'] > 0) _toastMessage('Finish ${_glyphsUntilUnlock['number']} more glyph${_glyphsUntilUnlock['number'] > 1 ? 's' : ''} to unlock the ${_glyphsUntilUnlock['colorScheme']} color scheme!');
+    }
     await Future.delayed(const Duration(milliseconds: showAnswerToEnableSwipeDuration));
     if(isQuiz) _state.disableSwipe = false;
     if (!_isTutorial || !isQuiz) {
@@ -497,7 +505,7 @@ class GameLogicManager {
     }
   }
   void _addNextBatchIfGlyphsDone() {
-    if(_glyphPool.length < (isQuiz? quizCardPoolMinCount : drawCardPoolMinCount) && _state.overallProgressCount < totalGlyphCount) {
+    if(_state.overallProgressCount < totalGlyphCount) {
       bool isDone = true;
       for(String _glyph in _glyphPool)
         if(_glyphProgresses[_glyph] < (isQuiz? maxQuizGlyphProgress : maxWritingGlyphProgress)) {
@@ -520,5 +528,17 @@ class GameLogicManager {
     _batchNumber = _batchNumber + 1;
     _choicePool.addAll(kulitanBatches[_batchNumber - 1]);
     _glyphPool = kulitanBatches[_batchNumber - 1].toList();
+  }
+
+  void _toastMessage(String msg) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIos: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: toastFontSize,
+    );
   }
 }

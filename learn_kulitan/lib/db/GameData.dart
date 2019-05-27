@@ -332,12 +332,59 @@ class GameData {
   int getGlyphProgress(String page, String glyph) => _data[page]['glyphs'][glyph];
   Map<String, int> getGlyphProgressList(String page) => _data[page]['glyphs'];
   
-  void unlockColor(String colorScheme) {
+  Map<String, dynamic> checkGlyphsUntilUnlock(String page) {
+    final int _batch = _data[page]['progress']['current_batch'];
+    if (_batch == 1 || _batch == halfBatch || _batch == threeFourthBatch) {
+      final int _otherBatch = _data[page == 'reading' ? 'writing' : 'reading']['progress']['current_batch'];
+      final int _progress = _data[page]['progress']['overall_progress'];
+      final int _glyphsToBatch = _batch == 1 ? kulitanBatches[0].length : _batch == halfBatch ? halfBatchesLen : threeFourthBatchesLen;
+      final int _glyphsTilComplete = _glyphsToBatch - _progress;
+      String _colorScheme = '';
+      if (_glyphsTilComplete <= 3) {
+        if (_batch == 1) {
+          if (_otherBatch > 1) _colorScheme = 'pink';
+          else _colorScheme = 'blue';
+        } else if (_batch == halfBatch) {
+          if (_otherBatch > halfBatch) _colorScheme = 'green';
+          else _colorScheme = 'dark';
+        } else if (_batch == threeFourthBatch && _otherBatch > threeFourthBatch) {
+          _colorScheme = 'amoled';
+        }
+        if (_colorScheme.length > 0 && !_data['colors']['unlockedSchemes'].contains(_colorScheme)) return { 'number': _glyphsTilComplete, 'colorScheme': _colorScheme };
+        else return { 'number': 0 };
+      } else return { 'number': 0 };
+    } else return { 'number': 0 };
+  }
+  String checkColorSchemeUnlock() {
+    final List<String> _schemes = _data['colors']['unlockedSchemes'];
+    final int _rBatch = _data['reading']['progress']['current_batch'];
+    final int _wBatch = _data['writing']['progress']['current_batch'];
+    if (_rBatch > 1 && _wBatch > 1 && !_schemes.contains('pink')) {
+      _unlockColor('pink');
+      return 'Pink';
+    } else if ((_rBatch > 1 || _wBatch > 1) && !_schemes.contains('blue')) {
+      _unlockColor('blue');
+      return 'Blue';
+    } else if (_rBatch > halfBatch && _wBatch > halfBatch && !_schemes.contains('dark')) {
+      _unlockColor('dark');
+      return 'Dark Mode';
+    } else if ((_rBatch > halfBatch || _wBatch > halfBatch) && !_schemes.contains('green')) {
+      _unlockColor('green');
+      return 'Green';
+    } else if (_rBatch > threeFourthBatch && _wBatch > threeFourthBatch && !_schemes.contains('amoled')) {
+      _unlockColor('amoled');
+      return 'AMOLED Dark Mode';
+    } else {
+      return 'none';
+    }
+  }
+  void _unlockColor(String colorScheme) {
     final List<String> _colorSchemeList = _data['colors']['unlockedSchemes']
       ..add(colorScheme);
     _data['colors']['unlockedSchemes'] = _colorSchemeList;
     _db.execute('INSERT INTO UnlockedColorSchemes VALUES ("$colorScheme")');
   }
+
   void setStatusBarColors(String colorScheme) {
     final Map<String, int> colors = colorSchemes[colorScheme];
     if (darkColorSchemes.contains(colorScheme)) {
