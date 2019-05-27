@@ -89,8 +89,8 @@ class _AboutPageState extends State<AboutPage> {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIos: 1,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
+      backgroundColor: _gameData.getColor('toastBackground'),
+      textColor: _gameData.getColor('toastForeground'),
       fontSize: toastFontSize,
     );
   }
@@ -105,8 +105,8 @@ class _AboutPageState extends State<AboutPage> {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIos: 1,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
+      backgroundColor: _gameData.getColor('toastBackground'),
+      textColor: _gameData.getColor('toastForeground'),
       fontSize: toastFontSize,
     );
   }
@@ -120,8 +120,8 @@ class _AboutPageState extends State<AboutPage> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIos: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
+        backgroundColor: _gameData.getColor('toastBackground'),
+        textColor: _gameData.getColor('toastForeground'),
         fontSize: toastFontSize,
       );
     } catch (_) {
@@ -130,8 +130,8 @@ class _AboutPageState extends State<AboutPage> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIos: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
+        backgroundColor: _gameData.getColor('toastBackground'),
+        textColor: _gameData.getColor('toastForeground'),
         fontSize: toastFontSize,
       );
     }

@@ -66,18 +66,24 @@ class _ColorSchemeChoiceState extends State<ColorSchemeChoice> {
       else
         _msg =
             'Finish ${_thirdMoreR > 0 ? '$_thirdMoreR more glyph$_thirdSR in Pámamásâ' : ''}${_thirdMoreR > 0 && _thirdMoreW > 0 ? ' and ' : ''}${_thirdMoreW > 0 ? '$_thirdMoreW more glyph$_thirdSW in Pámaniúlat' : ''} to unlock this color scheme.';
-    } else
+    } else {
       _msg = 'Color scheme changed.';
+    }
+    final Color _fore = widget.locked
+        ? _gameData.getColor('toastForeground')
+        : Color(colorSchemes[widget.colorScheme]['white']);
+    final Color _back = widget.locked
+        ? _gameData.getColor('toastBackground')
+        : Color(colorSchemes[widget.colorScheme]['accent']);
     Fluttertoast.showToast(
       msg: _msg,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIos: 1,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
+      backgroundColor: _back,
+      textColor: _fore,
       fontSize: toastFontSize,
     );
-
     if (!widget.locked) {
       await _gameData.setColorScheme(widget.colorScheme);
       widget.refreshPage();

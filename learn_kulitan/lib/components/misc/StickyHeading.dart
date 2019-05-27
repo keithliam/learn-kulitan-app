@@ -28,8 +28,8 @@ class StickyHeading extends StatelessWidget {
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIos: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
+        backgroundColor: _gameData.getColor('toastBackground'),
+        textColor: _gameData.getColor('toastForeground'),
         fontSize: toastFontSize,
       );
     }

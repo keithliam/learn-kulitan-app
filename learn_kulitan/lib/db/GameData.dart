@@ -37,6 +37,8 @@ class GameData {
       else if (color == 'loaderStroke') return Color(_data['colors']['white']);
       else if (color == 'loaderStrokeShadow') return Color(_data['colors']['accent']);
       else if (color == 'loaderBackground') return Color(_data['colors']['primary']);
+      else if (color == 'toastForeground') return Color(_data['colors']['white']);
+      else if (color == 'toastBackground') return Color(_data['colors']['accent']);
       else if (color == 'headerNavigation') return Color(_data['colors']['white']);
       else if (color == 'circularProgressText') return Color(_data['colors']['white']);
       else if (color == 'circularProgressForeground') return Color(_data['colors']['accent']);

@@ -536,8 +536,8 @@ class GameLogicManager {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.TOP,
       timeInSecForIos: 1,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
+      backgroundColor: _gameData.getColor('toastBackground'),
+      textColor: _gameData.getColor('toastForeground'),
       fontSize: toastFontSize,
     );
   }
