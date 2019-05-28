@@ -88,7 +88,7 @@ class GameLogicManager {
     _initData(progress: _progress, batch: _batch);
     _pushCards();
     if(isQuiz) {
-      _state.disableSwipe = false;
+      if (_state.cards[0]['progress'] < maxQuizGlyphProgress) _state.disableSwipe = false;
       _state.enableAllChoices();
       _pushChoices();
     }
