@@ -107,7 +107,6 @@ class ReadingPageState extends State<ReadingPage> {
   set mode(bool i) => setState(() { _kulitanSwitch = i; _isKulitan = i; });
   void changeMode() => setState(() => _isKulitan = _kulitanSwitch);
   void setCard(Map<String, dynamic> card, int i) => setState(() => _cards[i] = card);
-  void setCardStackNo(int i, int sNum) => setState(() => _cards[i]['stackNumber'] = sNum);
   void setChoice(Map<String, dynamic> choice, int i) => setState(() => _choices[i] = choice);
   void shuffleChoices() => setState(() => _choices.shuffle());
   void flipCard() => _flipStreamController.sink.add(true);

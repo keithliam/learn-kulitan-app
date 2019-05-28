@@ -463,17 +463,14 @@ class GameLogicManager {
       _state.disableChoices = true;
       _state.disableSwipe = true;
     }
-    _state.setCard(_state.cards[1], 0);
-    if(isQuiz) _state.setCard(_state.cards[2], 1);
+    _state.setCard(_state.cards[1]..['stackNumber'] = 1, 0);
+    if(isQuiz) _state.setCard(_state.cards[2]..['stackNumber'] = 2, 1);
     if (_isTutorial && isQuiz && _tutorialNo == 0) {
       _setFourthTutorialCard();
     } else {
       _getNewCards(index: (isQuiz? 2 : 1));
     }
-    _state.setCardStackNo(0, 1);
-    _state.setCardStackNo(1, 2);
     if(isQuiz) {
-      _state.setCardStackNo(2, 3);
       _state.resetChoices();
       await Future.delayed(const Duration(milliseconds: resetChoicesDuration));
       _getNewChoices();

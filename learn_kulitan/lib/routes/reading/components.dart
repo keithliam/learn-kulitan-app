@@ -419,6 +419,8 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
           _animateSwipe(_cardRotate, 1.0);
       });
     }
+    if (widget.kulitan != oldWidget.kulitan && widget.stackNumber != 1)
+      _updatedStackNumber();
     if(widget.heightToStackTop != oldWidget.heightToStackTop) {
       if(widget.stackNumber == 1)
         _topOffset = widget.heightToStackTop + quizCardStackTopSpace;
