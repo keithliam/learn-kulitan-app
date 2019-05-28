@@ -17,6 +17,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
   int _intro = 0;
   bool _disabled = true;
   bool _isLoading = true;
+  bool _loaderAnimating = true;
   double _opacity = 0.0;
   double _messageOpacity = 0.0;
   String _animation;
@@ -28,6 +29,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
   }
 
   void _onLoaderFinish() {
+    setState(() => _loaderAnimating = false);
     if (_gameData.getTutorial('intro')) _nextIntro();
     else Navigator.pushReplacementNamed(context, '/home');
     _gameData.setStatusBarColors(_gameData.getColorScheme());
@@ -110,7 +112,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         body: Container(
-          color: Color(colorSchemes['default']['primary']),
+          color: _loaderAnimating ? Color(colorSchemes['default']['primary']) : _gameData.getColor('background'),
           child: SafeArea(
             child: Loader(
               isStartup: true,
@@ -153,7 +155,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                         curve: introTextOpacityCurve,
                         duration: const Duration(milliseconds: introTextOpacityDuration),
                         child: Center(
-                          child: AutoSizeText(_message, textAlign: TextAlign.center, style: _gameData.getStyle('textTutorialOverlay')),
+                          child: AutoSizeText(_message, textAlign: TextAlign.center, style: _loaderAnimating ? null : _gameData.getStyle('textTutorialOverlay')),
                         ),
                       ),
                     ),
@@ -168,8 +170,9 @@ class _IntroductionPageState extends State<IntroductionPage> {
                         borderRadius: 30.0,
                         padding: const EdgeInsets.symmetric(horizontal: 30.0),
                         elevation: 10.0,
+                        color: _loaderAnimating ? Color(colorSchemes['default']['white']) : null,
                         child: Center(
-                          child: Text('Next', style: _gameData.getStyle('textInfoButton')),
+                          child: Text('Next', style: _loaderAnimating ? null : _gameData.getStyle('textInfoButton')),
                         ),
                       ),
                     ),
