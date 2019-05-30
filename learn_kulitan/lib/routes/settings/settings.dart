@@ -114,7 +114,7 @@ class _SettingsPageState extends State<SettingsPage> {
               informationHorizontalScreenPadding,
               10.0,
             ),
-            child: Text('Settings', style: _gameData.getStyle('textPageTitle')),
+            child: Text('${MediaQuery.of(context).size.width >= 690 ? 'Pipanagpágang ' : ''}Kaburian', style: _gameData.getStyle('textPageTitle')),
           ),
           Expanded(
             child: Scrollbar(
