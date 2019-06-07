@@ -77,7 +77,8 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double _width = MediaQuery.of(context).size.width;
+    final double _screenHorizontalPadding = MediaQuery.of(context).size.width > 600.0 ? 0.0 : informationHorizontalScreenPadding;
+    final double _width = MediaQuery.of(context).size.width > 600.0 ? 600.0 : MediaQuery.of(context).size.width;
 
     Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding,
@@ -555,37 +556,43 @@ class _HistoryPageState extends State<HistoryPage> {
       Scrollbar(
         child: SingleChildScrollView(
           controller: _scrollController,
-          child: Column(
-            children: <Widget>[
-              StickyHeading(
-                headingText: 'History',
-                showCredits: true,
-                content: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(
-                    informationHorizontalScreenPadding,
-                    imageTopPadding - informationCreditsVerticalPadding,
-                    informationHorizontalScreenPadding,
-                    informationVerticalScreenPadding -
-                        headerVerticalPadding +
-                        8.0,
+          child: Align(
+            alignment: Alignment.center,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 600.0),
+              child: Column(
+                children: <Widget>[
+                  StickyHeading(
+                    headingText: 'History',
+                    showCredits: true,
+                    content: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.fromLTRB(
+                        _screenHorizontalPadding,
+                        imageTopPadding - informationCreditsVerticalPadding,
+                        _screenHorizontalPadding,
+                        informationVerticalScreenPadding -
+                            headerVerticalPadding +
+                            8.0,
+                      ),
+                      child: _history,
+                    ),
                   ),
-                  child: _history,
-                ),
-              ),
-              StickyHeading(
-                headingText: 'References',
-                content: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    informationHorizontalScreenPadding,
-                    informationSubtitleBottomPadding - headerVerticalPadding,
-                    informationHorizontalScreenPadding,
-                    informationVerticalScreenPadding,
+                  StickyHeading(
+                    headingText: 'References',
+                    content: Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        _screenHorizontalPadding,
+                        informationSubtitleBottomPadding - headerVerticalPadding,
+                        _screenHorizontalPadding,
+                        informationVerticalScreenPadding,
+                      ),
+                      child: _references,
+                    ),
                   ),
-                  child: _references,
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

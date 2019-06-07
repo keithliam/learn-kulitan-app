@@ -658,9 +658,12 @@ class _TranscribePageState extends State<TranscribePage>
       ),
     );
 
+    final double _aspectRatio = MediaQuery.of(context).size.aspectRatio;
+    final double _horizontalPadding = transcribeHorizontalScreenPadding * (_aspectRatio > 0.7 ? ((_aspectRatio / 0.75) * 4.0) : 1.0);
+
     Widget _page = Padding(
-      padding: const EdgeInsets.symmetric(
-          horizontal: transcribeHorizontalScreenPadding,
+      padding: EdgeInsets.symmetric(
+          horizontal: _horizontalPadding,
           vertical: transcribeVerticalScreenPadding),
       child: GestureDetector(
         onVerticalDragStart: (_) =>
@@ -699,11 +702,14 @@ class _TranscribePageState extends State<TranscribePage>
         children: <Widget>[
           _header,
           Expanded(
-            child: KulitanKeyboard(
-              getGlyph: _getLastKulitanGlyph,
-              visibility: _keyboardOffset,
-              onKeyPress: _kulitanKeyPressed,
-              child: _page,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: _horizontalPadding - transcribeHorizontalScreenPadding),
+              child: KulitanKeyboard(
+                getGlyph: _getLastKulitanGlyph,
+                visibility: _keyboardOffset,
+                onKeyPress: _kulitanKeyPressed,
+                child: _page,
+              ),
             ),
           ),
         ],

@@ -726,8 +726,11 @@ class WritingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _aspectRatio = MediaQuery.of(context).size.aspectRatio;
+    final double _horizontalPadding = writingHorizontalScreenPadding * (_aspectRatio > 0.7 ? ((_aspectRatio / 0.75) * 4.0) : 1.0);
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(writingHorizontalScreenPadding, 0.0, writingHorizontalScreenPadding, writingVerticalScreenPadding),
+      padding: EdgeInsets.fromLTRB(_horizontalPadding, 0.0, _horizontalPadding, writingVerticalScreenPadding),
       child: Column(
         children: <Widget>[
           Expanded(
@@ -888,7 +891,7 @@ class _TutorialState extends State<Tutorial> with SingleTickerProviderStateMixin
   OverlayEntry _createOverlay() {
     return OverlayEntry(
       builder: (context) {
-        final Size _dimensions = MediaQuery.of(context).size;
+        final Size _dimensions = MediaQuery.of(context).size.width >= 600 ? Size(600.0, MediaQuery.of(context).size.height) : MediaQuery.of(context).size;
         final double _relWidth = _dimensions.width / 414.0;
         final List<Widget> _elements = [
           _flare(

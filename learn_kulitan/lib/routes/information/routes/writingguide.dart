@@ -75,7 +75,9 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
 
   @override
   Widget build(BuildContext context) {
-    final double _width = MediaQuery.of(context).size.width;
+    final double _screenHorizontalPadding = MediaQuery.of(context).size.width > 600.0 ? 0.0 : informationHorizontalScreenPadding;
+    final double _width = MediaQuery.of(context).size.width > 600.0 ? 600.0 : MediaQuery.of(context).size.width;
+
 
     Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding,
@@ -1603,18 +1605,22 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
         physics: BouncingScrollPhysics(),
         itemCount: _guideList.length,
         itemBuilder: (BuildContext _, int index) {
-          return Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(
-                horizontal: informationHorizontalScreenPadding),
-            child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    bottom: informationVerticalScreenPadding -
-                        (index == 0 ? 7.5 : 0.0)),
-                child: Column(
-                  children: _guideList[index],
+          return Align(
+            alignment: Alignment.center,
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 600.0),
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                  horizontal: _screenHorizontalPadding),
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: informationVerticalScreenPadding -
+                          (index == 0 ? 7.5 : 0.0)),
+                  child: Column(
+                    children: _guideList[index],
+                  ),
                 ),
               ),
             ),
@@ -1629,9 +1635,9 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           Container(
             color: _gameData.getColor('background'),
             padding: const EdgeInsets.fromLTRB(
-              informationHorizontalScreenPadding,
+              headerHorizontalPadding,
               headerVerticalPadding - 8.0,
-              informationHorizontalScreenPadding,
+              headerHorizontalPadding,
               0.0,
             ),
             child: Text('Guide', style: _gameData.getStyle('textPageTitle')),

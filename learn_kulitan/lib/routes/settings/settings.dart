@@ -17,8 +17,20 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _refresh() => setState(() {});
 
+  Widget _getColor(String color) {
+    final List<String> _unlockedColors = _gameData.getUnlockedColorSchemes();
+    return ColorSchemeChoice(
+      colorScheme: color,
+      refreshPage: _refresh,
+      locked: !_unlockedColors.contains(color),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final double _screenWidth = MediaQuery.of(context).size.width;
+    final double _screenHorizontalPadding = _screenWidth > 600.0 ? 0.0 : informationHorizontalScreenPadding;
+
     Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding,
           headerVerticalPadding, headerHorizontalPadding, 0.0),
@@ -33,74 +45,60 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
 
-    final List<String> _unlockedColors = _gameData.getUnlockedColorSchemes();
-
     final Widget _content = Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: ColorSchemeChoice(
-                colorScheme: 'default',
-                refreshPage: _refresh,
-                locked: !_unlockedColors.contains('default'),
-              ),
-            ),
-            SizedBox(width: informationHorizontalScreenPadding),
-            Expanded(
-              child: ColorSchemeChoice(
-                colorScheme: 'blue',
-                refreshPage: _refresh,
-                locked: !_unlockedColors.contains('blue'),
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: informationHorizontalScreenPadding),
-          child: Row(
+      children: _screenWidth < 600.0
+        ? <Widget>[
+          Row(
             children: <Widget>[
-              Expanded(
-                child: ColorSchemeChoice(
-                  colorScheme: 'pink',
-                  refreshPage: _refresh,
-                  locked: !_unlockedColors.contains('pink'),
-                ),
-              ),
+              Expanded(child: _getColor('default')),
               SizedBox(width: informationHorizontalScreenPadding),
-              Expanded(
-                child: ColorSchemeChoice(
-                  colorScheme: 'green',
-                  refreshPage: _refresh,
-                  locked: !_unlockedColors.contains('green'),
-                ),
-              ),
+              Expanded(child: _getColor('blue')),
             ],
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: informationHorizontalScreenPadding),
-          child: Row(
+          Padding(
+            padding: const EdgeInsets.only(top: informationHorizontalScreenPadding),
+            child: Row(
+              children: <Widget>[
+                Expanded(child: _getColor('pink')),
+                SizedBox(width: informationHorizontalScreenPadding),
+                Expanded(child: _getColor('green')),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: informationHorizontalScreenPadding),
+            child: Row(
+              children: <Widget>[
+                Expanded(child: _getColor('dark')),
+                SizedBox(width: informationHorizontalScreenPadding),
+                Expanded(child: _getColor('amoled')),
+              ],
+            ),
+          ),
+        ]
+        : <Widget>[
+          Row(
             children: <Widget>[
-              Expanded(
-                child: ColorSchemeChoice(
-                  colorScheme: 'dark',
-                  refreshPage: _refresh,
-                  locked: !_unlockedColors.contains('dark'),
-                ),
-              ),
+              Expanded(child: _getColor('default')),
               SizedBox(width: informationHorizontalScreenPadding),
-              Expanded(
-                child: ColorSchemeChoice(
-                  colorScheme: 'amoled',
-                  refreshPage: _refresh,
-                  locked: !_unlockedColors.contains('amoled'),
-                ),
-              ),
+              Expanded(child: _getColor('blue')),
+              SizedBox(width: informationHorizontalScreenPadding),
+              Expanded(child: _getColor('pink')),
             ],
           ),
-        ),
-      ],
+          Padding(
+            padding: const EdgeInsets.only(top: informationHorizontalScreenPadding),
+            child: Row(
+              children: <Widget>[
+                Expanded(child: _getColor('green')),
+                SizedBox(width: informationHorizontalScreenPadding),
+                Expanded(child: _getColor('dark')),
+                SizedBox(width: informationHorizontalScreenPadding),
+                Expanded(child: _getColor('amoled')),
+              ],
+            ),
+          ),
+        ],
     );
 
     final List<Widget> _pageStack = [
@@ -122,11 +120,17 @@ class _SettingsPageState extends State<SettingsPage> {
                 physics: BouncingScrollPhysics(),
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: informationHorizontalScreenPadding,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: _screenHorizontalPadding,
                     vertical: informationVerticalScreenPadding,
                   ),
-                  child: _content,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 600.0),
+                      child: _content,
+                    ),
+                  ),
                 ),
               ),
             ),

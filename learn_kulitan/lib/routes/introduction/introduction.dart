@@ -108,6 +108,9 @@ class _IntroductionPageState extends State<IntroductionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final double _screenWidth = MediaQuery.of(context).size.width;
+    final double _screenHorizontalPadding = _screenWidth > 600.0 ? 0.0 : 32.0;
+
     return Material(
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
@@ -146,9 +149,8 @@ class _IntroductionPageState extends State<IntroductionPage> {
                       ),
                     ),
                     Container(
-                      padding: MediaQuery.of(context).size.height > 600
-                        ? const EdgeInsets.symmetric(horizontal: 32.0, vertical: 20.0)
-                        : const EdgeInsets.symmetric(horizontal: 32.0 / 2.0, vertical : 20.0 / 2.0),
+                      constraints: BoxConstraints(maxWidth: 600.0),
+                      padding: EdgeInsets.symmetric(horizontal: _screenHorizontalPadding, vertical: 20.0),
                       height: MediaQuery.of(context).size.height > 600 ? 125.0 : 80.0,
                       child: AnimatedOpacity(
                         opacity: _messageOpacity,
@@ -159,10 +161,9 @@ class _IntroductionPageState extends State<IntroductionPage> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: MediaQuery.of(context).size.height > 600
-                        ? const EdgeInsets.fromLTRB(32.0, 0.0, 32.0, 32.0)
-                        : const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                    Container(
+                      constraints: BoxConstraints(maxWidth: 600.0),
+                      padding: EdgeInsets.fromLTRB(_screenHorizontalPadding, 0.0, _screenHorizontalPadding, 32.0),
                       child: CustomButton(
                         disable: _disabled,
                         onPressed: _nextIntro,

@@ -54,6 +54,9 @@ class _InformationPageState extends State<InformationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final double _screenWidth = MediaQuery.of(context).size.width;
+    final double _screenHorizontalPadding = _screenWidth > 600.0 ? 0.0 : informationHorizontalScreenPadding;
+
     final Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(
         headerHorizontalPadding,
@@ -73,10 +76,10 @@ class _InformationPageState extends State<InformationPage> {
     );
 
     final Widget _historyButton = Padding(
-      padding: const EdgeInsets.fromLTRB(
-        informationHorizontalScreenPadding,
+      padding: EdgeInsets.fromLTRB(
+        _screenHorizontalPadding,
         informationVerticalScreenPadding,
-        informationHorizontalScreenPadding,
+        _screenHorizontalPadding,
         0.0,
       ),
       child: CustomButton(
@@ -109,10 +112,10 @@ class _InformationPageState extends State<InformationPage> {
       ),
     );
     final Widget _writingInstructionsButton = Padding(
-      padding: const EdgeInsets.fromLTRB(
-        informationHorizontalScreenPadding,
+      padding: EdgeInsets.fromLTRB(
+        _screenHorizontalPadding,
         0.0,
-        informationHorizontalScreenPadding,
+        _screenHorizontalPadding,
         informationVerticalScreenPadding - headerVerticalPadding + 8.0,
       ),
       child: CustomButton(
@@ -147,10 +150,10 @@ class _InformationPageState extends State<InformationPage> {
     );
 
     final Widget _indungSulatTable = Padding(
-      padding: const EdgeInsets.fromLTRB(
-        informationHorizontalScreenPadding,
+      padding: EdgeInsets.fromLTRB(
+        _screenHorizontalPadding,
         informationSubtitleBottomPadding - headerVerticalPadding,
-        informationHorizontalScreenPadding,
+        _screenHorizontalPadding,
         0.0,
       ),
       child: Table(
@@ -178,10 +181,10 @@ class _InformationPageState extends State<InformationPage> {
       ),
     );
     final Widget _indungSulatVowelTable = Padding(
-      padding: const EdgeInsets.fromLTRB(
-        informationHorizontalScreenPadding,
+      padding: EdgeInsets.fromLTRB(
+        _screenHorizontalPadding,
         0.0,
-        informationHorizontalScreenPadding,
+        _screenHorizontalPadding,
         informationVerticalScreenPadding - headerVerticalPadding + 8.0,
       ),
       child: Table(
@@ -205,18 +208,16 @@ class _InformationPageState extends State<InformationPage> {
       ),
     );
 
-    final double _screenWidth = MediaQuery.of(context).size.width;
-    final double _cellWidth =
-        (_screenWidth - (informationHorizontalScreenPadding * 2)) / 4;
+    final double _cellWidth = _screenWidth >= 600 ? 120.0 : (_screenWidth - (_screenHorizontalPadding * 2)) / 4;
 
     final Widget _anakSulatTable = SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       physics: BouncingScrollPhysics(),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          informationHorizontalScreenPadding,
+        padding: EdgeInsets.fromLTRB(
+          _screenHorizontalPadding,
           0.0,
-          informationHorizontalScreenPadding,
+          _screenHorizontalPadding,
           informationVerticalScreenPadding,
         ),
         child: Table(
@@ -339,9 +340,9 @@ class _InformationPageState extends State<InformationPage> {
 
     final _indungSulatDivider = Padding(
       padding: EdgeInsets.fromLTRB(
-        _screenWidth * 0.31,
+        (_screenWidth >= 600 ? 600.0 : _screenWidth) * 0.31,
         40.0,
-        _screenWidth * 0.31,
+        (_screenWidth >= 600 ? 600.0 : _screenWidth) * 0.31,
         22.0,
       ),
       child: DividerNew(
@@ -358,30 +359,43 @@ class _InformationPageState extends State<InformationPage> {
       controller: _scrollController,
       child: Column(
         children: <Widget>[
-          StickyHeading(
-            headingText: 'Kapabaluan',
-            content: Column(
-              children: <Widget>[
-                _historyButton,
-                _writingInstructionsButton,
-              ],
+          Align(
+            alignment: Alignment.center,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 600.0),
+              child: Column(
+                children: <Widget>[
+                  StickyHeading(
+                    headingText: 'Kapabaluan',
+                    content: Column(
+                      children: <Widget>[
+                        _historyButton,
+                        _writingInstructionsButton,
+                      ],
+                    ),
+                  ),
+                  StickyHeading(
+                    headingText: 'Indûng Súlat',
+                    content: Column(
+                      children: <Widget>[
+                        _indungSulatTable,
+                        _indungSulatDivider,
+                        _indungSulatVowelTable,
+                      ],
+                    ),
+                  ),
+                  StickyHeading(
+                    headingText: 'Anak Súlat',
+                    content: Container(),
+                  ),
+                ],
+              ),
             ),
           ),
-          StickyHeading(
-            headingText: 'Indûng Súlat',
-            content: Column(
-              children: <Widget>[
-                _indungSulatTable,
-                _indungSulatDivider,
-                _indungSulatVowelTable,
-              ],
-            ),
-          ),
-          StickyHeading(
-            headingText: 'Anak Súlat',
-            content: Column(
-              children: <Widget>[_anakSulatTable],
-            ),
+          Container(
+            alignment: Alignment.center,
+            width: double.infinity,
+            child: _anakSulatTable,
           )
         ],
       ),
@@ -406,7 +420,7 @@ class _InformationPageState extends State<InformationPage> {
         ),
       );
     }
-
+    
     return Material(
       color: _gameData.getColor('background'),
       child: SafeArea(

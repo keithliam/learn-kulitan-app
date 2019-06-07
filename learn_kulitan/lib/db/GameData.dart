@@ -171,7 +171,7 @@ class GameData {
     );
     else if (style == 'textQuizHeader') return TextStyle(
       fontFamily: 'Barlow',
-      fontSize: 25.0,
+      fontSize: 36.0,
       fontWeight: FontWeight.bold,
       color: getColor('white'),
     );

@@ -633,11 +633,12 @@ class _KeyboardKeyContainer extends StatelessWidget {
         ),
       );
     } else if (keyType == 'delete' || keyType == 'enter' || keyType == 'add') {
+      final double _aspectRatio = MediaQuery.of(context).size.aspectRatio;
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: CustomPaint(
           painter: _KeyIconPainter(
-            strokePercent: MediaQuery.of(context).size.width / 414.0,
+            strokePercent: _aspectRatio > 0.7 ? 1.5 : (MediaQuery.of(context).size.width / 414.0),
             keyType: keyType,
           ),
         ),
@@ -706,9 +707,9 @@ class _KeyIconPainter extends CustomPainter {
     final Offset _shadowOffset =
         Offset(2.5 * strokePercent, 2.5 * strokePercent);
     final double _strokeWidth = 3.0 * strokePercent;
-    final double _start = _strokeWidth - (_shadowOffset.dx / 2.0);
-    final double _end = size.width - _strokeWidth - (_shadowOffset.dx / 2.0);
-    final double _width = _end - _start;
+    final double _width = size.height / 0.6588;
+    final double _start = ((size.width - _width) / 2.0) + ((_strokeWidth + _shadowOffset.dx) / 2.0);
+    final double _end = ((size.width + _width) / 2.0) - ((_strokeWidth + _shadowOffset.dx) / 2.0);
     final double _middle = size.height / 2.0;
 
     Paint _stroke = Paint()
@@ -718,9 +719,9 @@ class _KeyIconPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = _strokeWidth;
     if (keyType == 'delete') {
-      final double _crossOrigin = _start + (_width * 0.66678);
-      final double _arrowOffset = _width * 0.33391;
-      final double _crossOffset = _width * 0.13713;
+      final double _arrowOffset = (_width - size.height - _strokeWidth);
+      final double _crossOrigin = _start + _arrowOffset + (size.height / 2.0) - (_strokeWidth / 2.0);
+      final double _crossOffset = size.height * 0.19;
       final Path _outline = Path()
         ..moveTo(_start, _middle)
         ..lineTo(_start + _arrowOffset, _middle - _arrowOffset)
@@ -784,7 +785,11 @@ class KulitanKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double _keyboardHeight = MediaQuery.of(context).size.width * 0.6588;
+    final double _aspectRatio = MediaQuery.of(context).size.aspectRatio;
+    final double _horizontalPadding = transcribeHorizontalScreenPadding * (_aspectRatio > 0.7 ? ((0.75 / _aspectRatio) * 4.0) : 1.0);
+
+    final double _keyboardPreferredHeight = (MediaQuery.of(context).size.width - ((_horizontalPadding - transcribeHorizontalScreenPadding) * 2.0)) * 0.6588;
+    final double _keyboardHeight = _keyboardPreferredHeight > 330.0 ? 330.0 : _keyboardPreferredHeight;
     final double _keyHeight = (_keyboardHeight - keyboardDividerHeight) / 4.0;
 
     Widget _keyboard = Table(
@@ -1102,7 +1107,7 @@ class _TutorialState extends State<Tutorial>
   OverlayEntry _createOverlay() {
     return OverlayEntry(
       builder: (context) {
-        final Size _dimensions = MediaQuery.of(context).size;
+        final Size _dimensions = MediaQuery.of(context).size.width >= 600 ? Size(600.0, MediaQuery.of(context).size.height) : MediaQuery.of(context).size;
         final double _relHeight = _dimensions.height / 896.0;
         List<Widget> _elements = [];
         if (widget.tutorialNo == 1) {

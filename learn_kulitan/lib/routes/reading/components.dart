@@ -147,11 +147,11 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return CustomButton(
-      height: MediaQuery.of(context).size.aspectRatio < 0.5 ? quizChoiceButtonHeight : 45.0,
+      height: MediaQuery.of(context).size.height < 600.0 ? 45.0 : MediaQuery.of(context).size.height < 950.0 ? quizChoiceButtonHeight : 70.0,
       color: _animation.value,
       onPressed: _tapped,
       disable:  widget.disable || _isTapped,
-      elevation: MediaQuery.of(context).size.aspectRatio < 0.5 ? quizChoiceButtonElevation : 7.0,
+      elevation: MediaQuery.of(context).size.height < 600.0 ? 7.0 : MediaQuery.of(context).size.height < 950.0 ? quizChoiceButtonElevation : 12.0,
       borderRadius: 15.0,
       padding: const EdgeInsets.all(12.0),
       pressDelay: quizChoicePressDuration,
@@ -290,6 +290,7 @@ class AnimatedQuizCard extends StatefulWidget {
     @required this.stackNumber,
     @required this.stackWidth,
     @required this.heightToStackTop,
+    @required this.horizontalScreenPadding,
     this.revealAnswer,
     this.swipedLeft,
     this.swipingCard,
@@ -311,6 +312,7 @@ class AnimatedQuizCard extends StatefulWidget {
   final VoidCallback swipingCard;
   final VoidCallback swipingCardDone;
   final bool disableSwipe;
+  final double horizontalScreenPadding;
 
   @override
   _AnimatedQuizCard createState() => _AnimatedQuizCard();
@@ -336,7 +338,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   double _cardWidth = 50.0;
 
   double _topOffset = 0.0;
-  double _leftOffset = quizHorizontalScreenPadding;
+  double _leftOffset = 0.0;
 
   bool _isSwipeDownSnapping = false;
   bool _isSwipeLeftSnapping = false;
@@ -353,6 +355,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   @override
   void initState() {
     super.initState();
+    _leftOffset = widget.horizontalScreenPadding;    
     _isKulitan = widget.isKulitan;
     _controller = AnimationController(duration: Duration(milliseconds: swipeDownSnapDuration), vsync: this);
     _curveAnimation = CurvedAnimation(parent: _controller, curve: _swipeDownCurve);
@@ -423,9 +426,9 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
       _updatedStackNumber();
     if(widget.heightToStackTop != oldWidget.heightToStackTop) {
       if(widget.stackNumber == 1)
-        _topOffset = widget.heightToStackTop + quizCardStackTopSpace;
+        _topOffset = widget.heightToStackTop + quizCardStackTopSpace * (widget.stackWidth / 400.0);
       else if(widget.stackNumber == 2)
-        _topOffset = widget.heightToStackTop + (quizCardStackTopSpace / 2);
+        _topOffset = widget.heightToStackTop + (quizCardStackTopSpace * (widget.stackWidth / 400.0) / 2);
       else
         _topOffset = widget.heightToStackTop;
     }
@@ -459,15 +462,15 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
   }
 
   void _forwardCardListener() {
-    double _topStart = widget.stackNumber == 2? 0.0 : quizCardStackTopSpace / 2;
-    double _topFin = widget.stackNumber == 3? -quizCardStackTopSpace / 2 : quizCardStackTopSpace / 2;
+    double _topStart = widget.stackNumber == 2? 0.0 : quizCardStackTopSpace * (widget.stackWidth / 400.0) / 2;
+    double _topFin = widget.stackNumber == 3? -quizCardStackTopSpace * (widget.stackWidth / 400.0) / 2 : quizCardStackTopSpace * (widget.stackWidth / 400.0) / 2;
     double _leftStart = widget.stackNumber == 1? 0.05 : widget.stackNumber == 1? 0.05 : widget.stackNumber == 2? 0.1 : 0.15;
     double _leftFinDiff = 0.05;
     double _widthStart = widget.stackNumber == 1? 0.9 : widget.stackNumber == 2? 0.8 : 0.7;
     double _widthFinDiff = 0.1;
     setState(() {
       _topOffset = widget.heightToStackTop + _topStart + (_animation.value * _topFin);
-      _leftOffset = quizHorizontalScreenPadding + (widget.stackWidth * _leftStart - (widget.stackWidth * _animation.value * _leftFinDiff));
+      _leftOffset = widget.horizontalScreenPadding + (widget.stackWidth * _leftStart - (widget.stackWidth * _animation.value * _leftFinDiff));
       _cardWidth = widget.stackWidth * _widthStart + (widget.stackWidth * _animation.value * _widthFinDiff);
     });
   }
@@ -666,7 +669,7 @@ class _AnimatedQuizCard extends State<AnimatedQuizCard> with SingleTickerProvide
 
     return Positioned(
       top: _topOffset - (_swipeRatio * quizCardMoveUpVelocity * 150.0),
-      left: _leftOffset - (_swipeRatio * quizCardMoveLeftVelocity * ((widget.stackWidth + quizHorizontalScreenPadding) * 1.2)),
+      left: _leftOffset - (_swipeRatio * quizCardMoveLeftVelocity * ((widget.stackWidth + widget.horizontalScreenPadding) * 1.2)),
       child: widget.stackNumber != 1 ? _card : Transform.rotate(
         angle: (_swipeRatio * quizCardRotateVelocity * (-math.pi / 4)),
         alignment: FractionalOffset.center,
@@ -698,6 +701,7 @@ class TutorialOverlay extends StatefulWidget {
     @required this.animation,
     @required this.flare,
     @required this.tutorialNo,
+    @required this.horizontalScreenPadding,
   }) : super(key: key);
 
   final double width;
@@ -706,6 +710,7 @@ class TutorialOverlay extends StatefulWidget {
   final String animation;
   final String flare;
   final int tutorialNo;
+  final double horizontalScreenPadding;
 
   @override
   _TutorialOverlayState createState() => _TutorialOverlayState();
@@ -807,7 +812,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
   OverlayEntry _createOverlay() {
     return OverlayEntry(
       builder: (context) {
-        final Size _dimensions = MediaQuery.of(context).size;
+        final Size _dimensions = MediaQuery.of(context).size.width >= 600 ? Size(600.0, MediaQuery.of(context).size.height) : MediaQuery.of(context).size;
         final double _relWidth = _dimensions.width / 414.0;
 
         double top = 0.0;
@@ -818,14 +823,14 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
         List<Widget> _elements = [];
 
         double topF = widget.quizCardTop;
-        double leftF = quizHorizontalScreenPadding;
+        double leftF = widget.horizontalScreenPadding;
         double rightF = 0.0;
         double heightF = widget.width;
 
         if (widget.tutorialNo == 2) {
           heightF = 100.0;
           if (!_pageTwo) {
-            leftF = quizHorizontalScreenPadding + 45.0;
+            leftF = widget.horizontalScreenPadding + 45.0;
             topF = widget.quizCardTop - 55.0;
             _elements.add(_flare(top: widget.quizCardBottom + 10.0, height: heightF * _relWidth, left: 50.0, right: 100.0, flipH: true));
           } else {
@@ -834,7 +839,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
           }
         } else if (widget.tutorialNo == 3 || widget.tutorialNo == 4) {
           heightF = 100.0;
-          leftF = quizHorizontalScreenPadding + 45.0;
+          leftF = widget.horizontalScreenPadding + 45.0;
           topF = widget.quizCardTop - 55.0;
         }
         final bool flipV = widget.tutorialNo == 2 && _pageTwo;
@@ -883,7 +888,13 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
                 parent: _controller,
                 curve: Curves.easeInOut,
               )),
-              child: Stack(children: _elements),
+              child: Align(
+                alignment: Alignment.center,
+                child: Container(
+                  constraints: BoxConstraints(maxWidth: 600.0),
+                  child: Stack(children: _elements),
+                ),
+              ),
             ),
           ),
         );
@@ -972,19 +983,23 @@ class _TutorialSuccessState extends State<TutorialSuccess> with SingleTickerProv
                         animation: 'Untitled',
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0,
-                        vertical: 20.0,
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        constraints: BoxConstraints(maxWidth: 600.0),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width >= 600.0 ? 0.0 : 20.0,
+                          vertical: 20.0,
+                        ),
+                        child: Paragraphs(
+                          textAlign: TextAlign.center,
+                          paragraphs: [TextSpan(
+                            text: widget.text,
+                            style: _gameData.getStyle('textTutorialOverlay'),
+                          )],
+                        ),
                       ),
-                      child: Paragraphs(
-                        textAlign: TextAlign.center,
-                        paragraphs: [TextSpan(
-                          text: widget.text,
-                          style: _gameData.getStyle('textTutorialOverlay'),
-                        )],
-                      ),
-                    )
+                    ),
                   ],
                 ),
               ),

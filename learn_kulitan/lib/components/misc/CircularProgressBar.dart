@@ -106,8 +106,8 @@ class _CircularProgressBarState extends State<CircularProgressBar>
   Widget build(BuildContext context) {return FittedBox(
       fit: BoxFit.scaleDown,
       child: Container(
-        width: MediaQuery.of(context).size.width - (quizHorizontalScreenPadding * 2),
-        height: 124.0,
+        width: 180.0,
+        height: 180.0,
         child: CustomPaint(
           painter: _CircularProgressBarPainter(
             progress: _animation.value,
@@ -116,7 +116,7 @@ class _CircularProgressBarState extends State<CircularProgressBar>
             children: <Widget>[
               Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.only(bottom: 45.0),
+                padding: const EdgeInsets.only(bottom: 65.0),
                 child: Text(
                   '${widget.numerator}',
                   style: _gameData.getStyle('textQuizHeader'),
@@ -125,14 +125,14 @@ class _CircularProgressBarState extends State<CircularProgressBar>
               ),
               Center(
                 child: DividerNew(
-                  height: 5.0,
-                  width: 64.0,
+                  height: 7.3,
+                  width: 93.0,
                   color: _gameData.getColor('circularProgressText'),
                 ),
               ),
               Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.only(top: 40.0),
+                padding: const EdgeInsets.only(top: 60.0),
                 child: Text(
                   '${widget.denominator}',
                   style: _gameData.getStyle('textQuizHeader'),

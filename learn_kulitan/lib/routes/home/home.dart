@@ -172,7 +172,15 @@ class _HomePageState extends State<HomePage> {
                 _infoButton,
                 _aboutButton,
                 _settingsButton,
-              ],
+              ].map((button) {
+                return Align(
+                  alignment: Alignment.center,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 600.0),
+                    child: button,
+                  ),
+                );
+              }).toList(),
             ),
           ),
         ),

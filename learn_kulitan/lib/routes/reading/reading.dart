@@ -175,24 +175,25 @@ class ReadingPageState extends State<ReadingPage> {
   void _getQuizCardsSize() {
     final RenderBox _screenBox = _pageKey.currentContext.findRenderObject();
     final RenderBox _cardBox = _quizCardsKey.currentContext.findRenderObject();
-    double _cardWidth = _cardBox.size.width - (quizHorizontalScreenPadding * 2);
+    final double _horizontalPadding = (quizHorizontalScreenPadding * (_screenSize.aspectRatio > 0.7 ? ((_screenSize.aspectRatio / 0.75) * 4.0) : 1.0) * 2);
+    double _cardWidth = _cardBox.size.width - _horizontalPadding;
 
-    final _cardStackBottomPadding = _screenSize.aspectRatio < 0.5 ? cardQuizStackBottomPadding : 13.0;
-    final _buttonElevation = _screenSize.aspectRatio < 0.5 ? quizChoiceButtonElevation : 7.0;
-    final _buttonHeight = _screenSize.aspectRatio < 0.5 ? quizChoiceButtonHeight : 45.0;
-    final _choiceSpacing = MediaQuery.of(context).size.aspectRatio < 0.5 ? choiceSpacing : 7.0;
+    final _buttonElevation = _screenSize.height < 600.0 ? 7.0 : _screenSize.height < 950.0 ? quizChoiceButtonElevation : 12.0;
+    final _buttonHeight = _screenSize.height < 600.0 ? 45.0 : _screenSize.height < 950.0 ? quizChoiceButtonHeight : 70.0;
 
     setState(() {
       _quizCardWidth = _cardWidth;
-      _heightToCardStackBottom = _screenBox.size.height - quizVerticalScreenPadding - ((_buttonHeight + _buttonElevation) * 2) - _choiceSpacing - _cardStackBottomPadding;
-      _heightToQuizCardTop = _heightToCardStackBottom - _quizCardWidth - quizCardStackTopSpace;
-      _quizCardStackHeight = _heightToCardStackBottom - _heightToQuizCardTop + _cardStackBottomPadding;
+      _heightToCardStackBottom = _screenBox.size.height - quizVerticalScreenPadding - ((_buttonHeight + _buttonElevation) * 2) - choiceSpacing - cardQuizStackBottomPadding;
+      _heightToQuizCardTop = _heightToCardStackBottom - _quizCardWidth - (quizCardStackTopSpace * (_cardWidth / 400.0));
+      _quizCardStackHeight = _heightToCardStackBottom - _heightToQuizCardTop + cardQuizStackBottomPadding;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
+    final double _aspectRatio = _size.aspectRatio;
+    final double _horizontalPadding = quizHorizontalScreenPadding * (_aspectRatio > 0.7 ? ((_aspectRatio / 0.75) * 4.0) : 1.0);
     if (!_updatedHeights) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if ((_screenSize.height - _size.height).abs() < 80) {
@@ -204,49 +205,51 @@ class ReadingPageState extends State<ReadingPage> {
     _screenSize = _size;
 
     final Widget _header = Padding(
-        padding: EdgeInsets.fromLTRB(headerHorizontalPadding, headerVerticalPadding, headerHorizontalPadding, 0.0),
-        child: StaticHeader(
-          left: IconButtonNew(
-            icon: Icons.arrow_back_ios,
-            iconSize: headerIconSize,
-            color: _gameData.getColor('headerNavigation'),
-            onPressed: () => Navigator.pop(context),
-            width: 80.0,
-            alignment: Alignment.centerLeft,
-          ),
-          middle: Container(
-            alignment: Alignment.center,
-            height: 48.0,
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                _isTutorial ? 'Tutorial' : 'Glyphs Learned',
-                style: _gameData.getStyle('textQuizHeader'),
-                textAlign: TextAlign.center,
-              ),
+      padding: EdgeInsets.fromLTRB(headerHorizontalPadding, headerVerticalPadding, headerHorizontalPadding, 0.0),
+      child: StaticHeader(
+        left: IconButtonNew(
+          icon: Icons.arrow_back_ios,
+          iconSize: headerIconSize,
+          color: _gameData.getColor('headerNavigation'),
+          onPressed: () => Navigator.pop(context),
+          width: 80.0,
+          alignment: Alignment.centerLeft,
+        ),
+        middle: Container(
+          alignment: Alignment.center,
+          height: 48.0,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              _isTutorial ? 'Tutorial' : 'Glyphs Learned',
+              style: _gameData.getStyle('textQuizHeader'),
+              textAlign: TextAlign.center,
             ),
           ),
-          right: _isTutorial ? TextButton(
-            text: 'Skip',
-            height: headerIconSize,
-            color: _gameData.getColor('headerNavigation'),
-            onPressed: _gameLogicManager.finishTutorial,
-            width: 80.0,
-            alignment: Alignment.centerRight,
-          ) : CustomSwitch(
-            value: _kulitanSwitch,
-            onChanged: (bool val) => setState(() => _kulitanSwitch = val),
-            disabled: _disableSwitch,
-          ),
         ),
-      );
-    
+        right: _isTutorial ? TextButton(
+          text: 'Skip',
+          height: headerIconSize,
+          color: _gameData.getColor('headerNavigation'),
+          onPressed: _gameLogicManager.finishTutorial,
+          width: 80.0,
+          alignment: Alignment.centerRight,
+        ) : CustomSwitch(
+          value: _kulitanSwitch,
+          onChanged: (bool val) => setState(() => _kulitanSwitch = val),
+          disabled: _disableSwitch,
+        ),
+      ),
+    );
+
     final Widget _progressBar = Expanded(
       child: Padding(
-        padding: MediaQuery.of(context).size.aspectRatio < 0.5 ? const EdgeInsets.symmetric(
-          horizontal: quizHorizontalScreenPadding,
-          vertical: 15.0,
-        ) : const EdgeInsets.only(bottom: 7.0),
+        padding: EdgeInsets.fromLTRB(
+          _horizontalPadding,
+          MediaQuery.of(context).size.height > 600.0 ? 25.0 : 5.0,
+          _horizontalPadding,
+          MediaQuery.of(context).size.height > 600.0 ? 25.0 : 15.0,
+        ),
         child: CircularProgressBar(
           numerator: _overallProgressCount,
           denominator: totalGlyphCount,
@@ -255,7 +258,7 @@ class ReadingPageState extends State<ReadingPage> {
     );
 
     final Widget _buttonChoices = Padding(
-      padding: const EdgeInsets.fromLTRB(quizHorizontalScreenPadding, 0.0, quizHorizontalScreenPadding, quizVerticalScreenPadding),
+      padding: EdgeInsets.fromLTRB(_horizontalPadding, 0.0, _horizontalPadding, quizVerticalScreenPadding),
       child: Column(
         children: <Widget>[
           Row(
@@ -290,7 +293,7 @@ class ReadingPageState extends State<ReadingPage> {
             ],
           ),
           Container(
-            height: MediaQuery.of(context).size.aspectRatio < 0.5 ? choiceSpacing : 7.0,
+            height: choiceSpacing,
           ),
           Row(
             children: <Widget>[
@@ -339,6 +342,7 @@ class ReadingPageState extends State<ReadingPage> {
             stackNumber: _cards[2]['stackNumber'],
             stackWidth: _quizCardWidth,
             heightToStackTop: _heightToQuizCardTop,
+            horizontalScreenPadding: _horizontalPadding,
           ),
           AnimatedQuizCard(
             isKulitan: _isKulitan,
@@ -348,6 +352,7 @@ class ReadingPageState extends State<ReadingPage> {
             stackNumber: _cards[1]['stackNumber'],
             stackWidth: _quizCardWidth,
             heightToStackTop: _heightToQuizCardTop,
+            horizontalScreenPadding: _horizontalPadding,
           ),
           AnimatedQuizCard(
             isKulitan: _isKulitan,
@@ -363,6 +368,7 @@ class ReadingPageState extends State<ReadingPage> {
             swipingCard: _swipingCard,
             swipingCardDone: _swipingCardDone,
             disableSwipe: _disableSwipe,
+            horizontalScreenPadding: _horizontalPadding,
           ),
         ],
       ),
@@ -387,12 +393,13 @@ class ReadingPageState extends State<ReadingPage> {
         IgnorePointer(
           child: TutorialOverlay(
             key: _tutorialKey1,
-            quizCardTop: _heightToQuizCardTop + quizCardStackTopSpace,
+            quizCardTop: _heightToQuizCardTop + (quizCardStackTopSpace * (_quizCardWidth / 400.0)),
             quizCardBottom: _heightToCardStackBottom,
             width: _quizCardWidth,
             flare: 'swipe_down.flr',
             animation: 'down',
             tutorialNo: _tutorialNo,
+            horizontalScreenPadding: _horizontalPadding,
           ),
         ),
       );
@@ -400,12 +407,13 @@ class ReadingPageState extends State<ReadingPage> {
         IgnorePointer(
           child: TutorialOverlay(
             key: _tutorialKey2,
-            quizCardTop: _heightToQuizCardTop + quizCardStackTopSpace,
+            quizCardTop: _heightToQuizCardTop + (quizCardStackTopSpace * (_quizCardWidth / 400.0)),
             quizCardBottom: _heightToCardStackBottom,
             width: _quizCardWidth,
             flare: 'swipe_down.flr',
             animation: 'left',
             tutorialNo: _tutorialNo,
+            horizontalScreenPadding: _horizontalPadding,
           ),
         ),
       );
@@ -413,12 +421,13 @@ class ReadingPageState extends State<ReadingPage> {
         IgnorePointer(
           child: TutorialOverlay(
             key: _tutorialKey3,
-            quizCardTop: _heightToQuizCardTop + quizCardStackTopSpace,
+            quizCardTop: _heightToQuizCardTop + (quizCardStackTopSpace * (_quizCardWidth / 400.0)),
             quizCardBottom: _heightToCardStackBottom,
             width: _quizCardWidth,
             flare: 'shaking_pointer.flr',
             animation: 'shake',
             tutorialNo: _tutorialNo,
+            horizontalScreenPadding: _horizontalPadding,
           ),
         ),
       );
@@ -426,12 +435,13 @@ class ReadingPageState extends State<ReadingPage> {
         IgnorePointer(
           child: TutorialOverlay(
             key: _tutorialKey4,
-            quizCardTop: _heightToQuizCardTop + quizCardStackTopSpace,
+            quizCardTop: _heightToQuizCardTop + (quizCardStackTopSpace * (_quizCardWidth / 400.0)),
             quizCardBottom: _heightToCardStackBottom,
             width: _quizCardWidth,
             flare: 'shaking_pointer.flr',
             animation: 'shake',
             tutorialNo: _tutorialNo,
+            horizontalScreenPadding: _horizontalPadding,
           ),
         ),
       );
@@ -439,12 +449,13 @@ class ReadingPageState extends State<ReadingPage> {
         IgnorePointer(
           child: TutorialOverlay(
             key: _tutorialKey5,
-            quizCardTop: _heightToQuizCardTop + quizCardStackTopSpace,
+            quizCardTop: _heightToQuizCardTop + (quizCardStackTopSpace * (_quizCardWidth / 400.0)),
             quizCardBottom: _heightToCardStackBottom,
             width: _quizCardWidth,
             flare: 'shaking_pointer.flr',
             animation: 'shake',
             tutorialNo: _tutorialNo,
+            horizontalScreenPadding: _horizontalPadding,
           ),
         ),
       );

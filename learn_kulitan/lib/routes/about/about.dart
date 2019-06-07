@@ -154,7 +154,9 @@ class _AboutPageState extends State<AboutPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double _width = MediaQuery.of(context).size.width;
+    final double _screenWidth = MediaQuery.of(context).size.width;
+    final double _screenHorizontalPadding = _screenWidth > 600.0 ? 0.0 : aboutHorizontalScreenPadding;
+    final double _width = MediaQuery.of(context).size.width > 600.0 ? 600.0 : MediaQuery.of(context).size.width;
 
     Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding,
@@ -456,22 +458,28 @@ class _AboutPageState extends State<AboutPage> {
       Scrollbar(
         child: SingleChildScrollView(
           controller: _scrollController,
-          child: Column(
-            children: <Widget>[
-              StickyHeading(
-                headingText: 'Reng Gínawá',
-                content: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(
-                    aboutHorizontalScreenPadding,
-                    aboutVerticalScreenPadding,
-                    aboutHorizontalScreenPadding,
-                    aboutVerticalScreenPadding - headerVerticalPadding + 8.0,
+          child: Align(
+            alignment: Alignment.center,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 600.0),
+              child: Column(
+                children: <Widget>[
+                  StickyHeading(
+                    headingText: 'Reng Gínawá',
+                    content: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.fromLTRB(
+                        _screenHorizontalPadding,
+                        aboutVerticalScreenPadding,
+                        _screenHorizontalPadding,
+                        aboutVerticalScreenPadding - headerVerticalPadding + 8.0,
+                      ),
+                      child: _about,
+                    ),
                   ),
-                  child: _about,
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
