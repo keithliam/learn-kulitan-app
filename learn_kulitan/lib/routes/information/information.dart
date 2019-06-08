@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import '../../styles/theme.dart';
-import '../../components/buttons/IconButtonNew.dart';
+import '../../components/buttons/RoundedBackButton.dart';
 import '../../components/buttons/CustomButton.dart';
 import '../../components/buttons/BackToStartButton.dart';
 import '../../components/misc/StaticHeader.dart';
@@ -65,12 +65,7 @@ class _InformationPageState extends State<InformationPage> {
         0.0,
       ),
       child: StaticHeader(
-        left: IconButtonNew(
-          icon: Icons.arrow_back_ios,
-          iconSize: headerIconSize,
-          color: _gameData.getColor('headerNavigation'),
-          onPressed: () => Navigator.pop(context),
-        ),
+        left: RoundedBackButton(alignment: Alignment.center),
         right: SizedBox(width: 56.0, height: 48.0),
       ),
     );

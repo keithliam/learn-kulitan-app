@@ -139,7 +139,7 @@ const aboutSubtitleTopPadding = 25.0;
 
 // Sizes
 const homeTitleHeight = 110.0;
-const headerIconSize = 32.0;
+const headerIconSize = 30.0;
 const customSwitchThreshold = 32.0;
 const quizChoiceButtonHeight = 62.0;
 const quizCardStackTopSpace = 32.0;

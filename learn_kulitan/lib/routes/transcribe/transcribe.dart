@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../styles/theme.dart';
 import '../../db/GameData.dart';
-import '../../components/buttons/IconButtonNew.dart';
+import '../../components/buttons/RoundedBackButton.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/CustomCard.dart';
 import '../../components/misc/DividerNew.dart';
@@ -591,12 +591,7 @@ class _TranscribePageState extends State<TranscribePage>
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding,
           headerVerticalPadding, headerHorizontalPadding, 0.0),
       child: StaticHeader(
-        left: IconButtonNew(
-          icon: Icons.arrow_back_ios,
-          iconSize: headerIconSize,
-          color: _gameData.getColor('headerNavigation'),
-          onPressed: () => Navigator.pop(context),
-        ),
+        left: RoundedBackButton(),
         middle: Padding(
           padding: const EdgeInsets.only(bottom: headerVerticalPadding),
           child: Center(

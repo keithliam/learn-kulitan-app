@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../styles/theme.dart';
 import '../../components/buttons/CustomButton.dart';
-import '../../components/buttons/IconButtonNew.dart';
+import '../../components/buttons/RoundedBackButton.dart';
 import '../../components/buttons/TextButton.dart';
 import '../../components/buttons/CustomSwitch.dart';
 import '../../components/misc/StaticHeader.dart';
@@ -208,14 +208,7 @@ class ReadingPageState extends State<ReadingPage> {
     final Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding, headerVerticalPadding, headerHorizontalPadding, 0.0),
       child: StaticHeader(
-        left: IconButtonNew(
-          icon: Icons.arrow_back_ios,
-          iconSize: headerIconSize,
-          color: _gameData.getColor('headerNavigation'),
-          onPressed: () => Navigator.pop(context),
-          width: 80.0,
-          alignment: Alignment.centerLeft,
-        ),
+        left: RoundedBackButton(alignment: Alignment.centerLeft),
         middle: Container(
           alignment: Alignment.center,
           height: 48.0,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../styles/theme.dart';
-import '../../components/buttons/IconButtonNew.dart';
+import '../../components/buttons/RoundedBackButton.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/LinearProgressBar.dart';
 import '../../components/misc/GameLogicManager.dart';
@@ -70,12 +70,7 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
     Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding, headerVerticalPadding, headerHorizontalPadding, 0.0),
       child: StaticHeader(
-        left: IconButtonNew(
-          icon: Icons.arrow_back_ios,
-          iconSize: headerIconSize,
-          color: _gameData.getColor('headerNavigation'),
-          onPressed: () => Navigator.pop(context),
-        ),
+        left: RoundedBackButton(),
         middle: Column(
           children: <Widget>[
             Padding(
