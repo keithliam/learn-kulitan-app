@@ -7,6 +7,7 @@ import '../../components/buttons/TextButton.dart';
 import '../../components/buttons/CustomSwitch.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/CircularProgressBar.dart';
+import '../../components/misc/LinearProgressBar.dart';
 import '../../components/misc/GameLogicManager.dart';
 import '../../db/GameData.dart';
 import './components.dart';
@@ -242,18 +243,22 @@ class ReadingPageState extends State<ReadingPage> {
       ),
     );
 
+    final bool _isTall = MediaQuery.of(context).size.height > 600.0;
     final Widget _progressBar = Expanded(
-      child: Padding(
+      child: Container(
         padding: EdgeInsets.fromLTRB(
           _horizontalPadding,
-          MediaQuery.of(context).size.height > 600.0 ? 25.0 : 5.0,
+          _isTall ? 25.0 : 5.0,
           _horizontalPadding,
-          MediaQuery.of(context).size.height > 600.0 ? 25.0 : 15.0,
+          _isTall ? 25.0 : 15.0,
         ),
-        child: CircularProgressBar(
-          numerator: _overallProgressCount,
-          denominator: totalGlyphCount,
-        ),
+        alignment: Alignment.center,
+        child: _isTall
+          ? CircularProgressBar(numerator: _overallProgressCount, denominator: totalGlyphCount)
+          : LinearProgressBar(
+            progress: _overallProgressCount / totalGlyphCount,
+            color: _gameData.getColor('white'),
+          ),
       ),
     );
 
