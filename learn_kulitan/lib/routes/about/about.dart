@@ -373,10 +373,26 @@ class _AboutPageState extends State<AboutPage> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: paragraphTopPadding),
-          child: RichText(
-            text: TextSpan(
+        Paragraphs(
+          paragraphs: [
+            TextSpan(
+              children: <TextSpan>[
+                _romanText('The success animation used in the tutorials was made by '),
+                _romanText(
+                  'Guido Rosso',
+                  TapGestureRecognizer()
+                    ..onTap = () => _openURL('https://www.2dimensions.com/a/pollux/files/recent/all'),
+                ),
+                _romanText(', licensed under '),
+                _romanText(
+                  'CC BY',
+                  TapGestureRecognizer()
+                    ..onTap = () => _openURL('https://creativecommons.org/licenses/by/4.0/'),
+                ),
+                _romanText('.'),
+              ],
+            ),
+            TextSpan(
               style: _gameData.getStyle('textAboutFooter'),
               children: <TextSpan>[
                 _romanText('This application was developed using '),
@@ -388,7 +404,7 @@ class _AboutPageState extends State<AboutPage> {
                 _romanText('.'),
               ],
             ),
-          ),
+          ],
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 15.0),
