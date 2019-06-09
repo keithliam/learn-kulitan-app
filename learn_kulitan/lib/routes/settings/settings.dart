@@ -162,7 +162,7 @@ class _SettingsPageState extends State<SettingsPage> {
               10.0,
             ),
             child: Text(
-                '${MediaQuery.of(context).size.width >= 690 ? 'Pipanagpágang ' : ''}Kaburian',
+                'Kasaddian',
                 style: _gameData.getStyle('textPageTitle')),
           ),
           Expanded(

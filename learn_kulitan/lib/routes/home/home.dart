@@ -140,12 +140,11 @@ class _HomePageState extends State<HomePage> {
       disabled: _disabled,
       onPressedImmediate: _disableButtons,
       kulitanText: <Widget>[
-        Text('ka', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.5)),
-        Text('bu', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.8)),
-        Text('ri', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 1.2)),
-        Text('an   ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
+        Text('ka ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.6)),
+        Text('sad   ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.9)),
+        Text('dian    ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 1.1)),
       ],
-      title: 'Pipanagpágang${MediaQuery.of(context).size.width > 340.0 ? ' ' : '\n'}Kaburian',
+      title: 'Kasaddian',
       subtitle: 'SETTINGS',
       route: '/settings',
     );
