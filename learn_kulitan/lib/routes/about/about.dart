@@ -8,7 +8,7 @@ import 'package:share/share.dart';
 import '../../styles/theme.dart';
 import '../../components/buttons/RoundedBackButton.dart';
 import '../../components/buttons/BackToStartButton.dart';
-import '../../components/buttons/CustomButton.dart';
+import '../../components/buttons/PageButton.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/StickyHeading.dart';
 import '../../components/misc/ImageWithCaption.dart';
@@ -345,16 +345,10 @@ class _AboutPageState extends State<AboutPage> {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 5.0),
-          child: CustomButton(
+          child: PageButton(
             onPressed: () => _openURL('https://www.paypal.me/keithmanaloto'),
-            borderRadius: 30.0,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-            elevation: 10.0,
-            color: _gameData.getColor('accent'),
-            child: Center(
-              child: Text('DONATE', style: _gameData.getStyle('textAboutButton')),
-            ),
+            isColored: true,
+            text: 'DONATE',
           ),
         ),
         Padding(
@@ -435,31 +429,10 @@ class _AboutPageState extends State<AboutPage> {
         Padding(
           padding: const EdgeInsets.fromLTRB(
               20.0, 25.0, 20.0, aboutVerticalScreenPadding - 10.0),
-          child: CustomButton(
+          child: PageButton(
             onPressed: _shareApp,
-            borderRadius: 30.0,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 30.0,
-              vertical: 10.0,
-            ),
-            elevation: 10.0,
-            color: _gameData.getColor('white'),
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'SHARE',
-                      style: _gameData.getStyle('textAboutButton').copyWith(color: _gameData.getColor('foreground')),
-                    ),
-                  ),
-                  Icon(Icons.share, color: _gameData.getColor('accent')),
-                ],
-              ),
-            ),
+            text: 'SHARE',
+            icon: Icons.share,
           ),
         ),
       ],

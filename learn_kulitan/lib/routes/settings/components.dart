@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../components/buttons/PageButton.dart';
 import '../../styles/theme.dart';
 import '../../db/GameData.dart';
 
@@ -151,6 +152,64 @@ class _ColorSchemeChoiceState extends State<ColorSchemeChoice> {
           children: _stackList,
         ),
       ),
+    );
+  }
+}
+
+class ResetButton extends StatefulWidget {
+  const ResetButton({@required this.onPressed});
+
+  final Future<void> Function() onPressed;
+
+  @override
+  _ResetButtonState createState() => _ResetButtonState();
+}
+
+class _ResetButtonState extends State<ResetButton> {
+  static final GameData _gameData = GameData();
+  static final int _buttonPresses = 3;
+
+  int _presses = 0;
+
+  void _pressed() async {
+    final Color _backColor = _gameData.getColor('toastBackground');
+    final Color _foreColor = _gameData.getColor('toastForeground');
+    String _msg = '';
+    _presses++;
+    if (_presses == _buttonPresses) {
+      await widget.onPressed();
+      _msg = 'Game reset! ↩';
+    } else if (_presses > _buttonPresses) {
+      _msg = 'The game has already been reset.';
+    } else {
+      final int _times = _buttonPresses - _presses;
+      _msg =
+          'Press the button $_times more time${_times > 1 ? 's' : ''} to reset the game.';
+    }
+    Fluttertoast.showToast(
+      msg: _msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIos: 1,
+      backgroundColor: _backColor,
+      textColor: _foreColor,
+      fontSize: toastFontSize,
+    );
+    if (_presses == _buttonPresses) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/',
+        (Route<dynamic> route) => false,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageButton(
+      onPressed: _pressed,
+      isColored: true,
+      text: 'Reset Game',
     );
   }
 }

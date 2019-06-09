@@ -452,45 +452,55 @@ class GameData {
     _choices.forEach((String key, String value) => _data['reading']['choices'][key] = value);
   }
 
-  void clearGameData() {
-    _prefs.clear();
-    _DatabaseHelper.clearDatabase();
+  Future<void> resetGameData() async {
+    await _prefs.clear();
+    await _db.close();
+    await _DatabaseHelper.clearDatabase();
+    _prefs = await _PreferencesHelper.instance.preferences;
+    _db = await _DatabaseHelper.instance.database;
+    await _initPrefs();
+    await _getGameData();
   }
 
   Future<void> _getGameData() async {
-    _data['colors'] = {};
-    _data['intro'] = {};
-    _data['reading'] = {};
-    _data['writing'] = {};
-    _data['transcribe'] = {};
-    _data['colors']['unlockedSchemes'] = List<String>.from((await _db.query('UnlockedColorSchemes')).map((color) => color['color']));
-    _data['colors']['scheme'] = _prefs.getString('colorScheme');
-    _data['colors']['primary'] = _prefs.getInt('primary');
-    _data['colors']['accent'] = _prefs.getInt('accent');
-    _data['colors']['foreground'] = _prefs.getInt('foreground');
-    _data['colors']['kulitanPath'] = _prefs.getInt('kulitanPath');
-    _data['colors']['empty'] = _prefs.getInt('empty');
-    _data['colors']['correctAnswer'] = _prefs.getInt('correctAnswer');
-    _data['colors']['wrongAnswer'] = _prefs.getInt('wrongAnswer');
-    _data['colors']['quizCardMiddle'] = _prefs.getInt('quizCardMiddle');
-    _data['colors']['quizCardLast'] = _prefs.getInt('quizCardLast');
-    _data['colors']['white'] = _prefs.getInt('white');
-    _data['colors']['tutorialsOverlayBackground'] = _prefs.getInt('tutorialsOverlayBackground');
-    _data['colors']['cardShadow'] = _prefs.getInt('cardShadow');
-    _data['colors']['buttonShadow'] = _prefs.getInt('buttonShadow');
-    _data['intro']['tutorial'] = _prefs.getBool('introTutorial');
-    _data['reading']['tutorial'] = _prefs.getBool('readingTutorial');
-    _data['writing']['tutorial'] = _prefs.getBool('writingTutorial');
-    _data['transcribe']['tutorial'] = _prefs.getBool('transcribeTutorial');
-    _data['reading']['progress'] = Map<String, int>.from((await _db.query('Page', columns: ['overall_progress', 'current_batch'], where: 'name = "reading"'))[0]);
-    _data['writing']['progress'] = Map<String, int>.from((await _db.query('Page', columns: ['overall_progress', 'current_batch'], where: 'name = "writing"'))[0]);
-    _data['reading']['mode'] = (await _db.query('CurrentQuiz', columns: ['kulitanMode'], where: 'type = "mode"'))[0]['kulitanMode'] == 'true';
-    _data['reading']['cards'] = Map<String, String>.from((await _db.query('CurrentQuiz', where: 'type = "cards"'))[0]);
-    _data['writing']['cards'] = Map<String, String>.from((await _db.query('CurrentDraw', where: 'type = "cards"'))[0]);
-    _data['reading']['choices'] = Map<String, String>.from((await _db.query('CurrentQuiz', where: 'type = "choices"'))[0]);
+    Map<dynamic, dynamic> _colors = {};
+    Map<dynamic, dynamic> _intro = {};
+    Map<dynamic, dynamic> _reading = {};
+    Map<dynamic, dynamic> _writing = {};
+    Map<dynamic, dynamic> _transcribe = {};
+    _colors['unlockedSchemes'] = List<String>.from((await _db.query('UnlockedColorSchemes')).map((color) => color['color']));
+    _colors['scheme'] = _prefs.getString('colorScheme');
+    _colors['primary'] = _prefs.getInt('primary');
+    _colors['accent'] = _prefs.getInt('accent');
+    _colors['foreground'] = _prefs.getInt('foreground');
+    _colors['kulitanPath'] = _prefs.getInt('kulitanPath');
+    _colors['empty'] = _prefs.getInt('empty');
+    _colors['correctAnswer'] = _prefs.getInt('correctAnswer');
+    _colors['wrongAnswer'] = _prefs.getInt('wrongAnswer');
+    _colors['quizCardMiddle'] = _prefs.getInt('quizCardMiddle');
+    _colors['quizCardLast'] = _prefs.getInt('quizCardLast');
+    _colors['white'] = _prefs.getInt('white');
+    _colors['tutorialsOverlayBackground'] = _prefs.getInt('tutorialsOverlayBackground');
+    _colors['cardShadow'] = _prefs.getInt('cardShadow');
+    _colors['buttonShadow'] = _prefs.getInt('buttonShadow');
+    _intro['tutorial'] = _prefs.getBool('introTutorial');
+    _reading['tutorial'] = _prefs.getBool('readingTutorial');
+    _writing['tutorial'] = _prefs.getBool('writingTutorial');
+    _transcribe['tutorial'] = _prefs.getBool('transcribeTutorial');
+    _reading['progress'] = Map<String, int>.from((await _db.query('Page', columns: ['overall_progress', 'current_batch'], where: 'name = "reading"'))[0]);
+    _writing['progress'] = Map<String, int>.from((await _db.query('Page', columns: ['overall_progress', 'current_batch'], where: 'name = "writing"'))[0]);
+    _reading['mode'] = (await _db.query('CurrentQuiz', columns: ['kulitanMode'], where: 'type = "mode"'))[0]['kulitanMode'] == 'true';
+    _reading['cards'] = Map<String, String>.from((await _db.query('CurrentQuiz', where: 'type = "cards"'))[0]);
+    _writing['cards'] = Map<String, String>.from((await _db.query('CurrentDraw', where: 'type = "cards"'))[0]);
+    _reading['choices'] = Map<String, String>.from((await _db.query('CurrentQuiz', where: 'type = "choices"'))[0]);
     final List<Map<String, dynamic>> _glyphData = await _db.query('Glyph');
-    _data['reading']['glyphs'] = Map<String, int>.fromIterable(_glyphData, key: (glyph) => glyph['name'], value: (glyph) => glyph['progress_count_reading']);
-    _data['writing']['glyphs'] = Map<String, int>.fromIterable(_glyphData, key: (glyph) => glyph['name'], value: (glyph) => glyph['progress_count_writing']);
+    _reading['glyphs'] = Map<String, int>.fromIterable(_glyphData, key: (glyph) => glyph['name'], value: (glyph) => glyph['progress_count_reading']);
+    _writing['glyphs'] = Map<String, int>.fromIterable(_glyphData, key: (glyph) => glyph['name'], value: (glyph) => glyph['progress_count_writing']);
+    _data['colors'] = _colors;
+    _data['intro'] = _intro;
+    _data['reading'] = _reading;
+    _data['writing'] = _writing;
+    _data['transcribe'] = _transcribe;
   }
 
   Future<void> _initPrefs() async {
@@ -547,6 +557,7 @@ class _DatabaseHelper {
     final Directory documentsDirectory = await getApplicationDocumentsDirectory();
     final String _path = join(documentsDirectory.path, _databaseName);
     await deleteDatabase(_path);
+    _database = null;
   }
 
   Future _onCreate(Database db, int version) async {
