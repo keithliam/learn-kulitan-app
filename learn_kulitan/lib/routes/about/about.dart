@@ -155,8 +155,8 @@ class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     final double _screenWidth = MediaQuery.of(context).size.width;
-    final double _screenHorizontalPadding = _screenWidth > 600.0 ? 0.0 : aboutHorizontalScreenPadding;
-    final double _width = MediaQuery.of(context).size.width > 600.0 ? 600.0 : MediaQuery.of(context).size.width;
+    final double _screenHorizontalPadding = _screenWidth > maxPageWidth ? 0.0 : aboutHorizontalScreenPadding;
+    final double _width = MediaQuery.of(context).size.width > maxPageWidth ? maxPageWidth : MediaQuery.of(context).size.width;
 
     Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding,
@@ -445,7 +445,7 @@ class _AboutPageState extends State<AboutPage> {
           child: Align(
             alignment: Alignment.center,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 600.0),
+              constraints: BoxConstraints(maxWidth: maxPageWidth),
               child: Column(
                 children: <Widget>[
                   StickyHeading(

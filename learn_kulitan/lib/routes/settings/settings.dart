@@ -56,7 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final double _screenWidth = MediaQuery.of(context).size.width;
     final double _screenHorizontalPadding =
-        _screenWidth > 600.0 ? 0.0 : informationHorizontalScreenPadding;
+        _screenWidth > maxPageWidth ? 0.0 : informationHorizontalScreenPadding;
     const double _spacing = informationHorizontalScreenPadding;
 
     Widget _header = Padding(
@@ -70,7 +70,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     final List<Widget> _content = [];
 
-    if (_screenWidth < 600.0) {
+    if (_screenWidth < maxPageWidth) {
       _content.addAll([
         Row(
           children: <Widget>[
@@ -178,7 +178,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Align(
                     alignment: Alignment.center,
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 600.0),
+                      constraints: BoxConstraints(maxWidth: maxPageWidth),
                       child: Column(children: _content),
                     ),
                   ),

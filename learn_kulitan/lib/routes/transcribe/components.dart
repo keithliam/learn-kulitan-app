@@ -638,7 +638,7 @@ class _KeyboardKeyContainer extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: CustomPaint(
           painter: _KeyIconPainter(
-            strokePercent: _aspectRatio > 0.7 ? 1.5 : (MediaQuery.of(context).size.width / 414.0),
+            strokePercent: _aspectRatio > mediumMaxAspect ? 1.5 : (MediaQuery.of(context).size.width / 414.0),
             keyType: keyType,
           ),
         ),
@@ -785,8 +785,14 @@ class KulitanKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double _aspectRatio = MediaQuery.of(context).size.aspectRatio;
-    final double _horizontalPadding = transcribeHorizontalScreenPadding * (_aspectRatio > 0.7 ? ((0.75 / _aspectRatio) * 4.0) : 1.0);
+    final Size _size = MediaQuery.of(context).size;
+    final double _aspectRatio = _size.aspectRatio;
+    final double _padMultiplier = _aspectRatio > smallMaxAspect && _size.height <= smallHeight
+      ? (_aspectRatio * 2.0)
+      : _aspectRatio > mediumMaxAspect
+        ? ((0.75 / _aspectRatio) * 4.0)
+        : 1.0;
+    final double _horizontalPadding = transcribeHorizontalScreenPadding * _padMultiplier;
 
     final double _keyboardPreferredHeight = (MediaQuery.of(context).size.width - ((_horizontalPadding - transcribeHorizontalScreenPadding) * 2.0)) * 0.6588;
     final double _keyboardHeight = _keyboardPreferredHeight > 330.0 ? 330.0 : _keyboardPreferredHeight;
@@ -1107,7 +1113,7 @@ class _TutorialState extends State<Tutorial>
   OverlayEntry _createOverlay() {
     return OverlayEntry(
       builder: (context) {
-        final Size _dimensions = MediaQuery.of(context).size.width >= 600 ? Size(600.0, MediaQuery.of(context).size.height) : MediaQuery.of(context).size;
+        final Size _dimensions = MediaQuery.of(context).size.width >= maxPageWidth ? Size(maxPageWidth, MediaQuery.of(context).size.height) : MediaQuery.of(context).size;
         final double _relHeight = _dimensions.height / 896.0;
         List<Widget> _elements = [];
         if (widget.tutorialNo == 1) {

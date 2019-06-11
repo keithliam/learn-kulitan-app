@@ -585,7 +585,7 @@ class _TranscribePageState extends State<TranscribePage>
 
   @override
   Widget build(BuildContext context) {
-    if (!(MediaQuery.of(context).size.height > 600)) _fontSizePercent = 0.75;
+    if (!(MediaQuery.of(context).size.height > smallHeight)) _fontSizePercent = 0.75;
 
     Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding,
@@ -613,7 +613,7 @@ class _TranscribePageState extends State<TranscribePage>
           autocorrect: false,
           maxLines: null,
           keyboardType: TextInputType.multiline,
-          style: MediaQuery.of(context).size.height > 600
+          style: MediaQuery.of(context).size.height > smallHeight
               ? _gameData.getStyle('textTranscribe')
               : _gameData.getStyle('textTranscribe').copyWith(fontSize: 25.0),
           cursorColor: _gameData.getColor('transcribeCursor'),
@@ -653,12 +653,18 @@ class _TranscribePageState extends State<TranscribePage>
       ),
     );
 
-    final double _aspectRatio = MediaQuery.of(context).size.aspectRatio;
-    final double _horizontalPadding = transcribeHorizontalScreenPadding * (_aspectRatio > 0.7 ? ((_aspectRatio / 0.75) * 4.0) : 1.0);
+    final Size _size = MediaQuery.of(context).size;
+    final double _aspectRatio = _size.aspectRatio;
+    final double _padMultiplier = _aspectRatio > smallMaxAspect && _size.height <= smallHeight
+      ? (_aspectRatio * 2.0)
+      : _aspectRatio > mediumMaxAspect
+        ? ((_aspectRatio / 0.75) * 4.0)
+        : 1.0;
+    final double _horizontalPadding = transcribeHorizontalScreenPadding * _padMultiplier;
 
     Widget _page = Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: _horizontalPadding,
+          horizontal: transcribeHorizontalScreenPadding,
           vertical: transcribeVerticalScreenPadding),
       child: GestureDetector(
         onVerticalDragStart: (_) =>

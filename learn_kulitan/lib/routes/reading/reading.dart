@@ -176,11 +176,17 @@ class ReadingPageState extends State<ReadingPage> {
   void _getQuizCardsSize() {
     final RenderBox _screenBox = _pageKey.currentContext.findRenderObject();
     final RenderBox _cardBox = _quizCardsKey.currentContext.findRenderObject();
-    final double _horizontalPadding = (quizHorizontalScreenPadding * (_screenSize.aspectRatio > 0.7 ? ((_screenSize.aspectRatio / 0.75) * 4.0) : 1.0) * 2);
+    final double _aspectRatio = _screenSize.aspectRatio;
+    final double _padMultiplier = _aspectRatio > smallMaxAspect && _screenSize.height <= smallHeight
+      ? (_aspectRatio * 2.0)
+      : _aspectRatio > mediumMaxAspect
+        ? ((_aspectRatio / 0.75) * 4.0)
+        : 1.0;
+    final double _horizontalPadding = quizHorizontalScreenPadding * _padMultiplier * 2.0;
     double _cardWidth = _cardBox.size.width - _horizontalPadding;
 
-    final _buttonElevation = _screenSize.height < 600.0 ? 7.0 : _screenSize.height < 950.0 ? quizChoiceButtonElevation : 12.0;
-    final _buttonHeight = _screenSize.height < 600.0 ? 45.0 : _screenSize.height < 950.0 ? quizChoiceButtonHeight : 70.0;
+    final _buttonElevation = _screenSize.height < smallHeight ? 7.0 : _screenSize.height < 950.0 ? quizChoiceButtonElevation : 12.0;
+    final _buttonHeight = _screenSize.height < smallHeight ? 45.0 : _screenSize.height < 950.0 ? quizChoiceButtonHeight : 70.0;
 
     setState(() {
       _quizCardWidth = _cardWidth;
@@ -194,7 +200,13 @@ class ReadingPageState extends State<ReadingPage> {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     final double _aspectRatio = _size.aspectRatio;
-    final double _horizontalPadding = quizHorizontalScreenPadding * (_aspectRatio > 0.7 ? ((_aspectRatio / 0.75) * 4.0) : 1.0);
+    final double _padMultiplier = _aspectRatio > smallMaxAspect && _size.height <= smallHeight
+      ? (_aspectRatio * 2.0)
+      : _aspectRatio > mediumMaxAspect
+        ? ((_aspectRatio / 0.75) * 4.0)
+        : 1.0;
+    final double _horizontalPadding = quizHorizontalScreenPadding * _padMultiplier;
+
     if (!_updatedHeights) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if ((_screenSize.height - _size.height).abs() < 80) {
@@ -236,7 +248,7 @@ class ReadingPageState extends State<ReadingPage> {
       ),
     );
 
-    final bool _isTall = MediaQuery.of(context).size.height > 600.0;
+    final bool _isTall = MediaQuery.of(context).size.height > smallHeight;
     final Widget _progressBar = Expanded(
       child: Container(
         padding: EdgeInsets.fromLTRB(

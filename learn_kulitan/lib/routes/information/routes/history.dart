@@ -77,8 +77,8 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double _screenHorizontalPadding = MediaQuery.of(context).size.width > 600.0 ? 0.0 : informationHorizontalScreenPadding;
-    final double _width = MediaQuery.of(context).size.width > 600.0 ? 600.0 : MediaQuery.of(context).size.width;
+    final double _screenHorizontalPadding = MediaQuery.of(context).size.width > maxPageWidth ? 0.0 : informationHorizontalScreenPadding;
+    final double _width = MediaQuery.of(context).size.width > maxPageWidth ? maxPageWidth : MediaQuery.of(context).size.width;
 
     Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding,
@@ -554,7 +554,7 @@ class _HistoryPageState extends State<HistoryPage> {
           child: Align(
             alignment: Alignment.center,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 600.0),
+              constraints: BoxConstraints(maxWidth: maxPageWidth),
               child: Column(
                 children: <Widget>[
                   StickyHeading(

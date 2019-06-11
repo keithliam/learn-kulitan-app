@@ -75,8 +75,8 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
 
   @override
   Widget build(BuildContext context) {
-    final double _screenHorizontalPadding = MediaQuery.of(context).size.width > 600.0 ? 0.0 : informationHorizontalScreenPadding;
-    final double _width = MediaQuery.of(context).size.width > 600.0 ? 600.0 : MediaQuery.of(context).size.width;
+    final double _screenHorizontalPadding = MediaQuery.of(context).size.width > maxPageWidth ? 0.0 : informationHorizontalScreenPadding;
+    final double _width = MediaQuery.of(context).size.width > maxPageWidth ? maxPageWidth : MediaQuery.of(context).size.width;
 
 
     Widget _header = Padding(
@@ -1211,7 +1211,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
         ),
         Container(
           padding: const EdgeInsets.only(top: paragraphTopPadding),
-          constraints: BoxConstraints(maxWidth: 600.0),
+          constraints: BoxConstraints(maxWidth: maxPageWidth),
           child: FittedBox(
             fit: BoxFit.fitWidth,
             child: SizedBox(
@@ -1603,7 +1603,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           return Align(
             alignment: Alignment.center,
             child: Container(
-              constraints: BoxConstraints(maxWidth: 600.0),
+              constraints: BoxConstraints(maxWidth: maxPageWidth),
               width: double.infinity,
               padding: EdgeInsets.symmetric(
                   horizontal: _screenHorizontalPadding),

@@ -147,11 +147,11 @@ class _ChoiceButtonState extends State<ChoiceButton> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return CustomButton(
-      height: MediaQuery.of(context).size.height < 600.0 ? 45.0 : MediaQuery.of(context).size.height < 950.0 ? quizChoiceButtonHeight : 70.0,
+      height: MediaQuery.of(context).size.height < smallHeight ? 45.0 : MediaQuery.of(context).size.height < 950.0 ? quizChoiceButtonHeight : 70.0,
       color: _animation.value,
       onPressed: _tapped,
       disable:  widget.disable || _isTapped,
-      elevation: MediaQuery.of(context).size.height < 600.0 ? 7.0 : MediaQuery.of(context).size.height < 950.0 ? quizChoiceButtonElevation : 12.0,
+      elevation: MediaQuery.of(context).size.height < smallHeight ? 7.0 : MediaQuery.of(context).size.height < 950.0 ? quizChoiceButtonElevation : 12.0,
       borderRadius: 15.0,
       padding: const EdgeInsets.all(12.0),
       pressDelay: quizChoicePressDuration,
@@ -812,7 +812,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
   OverlayEntry _createOverlay() {
     return OverlayEntry(
       builder: (context) {
-        final Size _dimensions = MediaQuery.of(context).size.width >= 600 ? Size(600.0, MediaQuery.of(context).size.height) : MediaQuery.of(context).size;
+        final Size _dimensions = MediaQuery.of(context).size.width >= maxPageWidth ? Size(maxPageWidth, MediaQuery.of(context).size.height) : MediaQuery.of(context).size;
         final double _relWidth = _dimensions.width / 414.0;
 
         double top = 0.0;
@@ -891,7 +891,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
               child: Align(
                 alignment: Alignment.center,
                 child: Container(
-                  constraints: BoxConstraints(maxWidth: 600.0),
+                  constraints: BoxConstraints(maxWidth: maxPageWidth),
                   child: Stack(children: _elements),
                 ),
               ),
@@ -986,9 +986,9 @@ class _TutorialSuccessState extends State<TutorialSuccess> with SingleTickerProv
                     Align(
                       alignment: Alignment.center,
                       child: Container(
-                        constraints: BoxConstraints(maxWidth: 600.0),
+                        constraints: BoxConstraints(maxWidth: maxPageWidth),
                         padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width >= 600.0 ? 0.0 : 20.0,
+                          horizontal: MediaQuery.of(context).size.width >= smallHeight ? 0.0 : 20.0,
                           vertical: 20.0,
                         ),
                         child: Paragraphs(

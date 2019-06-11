@@ -55,7 +55,7 @@ class _InformationPageState extends State<InformationPage> {
   @override
   Widget build(BuildContext context) {
     final double _screenWidth = MediaQuery.of(context).size.width;
-    final double _screenHorizontalPadding = _screenWidth > 600.0 ? 0.0 : informationHorizontalScreenPadding;
+    final double _screenHorizontalPadding = _screenWidth > maxPageWidth ? 0.0 : informationHorizontalScreenPadding;
 
     final Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(
@@ -82,7 +82,7 @@ class _InformationPageState extends State<InformationPage> {
         disable: _disabled,
         onPressedImmediate: _disableButtons,
         onPressed: () => Navigator.pushNamed(context, '/information/history'),
-        height: MediaQuery.of(context).size.height > 600 ? 60.0 : 50.0,
+        height: MediaQuery.of(context).size.height > smallHeight ? 60.0 : 50.0,
         borderRadius: 30.0,
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
         elevation: 10.0,
@@ -335,9 +335,9 @@ class _InformationPageState extends State<InformationPage> {
 
     final _indungSulatDivider = Padding(
       padding: EdgeInsets.fromLTRB(
-        (_screenWidth >= 600 ? 600.0 : _screenWidth) * 0.31,
+        (_screenWidth >= 600 ? maxPageWidth : _screenWidth) * 0.31,
         40.0,
-        (_screenWidth >= 600 ? 600.0 : _screenWidth) * 0.31,
+        (_screenWidth >= 600 ? maxPageWidth : _screenWidth) * 0.31,
         22.0,
       ),
       child: DividerNew(
@@ -357,7 +357,7 @@ class _InformationPageState extends State<InformationPage> {
           Align(
             alignment: Alignment.center,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 600.0),
+              constraints: BoxConstraints(maxWidth: maxPageWidth),
               child: Column(
                 children: <Widget>[
                   StickyHeading(
