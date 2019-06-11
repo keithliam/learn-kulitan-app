@@ -631,6 +631,11 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
                       paths: _prevDrawPaths,
                     ),
                   ),
+                  CustomPaint(
+                    painter: _KulitanPainter(
+                      path: _drawPath,
+                    ),
+                  ),
                   AnimatedOpacity(
                     curve: _guideOpacityCurve,
                     opacity: _guideOpacity,
@@ -664,11 +669,6 @@ class _AnimatedWritingCardState extends State<_AnimatedWritingCard> with SingleT
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                  CustomPaint(
-                    painter: _KulitanPainter(
-                      path: _drawPath,
                     ),
                   ),
                   AnimatedOpacity(
