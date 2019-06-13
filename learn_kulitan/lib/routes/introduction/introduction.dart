@@ -115,7 +115,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         body: Container(
-          color: _loaderAnimating ? Color(colorSchemes['default']['primary']) : _gameData.getColor('background'),
+          color: _gameData.getColor('background'),
           child: SafeArea(
             child: Loader(
               isStartup: true,
@@ -171,7 +171,6 @@ class _IntroductionPageState extends State<IntroductionPage> {
                         borderRadius: 30.0,
                         padding: const EdgeInsets.symmetric(horizontal: 30.0),
                         elevation: 10.0,
-                        color: _loaderAnimating ? Color(colorSchemes['default']['white']) : null,
                         child: Center(
                           child: Text('Next', style: _loaderAnimating ? null : _gameData.getStyle('textInfoButton')),
                         ),

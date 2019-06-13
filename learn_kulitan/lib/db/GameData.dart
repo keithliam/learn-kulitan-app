@@ -23,60 +23,61 @@ class GameData {
 
   Database _db;
   SharedPreferences _prefs;
-  Map<String, dynamic> _data = {};
+  Map<String, dynamic> _data;
   static final HashSet<String> _colorset = HashSet.from(['primary', 'accent', 'foreground', 'kulitanPath', 'empty', 'correctAnswer', 'wrongAnswer', 'quizCardMiddle', 'quizCardLast', 'white', 'tutorialsOverlayBackground', 'cardShadow', 'buttonShadow']);
 
   List<String> getUnlockedColorSchemes() => _data['colors']['unlockedSchemes'];
   Color getColor(String color) {
+    final _colorScheme = _data != null ? _data['colors'] : colorSchemes['default'];
     if (_colorset.contains(color))
-      return Color(_data['colors'][color]);
+      return Color(_colorScheme[color]);
     else if (color == 'backToStartFABPressed')
-      return Color.lerp(Color(_data['colors']['white']), Color(_data['colors']['foreground']), 0.2);
+      return Color.lerp(Color(_colorScheme['white']), Color(_colorScheme['foreground']), 0.2);
     else {
-      if (color == 'background') return Color(_data['colors']['primary']);
-      else if (color == 'loaderStroke') return Color(_data['colors']['white']);
-      else if (color == 'loaderStrokeShadow') return Color(_data['colors']['accent']);
-      else if (color == 'loaderBackground') return Color(_data['colors']['primary']);
-      else if (color == 'toastForeground') return Color(_data['colors']['white']);
-      else if (color == 'toastBackground') return Color(_data['colors']['accent']);
-      else if (color == 'headerNavigation') return Color(_data['colors']['white']);
-      else if (color == 'circularProgressText') return Color(_data['colors']['white']);
-      else if (color == 'circularProgressForeground') return Color(_data['colors']['accent']);
-      else if (color == 'circularProgressBackground') return Color(_data['colors']['white']);
-      else if (color == 'linearProgressForeground') return Color(_data['colors']['accent']);
-      else if (color == 'linearProgressBackground') return Color(_data['colors']['empty']);
-      else if (color == 'writingHeaderProgressBG') return Color(_data['colors']['white']);
-      else if (color == 'customSwitch') return Color(_data['colors']['white']);
-      else if (color == 'customSwitchToggle') return Color(_data['colors']['accent']);
-      else if (color == 'cardDefault') return Color(_data['colors']['white']);
-      else if (color == 'buttonDefault') return Color(_data['colors']['white']);
-      else if (color == 'cardQuiz1') return Color(_data['colors']['white']);
-      else if (color == 'cardQuiz2') return Color(_data['colors']['quizCardMiddle']);
-      else if (color == 'cardQuiz3') return Color(_data['colors']['quizCardLast']);
-      else if (color == 'cardChoices') return Color(_data['colors']['white']);
-      else if (color == 'cardChoicesText') return Color(_data['colors']['foreground']);
-      else if (color == 'cardChoicesRight') return Color(_data['colors']['correctAnswer']);
-      else if (color == 'cardChoicesRightText') return Color(_data['colors']['foreground']);
-      else if (color == 'cardChoicesWrong') return Color(_data['colors']['wrongAnswer']);
-      else if (color == 'cardChoicesWrongText') return Color(_data['colors']['white']);
-      else if (color == 'writingGuide') return Color(_data['colors']['accent']);
-      else if (color == 'writingDraw') return Color(_data['colors']['kulitanPath']);
-      else if (color == 'writingShadow') return Color(_data['colors']['empty']);
-      else if (color == 'transcribeDivider') return Color(_data['colors']['empty']);
-      else if (color == 'transcribeCursor') return Color(_data['colors']['accent']);
-      else if (color == 'informationDivider') return Color(_data['colors']['accent']);
-      else if (color == 'informationDividerShadow') return Color(_data['colors']['buttonShadow']);
-      else if (color == 'backToStartFAB') return Color(_data['colors']['white']);
-      else if (color == 'backToStartFABShadow') return Color(_data['colors']['buttonShadow']);
-      else if (color == 'backToStartFABIcon') return Color(_data['colors']['accent']);
-      else if (color == 'keyboardStroke') return Color(_data['colors']['white']);
-      else if (color == 'keyboardStrokeShadow') return Color(_data['colors']['accent']);
-      else if (color == 'keyboardPress') return Color(_data['colors']['white']);
-      else if (color == 'keyboardMainPress') return Color(_data['colors']['white']);
-      else if (color == 'keyboardKeyHint') return Color(_data['colors']['accent']);
-      else if (color == 'links') return Color(_data['colors']['accent']);
-      else if (color == 'paragraphText') return Color(_data['colors']['white']);
-      else return Color(_data['colors']['accent']);  // fallback color
+      if (color == 'background') return Color(_colorScheme['primary']);
+      else if (color == 'loaderStroke') return Color(_colorScheme['white']);
+      else if (color == 'loaderStrokeShadow') return Color(_colorScheme['accent']);
+      else if (color == 'loaderBackground') return Color(_colorScheme['primary']);
+      else if (color == 'toastForeground') return Color(_colorScheme['white']);
+      else if (color == 'toastBackground') return Color(_colorScheme['accent']);
+      else if (color == 'headerNavigation') return Color(_colorScheme['white']);
+      else if (color == 'circularProgressText') return Color(_colorScheme['white']);
+      else if (color == 'circularProgressForeground') return Color(_colorScheme['accent']);
+      else if (color == 'circularProgressBackground') return Color(_colorScheme['white']);
+      else if (color == 'linearProgressForeground') return Color(_colorScheme['accent']);
+      else if (color == 'linearProgressBackground') return Color(_colorScheme['empty']);
+      else if (color == 'writingHeaderProgressBG') return Color(_colorScheme['white']);
+      else if (color == 'customSwitch') return Color(_colorScheme['white']);
+      else if (color == 'customSwitchToggle') return Color(_colorScheme['accent']);
+      else if (color == 'cardDefault') return Color(_colorScheme['white']);
+      else if (color == 'buttonDefault') return Color(_colorScheme['white']);
+      else if (color == 'cardQuiz1') return Color(_colorScheme['white']);
+      else if (color == 'cardQuiz2') return Color(_colorScheme['quizCardMiddle']);
+      else if (color == 'cardQuiz3') return Color(_colorScheme['quizCardLast']);
+      else if (color == 'cardChoices') return Color(_colorScheme['white']);
+      else if (color == 'cardChoicesText') return Color(_colorScheme['foreground']);
+      else if (color == 'cardChoicesRight') return Color(_colorScheme['correctAnswer']);
+      else if (color == 'cardChoicesRightText') return Color(_colorScheme['foreground']);
+      else if (color == 'cardChoicesWrong') return Color(_colorScheme['wrongAnswer']);
+      else if (color == 'cardChoicesWrongText') return Color(_colorScheme['white']);
+      else if (color == 'writingGuide') return Color(_colorScheme['accent']);
+      else if (color == 'writingDraw') return Color(_colorScheme['kulitanPath']);
+      else if (color == 'writingShadow') return Color(_colorScheme['empty']);
+      else if (color == 'transcribeDivider') return Color(_colorScheme['empty']);
+      else if (color == 'transcribeCursor') return Color(_colorScheme['accent']);
+      else if (color == 'informationDivider') return Color(_colorScheme['accent']);
+      else if (color == 'informationDividerShadow') return Color(_colorScheme['buttonShadow']);
+      else if (color == 'backToStartFAB') return Color(_colorScheme['white']);
+      else if (color == 'backToStartFABShadow') return Color(_colorScheme['buttonShadow']);
+      else if (color == 'backToStartFABIcon') return Color(_colorScheme['accent']);
+      else if (color == 'keyboardStroke') return Color(_colorScheme['white']);
+      else if (color == 'keyboardStrokeShadow') return Color(_colorScheme['accent']);
+      else if (color == 'keyboardPress') return Color(_colorScheme['white']);
+      else if (color == 'keyboardMainPress') return Color(_colorScheme['white']);
+      else if (color == 'keyboardKeyHint') return Color(_colorScheme['accent']);
+      else if (color == 'links') return Color(_colorScheme['accent']);
+      else if (color == 'paragraphText') return Color(_colorScheme['white']);
+      else return Color(_colorScheme['accent']);  // fallback color
     }
   }
   TextStyle getStyle(String style) {
@@ -453,6 +454,7 @@ class GameData {
   }
 
   Future<void> resetGameData() async {
+    _data = null;
     await _prefs.clear();
     await _db.close();
     await _DatabaseHelper.clearDatabase();
@@ -496,6 +498,7 @@ class GameData {
     final List<Map<String, dynamic>> _glyphData = await _db.query('Glyph');
     _reading['glyphs'] = Map<String, int>.fromIterable(_glyphData, key: (glyph) => glyph['name'], value: (glyph) => glyph['progress_count_reading']);
     _writing['glyphs'] = Map<String, int>.fromIterable(_glyphData, key: (glyph) => glyph['name'], value: (glyph) => glyph['progress_count_writing']);
+    _data = {};
     _data['colors'] = _colors;
     _data['intro'] = _intro;
     _data['reading'] = _reading;
@@ -504,7 +507,8 @@ class GameData {
   }
 
   Future<void> _initPrefs() async {
-    setColorScheme('default');
+    _data = {'colors': {}};
+    await setColorScheme('default');
     await _prefs.setBool('introTutorial', true);
     await _prefs.setBool('readingTutorial', true);
     await _prefs.setBool('writingTutorial', true);
