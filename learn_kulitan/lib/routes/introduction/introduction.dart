@@ -127,7 +127,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                   children: <Widget>[
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height > 600 ? 50.0: 16.0),
+                        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height > smallHeight ? 50.0: 16.0),
                         child: Center(
                           child: AnimatedOpacity(
                             opacity: _opacity,
@@ -151,7 +151,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                     Container(
                       constraints: BoxConstraints(maxWidth: 600.0),
                       padding: EdgeInsets.symmetric(horizontal: _screenHorizontalPadding, vertical: 20.0),
-                      height: MediaQuery.of(context).size.height > 600 ? 125.0 : 80.0,
+                      height: MediaQuery.of(context).size.height > smallHeight ? 125.0 : 80.0,
                       child: AnimatedOpacity(
                         opacity: _messageOpacity,
                         curve: introTextOpacityCurve,
@@ -167,7 +167,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                       child: CustomButton(
                         disable: _disabled,
                         onPressed: _nextIntro,
-                        height: MediaQuery.of(context).size.height > 600 ? 60.0 : 50.0,
+                        height: MediaQuery.of(context).size.height > smallHeight ? 60.0 : 50.0,
                         borderRadius: 30.0,
                         padding: const EdgeInsets.symmetric(horizontal: 30.0),
                         elevation: 10.0,
