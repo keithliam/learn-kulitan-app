@@ -184,7 +184,7 @@ class _AboutPageState extends State<AboutPage> {
           ),
         ),
         ImageWithCaption(
-          filename: 'keith.jpg',
+          filename: _gameData.getColorScheme() == 'default' ? 'keith.jpg' : 'keith_sablay.jpg',
           screenWidth: _width,
         ),
         Paragraphs(
