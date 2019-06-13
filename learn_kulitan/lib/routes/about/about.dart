@@ -163,7 +163,7 @@ class _AboutPageState extends State<AboutPage> {
           headerVerticalPadding, headerHorizontalPadding, 0.0),
       child: StaticHeader(
         left: RoundedBackButton(),
-        right: SizedBox(width: 56.0, height: 48.0),
+        right: SizedBox(width: 48.0, height: 48.0),
       ),
     );
 

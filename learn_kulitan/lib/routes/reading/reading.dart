@@ -221,15 +221,16 @@ class ReadingPageState extends State<ReadingPage> {
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding, headerVerticalPadding, headerHorizontalPadding, 0.0),
       child: StaticHeader(
         left: RoundedBackButton(alignment: Alignment.centerLeft),
-        middle: Container(
-          alignment: Alignment.center,
+        middle: SizedBox(
           height: 48.0,
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              _isTutorial ? 'Tutorial' : 'Glyphs Learned',
-              style: _gameData.getStyle('textQuizHeader'),
-              textAlign: TextAlign.center,
+          child: Center(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                _isTutorial ? 'Tutorial' : 'Glyphs Learned',
+                style: _gameData.getStyle('textQuizHeader'),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         ),

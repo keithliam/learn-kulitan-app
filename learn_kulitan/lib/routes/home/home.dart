@@ -46,12 +46,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Widget _appTitle = Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30.0),
-      child: Column(
-        children: <Widget>[
-          Text('Learn', style: _gameData.getStyle('textHomeSubtitle')),
-          Text('Kulitan', style: _gameData.getStyle('textHomeTitle')),
-        ],
+      padding: const EdgeInsets.all(30.0),
+      child: Center(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Column(
+            children: <Widget>[
+              Text('Learn', style: _gameData.getStyle('textHomeSubtitle')),
+              Text('Kulitan', style: _gameData.getStyle('textHomeTitle')),
+            ],
+          ),
+        ),
       ),
     );
 

@@ -592,8 +592,8 @@ class _TranscribePageState extends State<TranscribePage>
           headerVerticalPadding, headerHorizontalPadding, 0.0),
       child: StaticHeader(
         left: RoundedBackButton(),
-        middle: Padding(
-          padding: const EdgeInsets.only(bottom: headerVerticalPadding),
+        middle: SizedBox(
+          height: 48.0,
           child: Center(
             child: FittedBox(
               fit: BoxFit.scaleDown,
@@ -601,7 +601,7 @@ class _TranscribePageState extends State<TranscribePage>
             ),
           ),
         ),
-        right: SizedBox(width: 56.0, height: 48.0),
+        right: SizedBox(width: 48.0, height: 48.0),
       ),
     );
 

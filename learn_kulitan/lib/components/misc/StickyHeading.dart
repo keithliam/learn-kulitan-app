@@ -38,11 +38,12 @@ class StickyHeading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget _header = Container(
+      height: 48.0 + headerVerticalPadding,
       alignment: Alignment.center,
       padding: const EdgeInsets.fromLTRB(
-        headerIconSize + (headerHorizontalPadding * 2.0) + 16.0,
+        headerHorizontalPadding + 48.0,
         headerVerticalPadding - 8.0,
-        headerIconSize + (headerHorizontalPadding * 2.0) + 16.0,
+        headerHorizontalPadding + 48.0,
         0.0,
       ),
       child: FittedBox(

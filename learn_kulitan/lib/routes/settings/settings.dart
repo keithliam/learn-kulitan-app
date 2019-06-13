@@ -64,7 +64,7 @@ class _SettingsPageState extends State<SettingsPage> {
           headerVerticalPadding, headerHorizontalPadding, 0.0),
       child: StaticHeader(
         left: RoundedBackButton(),
-        right: SizedBox(width: 56.0, height: 48.0),
+        right: SizedBox(width: 48.0, height: 48.0),
       ),
     );
 
@@ -154,16 +154,22 @@ class _SettingsPageState extends State<SettingsPage> {
       Column(
         children: <Widget>[
           Container(
+            height: 48.0 + (headerVerticalPadding * 2.0),
+            width: double.infinity,
             color: _gameData.getColor('background'),
             padding: const EdgeInsets.fromLTRB(
-              informationHorizontalScreenPadding,
+              headerHorizontalPadding + 48.0,
               headerVerticalPadding - 8.0,
-              informationHorizontalScreenPadding,
+              headerHorizontalPadding + 48.0,
               10.0,
             ),
-            child: Text(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
                 'Kasaddian',
-                style: _gameData.getStyle('textPageTitle')),
+                style: _gameData.getStyle('textPageTitle'),
+              ),
+            ),
           ),
           Expanded(
             child: Scrollbar(

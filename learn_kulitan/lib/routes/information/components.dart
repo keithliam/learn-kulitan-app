@@ -13,21 +13,24 @@ class KulitanInfoCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 80.0,
-      child: Align(
+      child: Container(
         alignment: Alignment.bottomCenter,
+        padding: const EdgeInsets.all(5.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                kulitan,
-                style: _gameData.getStyle('kulitanInfo'),
-                textAlign: TextAlign.center,
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  kulitan,
+                  style: _gameData.getStyle('kulitanInfo'),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 5.0),
+            SizedBox(
+              height: 25.0,
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Text(

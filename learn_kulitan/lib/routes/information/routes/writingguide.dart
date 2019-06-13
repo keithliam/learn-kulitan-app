@@ -84,7 +84,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           headerVerticalPadding, headerHorizontalPadding, 0.0),
       child: StaticHeader(
         left: RoundedBackButton(),
-        right: SizedBox(width: 56.0, height: 48.0),
+        right: SizedBox(width: 48.0, height: 48.0),
       ),
     );
 
@@ -1629,13 +1629,18 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
         children: <Widget>[
           Container(
             color: _gameData.getColor('background'),
+            width: double.infinity,
+            height: 48.0 + headerVerticalPadding,
             padding: const EdgeInsets.fromLTRB(
-              headerHorizontalPadding,
+              headerHorizontalPadding + 48.0,
               headerVerticalPadding - 8.0,
-              headerHorizontalPadding,
+              headerHorizontalPadding + 48.0,
               0.0,
             ),
-            child: Text('Guide', style: _gameData.getStyle('textPageTitle')),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text('Writing Guide', style: _gameData.getStyle('textPageTitle')),
+            ),
           ),
           _pageCredits,
           Expanded(
