@@ -299,7 +299,7 @@ class _AboutPageState extends State<AboutPage> {
                 _romanText(
                   'Behance.net',
                   TapGestureRecognizer()
-                    ..onTap = () => _openURL('https://behance.net/keithliam'),
+                    ..onTap = () => _openURL('https://bit.ly/LEARNKULITANFONTBEHANCE'),
                 ),
                 _romanText(
                     '. For licensing inquiries, you may contact the developer via email at '),
