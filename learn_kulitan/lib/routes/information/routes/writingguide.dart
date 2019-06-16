@@ -108,7 +108,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                   text: 'Learn more',
                   style: _gameData.getStyle('textInfoCreditsLink'),
                   recognizer: TapGestureRecognizer()
-                    ..onTap = () => _openURL('http://siuala.com'),
+                    ..onTap = () => _openURL('https://bit.ly/LearnKulitan-Siuala'),
                 ),
                 TextSpan(text: '.'),
               ],
@@ -1544,13 +1544,13 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
               _romanText(
                 'An Introduction to Kulitan: The Indigenous Kapampangan Script',
                 TapGestureRecognizer()
-                  ..onTap = () => _openURL('http://siuala.com/'),
+                  ..onTap = () => _openURL('https://bit.ly/LearnKulitan-Siuala'),
               ),
               _romanText(' by '),
               _romanText(
                 'Michael Raymon M. Pangilinan',
                 TapGestureRecognizer()
-                  ..onTap = () => _openURL('http://siuala.com/siuala/'),
+                  ..onTap = () => _openURL('https://bit.ly/LearnKulitan-About-MikePangilinan'),
               ),
               _romanText(' (Siuálâ ding Meángûbié).'),
             ]),
@@ -1562,14 +1562,14 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                   'Facebook page',
                   TapGestureRecognizer()
                     ..onTap = () =>
-                        _openURL('https://www.facebook.com/sinupan.singsing/'),
+                        _openURL('https://bit.ly/LearnKulitan-SinupanSingsingFacebook'),
                 ),
                 _romanText(
                     '. For related news and articles, you may also visit their official website at '),
                 _romanText(
                   'sinupan.org',
                   TapGestureRecognizer()
-                    ..onTap = () => _openURL('https://www.sinupan.org/'),
+                    ..onTap = () => _openURL('https://bit.ly/LearnKulitan-SinupanSingsingWebsite'),
                 ),
                 _romanText('.'),
               ],
@@ -1581,7 +1581,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                   'Facebook group',
                   TapGestureRecognizer()
                     ..onTap = () => _openURL(
-                        'https://www.facebook.com/groups/Kulitkulitan/'),
+                        'https://bit.ly/LearnKulitan-KulitKulitanFacebook'),
                 ),
                 _romanText(
                     ' exists for Kulitan enthusiasts and those who would like to learn the indigenous Kapampangan script. Only English and Kapampangan languages are allowed in the group.'),

@@ -114,7 +114,7 @@ class _AboutPageState extends State<AboutPage> {
   void _shareApp() {
     try {
       Share.share(
-          'Kulitan has gone digital!\nManigáral tá nang Súlat Kapampángan!\nhttps://play.google.com');
+          'Kulitan has gone digital!\nManigáral tá nang Súlat Kapampángan!\nhttps://bit.ly/LearnKulitan-Android');
       Fluttertoast.showToast(
         msg: 'Thanks for sharing! Luíd ka!',
         toastLength: Toast.LENGTH_SHORT,
@@ -201,23 +201,23 @@ class _AboutPageState extends State<AboutPage> {
                 SocialMediaLink(
                   filename: 'twitter.png',
                   name: 'KeithManaloto_',
-                  link: 'https://twitter.com/KeithManaloto_',
+                  link: 'https://bit.ly/LearnKulitan-About-Twitter',
                   topPadding: 0.0,
                 ),
                 SocialMediaLink(
                   filename: 'instagram.png',
                   name: 'keithliam',
-                  link: 'https://instagram.com/keithliam',
+                  link: 'https://bit.ly/LearnKulitan-About-Instagram',
                 ),
                 SocialMediaLink(
                   filename: 'behance.png',
                   name: 'keithliam',
-                  link: 'https://behance.net/keithliam',
+                  link: 'https://bit.ly/LearnKulitan-About-Behance',
                 ),
                 SocialMediaLink(
                   filename: 'github.png',
                   name: 'keithliam',
-                  link: 'https://github.com/keithliam',
+                  link: 'https://bit.ly/LearnKulitan-About-GitHub',
                 ),
                 SocialMediaLink(
                   filename: 'gmail.png',
@@ -252,7 +252,7 @@ class _AboutPageState extends State<AboutPage> {
                 _romanText(
                   'siuala.com',
                   TapGestureRecognizer()
-                    ..onTap = () => _openURL('http://siuala.com/'),
+                    ..onTap = () => _openURL('https://bit.ly/LearnKulitan-Siuala'),
                 ),
                 _romanText(
                     ' for more information about Kapampangan language, script, history, cuisine, culture, and heritage.'),
@@ -299,7 +299,7 @@ class _AboutPageState extends State<AboutPage> {
                 _romanText(
                   'Behance.net',
                   TapGestureRecognizer()
-                    ..onTap = () => _openURL('https://bit.ly/LEARNKULITANFONTBEHANCE'),
+                    ..onTap = () => _openURL('https://bit.ly/LearnKulitan-BehanceFont'),
                 ),
                 _romanText(
                     '. For licensing inquiries, you may contact the developer via email at '),
@@ -346,7 +346,7 @@ class _AboutPageState extends State<AboutPage> {
         Padding(
           padding: const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 5.0),
           child: PageButton(
-            onPressed: () => _openURL('https://www.paypal.me/keithmanaloto'),
+            onPressed: () => _openURL('https://bit.ly/LearnKulitan-About-PayPal'),
             isColored: true,
             text: 'DONATE',
           ),
@@ -375,13 +375,13 @@ class _AboutPageState extends State<AboutPage> {
                 _romanText(
                   'Guido Rosso',
                   TapGestureRecognizer()
-                    ..onTap = () => _openURL('https://www.2dimensions.com/a/pollux/files/recent/all'),
+                    ..onTap = () => _openURL('https://bit.ly/LearnKulitan-About-Flare'),
                 ),
                 _romanText(', licensed under '),
                 _romanText(
                   'CC BY',
                   TapGestureRecognizer()
-                    ..onTap = () => _openURL('https://creativecommons.org/licenses/by/4.0/'),
+                    ..onTap = () => _openURL('https://bit.ly/LearnKulitan-About-FlareLicense'),
                 ),
                 _romanText('.'),
               ],
@@ -393,7 +393,7 @@ class _AboutPageState extends State<AboutPage> {
                 _romanText(
                   'Flutter',
                   TapGestureRecognizer()
-                    ..onTap = () => _openURL('https://flutter.io/'),
+                    ..onTap = () => _openURL('https://bit.ly/LearnKulitan-About-Flutter'),
                 ),
                 _romanText('.'),
               ],

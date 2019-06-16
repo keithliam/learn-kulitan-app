@@ -89,7 +89,7 @@ class StickyHeading extends StatelessWidget {
                             text: 'Learn more',
                             style: _gameData.getStyle('textInfoCreditsLink'),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () => _openURL('http://siuala.com'),
+                              ..onTap = () => _openURL('https://bit.ly/LearnKulitan-Siuala'),
                           ),
                           TextSpan(text: '.'),
                         ],
