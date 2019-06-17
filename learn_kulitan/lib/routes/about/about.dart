@@ -340,17 +340,17 @@ class _AboutPageState extends State<AboutPage> {
               ],
             ),
             _romanText(
-                'If you would like to support the developer for future updates and improvements of this application, feel free to donate by pressing the button below! You may also express your support using the social media links above!'),
+                'If you would like to support the developer for future updates and improvements of this application, feel free to donate! You may also express your support using the social media links above!'),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 5.0),
-          child: PageButton(
-            onPressed: () => _openURL('https://bit.ly/LearnKulitan-About-PayPal'),
-            isColored: true,
-            text: 'DONATE',
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 5.0),
+        //   child: PageButton(
+        //     onPressed: () => _openURL('https://bit.ly/LearnKulitan-About-PayPal'),
+        //     isColored: true,
+        //     text: 'DONATE',
+        //   ),
+        // ),
         Padding(
           padding: EdgeInsets.fromLTRB(
             _width * 0.31,
