@@ -78,6 +78,7 @@ class AdMob {
             _banner.show();
           }
         } else if (event == MobileAdEvent.closed) {
+          _showBanner = false;
           _bannerFailed = false;
           _bannerStatus = event;
           _createBanner();
