@@ -34,6 +34,7 @@ class AdMob {
   bool _showBanner = false;
   bool _bannerFailed = false;
   void Function() _adjustScreen;
+  void Function() _onBannerLoadFail;
 
   InterstitialAd _interstitial;
   MobileAdEvent _interstitialStatus;
@@ -65,6 +66,7 @@ class AdMob {
           if (!_bannerFailed) {
             _bannerFailed = true;
             _bannerStatus = event;
+            _onBannerLoadFail();
             Timer.periodic(adReloadTimeout, (Timer timer) {
               if (_bannerStatus == MobileAdEvent.loaded && _showBanner)
                 timer.cancel();
@@ -159,10 +161,14 @@ class AdMob {
     );
   }
 
-  void showBanner({void Function() adjustScreen}) {
+  void showBanner({
+    void Function() adjustScreen,
+    void Function() onLoadFail,
+  }) {
     if (!_showBanner) {
       _showBanner = true;
       _adjustScreen = adjustScreen;
+      _onBannerLoadFail = onLoadFail;
       if (_bannerStatus == MobileAdEvent.loaded) {
         _adjustScreen();
         _banner.show();
@@ -249,12 +255,16 @@ class MobileBannerAdState extends State<MobileBannerAd> {
   StreamSubscription _showBannerStreamSubscription;
 
   void _showBanner() {
-    _ads.showBanner(adjustScreen: () {
-      setState(
-        () =>
-            _bottomPadding = AdMob.getSmartBannerHeight(MediaQuery.of(context)),
-      );
-    });
+    _ads.showBanner(
+      adjustScreen: () {
+        setState(() {
+          _bottomPadding = AdMob.getSmartBannerHeight(MediaQuery.of(context));
+        });
+      },
+      onLoadFail: () {
+        setState(() => _bottomPadding = 0.0);
+      },
+    );
   }
 
   @override
@@ -268,8 +278,9 @@ class MobileBannerAdState extends State<MobileBannerAd> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _showBanner();
       });
+    } else {
+      _bottomPadding = widget.padding;
     }
-    _bottomPadding = widget.padding;
   }
 
   @override
