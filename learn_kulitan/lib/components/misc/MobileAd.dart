@@ -7,6 +7,7 @@ import 'package:firebase_admob/firebase_admob.dart';
 class AdMob {
   static final Duration adReloadTimeout = const Duration(seconds: 5);
   static final Duration videoTimeout = const Duration(seconds: 15);
+  static final int interstitialCardsCount = 15;
 
   static final AdMob _instance = AdMob._internal();
   factory AdMob() => _instance;
@@ -37,6 +38,7 @@ class AdMob {
   InterstitialAd _interstitial;
   MobileAdEvent _interstitialStatus;
   bool _showInterstitial = false;
+  bool _interstitialFailed = false;
 
   RewardedVideoAd _video;
   RewardedVideoAdEvent _videoStatus;
@@ -90,13 +92,25 @@ class AdMob {
       targetingInfo: _info,
       listener: (MobileAdEvent event) {
         if (event == MobileAdEvent.failedToLoad) {
-          _interstitialStatus = event;
+          if (!_interstitialFailed) {
+            _interstitialFailed = true;
+            _interstitialStatus = event;
+            Timer.periodic(adReloadTimeout, (Timer timer) {
+              if (_interstitialStatus == MobileAdEvent.loaded &&
+                  _showInterstitial)
+                timer.cancel();
+              else if (_showInterstitial) _createInterstitial();
+            });
+          }
         } else if (event == MobileAdEvent.loaded) {
+          _interstitialFailed = false;
           _interstitialStatus = event;
           if (_showInterstitial) _interstitial.show();
         } else if (event == MobileAdEvent.closed) {
+          _showInterstitial = false;
+          _interstitialFailed = false;
           _interstitialStatus = event;
-          if (_showInterstitial) _createInterstitial();
+          _createInterstitial();
         }
       },
     )..load();
