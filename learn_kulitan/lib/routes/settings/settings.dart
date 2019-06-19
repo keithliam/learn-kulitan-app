@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../components/buttons/RoundedBackButton.dart';
 import '../../components/buttons/PageButton.dart';
 import '../../components/misc/StaticHeader.dart';
+import '../../components/misc/MobileAd.dart';
 import '../../db/GameData.dart';
 import '../../styles/theme.dart';
 import './components.dart';
@@ -16,11 +17,13 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   static final GameData _gameData = GameData();
+  static final AdMob _ads = AdMob();
 
   void _refresh() => setState(() {});
 
   void _replayIntro() {
     _gameData.setTutorial('intro', true);
+    _ads.closeBanner();
     Navigator.pushNamedAndRemoveUntil(
       context,
       '/',
@@ -43,6 +46,11 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  Future<void> _resetGame() async {
+    _ads.closeBanner();
+    await _gameData.resetGameData();
+  }
+
   Widget _getColor(String color) {
     final List<String> _unlockedColors = _gameData.getUnlockedColorSchemes();
     return ColorSchemeChoice(
@@ -54,7 +62,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double _screenWidth = MediaQuery.of(context).size.width;
+    final MediaQueryData _mediaQuery = MediaQuery.of(context);
+    final double _screenWidth = _mediaQuery.size.width;
     final double _screenHorizontalPadding =
         _screenWidth > maxPageWidth ? 0.0 : informationHorizontalScreenPadding;
     const double _spacing = informationHorizontalScreenPadding;
@@ -146,7 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
       // Reset Game button
       Padding(
         padding: const EdgeInsets.only(top: _spacing - 10.0),
-        child: ResetButton(onPressed: _gameData.resetGameData),
+        child: ResetButton(onPressed: _resetGame),
       ),
     ]);
 
@@ -200,7 +209,10 @@ class _SettingsPageState extends State<SettingsPage> {
     return Material(
       color: _gameData.getColor('background'),
       child: SafeArea(
-        child: Stack(children: _pageStack),
+        child: MobileBannerAd(
+          padding: AdMob.getSmartBannerHeight(_mediaQuery),
+          child: Stack(children: _pageStack),
+        ),
       ),
     );
   }

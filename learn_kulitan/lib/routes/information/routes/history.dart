@@ -10,6 +10,7 @@ import '../../../components/misc/StaticHeader.dart';
 import '../../../components/misc/StickyHeading.dart';
 import '../../../components/misc/ImageWithCaption.dart';
 import '../../../components/misc/Paragraphs.dart';
+import '../../../components/misc/MobileAd.dart';
 import '../../../db/GameData.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -77,8 +78,9 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double _screenHorizontalPadding = MediaQuery.of(context).size.width > maxPageWidth ? 0.0 : informationHorizontalScreenPadding;
-    final double _width = MediaQuery.of(context).size.width > maxPageWidth ? maxPageWidth : MediaQuery.of(context).size.width;
+    final MediaQueryData _mediaQuery = MediaQuery.of(context);
+    final double _screenHorizontalPadding = _mediaQuery.size.width > maxPageWidth ? 0.0 : informationHorizontalScreenPadding;
+    final double _width = _mediaQuery.size.width > maxPageWidth ? maxPageWidth : _mediaQuery.size.width;
 
     Widget _header = Padding(
       padding: EdgeInsets.fromLTRB(headerHorizontalPadding,
@@ -612,8 +614,9 @@ class _HistoryPageState extends State<HistoryPage> {
     return Material(
       color: _gameData.getColor('background'),
       child: SafeArea(
-        child: Stack(
-          children: _pageStack,
+        child: MobileBannerAd(
+          padding: AdMob.getSmartBannerHeight(_mediaQuery),
+          child: Stack(children: _pageStack),
         ),
       ),
     );

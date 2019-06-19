@@ -16,6 +16,8 @@ class HomeButton extends StatelessWidget {
     this.height,
     this.progress = -1,
     this.padRight,
+    this.onRoutePush,
+    this.onRouteReturn,
   });
 
   final List<Widget> kulitanText;
@@ -29,14 +31,20 @@ class HomeButton extends StatelessWidget {
   final VoidCallback reload;
   final VoidCallback onPressedImmediate;
   final CustomButtonGroup buttonGroup;
+  final void Function() onRoutePush;
+  final void Function() onRouteReturn;
 
   static final GameData _gameData = GameData();
 
-  void _onPressed(BuildContext context) {
+  void _onPressed(BuildContext context) async {
+    if (onRoutePush != null) onRoutePush();
     if (reload != null) {
-      Navigator.pushNamed(context, route).then((_) => reload());
+      await Navigator.pushNamed(context, route).then((_) => reload());
     } else {
-      Navigator.pushNamed(context, route);
+      await Navigator.pushNamed(context, route);
+    }
+    if (onRouteReturn != null) {
+      onRouteReturn();
     }
   }
 
