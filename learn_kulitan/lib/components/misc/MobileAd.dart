@@ -46,6 +46,8 @@ class AdMob {
   MobileAdEvent _interstitialStatus;
   bool _showInterstitial = false;
   bool _interstitialFailed = false;
+  void Function() _onInterstitialClose;
+  void Function() _onInterstitialShow;
 
   RewardedVideoAd _video;
   RewardedVideoAdEvent _videoStatus;
@@ -115,11 +117,15 @@ class AdMob {
         } else if (event == MobileAdEvent.loaded) {
           _interstitialFailed = false;
           _interstitialStatus = event;
-          if (_showInterstitial) _interstitial.show();
+          if (_showInterstitial) {
+            if (_onInterstitialShow != null) _onInterstitialShow();
+            _interstitial.show();
+          }
         } else if (event == MobileAdEvent.closed) {
           _showInterstitial = false;
           _interstitialFailed = false;
           _interstitialStatus = event;
+          if (_onInterstitialClose != null) _onInterstitialClose();
           _createInterstitial();
         }
       },
@@ -192,9 +198,11 @@ class AdMob {
     }
   }
 
-  void showInterstitial() {
+  void showInterstitial({onClose, onShow}) {
     if (!_showInterstitial) {
       _showInterstitial = true;
+      _onInterstitialClose = onClose;
+      _onInterstitialShow = onShow;
       if (_interstitialStatus == MobileAdEvent.loaded) _interstitial.show();
     }
   }

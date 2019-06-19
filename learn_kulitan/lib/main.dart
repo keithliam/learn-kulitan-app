@@ -39,26 +39,25 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   static final AdMob _ads = AdMob();
-  bool _videoShown = false;
+  bool _adShown = false;
   Timer _timer;
 
   Timer _createIdleTimer() {
     return Timer(AdMob.videoTimeout, () {
-      _ads.showVideo(
+      _ads.showInterstitial(
         onClose: () {
-          _videoShown = false;
+          _adShown = false;
           _timer = _createIdleTimer();
         },
-        onShow: () => _videoShown = true,
+        onShow: () => _adShown = true,
       );
-      _timer?.cancel();
     });
   }
 
   void _resetIdleTimer(_) {
     _ads.closeVideo();
     _timer?.cancel();
-    if (!_videoShown) _timer = _createIdleTimer();
+    if (!_adShown) _timer = _createIdleTimer();
   }
 
   @override
