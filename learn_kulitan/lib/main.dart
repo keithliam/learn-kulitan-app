@@ -44,16 +44,19 @@ class _MainAppState extends State<MainApp> {
 
   Timer _createIdleTimer() {
     return Timer(AdMob.videoTimeout, () {
-      _videoShown = true;
-      _ads.showVideo(onClose: () {
-        _videoShown = false;
-        _timer = _createIdleTimer();
-      });
+      _ads.showVideo(
+        onClose: () {
+          _videoShown = false;
+          _timer = _createIdleTimer();
+        },
+        onShow: () => _videoShown = true,
+      );
       _timer?.cancel();
     });
   }
 
   void _resetIdleTimer(_) {
+    _ads.closeVideo();
     _timer?.cancel();
     if (!_videoShown) _timer = _createIdleTimer();
   }

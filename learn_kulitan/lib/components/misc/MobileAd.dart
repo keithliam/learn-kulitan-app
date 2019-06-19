@@ -45,6 +45,7 @@ class AdMob {
   bool _showVideo = false;
   bool _videoFailed = false;
   void Function() _onVideoClose;
+  void Function() _onVideoShow;
 
   Future<void> initialize() async {
     FirebaseAdMob.instance.initialize(appId: 'FirebaseAdMob.testAppId');
@@ -134,7 +135,10 @@ class AdMob {
         } else if (event == RewardedVideoAdEvent.loaded) {
           _videoFailed = false;
           _videoStatus = event;
-          if (_showVideo) _video.show();
+          if (_showVideo) {
+            _onVideoShow();
+            _video.show();
+          }
         } else if (event == RewardedVideoAdEvent.closed) {
           _showVideo = false;
           _videoFailed = false;
@@ -183,11 +187,20 @@ class AdMob {
     }
   }
 
-  void showVideo({onClose}) {
+  void showVideo({onClose, onShow}) {
     if (!_showVideo) {
       _showVideo = true;
       _onVideoClose = onClose;
+      _onVideoShow = onShow;
       if (_videoStatus == RewardedVideoAdEvent.loaded) _video.show();
+    }
+  }
+
+  void closeVideo() {
+    if (_showVideo) {
+      _showVideo = false;
+      _onVideoClose = null;
+      _onVideoShow = null;
     }
   }
 
