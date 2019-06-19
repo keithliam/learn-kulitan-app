@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../components/misc/MobileAd.dart';
 import '../../db/GameData.dart';
 import '../../routes/reading/components.dart' show ChoiceButton;
 import '../../styles/theme.dart';
@@ -7,6 +8,7 @@ import '../../styles/theme.dart';
 class GameLogicManager {
   GameLogicManager({ this.isQuiz: true });
   static final GameData _gameData = GameData();
+  static final AdMob _ads = AdMob();
   static final Map<String, dynamic> defaults = {
     'batch': 1,
     'progress': 2,
@@ -15,6 +17,7 @@ class GameLogicManager {
   final bool isQuiz;
   bool _isTutorial = false;
   int _tutorialNo = 0;
+  int _currentCardCount = 0;
 
   dynamic _state;
 
@@ -24,6 +27,10 @@ class GameLogicManager {
   int _batchNumber = 0;
 
   get isTutorial => _isTutorial;
+
+  void _incCurrentCardCount() {
+    if (++_currentCardCount % AdMob.interstitialCardsCount == 0) _ads.showInterstitial();
+  }
 
   void init(dynamic _pageState) {
     _state = _pageState;
@@ -455,6 +462,7 @@ class GameLogicManager {
     }
   }
   void swipedLeft() async {
+    _incCurrentCardCount();
     if(!isQuiz) {
       await Future.delayed(const Duration(milliseconds: writingNextCardDelay));
       _state.slideCard();

@@ -1,0 +1,41 @@
+{
+  "project_info": {
+    "project_number": "196491001230",
+    "firebase_url": "https://learn-kulitan.firebaseio.com",
+    "project_id": "learn-kulitan",
+    "storage_bucket": "learn-kulitan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196491001230:android:aab33235dc1c774d",
+        "android_client_info": {
+          "package_name": "com.keithmanaloto.learnkulitan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "196491001230-ehkoamqn1mp1gjtfuptbjlm3ul23u3gm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJLoWvrVoji0K0VYQjB0_bL1pWZ96NPLE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "196491001230-ehkoamqn1mp1gjtfuptbjlm3ul23u3gm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5065461727943279~7716069922"
+    }
+  ],
+  "configuration_version": "1"
+}

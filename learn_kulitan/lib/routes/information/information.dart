@@ -7,6 +7,7 @@ import '../../components/buttons/BackToStartButton.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/DividerNew.dart';
 import '../../components/misc/StickyHeading.dart';
+import '../../components/misc/MobileAd.dart';
 import '../../db/GameData.dart';
 import './components.dart';
 
@@ -54,7 +55,8 @@ class _InformationPageState extends State<InformationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double _screenWidth = MediaQuery.of(context).size.width;
+    final MediaQueryData _mediaQuery = MediaQuery.of(context);
+    final double _screenWidth = _mediaQuery.size.width;
     final double _screenHorizontalPadding = _screenWidth > maxPageWidth ? 0.0 : informationHorizontalScreenPadding;
 
     final Widget _header = Padding(
@@ -82,7 +84,7 @@ class _InformationPageState extends State<InformationPage> {
         disable: _disabled,
         onPressedImmediate: _disableButtons,
         onPressed: () => Navigator.pushNamed(context, '/information/history'),
-        height: MediaQuery.of(context).size.height > smallHeight ? 60.0 : 50.0,
+        height: _mediaQuery.size.height > smallHeight ? 60.0 : 50.0,
         borderRadius: 30.0,
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
         elevation: 10.0,
@@ -419,8 +421,9 @@ class _InformationPageState extends State<InformationPage> {
     return Material(
       color: _gameData.getColor('background'),
       child: SafeArea(
-        child: Stack(
-          children: _pageStack,
+        child: MobileBannerAd(
+          padding: AdMob.getSmartBannerHeight(_mediaQuery),
+          child: Stack(children: _pageStack),
         ),
       ),
     );
