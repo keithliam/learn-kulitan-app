@@ -9,6 +9,7 @@ class AdMob {
   static final Duration videoTimeout = const Duration(seconds: 15);
   static final int interstitialCardsCount = 15;
 
+  static final String appId = 'ca-app-pub-5065461727943279~7716069922';
   static final String bannerId = 'ca-app-pub-5065461727943279/9402354983';
   static final String interstitialId = 'ca-app-pub-5065461727943279/1580717040';
   static final String videoId = 'ca-app-pub-5065461727943279/1197573665';
@@ -57,7 +58,7 @@ class AdMob {
   void Function() _onVideoShow;
 
   Future<void> initialize() async {
-    FirebaseAdMob.instance.initialize(appId: 'FirebaseAdMob.testAppId');
+    FirebaseAdMob.instance.initialize(appId: AdMob.appId); // FirebaseAdMob.testAppId
     _createBanner();
     _createInterstitial();
     _createVideo();
