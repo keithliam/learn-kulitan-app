@@ -11,6 +11,7 @@ import './routes/transcribe/transcribe.dart';
 import './routes/about/about.dart';
 import './routes/settings/settings.dart';
 import './components/misc/CustomScrollBehavior.dart';
+import './components/misc/MobileAd.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -19,6 +20,7 @@ void main() {
     systemNavigationBarColor: Color(0xFFFABF40),
     systemNavigationBarIconBrightness: Brightness.dark,
   ));
+  AdMob().initialize();
   runApp(MyApp());
 }
 
