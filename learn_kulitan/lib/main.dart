@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import './routes/introduction/introduction.dart';
@@ -21,18 +23,65 @@ void main() {
     systemNavigationBarIconBrightness: Brightness.dark,
   ));
   AdMob().initialize();
-  runApp(MyApp());
+  runApp(LearnKulitanApp());
 }
 
-class MyApp extends StatelessWidget {
+class LearnKulitanApp extends StatelessWidget {
+  Widget build(BuildContext context) {
+    return MainApp();
+  }
+}
+
+class MainApp extends StatefulWidget {
+  @override
+  _MainAppState createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  static final AdMob _ads = AdMob();
+  bool _videoShown = false;
+  Timer _timer;
+
+  Timer _createIdleTimer() {
+    return Timer(AdMob.videoTimeout, () {
+      _videoShown = true;
+      _ads.showVideo(onClose: () {
+        _videoShown = false;
+        _timer = _createIdleTimer();
+      });
+      _timer?.cancel();
+    });
+  }
+
+  void _resetIdleTimer(_) {
+    _timer?.cancel();
+    if (!_videoShown) _timer = _createIdleTimer();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = _createIdleTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       builder: (context, child) {
-        return ScrollConfiguration(
-          behavior: CustomScrollBehavior(),
-          child: child,
+        return Listener(
+          behavior: HitTestBehavior.translucent,
+          onPointerMove: _resetIdleTimer,
+          child: ScrollConfiguration(
+            behavior: CustomScrollBehavior(),
+            child: child,
+          ),
         );
       },
       title: 'Learn Kulitan',

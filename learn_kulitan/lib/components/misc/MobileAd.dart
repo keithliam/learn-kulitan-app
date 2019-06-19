@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
 class AdMob {
+  static final Duration adReloadTimeout = const Duration(seconds: 5);
+  static final Duration videoTimeout = const Duration(seconds: 15);
+
   static final AdMob _instance = AdMob._internal();
   factory AdMob() => _instance;
   AdMob._internal();
@@ -36,11 +39,17 @@ class AdMob {
   bool _showInterstitial = false;
 
   RewardedVideoAd _video;
+  RewardedVideoAdEvent _videoStatus;
+  bool _showVideo = false;
+  bool _videoFailed = false;
+  void Function() _onVideoClose;
 
   Future<void> initialize() async {
     FirebaseAdMob.instance.initialize(appId: 'FirebaseAdMob.testAppId');
     _createBanner();
     _createInterstitial();
+    _createVideo();
+    _reloadVideo();
   }
 
   void _createBanner() {
@@ -53,7 +62,7 @@ class AdMob {
           if (!_bannerFailed) {
             _bannerFailed = true;
             _bannerStatus = event;
-            Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+            Timer.periodic(adReloadTimeout, (Timer timer) {
               if (_bannerStatus == MobileAdEvent.loaded && _showBanner)
                 timer.cancel();
               else if (_showBanner) _createBanner();
@@ -69,7 +78,7 @@ class AdMob {
         } else if (event == MobileAdEvent.closed) {
           _bannerFailed = false;
           _bannerStatus = event;
-          if (_showBanner) _createBanner();
+          _createBanner();
         }
       },
     )..load();
@@ -91,6 +100,44 @@ class AdMob {
         }
       },
     )..load();
+  }
+
+  void _createVideo() {
+    _video = RewardedVideoAd.instance
+      ..listener =
+          (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+        if (event == RewardedVideoAdEvent.failedToLoad) {
+          if (!_videoFailed) {
+            _videoFailed = true;
+            _videoStatus = event;
+            Timer.periodic(adReloadTimeout, (Timer timer) {
+              if (_videoStatus == RewardedVideoAdEvent.loaded && _showVideo)
+                timer.cancel();
+              else if (_showVideo) _reloadVideo();
+            });
+          }
+        } else if (event == RewardedVideoAdEvent.loaded) {
+          _videoFailed = false;
+          _videoStatus = event;
+          if (_showVideo) _video.show();
+        } else if (event == RewardedVideoAdEvent.closed) {
+          _showVideo = false;
+          _videoFailed = false;
+          _videoStatus = event;
+          if (_onVideoClose != null) {
+            _onVideoClose();
+            _onVideoClose = null;
+          }
+          _reloadVideo();
+        }
+      };
+  }
+
+  void _reloadVideo() {
+    _video.load(
+      adUnitId: RewardedVideoAd.testAdUnitId,
+      targetingInfo: _info,
+    );
   }
 
   void showBanner({void Function() adjustScreen}) {
@@ -118,6 +165,14 @@ class AdMob {
     if (!_showInterstitial) {
       _showInterstitial = true;
       if (_interstitialStatus == MobileAdEvent.loaded) _interstitial.show();
+    }
+  }
+
+  void showVideo({onClose}) {
+    if (!_showVideo) {
+      _showVideo = true;
+      _onVideoClose = onClose;
+      if (_videoStatus == RewardedVideoAdEvent.loaded) _video.show();
     }
   }
 
