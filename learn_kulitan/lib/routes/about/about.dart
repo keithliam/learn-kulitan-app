@@ -338,7 +338,7 @@ class _AboutPageState extends State<AboutPage> {
                 _romanText('This mobile application took '),
                 _boldRomanText('hundreds of hours'),
                 _romanText(
-                    ' to develop. In-app advertisements were not included to provide you the best experience as possible.'),
+                    ' to develop.'), // In-app advertisements were not included to provide you the best experience as possible.
               ],
             ),
             _romanText(
