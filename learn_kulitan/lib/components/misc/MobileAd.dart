@@ -9,6 +9,10 @@ class AdMob {
   static final Duration videoTimeout = const Duration(seconds: 15);
   static final int interstitialCardsCount = 15;
 
+  static final String bannerId = 'ca-app-pub-5065461727943279/9402354983';
+  static final String interstitialId = 'ca-app-pub-5065461727943279/1580717040';
+  static final String videoId = 'ca-app-pub-5065461727943279/1197573665';
+
   static final AdMob _instance = AdMob._internal();
   factory AdMob() => _instance;
   AdMob._internal();
@@ -22,11 +26,13 @@ class AdMob {
       'filipino',
       'kapampangan',
       'kulitan',
-      'language'
+      'language',
+      'writing',
+      'reading',
+      'transcribing',
     ],
-    contentUrl: 'https://flutter.io',
     childDirected: false,
-    testDevices: <String>['LHS7N18C25019181'],
+    // testDevices: <String>['311567B772A117B1369EDB196469C3B5'],
   );
 
   BannerAd _banner;
@@ -58,7 +64,7 @@ class AdMob {
 
   void _createBanner() {
     _banner = BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
+      adUnitId: AdMob.bannerId, // BannerAd.testAdUnitId
       size: AdSize.smartBanner,
       targetingInfo: _info,
       listener: (MobileAdEvent event) {
@@ -92,7 +98,7 @@ class AdMob {
 
   void _createInterstitial() {
     _interstitial = InterstitialAd(
-      adUnitId: InterstitialAd.testAdUnitId,
+      adUnitId: AdMob.interstitialId, // InterstitialAd.testAdUnitId
       targetingInfo: _info,
       listener: (MobileAdEvent event) {
         if (event == MobileAdEvent.failedToLoad) {
@@ -156,7 +162,7 @@ class AdMob {
 
   void _reloadVideo() {
     _video.load(
-      adUnitId: RewardedVideoAd.testAdUnitId,
+      adUnitId: AdMob.videoId, // RewardedVideoAd.testAdUnitId
       targetingInfo: _info,
     );
   }
