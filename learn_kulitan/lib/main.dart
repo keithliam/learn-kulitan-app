@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import './routes/introduction/introduction.dart';
