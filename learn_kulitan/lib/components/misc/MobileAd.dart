@@ -32,7 +32,7 @@ class AdMob {
       'reading',
       'transcribing',
     ],
-    childDirected: false,
+    childDirected: true,
     // testDevices: <String>['311567B772A117B1369EDB196469C3B5'],
   );
 
