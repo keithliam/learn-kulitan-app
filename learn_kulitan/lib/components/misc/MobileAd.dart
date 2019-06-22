@@ -6,7 +6,7 @@ import 'package:firebase_admob/firebase_admob.dart';
 
 class AdMob {
   static final Duration adReloadTimeout = const Duration(seconds: 5);
-  static final Duration videoTimeout = const Duration(seconds: 15);
+  static final Duration videoTimeout = const Duration(seconds: 30);
   static final int interstitialCardsCount = 15;
 
   static final String appId = 'ca-app-pub-5065461727943279~7716069922';
