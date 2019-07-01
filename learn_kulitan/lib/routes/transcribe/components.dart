@@ -94,14 +94,20 @@ class _KeyHintState extends State<_KeyHint>
     Offset offset = renderBox.localToGlobal(Offset.zero);
 
     Widget _child;
-    final _hintText = widget.hint;
-    if (_hintText.length > 1 &&
-        _hintText.endsWith('a') &&
-        !(_hintText.endsWith('aa') ||
-            _hintText.endsWith('ii') ||
-            _hintText.endsWith('uu'))) {
-      final String _i = _hintText.substring(0, _hintText.length - 1) + 'i';
-      final String _u = _hintText.substring(0, _hintText.length - 1) + 'u';
+    final String _hintText = widget.hint;
+    if ((_hintText == 'i' || _hintText == 'u') ||
+        (_hintText.length > 1 &&
+            _hintText.endsWith('a') &&
+            !(_hintText.endsWith('aa') ||
+                _hintText.endsWith('ii') ||
+                _hintText.endsWith('uu')))) {
+      String _substring = _hintText.substring(0, _hintText.length - 1);
+      if (_hintText == 'i')
+        _substring = 'y';
+      else if (_hintText == 'u')
+        _substring = 'w';
+      final String _i = _substring + 'i';
+      final String _u = _substring + 'u';
 
       _child = Column(
         children: <Widget>[
@@ -221,9 +227,9 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
     if (widget.keyType == 'a')
       _keyHintText = 'a';
     else if (widget.keyType == 'i')
-      _keyHintText = 'ya';
+      _keyHintText = 'i';
     else if (widget.keyType == 'u')
-      _keyHintText = 'wa';
+      _keyHintText = 'u';
     else
       _keyHintText = widget.keyType + 'a';
     WidgetsBinding.instance
@@ -257,32 +263,28 @@ class _KeyboardKeyState extends State<_KeyboardKey> {
           _endPos <= _startPos + (keyboardKeyMiddleZoneHeight / 2.0)) {
         if (!_keyHintText.endsWith('a')) {
           if (widget.keyType == 'i')
-            setState(() => _keyHintText = 'ya');
+            setState(() => _keyHintText = 'i');
           else if (widget.keyType == 'u')
-            setState(() => _keyHintText = 'wa');
+            setState(() => _keyHintText = 'u');
           else
             setState(() => _keyHintText = widget.keyType + 'a');
         }
         _pressHighlight(top: true, bottom: true);
       } else if (_startPos > _endPos) {
-        if (!_keyHintText.endsWith('i')) {
-          if (widget.keyType == 'i')
-            setState(() => _keyHintText = 'yi');
-          else if (widget.keyType == 'u')
-            setState(() => _keyHintText = 'wi');
-          else
-            setState(() => _keyHintText = widget.keyType + 'i');
-        }
+        if (widget.keyType == 'i')
+          setState(() => _keyHintText = 'yi');
+        else if (widget.keyType == 'u')
+          setState(() => _keyHintText = 'wi');
+        else
+          setState(() => _keyHintText = widget.keyType + 'i');
         _pressHighlight(top: true, bottom: false);
       } else {
-        if (!_keyHintText.endsWith('u')) {
-          if (widget.keyType == 'i')
-            setState(() => _keyHintText = 'yu');
-          else if (widget.keyType == 'u')
-            setState(() => _keyHintText = 'wu');
-          else
-            setState(() => _keyHintText = widget.keyType + 'u');
-        }
+        if (widget.keyType == 'i')
+          setState(() => _keyHintText = 'yu');
+        else if (widget.keyType == 'u')
+          setState(() => _keyHintText = 'wu');
+        else
+          setState(() => _keyHintText = widget.keyType + 'u');
         _pressHighlight(top: false, bottom: true);
       }
     }
