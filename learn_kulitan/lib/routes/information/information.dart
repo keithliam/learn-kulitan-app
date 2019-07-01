@@ -189,10 +189,10 @@ class _InformationPageState extends State<InformationPage> {
         children: <TableRow>[
           TableRow(children: const <Widget>[
             KulitanInfoCell('a', 'a'),
-            KulitanInfoCell('i', 'ka'),
+            KulitanInfoCell('i', 'i'),
             KulitanInfoCell('u', 'u'),
-            KulitanInfoCell('e', 'e'),
-            KulitanInfoCell('o', 'o'),
+            KulitanInfoCell('ee', 'e'),
+            KulitanInfoCell('oo', 'o'),
           ]),
           TableRow(children: <Widget>[
             KulitanInfoCell('aa', 'á/â'),
