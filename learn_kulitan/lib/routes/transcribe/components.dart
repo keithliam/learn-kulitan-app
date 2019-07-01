@@ -454,6 +454,7 @@ class _KeyboardAddKey extends StatefulWidget {
 class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
   static final GameData _gameData = GameData();
   static final List<String> _allowedGlyphs = [
+    'a',
     'i',
     'u',
     'g',
@@ -503,9 +504,13 @@ class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
     'ya',
     'yi',
     'yu',
+    'ia',
+    'iu',
     'wa',
     'wi',
-    'wu'
+    'wu',
+    'ua',
+    'ui',
   ];
   String _keyHintText = '';
   bool _isPressed = false;
@@ -526,10 +531,7 @@ class _KeyboardKeyAddState extends State<_KeyboardAddKey> {
       } else if (_oldGlyph.endsWith('u')) {
         setState(() => _keyHintText = _oldGlyph + 'u');
       } else {
-        if (_oldGlyph.endsWith('a'))
-          setState(() => _keyHintText = _oldGlyph + 'a');
-        else
-          setState(() => _keyHintText = _oldGlyph + 'aa');
+        setState(() => _keyHintText = _oldGlyph + 'a');
       }
       setState(() => _isPressed = true);
     } else if (_keyHintText != '') {
