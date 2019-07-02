@@ -246,15 +246,18 @@ class QuizCard extends StatelessWidget {
         Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
-            child: Text(
-              isKulitan ? answer : kulitan,
-              textAlign: TextAlign.center,
-              style: isKulitan
-                ? _gameData.getStyle('textQuizAnswer')
-                : _gameData.getStyle('textQuizAnswer').copyWith(
-                  fontFamily: 'Kulitan Semi Bold',
-                  fontSize: 130.0,
-                ),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                isKulitan ? answer : kulitan,
+                textAlign: TextAlign.center,
+                style: isKulitan
+                  ? _gameData.getStyle('textQuizAnswer')
+                  : _gameData.getStyle('textQuizAnswer').copyWith(
+                    fontFamily: 'Kulitan Semi Bold',
+                    fontSize: 130.0,
+                  ),
+              ),
             ),
           ),
         )
