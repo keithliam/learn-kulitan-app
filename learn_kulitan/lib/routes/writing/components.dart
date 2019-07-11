@@ -783,7 +783,7 @@ class _AnimatedTextState extends State<_AnimatedText> {
 
   void _incOpacity() async {
     await Future.delayed(const Duration(milliseconds: writingTextOpacityChangeDelay));
-    setState(() => _opacity = 1.0);
+    if (this.mounted) setState(() => _opacity = 1.0);
   }
   
   @override
