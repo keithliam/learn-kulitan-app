@@ -211,13 +211,19 @@ class GameLogicManager {
         'stackNumber': 1,
       }, 0);
     }
-    final int _cardTwoProgress = _getGlyphProgress(_pulledCards['two']);
-    _state.setCard({
-      'kulitan': kulitanGlyphs[_pulledCards['two']],
-      'answer': _pulledCards['two'],
-      'progress': _cardTwoProgress,
-      'stackNumber': 2,
-    }, 1);
+    // Fix error on writing page: db contains only 1 card; caused by sudden app exit on reveal answer animation
+    if (!isQuiz && !_isTutorial && _pulledCards['two'] == null) {
+      _getNewCards(index: 1);
+      _pushCards();
+    } else {
+      final int _cardTwoProgress = _getGlyphProgress(_pulledCards['two']);
+      _state.setCard({
+        'kulitan': kulitanGlyphs[_pulledCards['two']],
+        'answer': _pulledCards['two'],
+        'progress': _cardTwoProgress,
+        'stackNumber': 2,
+      }, 1);
+    }
     if(isQuiz) {
       if(_pulledCards['three'] != null) {
         final int _cardThreeProgress = _getGlyphProgress(_pulledCards['three']);
@@ -385,6 +391,7 @@ class GameLogicManager {
     }
     bool _isFullProgress = false;
     if(_state.cards[0]['progress'] == (isQuiz? maxQuizGlyphProgress : maxWritingGlyphProgress) - 1) {
+      if (!isQuiz && !_state.mounted) return;
       _state.incOverallProgressCount();
       if (!_isTutorial || !isQuiz) _pushOverallProgress();
       _removeFromGlyphPool();
@@ -393,6 +400,7 @@ class GameLogicManager {
       _removeFromGlyphPool();
     }
     if(_state.cards[0]['progress'] < (isQuiz? maxQuizGlyphProgress : maxWritingGlyphProgress)) {
+      if (!isQuiz && !_state.mounted) return;
       _state.incCurrCardProgress();
       _glyphProgresses[_state.cards[0]['answer']]++;
       if (!_isTutorial || !isQuiz) _pushGlyphProgress();
@@ -410,7 +418,7 @@ class GameLogicManager {
     if (!_isTutorial || !isQuiz) {
       _pushRemovedCards();
       if(isQuiz) _pushRemovedChoices();
-      else swipedLeft();
+      else if (_state.mounted) swipedLeft();
     }
   }
   void wrongAnswer() async {
@@ -465,12 +473,14 @@ class GameLogicManager {
     _incCurrentCardCount();
     if(!isQuiz) {
       await Future.delayed(const Duration(milliseconds: writingNextCardDelay));
+      if (!_state.mounted) return;
       _state.slideCard();
       await Future.delayed(const Duration(milliseconds: forwardQuizCardsDuration));
     } else {
       _state.disableChoices = true;
       _state.disableSwipe = true;
     }
+    if (!_state.mounted) return;
     _state.setCard(_state.cards[1]..['stackNumber'] = 1, 0);
     if(isQuiz) _state.setCard(_state.cards[2]..['stackNumber'] = 2, 1);
     if (_isTutorial && isQuiz && _tutorialNo == 0) {
@@ -493,6 +503,7 @@ class GameLogicManager {
         _state.disableSwipe = true;
       _state.disableChoices = false;
     } else {
+      if (!_state.mounted) return;
       _state.resetCard();
     }
     if (isTutorial && isQuiz) _nextTutorial();
