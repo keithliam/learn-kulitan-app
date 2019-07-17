@@ -250,8 +250,8 @@ class _TranscribePageState extends State<TranscribePage>
         .replaceAll('c', 'k')
         .replaceAll('r', 'd')
         .replaceAll('z', 's')
-        .replaceAll('ua', 'wa')
-        .replaceAll('ea', 'ya')
+        .replaceAll(' ua', ' wa')
+        .replaceAll(' ea', ' ya')
         .replaceAll(
             RegExp(r'kapampangan|pampanga|kapampaangan'), 'kapangpaang an')
         .replaceAll(RegExp('kulitan'), 'ku lit an')
