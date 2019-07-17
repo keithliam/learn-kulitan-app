@@ -247,6 +247,7 @@ class _TranscribePageState extends State<TranscribePage>
         .replaceAll(RegExp(r'[ôöòóœøōõ]'), 'o')
         .replaceAll('?', ' ? ')
         .replaceAll(RegExp(r'[ \t]+'), ' ')
+        .replaceAll('c', 'k')
         .replaceAll('r', 'd')
         .replaceAll('z', 's')
         .replaceAll('ua', 'wa')
