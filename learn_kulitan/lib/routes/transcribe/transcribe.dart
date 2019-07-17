@@ -478,7 +478,6 @@ class _TranscribePageState extends State<TranscribePage>
         final List<String> _kulitList = _kulitanGlyphs.last;
         final int _last = _kulitList.length - 1;
         final String _curr = _kulitList.last;
-        print(_curr);
         if (next == 'a') {
           if (_induA.contains(_curr) ||
               _curr == 'a' ||
@@ -565,9 +564,11 @@ class _TranscribePageState extends State<TranscribePage>
       for (int i = 0; i < _tempLine.length; i++) {
         _tempLine[i] = _tempLine[i]
             .replaceAll(RegExp(r'^ia$'), 'ya')
+            .replaceAll(RegExp(r'^iaa$'), 'yaa')
             .replaceAll(RegExp(r'^iai$'), 'ye')
             .replaceAll(RegExp(r'^iau$'), 'yo')
             .replaceAll(RegExp(r'^ua$'), 'wa')
+            .replaceAll(RegExp(r'^uaa$'), 'waa')
             .replaceAll(RegExp(r'^uai$'), 'we')
             .replaceAll(RegExp(r'^uau$'), 'wo');
         if (_tempLine[i] != 'br') _transcribed += _tempLine[i] + ' ';
@@ -582,7 +583,9 @@ class _TranscribePageState extends State<TranscribePage>
           .trimRight()
           .replaceAll('aa', 'á')
           .replaceAll('ii', 'í')
-          .replaceAll('uu', 'ú');
+          .replaceAll('uu', 'ú')
+          .replaceAll('yaa', 'yá')
+          .replaceAll('waa', 'wá');
     _romanController.text = _transcribed;
     setState(() => _glyphLines = _getLines(_tempGlyphs));
     WidgetsBinding.instance
