@@ -447,7 +447,7 @@ class _TranscribePageState extends State<TranscribePage>
         else if (_curr.contains(RegExp(r'^(i|u)a(a|e|o)$')) ||
             _curr.contains(RegExp(r'^(i|u)a$')) ||
             _curr.contains(RegExp(r'^a(i|u)$')) ||
-            _curr.contains(RegExp(r'(aa|ii|uu|ui)$')))
+            _curr.contains(RegExp(r'(aa|ii|uu|ui|ai|au)$')))
           _kulitList[_last] = _curr.substring(0, _curr.length - 1);
         else
           _kulitList[_last] = 'br';
