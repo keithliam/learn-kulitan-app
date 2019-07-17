@@ -480,6 +480,8 @@ class _TranscribePageState extends State<TranscribePage>
         final String _curr = _kulitList.last;
         if (next == 'a') {
           if (_induA.contains(_curr) ||
+              _induI.contains(_curr) ||
+              _induU.contains(_curr) ||
               _curr == 'a' ||
               _curr == 'i' ||
               _curr == 'u')
