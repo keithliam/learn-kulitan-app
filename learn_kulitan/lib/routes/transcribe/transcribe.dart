@@ -478,6 +478,7 @@ class _TranscribePageState extends State<TranscribePage>
         final List<String> _kulitList = _kulitanGlyphs.last;
         final int _last = _kulitList.length - 1;
         final String _curr = _kulitList.last;
+        print(_curr);
         if (next == 'a') {
           if (_induA.contains(_curr) ||
               _curr == 'a' ||
@@ -489,7 +490,10 @@ class _TranscribePageState extends State<TranscribePage>
         } else if (next == 'e') {
           if (_curr == 'ali')
             _kulitList[_last] = 'alii';
-          else if (_curr == 'ia' || _curr == 'ua')
+          else if (_curr == 'ia' ||
+            _curr == 'ua' ||
+            _curr == 'yi' ||
+            _curr == 'wi')
             _kulitList[_last] += 'i';              
           else if (_induA.contains(_curr))
             _kulitList[_last] = _curr.replaceAll('a', 'e');
@@ -501,7 +505,7 @@ class _TranscribePageState extends State<TranscribePage>
           else
             _kulitanGlyphs.last.add('i');
         } else if (next == 'o') {
-          if (_curr == 'ia' || _curr == 'ua')
+          if (_curr == 'ia' || _curr == 'ua' || _curr == 'yu' || _curr == 'wu')
             _kulitList[_last] += 'u';
           else if (_induA.contains(_curr))
             _kulitList[_last] = _curr.replaceAll('a', 'o');
