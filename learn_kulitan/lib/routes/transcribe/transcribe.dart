@@ -505,7 +505,8 @@ class _TranscribePageState extends State<TranscribePage>
             _kulitList[_last] += 'u';
           else if (_induA.contains(_curr))
             _kulitList[_last] = _curr.replaceAll('a', 'o');
-          else if (_induU.contains(_curr) ||
+          else if (_induI.contains(_curr) ||
+              _induU.contains(_curr) ||
               _curr == 'u' ||
               _curr == 'a')
             _kulitList[_last] += 'u';
@@ -559,12 +560,12 @@ class _TranscribePageState extends State<TranscribePage>
       _tempLine = List<String>.from(_line);
       for (int i = 0; i < _tempLine.length; i++) {
         _tempLine[i] = _tempLine[i]
-            .replaceAll('ia', 'ya')
-            .replaceAll('iai', 'ye')
-            .replaceAll('iau', 'yo')
-            .replaceAll('ua', 'wa')
-            .replaceAll('uai', 'we')
-            .replaceAll('uau', 'wo');
+            .replaceAll(RegExp(r'^ia$'), 'ya')
+            .replaceAll(RegExp(r'^iai$'), 'ye')
+            .replaceAll(RegExp(r'^iau$'), 'yo')
+            .replaceAll(RegExp(r'^ua$'), 'wa')
+            .replaceAll(RegExp(r'^uai$'), 'we')
+            .replaceAll(RegExp(r'^uau$'), 'wo');
         if (_tempLine[i] != 'br') _transcribed += _tempLine[i] + ' ';
       }
       _transcribed.replaceAll(RegExp(r' $'), ' ');
