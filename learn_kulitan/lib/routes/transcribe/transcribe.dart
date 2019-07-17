@@ -271,6 +271,7 @@ class _TranscribePageState extends State<TranscribePage>
           .replaceAll(RegExp(r'(^|\s)i+ka\s?yu(\s|$)'), ' iik yu ')
           .replaceAll(RegExp(r'(^|\s)i+la(\s|$)'), ' iil ')
           .replaceAll(RegExp(r'(^|\s)mewala(\s|$)'), ' me ala ')
+          .replaceAll(RegExp(r'(^|\s)ad(w|u)a(\s|$)'), ' ad dua ')
           .trim();
       _lineGlyphs.add(_line.split(' '));
     }
