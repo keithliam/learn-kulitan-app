@@ -585,7 +585,19 @@ class _TranscribePageState extends State<TranscribePage>
           .replaceAll('ii', 'í')
           .replaceAll('uu', 'ú')
           .replaceAll('yaa', 'yá')
-          .replaceAll('waa', 'wá');
+          .replaceAll('waa', 'wá')
+          .replaceAllMapped(RegExp(r'^(iai|iau|ia|iá|uai|uau|ua|uá)(.+)$'), (Match m) {
+            String _left;
+            if (m.group(1) == 'ia') _left = 'ya';
+            else if (m.group(1) == 'iá') _left = 'yá';
+            else if (m.group(1) == 'iai') _left = 'ye';
+            else if (m.group(1) == 'iau') _left = 'yo';
+            else if (m.group(1) == 'ua') _left = 'wa';
+            else if (m.group(1) == 'uaa') _left = 'wá';
+            else if (m.group(1) == 'uai') _left = 'we';
+            else if (m.group(1) == 'uau') _left = 'wo';
+            return ('$_left${m.group(2)}');
+          });
     _romanController.text = _transcribed;
     setState(() => _glyphLines = _getLines(_tempGlyphs));
     WidgetsBinding.instance
