@@ -489,24 +489,24 @@ class _TranscribePageState extends State<TranscribePage>
         } else if (next == 'e') {
           if (_curr == 'ali')
             _kulitList[_last] = 'alii';
+          else if (_curr == 'ia' || _curr == 'ua')
+            _kulitList[_last] += 'i';              
           else if (_induA.contains(_curr))
             _kulitList[_last] = _curr.replaceAll('a', 'e');
           else if (_induI.contains(_curr) ||
               _induU.contains(_curr) ||
-              _curr == 'e' ||
-              _curr == 'ia' ||
-              _curr == 'ua' ||
+              _curr == 'i' ||
               _curr == 'a')
             _kulitList[_last] += 'i';
           else
             _kulitanGlyphs.last.add('i');
         } else if (next == 'o') {
-          if (_induA.contains(_curr))
+          if (_curr == 'ia' || _curr == 'ua')
+            _kulitList[_last] += 'u';
+          else if (_induA.contains(_curr))
             _kulitList[_last] = _curr.replaceAll('a', 'o');
           else if (_induU.contains(_curr) ||
-              _curr == 'o' ||
-              _curr == 'ia' ||
-              _curr == 'ua' ||
+              _curr == 'u' ||
               _curr == 'a')
             _kulitList[_last] += 'u';
           else
