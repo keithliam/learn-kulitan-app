@@ -378,7 +378,7 @@ class _TranscribePageState extends State<TranscribePage>
           glyph.endsWith('o'));
 
   bool _hasTwoIndungSulat(String glyph) =>
-      glyph.contains(RegExp(r'^[^aiueo]+(a|i|u|e|o)[^aiueo]+$'));
+      glyph.contains(RegExp(r'^[^aiueo]+(a|i|u|e|o)+[^aiueo]+$'));
 
   void _kulitanKeyPressed(String next, {String glyph}) {
     _normalizeToKulitan();
@@ -439,15 +439,20 @@ class _TranscribePageState extends State<TranscribePage>
         if (_curr == 'br') {
           _kulitList.removeLast();
         } else if (_hasTwoIndungSulat(_curr) ||
-            _curr.contains(RegExp(r'^(aa?|ii?|uu?|e|o)[^aiueo]+$'))) {
-          _kulitList[_last] =
-              _curr.replaceAll(RegExp(r'(g|k|ng|t|d|n|l|s|m|p|b)$'), '');
+            _curr.contains(RegExp(r'^(iaa?|iai|iau|ua?|uai|uau|yii|yuu|wii|wuu|ui|aa?|ii?|uu?|e|o)[^aiueo]+$'))) {
+          _kulitList[_last] = _curr.replaceAllMapped(
+            RegExp(r'^(g|k|ng|t|d|n|l|s|m|p|b)?(iaa?|iai|iau|ua?|uai|uau|yii|yuu|wii|wuu|ui|aa?|ii?|uu?|e|o)(g|k|ng|t|d|n|l|s|m|p|b)$'),
+            (Match m) {
+              if (m.group(1) == null) return m.group(2);
+              else return '${m.group(1)}${m.group(2)}';
+            }
+          );
         } else if (_curr.contains(RegExp(r'^.+(e|o)$')))
           _kulitList[_last] = _curr.replaceAll(RegExp(r'e|o'), 'a');
         else if (_curr.contains(RegExp(r'^(i|u)a(a|e|o)$')) ||
             _curr.contains(RegExp(r'^(i|u)a$')) ||
             _curr.contains(RegExp(r'^a(i|u)$')) ||
-            _curr.contains(RegExp(r'(aa|ii|uu|ui|ai|au)$')))
+            _curr.contains(RegExp(r'(aa|ii|uu|ui|ai|au|ua|ia|iu)$')))
           _kulitList[_last] = _curr.substring(0, _curr.length - 1);
         else
           _kulitList[_last] = 'br';
