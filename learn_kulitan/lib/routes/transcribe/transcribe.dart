@@ -247,10 +247,11 @@ class _TranscribePageState extends State<TranscribePage>
         .replaceAll(RegExp(r'[ôöòóœøōõ]'), 'o')
         .replaceAll('?', ' ? ')
         .replaceAll(RegExp(r'[ \t]+'), ' ')
+        .replaceAll('c', 'k')
         .replaceAll('r', 'd')
         .replaceAll('z', 's')
-        .replaceAll('ua', 'wa')
-        .replaceAll('ea', 'ya')
+        .replaceAll(' ua', ' wa')
+        .replaceAll(' ea', ' ya')
         .replaceAll(
             RegExp(r'kapampangan|pampanga|kapampaangan'), 'kapangpaang an')
         .replaceAll(RegExp('kulitan'), 'ku lit an')
@@ -270,6 +271,7 @@ class _TranscribePageState extends State<TranscribePage>
           .replaceAll(RegExp(r'(^|\s)i+ka\s?yu(\s|$)'), ' iik yu ')
           .replaceAll(RegExp(r'(^|\s)i+la(\s|$)'), ' iil ')
           .replaceAll(RegExp(r'(^|\s)mewala(\s|$)'), ' me ala ')
+          .replaceAll(RegExp(r'(^|\s)ad(w|u)a(\s|$)'), ' ad dua ')
           .trim();
       _lineGlyphs.add(_line.split(' '));
     }
@@ -377,7 +379,7 @@ class _TranscribePageState extends State<TranscribePage>
           glyph.endsWith('o'));
 
   bool _hasTwoIndungSulat(String glyph) =>
-      glyph.contains(RegExp(r'^[^aiueo]+(a|i|u|e|o)[^aiueo]+$'));
+      glyph.contains(RegExp(r'^[^aiueo]+(a|i|u|e|o)+[^aiueo]+$'));
 
   void _kulitanKeyPressed(String next, {String glyph}) {
     _normalizeToKulitan();
@@ -438,15 +440,20 @@ class _TranscribePageState extends State<TranscribePage>
         if (_curr == 'br') {
           _kulitList.removeLast();
         } else if (_hasTwoIndungSulat(_curr) ||
-            _curr.contains(RegExp(r'^(aa?|ii?|uu?|e|o)[^aiueo]+$'))) {
-          _kulitList[_last] =
-              _curr.replaceAll(RegExp(r'(g|k|ng|t|d|n|l|s|m|p|b)$'), '');
+            _curr.contains(RegExp(r'^(iaa?|iai|iau|ua?|uai|uau|yii|yuu|wii|wuu|ui|aa?|ii?|uu?|e|o)[^aiueo]+$'))) {
+          _kulitList[_last] = _curr.replaceAllMapped(
+            RegExp(r'^(g|k|ng|t|d|n|l|s|m|p|b)?(iaa?|iai|iau|ua?|uai|uau|yii|yuu|wii|wuu|ui|aa?|ii?|uu?|e|o)(g|k|ng|t|d|n|l|s|m|p|b)$'),
+            (Match m) {
+              if (m.group(1) == null) return m.group(2);
+              else return '${m.group(1)}${m.group(2)}';
+            }
+          );
         } else if (_curr.contains(RegExp(r'^.+(e|o)$')))
           _kulitList[_last] = _curr.replaceAll(RegExp(r'e|o'), 'a');
         else if (_curr.contains(RegExp(r'^(i|u)a(a|e|o)$')) ||
             _curr.contains(RegExp(r'^(i|u)a$')) ||
             _curr.contains(RegExp(r'^a(i|u)$')) ||
-            _curr.contains(RegExp(r'(aa|ii|uu|ui)$')))
+            _curr.contains(RegExp(r'(aa|ii|uu|ui|ai|au|ua|ia|iu)$')))
           _kulitList[_last] = _curr.substring(0, _curr.length - 1);
         else
           _kulitList[_last] = 'br';
@@ -479,6 +486,8 @@ class _TranscribePageState extends State<TranscribePage>
         final String _curr = _kulitList.last;
         if (next == 'a') {
           if (_induA.contains(_curr) ||
+              _induI.contains(_curr) ||
+              _induU.contains(_curr) ||
               _curr == 'a' ||
               _curr == 'i' ||
               _curr == 'u')
@@ -488,24 +497,28 @@ class _TranscribePageState extends State<TranscribePage>
         } else if (next == 'e') {
           if (_curr == 'ali')
             _kulitList[_last] = 'alii';
+          else if (_curr == 'ia' ||
+            _curr == 'ua' ||
+            _curr == 'yi' ||
+            _curr == 'wi')
+            _kulitList[_last] += 'i';              
           else if (_induA.contains(_curr))
             _kulitList[_last] = _curr.replaceAll('a', 'e');
           else if (_induI.contains(_curr) ||
               _induU.contains(_curr) ||
-              _curr == 'e' ||
-              _curr == 'ia' ||
-              _curr == 'ua' ||
+              _curr == 'i' ||
               _curr == 'a')
             _kulitList[_last] += 'i';
           else
             _kulitanGlyphs.last.add('i');
         } else if (next == 'o') {
-          if (_induA.contains(_curr))
+          if (_curr == 'ia' || _curr == 'ua' || _curr == 'yu' || _curr == 'wu')
+            _kulitList[_last] += 'u';
+          else if (_induA.contains(_curr))
             _kulitList[_last] = _curr.replaceAll('a', 'o');
-          else if (_induU.contains(_curr) ||
-              _curr == 'o' ||
-              _curr == 'ia' ||
-              _curr == 'ua' ||
+          else if (_induI.contains(_curr) ||
+              _induU.contains(_curr) ||
+              _curr == 'u' ||
               _curr == 'a')
             _kulitList[_last] += 'u';
           else
@@ -558,12 +571,14 @@ class _TranscribePageState extends State<TranscribePage>
       _tempLine = List<String>.from(_line);
       for (int i = 0; i < _tempLine.length; i++) {
         _tempLine[i] = _tempLine[i]
-            .replaceAll('ia', 'ya')
-            .replaceAll('iai', 'ye')
-            .replaceAll('iau', 'yo')
-            .replaceAll('ua', 'wa')
-            .replaceAll('uai', 'we')
-            .replaceAll('uau', 'wo');
+            .replaceAll(RegExp(r'^ia$'), 'ya')
+            .replaceAll(RegExp(r'^iaa$'), 'yaa')
+            .replaceAll(RegExp(r'^iai$'), 'ye')
+            .replaceAll(RegExp(r'^iau$'), 'yo')
+            .replaceAll(RegExp(r'^ua$'), 'wa')
+            .replaceAll(RegExp(r'^uaa$'), 'waa')
+            .replaceAll(RegExp(r'^uai$'), 'we')
+            .replaceAll(RegExp(r'^uau$'), 'wo');
         if (_tempLine[i] != 'br') _transcribed += _tempLine[i] + ' ';
       }
       _transcribed.replaceAll(RegExp(r' $'), ' ');
@@ -576,7 +591,21 @@ class _TranscribePageState extends State<TranscribePage>
           .trimRight()
           .replaceAll('aa', 'á')
           .replaceAll('ii', 'í')
-          .replaceAll('uu', 'ú');
+          .replaceAll('uu', 'ú')
+          .replaceAll('yaa', 'yá')
+          .replaceAll('waa', 'wá')
+          .replaceAllMapped(RegExp(r'^(iai|iau|ia|iá|uai|uau|ua|uá)(.+)$'), (Match m) {
+            String _left;
+            if (m.group(1) == 'ia') _left = 'ya';
+            else if (m.group(1) == 'iá') _left = 'yá';
+            else if (m.group(1) == 'iai') _left = 'ye';
+            else if (m.group(1) == 'iau') _left = 'yo';
+            else if (m.group(1) == 'ua') _left = 'wa';
+            else if (m.group(1) == 'uaa') _left = 'wá';
+            else if (m.group(1) == 'uai') _left = 'we';
+            else if (m.group(1) == 'uau') _left = 'wo';
+            return ('$_left${m.group(2)}');
+          });
     _romanController.text = _transcribed;
     setState(() => _glyphLines = _getLines(_tempGlyphs));
     WidgetsBinding.instance

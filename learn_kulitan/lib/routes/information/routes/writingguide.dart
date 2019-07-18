@@ -1447,9 +1447,8 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                     ' or “vowel killer” in the form of a “cross kudlit” introduced by the Spanish friar Francisco Lopez in 1620 (Marcilla, 1895), the final consonant glyph is written out in full in Súlat Kapampángan but is read without the default vowel sound ‘A’.'),
               ],
             ),
-            TextSpan(
-                text:
-                    'The only way to appreciate how this is done is by writing Súlat Kapampángan vertically instead of horizontally. To terminate the inherent vowel sound ‘A’ of any of the consonantal glyphs, simply write the target character next to the one preceding it instead of below it. This will terminate its default vowel sound.'),
+            _romanText(
+                'The only way to appreciate how this is done is by writing Súlat Kapampángan vertically instead of horizontally. To terminate the inherent vowel sound ‘A’ of any of the consonantal glyphs, simply write the target character next to the one preceding it instead of below it. This will terminate its default vowel sound.'),
             TextSpan(
               children: <TextSpan>[
                 _romanText(
