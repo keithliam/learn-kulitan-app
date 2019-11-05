@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import '../../styles/theme.dart';
 import '../../components/buttons/RoundedBackButton.dart';
 import '../../components/buttons/BackToStartButton.dart';
@@ -67,6 +68,22 @@ class _LearnMorePageState extends State<LearnMorePage> {
           ? _gameData.getStyle('textInfoText')
           : _gameData.getStyle('textInfoLink'),
       recognizer: recognizer,
+    );
+  }
+
+  void _sendEmail(String emailAddress) {
+    FlutterEmailSender.send(Email(
+      subject: 'Kulitan Handwriting Font Inquiry',
+      recipients: [emailAddress],
+    ));
+    Fluttertoast.showToast(
+      msg: 'Composing email...',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIos: 1,
+      backgroundColor: _gameData.getColor('toastBackground'),
+      textColor: _gameData.getColor('toastForeground'),
+      fontSize: toastFontSize,
     );
   }
 
@@ -165,6 +182,50 @@ class _LearnMorePageState extends State<LearnMorePage> {
                     ' exists for Kulitan enthusiasts and those who would like to learn the indigenous Kapampangan script. You may post your own art, photographs, articles, questions, and ideas, as long as they are related to Kulitan.'),
               ],
             ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: aboutSubtitleTopPadding),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text('Kulitan Font',
+                style: _gameData.getStyle('textAboutSubtitle')),
+          ),
+        ),
+        Paragraphs(
+          paragraphs: <TextSpan>[
+            _romanText(
+                'Prior to the development of this app, a modern Kulitan font was created by the developer. This font was designed to be display-friendly, enhancing readability on mobile devices.'),
+          ],
+        ),
+        ImageWithCaption(
+          filename: 'kulitan_font.png',
+          caption: TextSpan(text: 'Kulitan Handwriting Font'),
+          screenWidth: _width,
+          hasBorder: true,
+          percentWidth: 0.65,
+        ),
+        Paragraphs(
+          paragraphs: <TextSpan>[
+            TextSpan(
+              children: <TextSpan>[
+                _romanText(
+                    'The OpenType font is free for non-commercial purposes. It is available for download at '),
+                _romanText(
+                  'Behance.net',
+                  TapGestureRecognizer()
+                    ..onTap = () => _openURL('https://bit.ly/LearnKulitan-BehanceFont'),
+                ),
+                _romanText(
+                    '. For licensing inquiries, you may contact the developer via email at '),
+                _romanText(
+                  'keithliamm@gmail.com',
+                  TapGestureRecognizer()
+                    ..onTap = () => _sendEmail('keithliamm@gmail.com'),
+                ),
+                _romanText('.'),
+              ],
+            )
           ],
         ),
         Padding(
