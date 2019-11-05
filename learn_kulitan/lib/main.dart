@@ -1,5 +1,7 @@
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import './routes/introduction/introduction.dart';
 import './routes/home/home.dart';
 import './routes/reading/reading.dart';
@@ -30,9 +32,14 @@ class LearnKulitanApp extends StatelessWidget {
 }
 
 class MainApp extends StatelessWidget {
+  static FirebaseAnalyticsObserver _firebaseObserver = FirebaseAnalyticsObserver(analytics: FirebaseAnalytics());
+
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [
+        _firebaseObserver
+      ],
       builder: (context, child) {
         return ScrollConfiguration(
           behavior: CustomScrollBehavior(),
@@ -49,7 +56,7 @@ class MainApp extends StatelessWidget {
         '/transcribe': (context) => TranscribePage(),
         '/information': (context) => InformationPage(),
         '/information/history': (context) => HistoryPage(),
-        '/information/guide': (context) => WritingGuidePage(),
+        '/information/guide': (context) => WritingGuidePage(firebaseObserver: _firebaseObserver),
         '/learn_more': (context) => LearnMorePage(),
         '/about': (context) => AboutPage(),
         '/settings': (context) => SettingsPage(),

@@ -25,6 +25,7 @@ dependencies:
   flare_flutter: ^1.6.4
   flutter_email_sender: ^2.1.0
   share: ^0.6.3+1
+  firebase_analytics: ^5.0.2
   
 dev_dependencies:
   flutter_test:

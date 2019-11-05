@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart' show TapGestureRecognizer;
+import 'package:firebase_analytics/observer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../../styles/theme.dart';
@@ -12,7 +14,10 @@ import '../../../components/misc/Paragraphs.dart';
 import '../../../db/GameData.dart';
 
 class WritingGuidePage extends StatefulWidget {
-  const WritingGuidePage();
+  const WritingGuidePage({ @required this.firebaseObserver });
+
+  final FirebaseAnalyticsObserver firebaseObserver;
+
   @override
   _WritingGuidePageState createState() => _WritingGuidePageState();
 }
@@ -21,14 +26,34 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
   static final GameData _gameData = GameData();
   final PageController _pageController = PageController();
 
+  Timer _analyticsTimer;
+  int _page;
   bool _showBackToStartFAB = false;
+
+
+  void _attemptPushAnalytics() {
+    if (_analyticsTimer != null) _analyticsTimer.cancel();
+
+    _analyticsTimer = Timer(Duration(milliseconds: informationPageScrollDuration), () {
+      widget.firebaseObserver.analytics.setCurrentScreen(
+        screenName: '/information/guide/$_page',
+      );
+      _analyticsTimer = null;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    _page = 0;
     _pageController
       ..addListener(() {
-        if (_pageController.page == 0)
+        final int _currentPage = _pageController.page.round();
+        if (_page != _currentPage) {
+          _page = _currentPage;
+          _attemptPushAnalytics();
+        }
+        if (_currentPage == 0)
           setState(() => _showBackToStartFAB = false);
         else
           setState(() => _showBackToStartFAB = true);
@@ -37,6 +62,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
 
   @override
   void dispose() {
+    _analyticsTimer?.cancel();
     _pageController.dispose();
     super.dispose();
   }
