@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart' show TapGestureRecognizer;
+import 'package:firebase_analytics/observer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../../styles/theme.dart';
@@ -9,11 +11,13 @@ import '../../../components/buttons/GuideButton.dart';
 import '../../../components/misc/StaticHeader.dart';
 import '../../../components/misc/ImageWithCaption.dart';
 import '../../../components/misc/Paragraphs.dart';
-import '../../../components/misc/MobileAd.dart';
 import '../../../db/GameData.dart';
 
 class WritingGuidePage extends StatefulWidget {
-  const WritingGuidePage();
+  const WritingGuidePage({ @required this.firebaseObserver });
+
+  final FirebaseAnalyticsObserver firebaseObserver;
+
   @override
   _WritingGuidePageState createState() => _WritingGuidePageState();
 }
@@ -22,14 +26,34 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
   static final GameData _gameData = GameData();
   final PageController _pageController = PageController();
 
+  Timer _analyticsTimer;
+  int _page;
   bool _showBackToStartFAB = false;
+
+
+  void _attemptPushAnalytics() {
+    if (_analyticsTimer != null) _analyticsTimer.cancel();
+
+    _analyticsTimer = Timer(Duration(milliseconds: informationPageScrollDuration), () {
+      widget.firebaseObserver.analytics.setCurrentScreen(
+        screenName: '/information/guide/$_page',
+      );
+      _analyticsTimer = null;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    _page = 0;
     _pageController
       ..addListener(() {
-        if (_pageController.page == 0)
+        final int _currentPage = _pageController.page.round();
+        if (_page != _currentPage) {
+          _page = _currentPage;
+          _attemptPushAnalytics();
+        }
+        if (_currentPage == 0)
           setState(() => _showBackToStartFAB = false);
         else
           setState(() => _showBackToStartFAB = true);
@@ -38,6 +62,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
 
   @override
   void dispose() {
+    _analyticsTimer?.cancel();
     _pageController.dispose();
     super.dispose();
   }
@@ -221,11 +246,6 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
         GuideButton(
           pageNumber: 16,
           text: 'Pámakamaté Siuálâ',
-          controller: _pageController,
-        ),
-        GuideButton(
-          pageNumber: 17,
-          text: 'Advanced Kulitan',
           controller: _pageController,
         ),
       ],
@@ -1510,89 +1530,6 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           screenWidth: _width,
         ),
       ],
-
-      // Advanced Kulitan
-      [
-        Padding(
-          padding: const EdgeInsets.only(
-              top: imageTopPadding - informationCreditsVerticalPadding),
-          child: ImageWithCaption(
-            filename: 'sinupan.jpg',
-            hasPadding: false,
-            captionAlignment: TextAlign.center,
-            caption: TextSpan(
-                text:
-                    'Sínúpan Singsing:\nCenter for Kapampángan Cultural Heritage'),
-            screenWidth: _width,
-            borderRadius: 1.0,
-          ),
-        ),
-        ImageWithCaption(
-          filename: 'kulitan_book.jpg',
-          orientation: Axis.horizontal,
-          captionAlignment: TextAlign.center,
-          caption: TextSpan(
-              text:
-                  'An Introduction to Kulitan:\nThe Indigenous Kapampangan Script'),
-          subcaption: 'by Michael Raymon M. Pangilinan',
-          screenWidth: _width,
-        ),
-        Paragraphs(
-          paragraphs: <TextSpan>[
-            TextSpan(children: <TextSpan>[
-              _romanText(
-                  'To learn more about the history, rules, and uses of Kulitan, you may read the continuation of this guide in the book '),
-              _romanText(
-                'An Introduction to Kulitan: The Indigenous Kapampangan Script',
-                TapGestureRecognizer()
-                  ..onTap = () => _openURL('https://bit.ly/LearnKulitan-Siuala'),
-              ),
-              _romanText(' by '),
-              _romanText(
-                'Michael Raymon M. Pangilinan',
-                TapGestureRecognizer()
-                  ..onTap = () => _openURL('https://bit.ly/LearnKulitan-About-MikePangilinan'),
-              ),
-              _romanText(' (Siuálâ ding Meángûbié).'),
-            ]),
-            TextSpan(
-              children: <TextSpan>[
-                _romanText(
-                    'For a hands-on experience, you may opt to attend writing workshops organized by Sínúpan Singsing: Center for Kapampángan Cultural Heritage. Upcoming events and activites can be viewed on their '),
-                _romanText(
-                  'Facebook page',
-                  TapGestureRecognizer()
-                    ..onTap = () =>
-                        _openURL('https://bit.ly/LearnKulitan-SinupanSingsingFacebook'),
-                ),
-                _romanText(
-                    '. For related news and articles, you may also visit their official website at '),
-                _romanText(
-                  'sinupan.org',
-                  TapGestureRecognizer()
-                    ..onTap = () => _openURL('https://bit.ly/LearnKulitan-SinupanSingsingWebsite'),
-                ),
-                _romanText('.'),
-              ],
-            ),
-            TextSpan(
-              children: <TextSpan>[
-                _romanText('A '),
-                _romanText(
-                  'Facebook group',
-                  TapGestureRecognizer()
-                    ..onTap = () => _openURL(
-                        'https://bit.ly/LearnKulitan-KulitKulitanFacebook'),
-                ),
-                _romanText(
-                    ' exists for Kulitan enthusiasts and those who would like to learn the indigenous Kapampangan script. Only English and Kapampangan languages are allowed in the group.'),
-              ],
-            ),
-            _romanText(
-                'It is important to note that Kulitan shall exclusively be written in the Kapampangan language only.'),
-          ],
-        ),
-      ],
     ];
 
     final Widget _chapters = Scrollbar(
@@ -1671,10 +1608,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
     return Material(
       color: _gameData.getColor('background'),
       child: SafeArea(
-        child: MobileBannerAd(
-          padding: AdMob.getSmartBannerHeight(_mediaQuery),
-          child: Stack(children: _pageStack),
-        ),
+        child: Stack(children: _pageStack),
       ),
     );
   }

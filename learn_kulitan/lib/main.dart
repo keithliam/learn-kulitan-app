@@ -1,18 +1,19 @@
-import 'dart:async';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import './routes/introduction/introduction.dart';
 import './routes/home/home.dart';
 import './routes/reading/reading.dart';
 import './routes/writing/writing.dart';
+import './routes/transcribe/transcribe.dart';
 import './routes/information/information.dart';
 import './routes/information/routes/history.dart';
 import './routes/information/routes/writingguide.dart';
-import './routes/transcribe/transcribe.dart';
+import './routes/learn_more/learn_more.dart';
 import './routes/about/about.dart';
 import './routes/settings/settings.dart';
 import './components/misc/CustomScrollBehavior.dart';
-import './components/misc/MobileAd.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -21,7 +22,6 @@ void main() {
     systemNavigationBarColor: Color(0xFFFABF40),
     systemNavigationBarIconBrightness: Brightness.dark,
   ));
-  AdMob().initialize();
   runApp(LearnKulitanApp());
 }
 
@@ -31,58 +31,19 @@ class LearnKulitanApp extends StatelessWidget {
   }
 }
 
-class MainApp extends StatefulWidget {
-  @override
-  _MainAppState createState() => _MainAppState();
-}
+class MainApp extends StatelessWidget {
+  static FirebaseAnalyticsObserver _firebaseObserver = FirebaseAnalyticsObserver(analytics: FirebaseAnalytics());
 
-class _MainAppState extends State<MainApp> {
-  static final AdMob _ads = AdMob();
-  bool _adShown = false;
-  Timer _timer;
-
-  Timer _createIdleTimer() {
-    return Timer(AdMob.videoTimeout, () {
-      _ads.showInterstitial(
-        onClose: () {
-          _adShown = false;
-          _timer = _createIdleTimer();
-        },
-        onShow: () => _adShown = true,
-      );
-    });
-  }
-
-  void _resetIdleTimer(_) {
-    _ads.closeVideo();
-    _timer?.cancel();
-    if (!_adShown) _timer = _createIdleTimer();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _timer = _createIdleTimer();
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [
+        _firebaseObserver
+      ],
       builder: (context, child) {
-        return Listener(
-          behavior: HitTestBehavior.translucent,
-          onPointerMove: _resetIdleTimer,
-          child: ScrollConfiguration(
-            behavior: CustomScrollBehavior(),
-            child: child,
-          ),
+        return ScrollConfiguration(
+          behavior: CustomScrollBehavior(),
+          child: child,
         );
       },
       title: 'Learn Kulitan',
@@ -92,10 +53,11 @@ class _MainAppState extends State<MainApp> {
         '/home': (context) => HomePage(),
         '/reading': (context) => ReadingPage(),
         '/writing': (context) => WritingPage(),
+        '/transcribe': (context) => TranscribePage(),
         '/information': (context) => InformationPage(),
         '/information/history': (context) => HistoryPage(),
-        '/information/guide': (context) => WritingGuidePage(),
-        '/transcribe': (context) => TranscribePage(),
+        '/information/guide': (context) => WritingGuidePage(firebaseObserver: _firebaseObserver),
+        '/learn_more': (context) => LearnMorePage(),
         '/about': (context) => AboutPage(),
         '/settings': (context) => SettingsPage(),
       },

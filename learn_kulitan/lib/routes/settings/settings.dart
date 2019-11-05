@@ -3,7 +3,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../components/buttons/RoundedBackButton.dart';
 import '../../components/buttons/PageButton.dart';
 import '../../components/misc/StaticHeader.dart';
-import '../../components/misc/MobileAd.dart';
 import '../../db/GameData.dart';
 import '../../styles/theme.dart';
 import './components.dart';
@@ -17,13 +16,11 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   static final GameData _gameData = GameData();
-  static final AdMob _ads = AdMob();
 
   void _refresh() => setState(() {});
 
   void _replayIntro() {
     _gameData.setTutorial('intro', true);
-    _ads.closeBanner();
     Navigator.pushNamedAndRemoveUntil(
       context,
       '/',
@@ -47,7 +44,6 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _resetGame() async {
-    _ads.closeBanner();
     await _gameData.resetGameData();
   }
 
@@ -209,10 +205,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Material(
       color: _gameData.getColor('background'),
       child: SafeArea(
-        child: MobileBannerAd(
-          padding: AdMob.getSmartBannerHeight(_mediaQuery),
-          child: Stack(children: _pageStack),
-        ),
+        child: Stack(children: _pageStack),
       ),
     );
   }
