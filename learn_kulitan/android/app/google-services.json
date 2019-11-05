@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "196491001230-rckr8of5s5f40gbgndkmjughf7tndtu7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.keithmanaloto.learnkulitan",
+            "certificate_hash": "4055b5df73020131e53ceb7137e7f3d06e30d606"
+          }
+        },
+        {
           "client_id": "196491001230-ehkoamqn1mp1gjtfuptbjlm3ul23u3gm.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -35,6 +43,35 @@
         }
       },
       "admob_app_id": "ca-app-pub-5065461727943279~7716069922"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196491001230:android:12760935eb19e833c8f8df",
+        "android_client_info": {
+          "package_name": "com.keithmanaloto.learnkulitan.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "196491001230-ehkoamqn1mp1gjtfuptbjlm3ul23u3gm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJLoWvrVoji0K0VYQjB0_bL1pWZ96NPLE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "196491001230-ehkoamqn1mp1gjtfuptbjlm3ul23u3gm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
