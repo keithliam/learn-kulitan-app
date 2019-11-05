@@ -272,49 +272,6 @@ class _AboutPageState extends State<AboutPage> {
           screenWidth: _width,
         ),
         Padding(
-          padding: const EdgeInsets.only(top: aboutSubtitleTopPadding),
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text('Resources', style: _gameData.getStyle('textAboutSubtitle')),
-          ),
-        ),
-        Paragraphs(
-          paragraphs: <TextSpan>[
-            _romanText(
-                'Prior to the development of this app, a modern Kulitan font was created by the developer. This font was designed to be display-friendly, enhancing readability on mobile devices.'),
-          ],
-        ),
-        ImageWithCaption(
-          filename: 'kulitan_font.png',
-          caption: TextSpan(text: 'Kulitan Handwriting Font'),
-          screenWidth: _width,
-          hasBorder: true,
-          percentWidth: 0.65,
-        ),
-        Paragraphs(
-          paragraphs: <TextSpan>[
-            TextSpan(
-              children: <TextSpan>[
-                _romanText(
-                    'The OpenType font is free for non-commercial purposes. It is available for download at '),
-                _romanText(
-                  'Behance.net',
-                  TapGestureRecognizer()
-                    ..onTap = () => _openURL('https://bit.ly/LearnKulitan-BehanceFont'),
-                ),
-                _romanText(
-                    '. For licensing inquiries, you may contact the developer via email at '),
-                _romanText(
-                  'keithliamm@gmail.com',
-                  TapGestureRecognizer()
-                    ..onTap = () => _sendEmail('keithliamm@gmail.com'),
-                ),
-                _romanText('.'),
-              ],
-            )
-          ],
-        ),
-        Padding(
           padding: EdgeInsets.fromLTRB(
             _width * 0.31,
             37.0,
