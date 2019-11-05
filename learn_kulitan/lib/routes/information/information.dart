@@ -7,7 +7,6 @@ import '../../components/buttons/BackToStartButton.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/DividerNew.dart';
 import '../../components/misc/StickyHeading.dart';
-import '../../components/misc/MobileAd.dart';
 import '../../db/GameData.dart';
 import './components.dart';
 
@@ -421,10 +420,7 @@ class _InformationPageState extends State<InformationPage> {
     return Material(
       color: _gameData.getColor('background'),
       child: SafeArea(
-        child: MobileBannerAd(
-          padding: AdMob.getSmartBannerHeight(_mediaQuery),
-          child: Stack(children: _pageStack),
-        ),
+        child: Stack(children: _pageStack),
       ),
     );
   }

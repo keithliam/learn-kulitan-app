@@ -9,7 +9,6 @@ import '../../../components/buttons/GuideButton.dart';
 import '../../../components/misc/StaticHeader.dart';
 import '../../../components/misc/ImageWithCaption.dart';
 import '../../../components/misc/Paragraphs.dart';
-import '../../../components/misc/MobileAd.dart';
 import '../../../db/GameData.dart';
 
 class WritingGuidePage extends StatefulWidget {
@@ -1583,10 +1582,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
     return Material(
       color: _gameData.getColor('background'),
       child: SafeArea(
-        child: MobileBannerAd(
-          padding: AdMob.getSmartBannerHeight(_mediaQuery),
-          child: Stack(children: _pageStack),
-        ),
+        child: Stack(children: _pageStack),
       ),
     );
   }

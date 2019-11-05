@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../db/GameData.dart';
 import '../../components/buttons/CustomButton.dart';
-import '../../components/misc/MobileAd.dart';
 import './components.dart';
 import '../../styles/theme.dart';
 
@@ -14,13 +13,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static final GameData _gameData = GameData();
-  static final AdMob _ads = AdMob();
   final CustomButtonGroup _buttonGroup = CustomButtonGroup();
   bool _disabled = false;
   int _readingProgress = -1;
   int _writingProgress = -1;
-
-  final _showAdController = StreamController.broadcast();
 
   void _loadProgresses() {
     setState(() {
@@ -46,12 +42,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _preventAccidentalPresses();
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadProgresses());
-  }
-
-  @override
-  void dispose() {
-    _showAdController.close();
-    super.dispose();
   }
 
   @override
@@ -84,8 +74,6 @@ class _HomePageState extends State<HomePage> {
       title: 'Pámamásâ',
       subtitle: 'READING',
       route: '/reading',
-      onRoutePush: () => _ads.closeBanner(),
-      onRouteReturn: () => _showAdController.sink.add(null),
       progress: _readingProgress / totalGlyphCount,
       reload: _loadProgresses,
     );
@@ -104,8 +92,6 @@ class _HomePageState extends State<HomePage> {
       title: 'Pámaniúlat',
       subtitle: 'WRITING',
       route: '/writing',
-      onRoutePush: () => _ads.closeBanner(),
-      onRouteReturn: () => _showAdController.sink.add(null),
       progress: _writingProgress / totalGlyphCount,
       reload: _loadProgresses,
     );
@@ -123,8 +109,6 @@ class _HomePageState extends State<HomePage> {
       title: 'Pámanlíkas',
       subtitle: 'TRANSCRIBE',
       route: '/transcribe',
-      onRoutePush: () => _ads.closeBanner(),
-      onRouteReturn: () => _showAdController.sink.add(null),
     );
 
     Widget _infoButton = HomeButton(
@@ -192,35 +176,32 @@ class _HomePageState extends State<HomePage> {
         body:  Container(
           color: _gameData.getColor('background'),
           child: SafeArea(
-            child: MobileBannerAd(
-              showBannerStream: _showAdController.stream,
-              child: ListView(
-                physics: BouncingScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(
-                  homeHorizontalScreenPadding,
-                  0.0,
-                  homeHorizontalScreenPadding,
-                  homeVerticalScreenPadding - quizChoiceButtonElevation,
-                ),
-                children: <Widget>[
-                  _appTitle,
-                  _readingButton,
-                  _writingButton,
-                  _transcribeButton,
-                  _infoButton,
-                  _learnMoreButton,
-                  _aboutButton,
-                  _settingsButton,
-                ].map((button) {
-                  return Align(
-                    alignment: Alignment.center,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 600.0),
-                      child: button,
-                    ),
-                  );
-                }).toList(),
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(
+                homeHorizontalScreenPadding,
+                0.0,
+                homeHorizontalScreenPadding,
+                homeVerticalScreenPadding - quizChoiceButtonElevation,
               ),
+              children: <Widget>[
+                _appTitle,
+                _readingButton,
+                _writingButton,
+                _transcribeButton,
+                _infoButton,
+                _learnMoreButton,
+                _aboutButton,
+                _settingsButton,
+              ].map((button) {
+                return Align(
+                  alignment: Alignment.center,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 600.0),
+                    child: button,
+                  ),
+                );
+              }).toList(),
             ),
           ),
         ),

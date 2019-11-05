@@ -14,7 +14,6 @@ import '../../components/misc/StickyHeading.dart';
 import '../../components/misc/ImageWithCaption.dart';
 import '../../components/misc/Paragraphs.dart';
 import '../../components/misc/DividerNew.dart';
-import '../../components/misc/MobileAd.dart';
 import '../../db/GameData.dart';
 import './components.dart';
 
@@ -490,10 +489,7 @@ class _AboutPageState extends State<AboutPage> {
     return Material(
       color: _gameData.getColor('background'),
       child: SafeArea(
-        child: MobileBannerAd(
-          padding: AdMob.getSmartBannerHeight(_mediaQuery),
-          child: Stack(children: _pageStack),
-        ),
+        child: Stack(children: _pageStack),
       ),
     );
   }
