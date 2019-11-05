@@ -223,11 +223,6 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
           text: 'Pámakamaté Siuálâ',
           controller: _pageController,
         ),
-        GuideButton(
-          pageNumber: 17,
-          text: 'Advanced Kulitan',
-          controller: _pageController,
-        ),
       ],
 
       // Introduction: Poem
@@ -1508,89 +1503,6 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
             ],
           ),
           screenWidth: _width,
-        ),
-      ],
-
-      // Advanced Kulitan
-      [
-        Padding(
-          padding: const EdgeInsets.only(
-              top: imageTopPadding - informationCreditsVerticalPadding),
-          child: ImageWithCaption(
-            filename: 'sinupan.jpg',
-            hasPadding: false,
-            captionAlignment: TextAlign.center,
-            caption: TextSpan(
-                text:
-                    'Sínúpan Singsing:\nCenter for Kapampángan Cultural Heritage'),
-            screenWidth: _width,
-            borderRadius: 1.0,
-          ),
-        ),
-        ImageWithCaption(
-          filename: 'kulitan_book.jpg',
-          orientation: Axis.horizontal,
-          captionAlignment: TextAlign.center,
-          caption: TextSpan(
-              text:
-                  'An Introduction to Kulitan:\nThe Indigenous Kapampangan Script'),
-          subcaption: 'by Michael Raymon M. Pangilinan',
-          screenWidth: _width,
-        ),
-        Paragraphs(
-          paragraphs: <TextSpan>[
-            TextSpan(children: <TextSpan>[
-              _romanText(
-                  'To learn more about the history, rules, and uses of Kulitan, you may read the continuation of this guide in the book '),
-              _romanText(
-                'An Introduction to Kulitan: The Indigenous Kapampangan Script',
-                TapGestureRecognizer()
-                  ..onTap = () => _openURL('https://bit.ly/LearnKulitan-Siuala'),
-              ),
-              _romanText(' by '),
-              _romanText(
-                'Michael Raymon M. Pangilinan',
-                TapGestureRecognizer()
-                  ..onTap = () => _openURL('https://bit.ly/LearnKulitan-About-MikePangilinan'),
-              ),
-              _romanText(' (Siuálâ ding Meángûbié).'),
-            ]),
-            TextSpan(
-              children: <TextSpan>[
-                _romanText(
-                    'For a hands-on experience, you may opt to attend writing workshops organized by Sínúpan Singsing: Center for Kapampángan Cultural Heritage. Upcoming events and activites can be viewed on their '),
-                _romanText(
-                  'Facebook page',
-                  TapGestureRecognizer()
-                    ..onTap = () =>
-                        _openURL('https://bit.ly/LearnKulitan-SinupanSingsingFacebook'),
-                ),
-                _romanText(
-                    '. For related news and articles, you may also visit their official website at '),
-                _romanText(
-                  'sinupan.org',
-                  TapGestureRecognizer()
-                    ..onTap = () => _openURL('https://bit.ly/LearnKulitan-SinupanSingsingWebsite'),
-                ),
-                _romanText('.'),
-              ],
-            ),
-            TextSpan(
-              children: <TextSpan>[
-                _romanText('A '),
-                _romanText(
-                  'Facebook group',
-                  TapGestureRecognizer()
-                    ..onTap = () => _openURL(
-                        'https://bit.ly/LearnKulitan-KulitKulitanFacebook'),
-                ),
-                _romanText(
-                    ' exists for Kulitan enthusiasts and those who would like to learn the indigenous Kapampangan script. Only English and Kapampangan languages are allowed in the group.'),
-              ],
-            ),
-            _romanText(
-                'It is important to note that Kulitan shall exclusively be written in the Kapampangan language only.'),
-          ],
         ),
       ],
     ];
