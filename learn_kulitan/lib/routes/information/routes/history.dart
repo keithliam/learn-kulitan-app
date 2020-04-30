@@ -185,7 +185,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       fontStyle: FontStyle.italic)),
               TextSpan(
                   text:
-                      ' A typical brown-glazed four-eared Luzon jar (呂宋壷 [褐釉 四耳壷]) exported to Japan by the Kingdom of Luzon in the mid-16th century. Photo courtesy of Hikone Castle Museum (彦根城博物館) Newsletter, Vol. 13, 1991 May 1.Figure 3. A typical brown-glazed four-eared Luzon jar (呂宋壷 [褐釉 四耳壷]) exported to Japan by the Kingdom of Luzon in the mid-16th century. Photo courtesy of Hikone Castle Museum (彦根城博物館) Newsletter, Vol. 13, 1991 May 1.'),
+                      ' A typical brown-glazed four-eared Luzon jar (呂宋壷 [褐釉 四耳壷]) exported to Japan by the Kingdom of Luzon in the mid-16th century. Photo courtesy of Hikone Castle Museum (彦根城博物館) Newsletter, Vol. 13, 1991 May 1. Figure 3. A typical brown-glazed four-eared Luzon jar (呂宋壷 [褐釉 四耳壷]) exported to Japan by the Kingdom of Luzon in the mid-16th century. Photo courtesy of Hikone Castle Museum (彦根城博物館) Newsletter, Vol. 13, 1991 May 1.'),
             ],
           ),
         ),
