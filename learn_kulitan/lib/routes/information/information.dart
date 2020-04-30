@@ -210,12 +210,7 @@ class _InformationPageState extends State<InformationPage> {
       scrollDirection: Axis.horizontal,
       physics: BouncingScrollPhysics(),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(
-          _screenHorizontalPadding,
-          0.0,
-          _screenHorizontalPadding,
-          informationVerticalScreenPadding,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: _screenHorizontalPadding),
         child: Table(
           defaultColumnWidth: FixedColumnWidth(_cellWidth),
           children: const <TableRow>[
@@ -329,12 +324,81 @@ class _InformationPageState extends State<InformationPage> {
               KulitanInfoCell('bo', 'bo'),
               KulitanInfoCell('bang', 'bang'),
             ]),
+            TableRow(children: <Widget>[
+              KulitanInfoCell('yaa', 'yá/yâ'),
+              KulitanInfoCell('yi', 'yi'),
+              KulitanInfoCell('yii', 'yí/yî'),
+              KulitanInfoCell('yu', 'yu'),
+              KulitanInfoCell('yuu', 'yú/yû'),
+              KulitanInfoCell('ye', 'ye'),
+              KulitanInfoCell('yo', 'yo'),
+              KulitanInfoCell('yang', 'yang'),
+            ]),
+            TableRow(children: <Widget>[
+              KulitanInfoCell('waa', 'wá/wâ'),
+              KulitanInfoCell('wi', 'wi'),
+              KulitanInfoCell('wii', 'wí/wî'),
+              KulitanInfoCell('wu', 'wu'),
+              KulitanInfoCell('wuu', 'wú/wû'),
+              KulitanInfoCell('we', 'we'),
+              KulitanInfoCell('wo', 'wo'),
+              KulitanInfoCell('wang', 'wang'),
+            ]),
           ],
         ),
       ),
     );
+    final Widget _anakSulatVowelTable = Padding(
+      padding: EdgeInsets.fromLTRB(
+        _screenHorizontalPadding,
+        0.0,
+        _screenHorizontalPadding,
+        informationVerticalScreenPadding - headerVerticalPadding + 8.0,
+      ),
+      child: Table(
+        defaultColumnWidth: FlexColumnWidth(1.0),
+        children: <TableRow>[
+          TableRow(children: <Widget>[
+            Container(),
+            KulitanInfoCell('ya', 'ya'),
+            KulitanInfoCell('wa', 'wa'),
+            Container(),
+          ]),
+        ],
+      ),
+    );
 
-    final _indungSulatDivider = Padding(
+
+    final Widget _pakamateSiualaTable = Padding(
+      padding: EdgeInsets.fromLTRB(
+        _screenHorizontalPadding,
+        0.0,
+        _screenHorizontalPadding,
+        informationVerticalScreenPadding - headerVerticalPadding + 8.0,
+      ),
+      child: Table(
+        defaultColumnWidth: FlexColumnWidth(1.0),
+        children: <TableRow>[
+          TableRow(children: const <Widget>[
+            KulitanInfoCell('kan', 'kan'),
+            KulitanInfoCell('kin', 'kin'),
+            KulitanInfoCell('kun', 'kun'),
+          ]),
+          TableRow(children: <Widget>[
+            KulitanInfoCell('ken', 'ken'),
+            KulitanInfoCell('kon', 'kon'),
+            KulitanInfoCell('kaan', 'kán'),
+          ]),
+          TableRow(children: <Widget>[
+            KulitanInfoCell('kiin', 'kín'),
+            KulitanInfoCell('kuun', 'kún'),
+            Container(),
+          ]),
+        ],
+      ),
+    );
+
+    final _sulatDivider = Padding(
       padding: EdgeInsets.fromLTRB(
         (_screenWidth >= 600 ? maxPageWidth : _screenWidth) * 0.31,
         40.0,
@@ -375,7 +439,7 @@ class _InformationPageState extends State<InformationPage> {
                     content: Column(
                       children: <Widget>[
                         _indungSulatTable,
-                        _indungSulatDivider,
+                        _sulatDivider,
                         _indungSulatVowelTable,
                       ],
                     ),
@@ -392,7 +456,27 @@ class _InformationPageState extends State<InformationPage> {
             alignment: Alignment.center,
             width: double.infinity,
             child: _anakSulatTable,
-          )
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxPageWidth),
+              child: Column(
+                children: <Widget>[
+                  _sulatDivider,
+                  _anakSulatVowelTable,
+                  StickyHeading(
+                    headingText: 'Pakamaté Siuálâ',
+                    content: Column(
+                      children: <Widget>[
+                        _pakamateSiualaTable,
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
