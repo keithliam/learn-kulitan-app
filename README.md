@@ -7,6 +7,7 @@ There are six buttons in the home page of this application:
 - Pámaniúlat or Writing page
 - Pámanlíkas or Transribe page
 - Kapabaluan or Information page
+- Pakibaluan Té Pa or Learn More page
 - Reng Gínawa or About the Authors page
 - Settings page
 
@@ -35,6 +36,10 @@ To reveal the Kulitan keyboard, tap on the Kulitan portion of the card or swipe 
 
 ## Kapabaluan
 The main Kapabaluan page shows tables of Indûng Súlat and Anak Súlat glyphs. It also contains two more informative pages, namely History and Writing Guide pages.
+
+## Pakibaluan Té Pa
+This page contains activities and links for people who want to apply or enhance their knowledge about Kulitan. These activities include workshops, joining
+a Kulitan Facebook Group, using the Kulitan font, and obtaining a copy of the Kulitan book.
 
 ## Reng Gínawa
 This page shows information about the creators of the mobile application. Contact links, downloadable resources, and a Share button are also found here.
