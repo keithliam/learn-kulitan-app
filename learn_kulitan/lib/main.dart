@@ -16,6 +16,7 @@ import './routes/settings/settings.dart';
 import './components/misc/CustomScrollBehavior.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
     statusBarColor: Color(0xFFFABF40),
