@@ -1461,7 +1461,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                     'There are two things that actually make Súlat Kapampángan different from all other scripts within the archipelago: First, it is the only script in the archipelago that is traditionally and preferably written vertically top to bottom, left to right, similar to other East Asian scripts. Second, Súlat Kapampángan is also the only script in the archipelago that has managed to create a spelling convention where the final consonant glyph is retained minus its inherent vowel sound ‘A’ without using a '),
                 _italicRomanText('virama'),
                 _romanText(
-                    ' (vowel killer).This spelling convention has been observed as early as the 17\u1d57\u02b0 century based on several Kapampángan signatures from that era (Miller, 2010 and 2011a). While the other indigenous scripts in the archipelago either dropped the coda consonant in the same manner as the Bugis-Makasarese scripts of Indonesia (Miller, 2011a and 2012) or use the '),
+                    ' (vowel killer). This spelling convention has been observed as early as the 17\u1d57\u02b0 century based on several Kapampángan signatures from that era (Miller, 2010 and 2011a). While the other indigenous scripts in the archipelago either dropped the coda consonant in the same manner as the Bugis-Makasarese scripts of Indonesia (Miller, 2011a and 2012) or use the '),
                 _italicRomanText('virama'),
                 _romanText(
                     ' or “vowel killer” in the form of a “cross kudlit” introduced by the Spanish friar Francisco Lopez in 1620 (Marcilla, 1895), the final consonant glyph is written out in full in Súlat Kapampángan but is read without the default vowel sound ‘A’.'),
@@ -1507,7 +1507,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
                 _romanText(') right next to the '),
                 _italicRomanText('anak súlat'),
                 _romanText(' BU ('),
-                _italicRomanText('bu'),
+                _kulitanText('bu'),
                 _romanText(
                     ') instead of below it. This will terminate the default ‘A’ sound of SA ('),
                 _kulitanText('sa'),
