@@ -191,7 +191,7 @@ class _AboutPageState extends State<AboutPage> {
         Paragraphs(
           paragraphs: [
             _romanText(
-                'Keith Liam Manaloto is an undergraduate Computer Science student at the University of the Philippines Los Baños. He is a Kapampangan resident of Angeles City. His development of this application was primarily driven by his passion to preserve the culture and heritage of his hometown. During his free time, he likes to travel, take photographs, listen to podcasts, and read tech news & articles.'),
+                'Keith Liam Manaloto studied Computer Science at the University of the Philippines Los Baños. He is a Kapampangan from Angeles City. His development of this application was primarily driven by his passion to preserve the culture and heritage of his hometown. During his free time, he likes to travel, take photographs, listen to podcasts, learn new languages, and read tech news & articles.'),
           ],
         ),
         Padding(
