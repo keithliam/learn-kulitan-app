@@ -248,23 +248,23 @@ class GameData {
     );
     else if (style == 'textInfoImageCaption') return TextStyle(
       fontFamily: 'Barlow',
-      fontSize: 13.0,
+      fontSize: 14.0,
       color: getColor('white'),
     );
     else if (style == 'textInfoImageCaptionItalic') return TextStyle(
       fontFamily: 'Barlow',
-      fontSize: 13.0,
+      fontSize: 14.0,
       fontStyle: FontStyle.italic,
       color: getColor('white'),
     );
     else if (style == 'textInfoImageCaptionKulitan') return TextStyle(
       fontFamily: 'Kulitan Semi Bold',
-      fontSize: 13.0,
+      fontSize: 14.0,
       color: getColor('white'),
     );
     else if (style == 'textInfoImageSubCaption') return TextStyle(
       fontFamily: 'Barlow',
-      fontSize: 9.0,
+      fontSize: 10.0,
       color: getColor('white'),
     );
     else if (style == 'textInfoText') return TextStyle(
