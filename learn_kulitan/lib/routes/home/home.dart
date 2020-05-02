@@ -126,6 +126,21 @@ class _HomePageState extends State<HomePage> {
       route: '/information',
     );
 
+    Widget _examplesButton = HomeButton(
+      buttonGroup: _buttonGroup,
+      disabled: _disabled,
+      onPressedImmediate: _disableButtons,
+      kulitanText: <Widget>[
+        Text('k ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.7)),
+        Text('l  ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.6)),
+        Text('lang', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 1.0)),
+        Text('an ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.9)),
+      ],
+      title: 'Kalalangan',
+      subtitle: 'ARTWORKS',
+      route: '/artworks',
+    );
+
     Widget _learnMoreButton = HomeButton(
       buttonGroup: _buttonGroup,
       disabled: _disabled,
@@ -190,6 +205,7 @@ class _HomePageState extends State<HomePage> {
                 _writingButton,
                 _transcribeButton,
                 _infoButton,
+                _examplesButton,
                 _learnMoreButton,
                 _aboutButton,
                 _settingsButton,

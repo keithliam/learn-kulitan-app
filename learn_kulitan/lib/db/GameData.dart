@@ -251,6 +251,19 @@ class GameData {
       fontSize: 14.0,
       color: getColor('white'),
     );
+    else if (style == 'textInfoImageCaptionLink') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 14.0,
+      fontStyle: FontStyle.italic,
+      decoration: TextDecoration.underline,
+      color: getColor('white'),
+    );
+    else if (style == 'textInfoImageCaptionLinkLarge') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 20.0,
+      fontStyle: FontStyle.italic,
+      color: getColor('links'),
+    );
     else if (style == 'textInfoImageCaptionItalic') return TextStyle(
       fontFamily: 'Barlow',
       fontSize: 14.0,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../styles/theme.dart';
 import '../../db/GameData.dart';
 
@@ -9,6 +11,7 @@ class ImageWithCaption extends StatelessWidget {
     this.captionAlignment = TextAlign.justify,
     this.caption,
     this.subcaption,
+    this.imageLink,
     this.hasPadding = true,
     this.orientation = Axis.vertical,
     this.borderRadius = 0.03623,
@@ -21,6 +24,7 @@ class ImageWithCaption extends StatelessWidget {
   final String subcaption;
   final double screenWidth;
   final TextAlign captionAlignment;
+  final String imageLink;
   final bool hasPadding;
   final Axis orientation;
   final double borderRadius;
@@ -28,6 +32,22 @@ class ImageWithCaption extends StatelessWidget {
   final bool hasBorder;
 
   static final GameData _gameData = GameData();
+
+  void _openURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Fluttertoast.showToast(
+        msg: "Cannot open webpage",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: _gameData.getColor('toastBackground'),
+        textColor: _gameData.getColor('toastForeground'),
+        fontSize: toastFontSize,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +69,12 @@ class ImageWithCaption extends StatelessWidget {
                 BorderRadius.circular((borderRadius * screenWidth) + 1.0),
             color: _gameData.getColor('accent')),
         child: _image,
+      );
+
+    if (imageLink != null)
+      _image = GestureDetector(
+        child: _image,
+        onTap: () => _openURL(imageLink),
       );
 
     List<Widget> _list = [
