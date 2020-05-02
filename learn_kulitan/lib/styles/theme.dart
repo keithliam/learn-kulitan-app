@@ -96,7 +96,7 @@ const Map<String, Map<String, int>> colorSchemes = {
 };
 
 // Screen Sizes
-const smallHeight = 650.0;
+const smallHeight = 750.0;
 const smallMaxAspect = 0.4;
 const mediumMaxAspect = 0.7;
 const maxPageWidth = 600.0;
