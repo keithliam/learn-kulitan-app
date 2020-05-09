@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const List<String> darkColorSchemes = ['dark, amoled'];
+const List<String> darkColorSchemes = ['purple, dark, amoled'];
 
 const Map<String, Map<String, int>> colorSchemes = {
   'default': {
