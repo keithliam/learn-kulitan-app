@@ -389,7 +389,7 @@ class GameData {
       return 'Green';
     } else if (_rBatch > threeFourthBatch && _wBatch > threeFourthBatch && !_schemes.contains('amoled')) {
       _unlockColor('amoled');
-      return 'AMOLED Dark Mode';
+      return 'Lights Out Dark Mode';
     } else {
       return 'none';
     }
