@@ -253,7 +253,7 @@ class _TranscribePageState extends State<TranscribePage>
         .replaceAll(' ua', ' wa')
         .replaceAll(' ea', ' ya')
         .replaceAll(
-            RegExp(r'kapampangan|pampanga|kapampaangan'), 'kapangpaang an')
+            RegExp(r'kapampangan|pampanga|kapampaangan'), 'kapangpang an')
         .replaceAll(RegExp('kulitan'), 'ku lit an')
         .trim();
     final List<String> _lines = _filteredText.split('\n');
