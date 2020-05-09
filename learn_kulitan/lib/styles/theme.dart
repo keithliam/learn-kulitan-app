@@ -111,8 +111,8 @@ const Map<String, Map<String, int>> colorSchemes = {
 };
 
 // Default Texts
-const defaultTranscribeText = 'atin ku pung singsing metung yang timpukan';
-const defaultTranscribeKulitan = 'atin ku pung singsing metung yang timpukan';
+const defaultTranscribeText = 'atin ku pung singsing;\nlawíwîng pambangsâ';
+const defaultTranscribeKulitan = 'atin ku pung singsing;\nlawíwîng pambangsâ';
 
 // Screen Sizes
 const smallHeight = 750.0;
