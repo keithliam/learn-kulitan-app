@@ -284,7 +284,7 @@ class _LearnMorePageState extends State<LearnMorePage> {
               child: Column(
                 children: <Widget>[
                   StickyHeading(
-                    headingText: 'Learn More',
+                    headingText: 'Pakibaluan Té Pa',
                     content: Container(
                       width: double.infinity,
                       padding: EdgeInsets.fromLTRB(

@@ -250,7 +250,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
               child: Column(
                 children: <Widget>[
                   StickyHeading(
-                    headingText: 'Artworks',
+                    headingText: 'Kalalangan',
                     content: Container(
                       width: double.infinity,
                       padding: EdgeInsets.fromLTRB(
