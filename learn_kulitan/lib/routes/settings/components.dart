@@ -6,10 +6,13 @@ import '../../db/GameData.dart';
 
 class ColorSchemeChoice extends StatefulWidget {
   const ColorSchemeChoice({
-    @required this.colorScheme,
-    @required this.refreshPage,
+    this.colorScheme,
+    this.refreshPage,
     this.locked = false,
-  });
+  }) : assert(
+         colorScheme == null || refreshPage != null,
+         'refreshPage is required when colorScheme is provided.'
+        );
 
   final String colorScheme;
   final VoidCallback refreshPage;
@@ -54,19 +57,19 @@ class _ColorSchemeChoiceState extends State<ColorSchemeChoice> {
       final String _thirdSW = _thirdMoreW > 1 ? 's' : '';
       if (widget.colorScheme == 'blue')
         _msg =
-            'Finish $_oneMoreR more glyph$_oneSR in Pámamásâ or $_oneMoreW more glyph$_oneSW in Pámaniúlat to unlock this color scheme.';
+            'Finish $_oneMoreR more syllables$_oneSR in Pámamásâ or $_oneMoreW more syllables$_oneSW in Pámaniúlat to unlock this color scheme.';
       else if (widget.colorScheme == 'pink')
         _msg =
-            'Finish ${_oneMoreR > 0 ? '$_oneMoreR more glyph$_oneSR in Pámamásâ' : ''}${_oneMoreR > 0 && _oneMoreW > 0 ? ' and ' : ''}${_oneMoreW > 0 ? '$_oneMoreW more glyph$_oneSW in Pámaniúlat' : ''} to unlock this color scheme.';
+            'Finish ${_oneMoreR > 0 ? '$_oneMoreR more syllables$_oneSR in Pámamásâ' : ''}${_oneMoreR > 0 && _oneMoreW > 0 ? ' and ' : ''}${_oneMoreW > 0 ? '$_oneMoreW more syllables$_oneSW in Pámaniúlat' : ''} to unlock this color scheme.';
       else if (widget.colorScheme == 'green')
         _msg =
-            'Finish $_halfMoreR more glyph$_halfSR in Pámamásâ or $_halfMoreW more glyph$_halfSW in Pámaniúlat to unlock this color scheme.';
-      else if (widget.colorScheme == 'dark')
+            'Finish $_halfMoreR more syllables$_halfSR in Pámamásâ or $_halfMoreW more syllables$_halfSW in Pámaniúlat to unlock this color scheme.';
+      else if (widget.colorScheme == 'purple')
         _msg =
-            'Finish ${_halfMoreR > 0 ? '$_halfMoreR more glyph$_halfSR in Pámamásâ' : ''}${_halfMoreR > 0 && _halfMoreW > 0 ? ' and ' : ''}${_halfMoreW > 0 ? '$_halfMoreW more glyph$_halfSW in Pámaniúlat' : ''} to unlock this color scheme.';
+            'Finish ${_halfMoreR > 0 ? '$_halfMoreR more syllables$_halfSR in Pámamásâ' : ''}${_halfMoreR > 0 && _halfMoreW > 0 ? ' and ' : ''}${_halfMoreW > 0 ? '$_halfMoreW more syllables$_halfSW in Pámaniúlat' : ''} to unlock this color scheme.';
       else
         _msg =
-            'Finish ${_thirdMoreR > 0 ? '$_thirdMoreR more glyph$_thirdSR in Pámamásâ' : ''}${_thirdMoreR > 0 && _thirdMoreW > 0 ? ' and ' : ''}${_thirdMoreW > 0 ? '$_thirdMoreW more glyph$_thirdSW in Pámaniúlat' : ''} to unlock this color scheme.';
+            'Finish ${_thirdMoreR > 0 ? '$_thirdMoreR more syllables$_thirdSR in Pámamásâ' : ''}${_thirdMoreR > 0 && _thirdMoreW > 0 ? ' and ' : ''}${_thirdMoreW > 0 ? '$_thirdMoreW more syllables$_thirdSW in Pámaniúlat' : ''} to unlock this color scheme.';
     } else {
       _msg = 'Color scheme changed.';
     }
@@ -93,66 +96,76 @@ class _ColorSchemeChoiceState extends State<ColorSchemeChoice> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _stackList = [
-      Container(
-        decoration: BoxDecoration(
-          color: Color(colorSchemes[widget.colorScheme]['primary']),
-          border: Border.all(
-            color: _gameData.getColor('white'),
-            width: 8.0,
-          ),
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-      ),
-      Align(
-        alignment: Alignment(1.0, 1.0),
-        child: FractionallySizedBox(
-          heightFactor: 0.6,
-          widthFactor: 0.6,
-          child: Container(
+    final _visible = widget.colorScheme != null;
+
+    final AspectRatio _widget = AspectRatio(
+      aspectRatio: 1.5,
+      child: Stack(
+        children: <Widget>[
+          Container(
             decoration: BoxDecoration(
-              color: Color(colorSchemes[widget.colorScheme]['accent']),
+              color: _visible
+                      ? Color(colorSchemes[widget.colorScheme]['primary'])
+                      : Colors.transparent,
               border: Border.all(
-                color: _gameData.getColor('white'),
+                color: _visible ? _gameData.getColor('white') : Colors.transparent,
                 width: 8.0,
               ),
               borderRadius: BorderRadius.circular(20.0),
             ),
           ),
-        ),
-      ),
-      AnimatedOpacity(
-        duration: const Duration(
-          milliseconds: settingsColorSchemeOpacityDuration,
-        ),
-        curve: settingsColorSchemeOpacityCurve,
-        opacity: _opacity,
-        child: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.4),
-            borderRadius: BorderRadius.circular(20.0),
+          Align(
+            alignment: Alignment(1.0, 1.0),
+            child: FractionallySizedBox(
+              heightFactor: 0.6,
+              widthFactor: 0.6,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: _visible
+                          ? Color(colorSchemes[widget.colorScheme]['accent'])
+                          : Colors.transparent,
+                  border: Border.all(
+                    color: _visible ? _gameData.getColor('white') : Colors.transparent,
+                    width: 8.0,
+                  ),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+              ),
+            ),
           ),
-          child: LayoutBuilder(builder: (_, BoxConstraints constraints) {
-            return Icon(
-              Icons.lock,
-              color: Colors.white,
-              size: constraints.biggest.width * 0.2,
-            );
-          }),
-        ),
-      ),
-    ];
-
-    return GestureDetector(
-      onTap: _pressedColorScheme,
-      child: AspectRatio(
-        aspectRatio: 1.5,
-        child: Stack(
-          children: _stackList,
-        ),
+          AnimatedOpacity(
+            duration: const Duration(
+              milliseconds: settingsColorSchemeOpacityDuration,
+            ),
+            curve: settingsColorSchemeOpacityCurve,
+            opacity: _opacity,
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: _visible ? Colors.black.withOpacity(0.4) : Colors.transparent,
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: LayoutBuilder(builder: (_, BoxConstraints constraints) {
+                return Icon(
+                  Icons.lock,
+                  color: _visible ? Colors.white : Colors.transparent,
+                  size: constraints.biggest.width * 0.2,
+                );
+              }),
+            ),
+          ),
+        ],
       ),
     );
+
+    return widget.colorScheme != null && widget.refreshPage != null
+      ? GestureDetector(
+        onTap: _pressedColorScheme,
+        child: AspectRatio(
+          aspectRatio: 1.5,
+          child: _widget,
+        ),
+       ) : _widget;
   }
 }
 

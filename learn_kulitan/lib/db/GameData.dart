@@ -18,6 +18,7 @@ class GameData {
     _db = await _DatabaseHelper.instance.database;
     _prefs = await _PreferencesHelper.instance.preferences;
     if (_prefs.getBool('introTutorial') == null) await _initPrefs();
+    await _executeMigrations();
     await _getGameData();
   }
 
@@ -381,9 +382,9 @@ class GameData {
     } else if ((_rBatch > 1 || _wBatch > 1) && !_schemes.contains('blue')) {
       _unlockColor('blue');
       return 'Blue';
-    } else if (_rBatch > halfBatch && _wBatch > halfBatch && !_schemes.contains('dark')) {
-      _unlockColor('dark');
-      return 'Dark Mode';
+    } else if (_rBatch > halfBatch && _wBatch > halfBatch && !_schemes.contains('purple')) {
+      _unlockColor('purple');
+      return 'Purple';
     } else if ((_rBatch > halfBatch || _wBatch > halfBatch) && !_schemes.contains('green')) {
       _unlockColor('green');
       return 'Green';
@@ -475,6 +476,21 @@ class GameData {
     _db = await _DatabaseHelper.instance.database;
     await _initPrefs();
     await _getGameData();
+  }
+
+  Future<void> _executeMigrations() async {
+    // For the new "purple" color scheme
+    final bool _hasDark = Sqflite.firstIntValue(await _db.rawQuery('SELECT COUNT(*) from UnlockedColorSchemes WHERE color = "dark"')) > 0;
+    if (_hasDark) {
+      final int _rBatch = (Map<String, int>.from((await _db.query('Page', columns: ['current_batch'], where: 'name = "reading"'))[0]))['current_batch'];
+      final int _wBatch = (Map<String, int>.from((await _db.query('Page', columns: ['current_batch'], where: 'name = "writing"'))[0]))['current_batch'];
+      final bool _hasPurple = Sqflite.firstIntValue(await _db.rawQuery('SELECT COUNT(*) from UnlockedColorSchemes WHERE color = "purple"')) == 0;
+      if (_rBatch > halfBatch && _wBatch > halfBatch && !_hasPurple) {
+        await _db.execute('INSERT INTO UnlockedColorSchemes VALUES ("purple")');
+      }
+    } else {
+      await _db.execute('INSERT INTO UnlockedColorSchemes VALUES ("dark")');
+    }
   }
 
   Future<void> _getGameData() async {
@@ -621,6 +637,7 @@ class _DatabaseHelper {
     await db.execute('INSERT INTO CurrentQuiz VALUES ("choices", null, null, null, null, null)');
     await db.execute('INSERT INTO CurrentDraw VALUES ("cards", null, null)');
     await db.execute('INSERT INTO UnlockedColorSchemes VALUES ("default")');
+    await db.execute('INSERT INTO UnlockedColorSchemes VALUES ("dark")');
     await db.execute('INSERT INTO Glyph VALUES ("a", 0, 0)');
     await db.execute('INSERT INTO Glyph VALUES ("i", 0, 0)');
     await db.execute('INSERT INTO Glyph VALUES ("u", 0, 0)');
