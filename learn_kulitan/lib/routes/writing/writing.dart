@@ -81,7 +81,7 @@ class WritingPageState extends State<WritingPage> with SingleTickerProviderState
               ),
             ),
             Text(
-              'GLYPHS LEARNED',
+              'SYLLABLES LEARNED',
               style: _gameData.getStyle('textWritingProgressBar')
             )
           ],

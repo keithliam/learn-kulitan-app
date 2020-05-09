@@ -227,7 +227,7 @@ class ReadingPageState extends State<ReadingPage> {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                _isTutorial ? 'Tutorial' : 'Glyphs Learned',
+                _isTutorial ? 'Tutorial' : 'Syllables Learned',
                 style: _gameData.getStyle('textQuizHeader'),
                 textAlign: TextAlign.center,
               ),

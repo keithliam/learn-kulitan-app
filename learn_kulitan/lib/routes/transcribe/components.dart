@@ -1102,10 +1102,10 @@ class _TutorialState extends State<Tutorial>
               color: Colors.transparent,
               child: Text(
                   widget.tutorialNo == 1
-                  ? 'Editing the text above transcribes it to Kulitan, while editing the Kulitan glyphs below shows their approximate romanized text counterparts.'
+                  ? 'Editing the text above transcribes it to Kulitan, while editing the Kulitan syllables below shows their approximate romanized text counterparts.'
                   : widget.tutorialNo == 2
                     ? 'Swipe up to reveal the Kulitan keyboard ⌨️'
-                    : 'Some keys can be swiped up or down. These swipes put diacritical marks on the top or bottom of the glyphs.',
+                    : 'Some keys can be swiped up or down. These swipes put diacritical marks on the top or bottom of the syllables.',
                   style: _gameData.getStyle('textTutorialOverlay')),
             ),
           ),
