@@ -49,9 +49,9 @@ class _TranscribePageState extends State<TranscribePage>
 
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _romanController =
-      TextEditingController(text: 'atin ku pung singsing metung yang timpukan');
+      TextEditingController(text: defaultTranscribeText);
 
-  String _kulitanText = 'atin ku pung singsing metung yang timpukan';
+  String _kulitanText = defaultTranscribeKulitan;
   List<Widget> _glyphLines = [];
   List<List<String>> _kulitanGlyphs = [[]];
 
