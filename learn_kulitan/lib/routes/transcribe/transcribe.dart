@@ -49,9 +49,9 @@ class _TranscribePageState extends State<TranscribePage>
 
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _romanController =
-      TextEditingController(text: 'atin ku pung singsing metung yang timpukan');
+      TextEditingController(text: defaultTranscribeText);
 
-  String _kulitanText = 'atin ku pung singsing metung yang timpukan';
+  String _kulitanText = defaultTranscribeKulitan;
   List<Widget> _glyphLines = [];
   List<List<String>> _kulitanGlyphs = [[]];
 
@@ -116,10 +116,13 @@ class _TranscribePageState extends State<TranscribePage>
       return '';
   }
 
-  List<SizedBox> _getGlyphs(List<String> glyphList) {
+  List<Widget> _getGlyphs(List<String> glyphList) {
+    double _width = 75.0 * transcribeRelativeFontSize * _fontSizePercent;
+    double _maxHeight = _width * 0.8;
+
     if (glyphList.length > 0) {
       Widget _textWidget;
-      List<SizedBox> _tempGlyphs = [];
+      List<Widget> _tempGlyphs = [];
       for (String _glyph in glyphList) {
         if (_glyph != 'br') {
           _textWidget = Text(
@@ -130,68 +133,36 @@ class _TranscribePageState extends State<TranscribePage>
                     _glyph == 'ki' ||
                     _glyph == 'ku'
                 ? _gameData.getStyle('kulitanTranscribe').copyWith(height: 0.8 * _fontSizePercent)
+                : _glyph == 'k' ||
+                    _glyph == 'ka' ||
+                    _glyph == 'ki' ||
+                    _glyph == 'ku'
+                ? _gameData.getStyle('kulitanTranscribe').copyWith(height: 0.8 * _fontSizePercent)
                 : _gameData.getStyle('kulitanTranscribe'),
           );
-          double _width = 75.0 * transcribeRelativeFontSize * _fontSizePercent;
-          if (_glyph == 'nu' || _glyph == 'lu')
-            _textWidget = Padding(
-              padding: EdgeInsets.only(bottom: 2.0 * _fontSizePercent),
-              child: _textWidget,
-            );
-          else if (_glyph.contains('s'))
+          if (_glyph.contains('si') || _glyph.contains('ni')) {
             _textWidget = Padding(
               padding: EdgeInsets.only(top: 2.0 * _fontSizePercent),
               child: _textWidget,
             );
-          if (_glyph == '?')
-            _width = 40.0 * transcribeRelativeFontSize * _fontSizePercent;
-          else if (_glyph == 'ngaa' ||
-              (_glyph.length == 3 &&
-                  (_glyph.contains('ng') && _glyph != 'ang')))
-            _width = 100.0 * transcribeRelativeFontSize * _fontSizePercent;
-          else if (_glyph == 'a' ||
-              _glyph == 'aa' ||
-              _glyph == 'ee' ||
-              _glyph == 'oo' ||
-              _glyph == 'ng' ||
-              _glyph == 'ang')
-            _width = 60.0 * transcribeRelativeFontSize * _fontSizePercent;
-          else if ((_glyph.length == 1 &&
-                  _glyph != 'a' &&
-                  _glyph != 'i' &&
-                  _glyph != 'u' &&
-                  _glyph != 'e' &&
-                  _glyph != 'o') ||
-              (_glyph.length == 2 &&
-                  _glyph[0] != 'i' &&
-                  _glyph[0] != 'u' &&
-                  _glyph[0] != 'e' &&
-                  _glyph[0] != 'o' &&
-                  (_glyph[1] == 'a' || _glyph[1] == 'i' || _glyph[1] == 'u')))
-            _width = 90.0 * transcribeRelativeFontSize * _fontSizePercent;
-          else if (_glyph == 'i' ||
-              _glyph == 'u' ||
-              _glyph == 'e' ||
-              _glyph == 'o')
-            _width = 40.0 * transcribeRelativeFontSize * _fontSizePercent;
-          else if (((_glyph.length > 2 &&
-                      midEnd.contains(_glyph.substring(0, 3)) &&
-                      !_glyph.contains('ng')) ||
-                  (_glyph.length > 1 &&
-                      midEnd.contains(_glyph.substring(0, 2)))) &&
-              _glyph != 'alii')
-            _width = 45.0 * transcribeRelativeFontSize * _fontSizePercent;
-          else if (_glyph == 'yaa' || _glyph == 'waa')
-            _width = 100.0 * transcribeRelativeFontSize * _fontSizePercent;
-          else
-            _width = 75.0 * transcribeRelativeFontSize * _fontSizePercent;
-          _tempGlyphs.add(SizedBox(
-            width: _width,
-            child: FittedBox(
-              fit: BoxFit.fitHeight,
+          } else if (_glyph.contains('su') || _glyph.contains('nu') || _glyph.contains('lu')) {
+            _textWidget = Padding(
+              padding: EdgeInsets.only(bottom: 2.0 * _fontSizePercent),
               child: _textWidget,
+            );
+          }
+          _tempGlyphs.add(
+            ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: _maxHeight),
+                child: SizedBox(
+                width: _width,
+                child: FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: _textWidget,
+                ),
+              ),
             ),
-          ));
+          );
         } else {
           _tempGlyphs.add(_kulitanCursor);
         }
@@ -202,9 +173,9 @@ class _TranscribePageState extends State<TranscribePage>
     }
   }
 
-  List<Container> _getLines(List<List<SizedBox>> lines) {
+  List<Container> _getLines(List<List<Widget>> lines) {
     List<Container> _tempLines = [];
-    for (List<SizedBox> _glyphs in lines) {
+    for (List<Widget> _glyphs in lines) {
       _tempLines.insert(
         0,
         Container(
@@ -253,7 +224,7 @@ class _TranscribePageState extends State<TranscribePage>
         .replaceAll(' ua', ' wa')
         .replaceAll(' ea', ' ya')
         .replaceAll(
-            RegExp(r'kapampangan|pampanga|kapampaangan'), 'kapangpaang an')
+            RegExp(r'kapampangan|pampanga|kapampaangan'), 'kapangpang an')
         .replaceAll(RegExp('kulitan'), 'ku lit an')
         .trim();
     final List<String> _lines = _filteredText.split('\n');
@@ -277,7 +248,7 @@ class _TranscribePageState extends State<TranscribePage>
     }
     String _glyphText;
     int _len, _maxLen;
-    List<List<SizedBox>> _tempLines = [];
+    List<List<Widget>> _tempLines = [];
     List<List<String>> _tempKulitans = [];
     List<String> _tempGlyphs;
     for (List<String> _line in _lineGlyphs) {
@@ -564,7 +535,7 @@ class _TranscribePageState extends State<TranscribePage>
   }
 
   void _updateInputsFromKulitan() {
-    List<List<SizedBox>> _tempGlyphs = [];
+    List<List<Widget>> _tempGlyphs = [];
     List<String> _tempLine;
     String _transcribed = '';
     for (List<String> _line in _kulitanGlyphs) {

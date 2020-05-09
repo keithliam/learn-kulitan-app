@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>196491001230-p0qd9os17nungk1upjh0c5u1d5cjtudf.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.196491001230-p0qd9os17nungk1upjh0c5u1d5cjtudf</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>196491001230-f8vs87okn5rvlbk73adel80u73u8kgh2.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC6D-vH7F4DUKZ5NVMLM9Spj7zHZcOn9EY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>196491001230</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.keithmanaloto.learnkulitan</string>
+	<key>PROJECT_ID</key>
+	<string>learn-kulitan</string>
+	<key>STORAGE_BUCKET</key>
+	<string>learn-kulitan.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:196491001230:ios:98e0afb86e85fd6ec8f8df</string>
+	<key>DATABASE_URL</key>
+	<string>https://learn-kulitan.firebaseio.com</string>
+</dict>
+</plist>

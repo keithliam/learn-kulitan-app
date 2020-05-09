@@ -404,7 +404,7 @@ class GameLogicManager {
       final String _unlockedColorScheme = _gameData.checkColorSchemeUnlock();
       final Map<String, dynamic> _glyphsUntilUnlock = _gameData.checkGlyphsUntilUnlock(isQuiz ? 'reading' : 'writing');
       if (_unlockedColorScheme != 'none') _toastMessage('$_unlockedColorScheme color scheme unlocked! Go to Settings to change the color scheme 🎨');
-      else if (_glyphsUntilUnlock['number'] > 0) _toastMessage('Finish ${_glyphsUntilUnlock['number']} more glyph${_glyphsUntilUnlock['number'] > 1 ? 's' : ''} to unlock the ${_glyphsUntilUnlock['colorScheme']} color scheme!');
+      else if (_glyphsUntilUnlock['number'] > 0) _toastMessage('Finish ${_glyphsUntilUnlock['number']} more syllable${_glyphsUntilUnlock['number'] > 1 ? 's' : ''} to unlock the ${_glyphsUntilUnlock['colorScheme']} color scheme!');
     }
     await Future.delayed(const Duration(milliseconds: showAnswerToEnableSwipeDuration));
     if(isQuiz) _state.disableSwipe = false;

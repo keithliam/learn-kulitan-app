@@ -41,7 +41,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
       setState(() {
         _disabled = true;
         _animation = 'Cards Initialize';
-        _message = 'Learn to recognize the glyphs of Kulitan using flash cards that become more difficult to answer over time!';
+        _message = 'Learn to recognize the syllables of Kulitan using flash cards that become more difficult to answer over time!';
         _opacity = 1.0;
         _messageOpacity = 1.0;
       });
@@ -87,7 +87,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
       });
       await Future.delayed(const Duration(milliseconds: introTextOpacityDuration));
       setState(() {
-        _message = 'Are you just curious about Kulitan? The information page provided contains glyph tables, the history of Kulitan, and writing guides 📖';
+        _message = 'Are you just curious about Kulitan? The information page provided contains character tables, the history of Kulitan, and writing guides 📖';
         _messageOpacity = 1.0;
       });
       await Future.delayed(const Duration(milliseconds: 2216 - introTextOpacityDuration));

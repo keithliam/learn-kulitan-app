@@ -854,12 +854,12 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
         else if (widget.tutorialNo == 1)
           text = 'Swipe left to dismiss the card 👈';
         else if (widget.tutorialNo == 2) {
-          if (!_pageTwo) text = 'This shows the number of glyphs you have already mastered 💯';
+          if (!_pageTwo) text = 'This shows the number of syllables you have already mastered 💯';
           else text = 'Choose the correct answer below to increase your mastery 💪 Press "ga"';
         } else if (widget.tutorialNo == 3) {
           text = 'Increase your total mastery by answering this card ✔️ Press "da"';
         } else if (widget.tutorialNo == 4) {
-          text = 'Mastered glyphs may occassionally show up. These cards can\'t be skipped. Total mastery will decrease when these aren\'t answered correctly! ❌ Try it out!';
+          text = 'Mastered syllables may occassionally show up. These cards can\'t be skipped. Total mastery will decrease when these aren\'t answered correctly! ❌ Try it out!';
         }
 
         if (widget.tutorialNo == 2) {
@@ -870,7 +870,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> with SingleTickerProv
               left: left,
               right: right,
               height: height * _relWidth,
-              text: 'This progress bar shows your mastery of the current glyph.',
+              text: 'This progress bar shows your mastery of the current syllable.',
             ));
           } else top = widget.quizCardBottom - 200.0;
         } else if (widget.tutorialNo > 2) {

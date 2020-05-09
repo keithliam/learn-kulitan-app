@@ -18,6 +18,7 @@ class GameData {
     _db = await _DatabaseHelper.instance.database;
     _prefs = await _PreferencesHelper.instance.preferences;
     if (_prefs.getBool('introTutorial') == null) await _initPrefs();
+    await _executeMigrations();
     await _getGameData();
   }
 
@@ -248,23 +249,36 @@ class GameData {
     );
     else if (style == 'textInfoImageCaption') return TextStyle(
       fontFamily: 'Barlow',
-      fontSize: 13.0,
+      fontSize: 14.0,
       color: getColor('white'),
+    );
+    else if (style == 'textInfoImageCaptionLink') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 14.0,
+      fontStyle: FontStyle.italic,
+      decoration: TextDecoration.underline,
+      color: getColor('white'),
+    );
+    else if (style == 'textInfoImageCaptionLinkLarge') return TextStyle(
+      fontFamily: 'Barlow',
+      fontSize: 20.0,
+      fontStyle: FontStyle.italic,
+      color: getColor('links'),
     );
     else if (style == 'textInfoImageCaptionItalic') return TextStyle(
       fontFamily: 'Barlow',
-      fontSize: 13.0,
+      fontSize: 14.0,
       fontStyle: FontStyle.italic,
       color: getColor('white'),
     );
     else if (style == 'textInfoImageCaptionKulitan') return TextStyle(
       fontFamily: 'Kulitan Semi Bold',
-      fontSize: 13.0,
+      fontSize: 14.0,
       color: getColor('white'),
     );
     else if (style == 'textInfoImageSubCaption') return TextStyle(
       fontFamily: 'Barlow',
-      fontSize: 9.0,
+      fontSize: 10.0,
       color: getColor('white'),
     );
     else if (style == 'textInfoText') return TextStyle(
@@ -368,15 +382,15 @@ class GameData {
     } else if ((_rBatch > 1 || _wBatch > 1) && !_schemes.contains('blue')) {
       _unlockColor('blue');
       return 'Blue';
-    } else if (_rBatch > halfBatch && _wBatch > halfBatch && !_schemes.contains('dark')) {
-      _unlockColor('dark');
-      return 'Dark Mode';
+    } else if (_rBatch > halfBatch && _wBatch > halfBatch && !_schemes.contains('purple')) {
+      _unlockColor('purple');
+      return 'Purple';
     } else if ((_rBatch > halfBatch || _wBatch > halfBatch) && !_schemes.contains('green')) {
       _unlockColor('green');
       return 'Green';
     } else if (_rBatch > threeFourthBatch && _wBatch > threeFourthBatch && !_schemes.contains('amoled')) {
       _unlockColor('amoled');
-      return 'AMOLED Dark Mode';
+      return 'Lights Out Dark Mode';
     } else {
       return 'none';
     }
@@ -462,6 +476,21 @@ class GameData {
     _db = await _DatabaseHelper.instance.database;
     await _initPrefs();
     await _getGameData();
+  }
+
+  Future<void> _executeMigrations() async {
+    // For the new "purple" color scheme
+    final bool _hasDark = Sqflite.firstIntValue(await _db.rawQuery('SELECT COUNT(*) from UnlockedColorSchemes WHERE color = "dark"')) > 0;
+    if (_hasDark) {
+      final int _rBatch = (Map<String, int>.from((await _db.query('Page', columns: ['current_batch'], where: 'name = "reading"'))[0]))['current_batch'];
+      final int _wBatch = (Map<String, int>.from((await _db.query('Page', columns: ['current_batch'], where: 'name = "writing"'))[0]))['current_batch'];
+      final bool _hasPurple = Sqflite.firstIntValue(await _db.rawQuery('SELECT COUNT(*) from UnlockedColorSchemes WHERE color = "purple"')) == 0;
+      if (_rBatch > halfBatch && _wBatch > halfBatch && !_hasPurple) {
+        await _db.execute('INSERT INTO UnlockedColorSchemes VALUES ("purple")');
+      }
+    } else {
+      await _db.execute('INSERT INTO UnlockedColorSchemes VALUES ("dark")');
+    }
   }
 
   Future<void> _getGameData() async {
@@ -608,6 +637,7 @@ class _DatabaseHelper {
     await db.execute('INSERT INTO CurrentQuiz VALUES ("choices", null, null, null, null, null)');
     await db.execute('INSERT INTO CurrentDraw VALUES ("cards", null, null)');
     await db.execute('INSERT INTO UnlockedColorSchemes VALUES ("default")');
+    await db.execute('INSERT INTO UnlockedColorSchemes VALUES ("dark")');
     await db.execute('INSERT INTO Glyph VALUES ("a", 0, 0)');
     await db.execute('INSERT INTO Glyph VALUES ("i", 0, 0)');
     await db.execute('INSERT INTO Glyph VALUES ("u", 0, 0)');

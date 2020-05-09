@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const List<String> darkColorSchemes = ['dark, amoled'];
+const List<String> darkColorSchemes = ['purple, dark, amoled'];
 
 const Map<String, Map<String, int>> colorSchemes = {
   'default': {
@@ -63,6 +63,21 @@ const Map<String, Map<String, int>> colorSchemes = {
     'cardShadow': 0x21000000,
     'buttonShadow': 0x22000000,
   },
+  'purple': {
+    'primary': 0xFF624DD6,
+    'accent': 0xFF3DCEBF,
+    'foreground': 0xFF22117d,
+    'kulitanPath': 0xFF624DD6,
+    'empty': 0xFFEEEEEE,
+    'correctAnswer': 0xFF00FFD8,
+    'wrongAnswer': 0xFFFF4546,
+    'quizCardLast': 0xFF75C6FA,
+    'quizCardMiddle': 0xFFBAE3FD,
+    'white': 0xFFFFFFFF,
+    'tutorialsOverlayBackground': 0xAA000000,
+    'cardShadow': 0x21000000,
+    'buttonShadow': 0x22000000,
+  },
   'pink': {
     'primary': 0xFFF496DE,
     'accent': 0xFFA197F2,
@@ -95,8 +110,12 @@ const Map<String, Map<String, int>> colorSchemes = {
   },
 };
 
+// Default Texts
+const defaultTranscribeText = 'atin ku pung singsing;\nlawíwîng pambangsâ';
+const defaultTranscribeKulitan = 'atin ku pung singsing;\nlawíwîng pambangsâ';
+
 // Screen Sizes
-const smallHeight = 650.0;
+const smallHeight = 750.0;
 const smallMaxAspect = 0.4;
 const mediumMaxAspect = 0.7;
 const maxPageWidth = 600.0;

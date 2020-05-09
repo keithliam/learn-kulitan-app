@@ -10,6 +10,7 @@ import './routes/transcribe/transcribe.dart';
 import './routes/information/information.dart';
 import './routes/information/routes/history.dart';
 import './routes/information/routes/writingguide.dart';
+import './routes/artworks/artworks.dart';
 import './routes/learn_more/learn_more.dart';
 import './routes/about/about.dart';
 import './routes/settings/settings.dart';
@@ -58,6 +59,7 @@ class MainApp extends StatelessWidget {
         '/information': (context) => InformationPage(),
         '/information/history': (context) => HistoryPage(),
         '/information/guide': (context) => WritingGuidePage(firebaseObserver: _firebaseObserver),
+        '/artworks': (context) => ArtworksPage(),
         '/learn_more': (context) => LearnMorePage(),
         '/about': (context) => AboutPage(),
         '/settings': (context) => SettingsPage(),

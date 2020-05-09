@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
       onPressedImmediate: _disableButtons,
       kulitanText: <Widget>[
         Text('paa', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
-        Text('ma', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
+        Text('ma ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
         Text('maa', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
         Text('saa', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
       ],
@@ -84,9 +84,9 @@ class _HomePageState extends State<HomePage> {
       onPressedImmediate: _disableButtons,
       kulitanText: <Widget>[
         Text('paa', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
-        Text(' man ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
-        Text('suu', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
-        Text(' lat ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
+        Text('man', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
+        Text('suu ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
+        Text('lat', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
       ],
       padRight: 5.0,
       title: 'Pámaniúlat',
@@ -102,9 +102,9 @@ class _HomePageState extends State<HomePage> {
       onPressedImmediate: _disableButtons,
       kulitanText: <Widget>[
         Text('paa', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
-        Text('man  ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
-        Text('lii', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
-        Text('kas  ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
+        Text('man', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
+        Text('lii ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
+        Text('kas', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
       ],
       title: 'Pámanlíkas',
       subtitle: 'TRANSCRIBE',
@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
       onPressedImmediate: _disableButtons,
       kulitanText: <Widget>[
         Text('k ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.7)),
-        Text('p ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.9)),
+        Text('p ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.8)),
         Text('b ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.7)),
         Text('luan', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
       ],
@@ -126,14 +126,29 @@ class _HomePageState extends State<HomePage> {
       route: '/information',
     );
 
+    Widget _examplesButton = HomeButton(
+      buttonGroup: _buttonGroup,
+      disabled: _disabled,
+      onPressedImmediate: _disableButtons,
+      kulitanText: <Widget>[
+        Text('k ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.7)),
+        Text('l  ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.6)),
+        Text('lang', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 1.0)),
+        Text('an ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.9)),
+      ],
+      title: 'Kalalangan',
+      subtitle: 'ARTWORKS',
+      route: '/artworks',
+    );
+
     Widget _learnMoreButton = HomeButton(
       buttonGroup: _buttonGroup,
       disabled: _disabled,
       onPressedImmediate: _disableButtons,
       kulitanText: <Widget>[
         Text('p  ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.8)),
-        Text('ki', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.7)),
-        Text('b  ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.6)),
+        Text('ki ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.81)),
+        Text('b  ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.55)),
         Text('luan ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
       ],
       title: 'Pakibaluan Té Pa',
@@ -146,9 +161,9 @@ class _HomePageState extends State<HomePage> {
       disabled: _disabled,
       onPressedImmediate: _disableButtons,
       kulitanText: <Widget>[
-        Text('reng    ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
-        Text('gii', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
-        Text('n  ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.8)),
+        Text('reng', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
+        Text('gii ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
+        Text('n   ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.6)),
         Text('waa', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome')),
       ],
       title: 'Reng Gínawá',
@@ -161,9 +176,9 @@ class _HomePageState extends State<HomePage> {
       disabled: _disabled,
       onPressedImmediate: _disableButtons,
       kulitanText: <Widget>[
-        Text('ka ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.6)),
-        Text('sad   ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.9)),
-        Text('dian    ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 1.1)),
+        Text('ka   ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.6)),
+        Text('sad  ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 0.8)),
+        Text('dian  ', textAlign: TextAlign.center, style: _gameData.getStyle('kulitanHome').copyWith(height: 1.0)),
       ],
       title: 'Kasaddian',
       subtitle: 'SETTINGS',
@@ -190,6 +205,7 @@ class _HomePageState extends State<HomePage> {
                 _writingButton,
                 _transcribeButton,
                 _infoButton,
+                _examplesButton,
                 _learnMoreButton,
                 _aboutButton,
                 _settingsButton,
