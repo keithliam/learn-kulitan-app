@@ -41,7 +41,7 @@ class ImageWithCaption extends StatelessWidget {
         msg: "Cannot open webpage",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
+        timeInSecForIos: 3,
         backgroundColor: _gameData.getColor('toastBackground'),
         textColor: _gameData.getColor('toastForeground'),
         fontSize: toastFontSize,

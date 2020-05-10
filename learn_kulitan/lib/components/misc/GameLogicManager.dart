@@ -540,9 +540,9 @@ class GameLogicManager {
   void _toastMessage(String msg) {
     Fluttertoast.showToast(
       msg: msg,
-      toastLength: Toast.LENGTH_SHORT,
+      toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.TOP,
-      timeInSecForIos: 1,
+      timeInSecForIos: 3,
       backgroundColor: _gameData.getColor('toastBackground'),
       textColor: _gameData.getColor('toastForeground'),
       fontSize: toastFontSize,

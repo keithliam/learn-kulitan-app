@@ -34,9 +34,9 @@ class _SettingsPageState extends State<SettingsPage> {
     _gameData.setTutorial('transcribe', true);
     Fluttertoast.showToast(
       msg: 'Reading, Writing, and Transcribe tutorials restarted!',
-      toastLength: Toast.LENGTH_SHORT,
+      toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.TOP,
-      timeInSecForIos: 1,
+      timeInSecForIos: 3,
       backgroundColor: _gameData.getColor('toastBackground'),
       textColor: _gameData.getColor('toastForeground'),
       fontSize: toastFontSize,

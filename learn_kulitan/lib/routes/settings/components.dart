@@ -81,9 +81,9 @@ class _ColorSchemeChoiceState extends State<ColorSchemeChoice> {
         : Color(colorSchemes[widget.colorScheme]['accent']);
     Fluttertoast.showToast(
       msg: _msg,
-      toastLength: Toast.LENGTH_SHORT,
+      toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.BOTTOM,
-      timeInSecForIos: 1,
+      timeInSecForIos: 3,
       backgroundColor: _back,
       textColor: _fore,
       fontSize: toastFontSize,
@@ -203,7 +203,7 @@ class _ResetButtonState extends State<ResetButton> {
       msg: _msg,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.TOP,
-      timeInSecForIos: 1,
+      timeInSecForIos: 3,
       backgroundColor: _backColor,
       textColor: _foreColor,
       fontSize: toastFontSize,
