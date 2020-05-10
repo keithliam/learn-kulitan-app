@@ -113,6 +113,8 @@ const Map<String, Map<String, int>> colorSchemes = {
 // Default Texts
 const defaultTranscribeText = 'atin ku pung singsing;\nlawíwîng pambangsâ';
 const defaultTranscribeKulitan = 'atin ku pung singsing;\nlawíwîng pambangsâ';
+const learnKulitanAndroidlink = 'https://bit.ly/LearnKulitan-Android';
+const learnKulitanIOSLink = 'https://bit.ly/LearnKulitan-Apple';
 
 // Screen Sizes
 const smallHeight = 750.0;

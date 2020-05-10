@@ -52,7 +52,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
         msg: "Cannot open webpage",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
+        timeInSecForIos: 3,
         backgroundColor: _gameData.getColor('toastBackground'),
         textColor: _gameData.getColor('toastForeground'),
         fontSize: toastFontSize,
@@ -199,7 +199,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
         _artwork(
           filename: 'art_sunlag.jpg',
           title: 'Sunlag/Buklúran ning Amánung Sísuan',
-          author: 'Linguistic Society Club',
+          author: 'Linguistics Society Club',
           link: 'https://www.facebook.com/LinguisticsSoc/photos/a.124568129004431/124568102337767/?type=3&eid=ARBf3bjWymKOf95d79LD2ME2IHu4e6NmQGVCghu7o_01KyHbCku2dUNVU5WjK8wI5JU5ut7Js6O4s-aq&__xts__%5B0%5D=68.ARB5kD1CYBASCq0E0EBrjxHPD6zoo5YIZS5y8w4EUeY8ayNzCrfRLcafnRBKozJxxH03FA7LErkjAfLK4_w0TzOorLi2Fdq9skktdGwujcphXgmiBHWLGLRxfJYM7nghYyMblfVQ78s95-6iBMgV6e4U4pwedw_l_3-V26Vjn29c_iQ6yBXIBRdsjQ5QUauwbIk9sZeKEe-2V5D0EBypILp341jWZCgWS2aW1AT795Dd4j65M_m3TLKdatlghrzWJDKDVFXLrkONf-wH6hwJDcOLTtqXrERPL0YFFNQVi22AZXsM6v1DQlncKCRRjKsI63Qau9X6W8AM2bcZdvpmbyk&__tn__=EEHH-R',
           portfolioLink: 'https://www.facebook.com/LinguisticsSoc/',
           screenWidth: _width,
@@ -345,7 +345,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
         _artwork(
           filename: 'art_banners.jpg',
           title: 'Guinú ning labuad Kapampángan',
-          author: 'Linguistic Society Club',
+          author: 'Linguistics Society Club',
           link: 'https://www.facebook.com/media/set/?set=a.140720707389173&type=3&__xts__%5B0%5D=68.ARDB6WxI1ae3vec5LDn7LJ_S88YvnuGL0EhVi43SZghMqfOsh901IxV2xVTe4F6CvMIV9JiUltpCTj1yaUVpERJWkS6kWDFsTLEpJoJEIWSOA0QdtR2L2SDmHBU6AMonYaoKW1j4ChCekgc3ao_fnwpMimrt7CRWX92DOnCLJ6wLEbpayJn7VIf6P0wOPLnNC8-ibHNo9hf4fuQX8Op5yD-67gA9bJHDVwkuwvNipn6nGE56tXEWk45U0GsYppMiFDJVc_epUO-FnkK-WLQHZDgzkKBeJuK4cMS81vUTXXtiPH4MaRv1OjX8JgqntvX9PMkM0ehfIioOajJkpiDa3ii4hPHjLi6nM7ompL6_C-R9V4M9TB-vVdiLyHJ7ei7CmQHp0LbUZRn8yhNplY5gbexmEpKwpZ45PmdFM5awy9vxuS6phBm5Tz71k74K-2PsmHk9TT_J12Gc1QJgVA&__tn__=-UC-R',
           portfolioLink: 'https://www.facebook.com/LinguisticsSoc/',
           screenWidth: _width,
@@ -353,7 +353,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
         _artwork(
           filename: 'art_banners1.jpg',
           title: 'Guinú ning labuad Kapampángan',
-          author: 'Linguistic Society Club',
+          author: 'Linguistics Society Club',
           link: 'https://www.facebook.com/media/set/?set=a.140720707389173&type=3&__xts__%5B0%5D=68.ARDB6WxI1ae3vec5LDn7LJ_S88YvnuGL0EhVi43SZghMqfOsh901IxV2xVTe4F6CvMIV9JiUltpCTj1yaUVpERJWkS6kWDFsTLEpJoJEIWSOA0QdtR2L2SDmHBU6AMonYaoKW1j4ChCekgc3ao_fnwpMimrt7CRWX92DOnCLJ6wLEbpayJn7VIf6P0wOPLnNC8-ibHNo9hf4fuQX8Op5yD-67gA9bJHDVwkuwvNipn6nGE56tXEWk45U0GsYppMiFDJVc_epUO-FnkK-WLQHZDgzkKBeJuK4cMS81vUTXXtiPH4MaRv1OjX8JgqntvX9PMkM0ehfIioOajJkpiDa3ii4hPHjLi6nM7ompL6_C-R9V4M9TB-vVdiLyHJ7ei7CmQHp0LbUZRn8yhNplY5gbexmEpKwpZ45PmdFM5awy9vxuS6phBm5Tz71k74K-2PsmHk9TT_J12Gc1QJgVA&__tn__=-UC-R',
           portfolioLink: 'https://www.facebook.com/LinguisticsSoc/',
           screenWidth: _width,
