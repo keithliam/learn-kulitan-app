@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart'
     show TapGestureRecognizer, GestureRecognizer;
@@ -113,8 +114,9 @@ class _AboutPageState extends State<AboutPage> {
 
   void _shareApp() {
     try {
-      Share.share(
-          'Kulitan has gone digital!\nManigáral tá nang Súlat Kapampángan!\nhttps://bit.ly/LearnKulitan-Android');
+      final String _link = Platform.isIOS ? learnKulitanIOSLink : learnKulitanAndroidlink;
+      Share.share('Kulitan has gone digital!\nManigáral tá nang Súlat Kapampángan!\n$_link');
+
       Fluttertoast.showToast(
         msg: 'Thanks for sharing! Luíd ka!',
         toastLength: Toast.LENGTH_SHORT,
