@@ -121,20 +121,32 @@ class _SettingsPageState extends State<SettingsPage> {
           children: <Widget>[
             Expanded(child: _getColor('default')),
             SizedBox(width: _spacing),
-            Expanded(child: _getColor('blue')),
+              Expanded(child: _getColor('dark')),
             SizedBox(width: _spacing),
-            Expanded(child: _getColor('pink')),
+            Expanded(child: _getColor('blue')),
           ],
         ),
         Padding(
           padding: const EdgeInsets.only(top: _spacing),
           child: Row(
             children: <Widget>[
+            Expanded(child: _getColor('pink')),
+              SizedBox(width: _spacing),
               Expanded(child: _getColor('green')),
               SizedBox(width: _spacing),
-              Expanded(child: _getColor('dark')),
+              Expanded(child: _getColor('purple')),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: _spacing),
+          child: Row(
+            children: <Widget>[
+            Expanded(child: _getColor('amoled')),
               SizedBox(width: _spacing),
-              Expanded(child: _getColor('amoled')),
+              Expanded(child: ColorSchemeChoice()),
+              SizedBox(width: _spacing),
+              Expanded(child: ColorSchemeChoice()),
             ],
           ),
         ),
