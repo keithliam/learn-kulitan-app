@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart'
-    show TapGestureRecognizer, GestureRecognizer;
+import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../../styles/theme.dart';

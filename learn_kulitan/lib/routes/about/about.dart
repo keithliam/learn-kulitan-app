@@ -1,7 +1,6 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart'
-    show TapGestureRecognizer, GestureRecognizer;
+import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fluttertoast/fluttertoast.dart';
