@@ -385,13 +385,13 @@ class _InformationPageState extends State<InformationPage> {
             KulitanInfoCell('kun', 'kun'),
           ]),
           TableRow(children: <Widget>[
-            KulitanInfoCell('ken', 'ken'),
-            KulitanInfoCell('kon', 'kon'),
             KulitanInfoCell('kaan', 'kán'),
-          ]),
-          TableRow(children: <Widget>[
             KulitanInfoCell('kiin', 'kín'),
             KulitanInfoCell('kuun', 'kún'),
+          ]),
+          TableRow(children: <Widget>[
+            KulitanInfoCell('ken', 'ken'),
+            KulitanInfoCell('kon', 'kon'),
             Container(),
           ]),
         ],
