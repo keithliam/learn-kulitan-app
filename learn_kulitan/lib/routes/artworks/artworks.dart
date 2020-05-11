@@ -98,16 +98,6 @@ class _ArtworksPageState extends State<ArtworksPage> {
     );
   }
 
-  TextSpan _romanText(String text, [TapGestureRecognizer recognizer]) {
-    return TextSpan(
-      text: text,
-      style: recognizer == null
-          ? _gameData.getStyle('textInfoText')
-          : _gameData.getStyle('textInfoLink'),
-      recognizer: recognizer,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final MediaQueryData _mediaQuery = MediaQuery.of(context);
@@ -132,12 +122,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
         Paragraphs(
           padding: 0.0,
           paragraphs: <TextSpan>[
-            TextSpan(
-              children: <TextSpan>[
-                _romanText(
-                    'To view a full-quality version of an artwork, tap on its photo or title.'),
-              ],
-            ),
+            RomanText('To view a full-quality version of an artwork, tap on its photo or title.'),
           ],
         ),
         _artwork(

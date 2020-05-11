@@ -139,21 +139,6 @@ class _AboutPageState extends State<AboutPage> {
     }
   }
 
-  TextSpan _romanText(String text, [GestureRecognizer recognizer]) {
-    return TextSpan(
-      text: text,
-      style: recognizer == null ? _gameData.getStyle('textInfoText') : _gameData.getStyle('textInfoLink'),
-      recognizer: recognizer,
-    );
-  }
-
-  TextSpan _boldRomanText(String text) {
-    return TextSpan(
-      text: text,
-      style: _gameData.getStyle('textInfoTextItalic').copyWith(fontWeight: FontWeight.w600),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final MediaQueryData _mediaQuery = MediaQuery.of(context);
@@ -175,7 +160,7 @@ class _AboutPageState extends State<AboutPage> {
         Paragraphs(
           padding: 0.0,
           paragraphs: <TextSpan>[
-            _romanText(
+            RomanText(
                 'This mobile application was developed with the goal of providing an easily accessible way for learning the Kulitan script (Súlat Kapampángan) with ease of use in mind. This application was not meant as a substitute for formal learning of the script through workshops and seminars. It provides just a glimpse of what the script has to offer aside from being the perfect and most appropriate script for writing the Kapampangan language.'),
           ],
         ),
@@ -192,7 +177,7 @@ class _AboutPageState extends State<AboutPage> {
         ),
         Paragraphs(
           paragraphs: [
-            _romanText(
+            RomanText(
                 'Keith Liam Manaloto studied Computer Science at the University of the Philippines Los Baños. He is a Kapampangan from Angeles City. His development of this application was primarily driven by his passion to preserve the culture and heritage of his hometown. During his free time, he likes to travel, take photographs, listen to podcasts, learn new languages, and read tech news & articles.'),
           ],
         ),
@@ -250,20 +235,20 @@ class _AboutPageState extends State<AboutPage> {
           paragraphs: [
             TextSpan(
               children: <TextSpan>[
-                _romanText(
+                RomanText(
                     'Special thanks to the “living Kapampangan culture resource center”, Mr. Mike Pangilinan for his extensive research regarding the Kulitan script, for making sure that the application\'s contents were correct, and for his big contribution to the Information pages. His comments and suggestions led to significant improvements of this mobile application. Visit his website at '),
-                _romanText(
+                RomanText(
                   'siuala.com',
                   TapGestureRecognizer()
                     ..onTap = () => _openURL('https://bit.ly/LearnKulitan-Siuala'),
                 ),
-                _romanText(
+                RomanText(
                     ' for more information about Kapampangan language, script, history, cuisine, culture, and heritage.'),
               ],
             ),
-            _romanText(
+            RomanText(
                 'I would also like to thank Mr. Kevin Bätscher of University of Hawaiʻi for his contributions to the Kulitan keyboard made for the application.'),
-            _romanText(
+            RomanText(
                 'Lastly, I am most grateful to my girlfriend, Shaira Lapus, for motivating me to do my best and to deliver the best application that I could possibly create. She also did most of the laborous plotting work for the Kulitan strokes in the writing page. Thank you, love.'),
           ],
         ),
@@ -293,13 +278,13 @@ class _AboutPageState extends State<AboutPage> {
           paragraphs: [
             TextSpan(
               children: <TextSpan>[
-                _romanText('This mobile application took '),
-                _boldRomanText('hundreds of hours'),
-                _romanText(
+                RomanText('This mobile application took '),
+                BoldRomanText('hundreds of hours'),
+                RomanText(
                     ' to develop.'), // In-app advertisements were not included to provide you the best experience as possible.
               ],
             ),
-            _romanText(
+            RomanText(
                 'If you would like to support the developer for future updates and improvements of this application, feel free to donate! You may also express your support using the social media links above!'),
           ],
         ),
@@ -331,31 +316,31 @@ class _AboutPageState extends State<AboutPage> {
           paragraphs: [
             TextSpan(
               children: <TextSpan>[
-                _romanText('The success animation used in the tutorials was made by '),
-                _romanText(
+                RomanText('The success animation used in the tutorials was made by '),
+                RomanText(
                   'Guido Rosso',
                   TapGestureRecognizer()
                     ..onTap = () => _openURL('https://bit.ly/LearnKulitan-About-Flare'),
                 ),
-                _romanText(', licensed under '),
-                _romanText(
+                RomanText(', licensed under '),
+                RomanText(
                   'CC BY',
                   TapGestureRecognizer()
                     ..onTap = () => _openURL('https://bit.ly/LearnKulitan-About-FlareLicense'),
                 ),
-                _romanText('.'),
+                RomanText('.'),
               ],
             ),
             TextSpan(
               style: _gameData.getStyle('textAboutFooter'),
               children: <TextSpan>[
-                _romanText('This application was developed using '),
-                _romanText(
+                RomanText('This application was developed using '),
+                RomanText(
                   'Flutter',
                   TapGestureRecognizer()
                     ..onTap = () => _openURL('https://bit.ly/LearnKulitan-About-Flutter'),
                 ),
-                _romanText('.'),
+                RomanText('.'),
               ],
             ),
           ],
@@ -373,17 +358,17 @@ class _AboutPageState extends State<AboutPage> {
           paragraphs: [
             TextSpan(
               children: <TextSpan>[
-                _romanText('Found a problem? Report it to '),
-                _romanText(
+                RomanText('Found a problem? Report it to '),
+                RomanText(
                   'keithliamm@gmail.com',
                   TapGestureRecognizer()
                     ..onTap = () => _sendEmail('keithliamm@gmail.com'),
                 ),
-                _romanText('. Attach screenshots if applicable. Suggestions are also welcome!')
+                RomanText('. Attach screenshots if applicable. Suggestions are also welcome!')
               ],
             ),
-            _romanText(''),
-            _romanText('Loved the app? Share it! Promote Kulitan!'),
+            RomanText(''),
+            RomanText('Loved the app? Share it! Promote Kulitan!'),
           ],
         ),
         Padding(
