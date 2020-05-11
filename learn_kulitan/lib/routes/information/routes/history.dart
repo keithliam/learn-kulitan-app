@@ -64,7 +64,7 @@ class _HistoryPageState extends State<HistoryPage> {
   TextSpan _romanText(String text, [GestureRecognizer recognizer]) {
     return TextSpan(
       text: text,
-      style: recognizer == null ? _gameData.getStyle('textInfoText') : _gameData.getStyle('textInfoText'),
+      style: recognizer == null ? _gameData.getStyle('textInfoText') : _gameData.getStyle('textInfoLink'),
       recognizer: recognizer,
     );
   }
