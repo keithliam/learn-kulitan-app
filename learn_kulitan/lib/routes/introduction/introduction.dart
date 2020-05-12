@@ -1,13 +1,18 @@
+import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'audio_filenames.dart';
 import '../../db/GameData.dart';
 import '../../components/animations/Loader.dart';
 import '../../components/buttons/CustomButton.dart';
 import '../../styles/theme.dart';
 
 class IntroductionPage extends StatefulWidget {
-  const IntroductionPage();
+  const IntroductionPage(this.audioPlayer);
+
+  final AudioCache audioPlayer;
+
   @override
   _IntroductionPageState createState() => _IntroductionPageState();
 }
@@ -25,6 +30,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
 
   void _initData() async {
     await _gameData.initStorage();
+    await widget.audioPlayer.loadAll(audioFilenames);
     setState(() => _isLoading = false);
   }
 

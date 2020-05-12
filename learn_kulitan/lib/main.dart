@@ -2,6 +2,7 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:audioplayers/audio_cache.dart';
 import './routes/introduction/introduction.dart';
 import './routes/home/home.dart';
 import './routes/reading/reading.dart';
@@ -35,6 +36,7 @@ class LearnKulitanApp extends StatelessWidget {
 
 class MainApp extends StatelessWidget {
   static FirebaseAnalyticsObserver _firebaseObserver = FirebaseAnalyticsObserver(analytics: FirebaseAnalytics());
+  static AudioCache _audioPlayer = AudioCache(prefix: 'audio/');
 
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,12 +53,12 @@ class MainApp extends StatelessWidget {
       title: 'Learn Kulitan',
       initialRoute: '/',
       routes: {
-        '/': (context) => IntroductionPage(),
+        '/': (context) => IntroductionPage(_audioPlayer),
         '/home': (context) => HomePage(),
         '/reading': (context) => ReadingPage(),
         '/writing': (context) => WritingPage(),
         '/transcribe': (context) => TranscribePage(),
-        '/information': (context) => InformationPage(),
+        '/information': (context) => InformationPage(_audioPlayer),
         '/information/history': (context) => HistoryPage(),
         '/information/guide': (context) => WritingGuidePage(firebaseObserver: _firebaseObserver),
         '/artworks': (context) => ArtworksPage(),

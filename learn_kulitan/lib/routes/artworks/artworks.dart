@@ -98,16 +98,6 @@ class _ArtworksPageState extends State<ArtworksPage> {
     );
   }
 
-  TextSpan _romanText(String text, [TapGestureRecognizer recognizer]) {
-    return TextSpan(
-      text: text,
-      style: recognizer == null
-          ? _gameData.getStyle('textInfoText')
-          : _gameData.getStyle('textInfoLink'),
-      recognizer: recognizer,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final MediaQueryData _mediaQuery = MediaQuery.of(context);
@@ -132,12 +122,7 @@ class _ArtworksPageState extends State<ArtworksPage> {
         Paragraphs(
           padding: 0.0,
           paragraphs: <TextSpan>[
-            TextSpan(
-              children: <TextSpan>[
-                _romanText(
-                    'To view a full-quality version of an artwork, tap on its photo or title.'),
-              ],
-            ),
+            RomanText('To view a full-quality version of an artwork, tap on its photo or title.'),
           ],
         ),
         _artwork(
@@ -246,10 +231,10 @@ class _ArtworksPageState extends State<ArtworksPage> {
         ),
         _artwork(
           filename: 'art_atin_ku_pung_singsing.jpg',
-          title: 'Atin Ku Pûng Singsing',
-          author: 'Clark Marriott Hotel / Mike Pangilinan',
-          link: 'https://anntristine.wordpress.com/2018/09/21/travelbrilliantly-first-look-at-clark-marriott-hotel-grand-launch-highlights/',
-          portfolioLink: 'https://www.facebook.com/ClarkMarriott',
+          title: 'Atin Ku Pûng Singsing at Clark Marriott Hotel',
+          author: 'Mike Pangilinan',
+          link: 'http://siuala.com/kulitan-the-indigenous-kapampangan-script/',
+          portfolioLink: 'http://siuala.com',
           screenWidth: _width,
         ),
         _artwork(

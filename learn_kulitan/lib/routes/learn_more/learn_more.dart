@@ -61,16 +61,6 @@ class _LearnMorePageState extends State<LearnMorePage> {
     }
   }
 
-  TextSpan _romanText(String text, [TapGestureRecognizer recognizer]) {
-    return TextSpan(
-      text: text,
-      style: recognizer == null
-          ? _gameData.getStyle('textInfoText')
-          : _gameData.getStyle('textInfoLink'),
-      recognizer: recognizer,
-    );
-  }
-
   void _sendEmail(String emailAddress) {
     FlutterEmailSender.send(Email(
       subject: 'Kulitan Handwriting Font Inquiry',
@@ -122,31 +112,31 @@ class _LearnMorePageState extends State<LearnMorePage> {
           paragraphs: <TextSpan>[
             TextSpan(
               children: <TextSpan>[
-                _romanText(
+                RomanText(
                     'For a hands-on experience, you may attend basic & advanced Kulitan writing workshops organized by '),
-                _romanText(
+                RomanText(
                   'Sínúpan Singsing: Center for Kapampángan Cultural Heritage',
                   TapGestureRecognizer()
                     ..onTap = () => _openURL(
                         'https://bit.ly/LearnKulitan-SinupanSingsingFacebookEventsPage'),
                 ),
-                _romanText(
+                RomanText(
                     ' in Angeles City, Pampanga. Upcoming events and activites can be viewed on their '),
-                _romanText(
+                RomanText(
                   'Facebook page',
                   TapGestureRecognizer()
                     ..onTap = () => _openURL(
                         'https://bit.ly/LearnKulitan-SinupanSingsingFacebookEventsPage'),
                 ),
-                _romanText(
+                RomanText(
                     '. For related news and articles, you may also visit their official website at '),
-                _romanText(
+                RomanText(
                   'sinupan.org',
                   TapGestureRecognizer()
                     ..onTap = () => _openURL(
                         'https://bit.ly/LearnKulitan-SinupanSingsingWebsite'),
                 ),
-                _romanText('.'),
+                RomanText('.'),
               ],
             ),
           ],
@@ -171,14 +161,14 @@ class _LearnMorePageState extends State<LearnMorePage> {
           paragraphs: <TextSpan>[
             TextSpan(
               children: <TextSpan>[
-                _romanText('A '),
-                _romanText(
+                RomanText('A '),
+                RomanText(
                   'Facebook group',
                   TapGestureRecognizer()
                     ..onTap = () => _openURL(
                         'https://bit.ly/LearnKulitan-KulitKulitanFacebook'),
                 ),
-                _romanText(
+                RomanText(
                     ' exists for Kulitan enthusiasts and those who would like to learn the indigenous Kapampangan script. You may post your own art, photographs, articles, questions, and ideas, as long as they are related to Kulitan.'),
               ],
             ),
@@ -194,7 +184,7 @@ class _LearnMorePageState extends State<LearnMorePage> {
         ),
         Paragraphs(
           paragraphs: <TextSpan>[
-            _romanText(
+            RomanText(
                 'Prior to the development of this app, a modern Kulitan font was created by the developer. This font was designed to be display-friendly, enhancing readability on mobile devices.'),
           ],
         ),
@@ -209,21 +199,21 @@ class _LearnMorePageState extends State<LearnMorePage> {
           paragraphs: <TextSpan>[
             TextSpan(
               children: <TextSpan>[
-                _romanText(
+                RomanText(
                     'The OpenType font is free for non-commercial purposes. It is available for download at '),
-                _romanText(
+                RomanText(
                   'Behance.net',
                   TapGestureRecognizer()
                     ..onTap = () => _openURL('https://bit.ly/LearnKulitan-BehanceFont'),
                 ),
-                _romanText(
+                RomanText(
                     '. For licensing inquiries, you may contact the developer via email at '),
-                _romanText(
+                RomanText(
                   'keithliamm@gmail.com',
                   TapGestureRecognizer()
                     ..onTap = () => _sendEmail('keithliamm@gmail.com'),
                 ),
-                _romanText('.'),
+                RomanText('.'),
               ],
             )
           ],
@@ -249,24 +239,24 @@ class _LearnMorePageState extends State<LearnMorePage> {
         Paragraphs(
           paragraphs: <TextSpan>[
             TextSpan(children: <TextSpan>[
-              _romanText(
+              RomanText(
                   'To learn more about the history, rules, and uses of Kulitan, you may read the book '),
-              _romanText(
+              RomanText(
                 'An Introduction to Kulitan: The Indigenous Kapampangan Script',
                 TapGestureRecognizer()
                   ..onTap =
                       () => _openURL('https://bit.ly/LearnKulitan-Siuala'),
               ),
-              _romanText(' by '),
-              _romanText(
+              RomanText(' by '),
+              RomanText(
                 'Michael Raymon M. Pangilinan',
                 TapGestureRecognizer()
                   ..onTap = () => _openURL(
                       'https://bit.ly/LearnKulitan-About-MikePangilinan'),
               ),
-              _romanText(' (Siuálâ ding Meángûbié).'),
+              RomanText(' (Siuálâ ding Meángûbié).'),
             ]),
-            _romanText(
+            RomanText(
                 'It is important to note that Kulitan shall be used for the Kapampangan language only.'),
           ],
         ),
