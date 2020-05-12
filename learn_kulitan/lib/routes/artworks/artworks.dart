@@ -231,10 +231,10 @@ class _ArtworksPageState extends State<ArtworksPage> {
         ),
         _artwork(
           filename: 'art_atin_ku_pung_singsing.jpg',
-          title: 'Atin Ku Pûng Singsing',
-          author: 'Clark Marriott Hotel / Mike Pangilinan',
-          link: 'https://anntristine.wordpress.com/2018/09/21/travelbrilliantly-first-look-at-clark-marriott-hotel-grand-launch-highlights/',
-          portfolioLink: 'https://www.facebook.com/ClarkMarriott',
+          title: 'Atin Ku Pûng Singsing at Clark Marriott Hotel',
+          author: 'Mike Pangilinan',
+          link: 'http://siuala.com/kulitan-the-indigenous-kapampangan-script/',
+          portfolioLink: 'http://siuala.com',
           screenWidth: _width,
         ),
         _artwork(
