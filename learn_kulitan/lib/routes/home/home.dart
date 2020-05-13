@@ -183,6 +183,7 @@ class _HomePageState extends State<HomePage> {
       title: 'Kasaddian',
       subtitle: 'SETTINGS',
       route: '/settings',
+      reload: () => setState(() {}),
     );
 
     return Material(
