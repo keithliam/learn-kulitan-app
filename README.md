@@ -2,7 +2,7 @@
 
 [![Learn Kulitan Promotional Image](/screenshots/app_pub.png?raw=true)](https://itsallwidgets.com/learn-kulitan)
 
-An Android and iOS application for learning the indigenous Kapampángan script "Kulitan" (Súlat Kapampangán).
+An Android and iOS application for learning the indigenous Kapampángan script "Kulitan" (Súlat Kapampángan).
 
 - [Install the App](#install-the-app)
 - [Features](#features)
