@@ -4,8 +4,7 @@
 
 An Android and iOS application for learning the indigenous Kapampángan script "Kulitan" (Súlat Kapampangán).
 
-[![App Store Badge Icon](/screenshots/app_store_badge.png?raw=true)](https://bit.ly/LearnKulitanApple) [![Google Play Badge Icon](/screenshots/google_play_badge.png?raw=true)](https://bit.ly/LearnKulitanAndroid)
-
+- [Install the App](#install-the-app)
 - [Features](#features)
   - [Responsive Design](#responsive-design)
 - [Usage](#usage)
@@ -24,6 +23,13 @@ An Android and iOS application for learning the indigenous Kapampángan script "
   - [Pakibaluan Té Pa (Learn More)](#pakibaluan-té-pa-learn-more)
   - [Reng Gínawa (About the Authors)](#reng-gínawa-about-the-authors)
   - [Kasaddian (Settings)](#kasaddian-settings)
+
+
+## Install the App
+
+iOS | Android
+-----|-----
+[![App Store Badge Icon](/screenshots/app_store_badge.png?raw=true)](https://bit.ly/LearnKulitanApple) | [![Google Play Badge Icon](/screenshots/google_play_badge.png?raw=true)](https://bit.ly/LearnKulitanAndroid)
 
 ## Features
 
