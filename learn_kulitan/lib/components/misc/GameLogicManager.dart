@@ -542,7 +542,7 @@ class GameLogicManager {
       msg: msg,
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.TOP,
-      timeInSecForIos: 3,
+      timeInSecForIosWeb: 3,
       backgroundColor: _gameData.getColor('toastBackground'),
       textColor: _gameData.getColor('toastForeground'),
       fontSize: toastFontSize,

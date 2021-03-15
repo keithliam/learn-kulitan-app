@@ -43,7 +43,7 @@ class _KulitanInfoCellState extends State<KulitanInfoCell> {
         msg: "Cannot play sound",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.TOP,
-        timeInSecForIos: 1,
+        timeInSecForIosWeb: 1,
         backgroundColor: _gameData.getColor('toastBackground'),
         textColor: _gameData.getColor('toastForeground'),
         fontSize: toastFontSize,

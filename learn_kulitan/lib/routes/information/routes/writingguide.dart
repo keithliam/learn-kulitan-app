@@ -75,7 +75,7 @@ class _WritingGuidePageState extends State<WritingGuidePage> {
         msg: "Cannot open webpage",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 3,
+        timeInSecForIosWeb: 3,
         backgroundColor: _gameData.getColor('toastBackground'),
         textColor: _gameData.getColor('toastForeground'),
         fontSize: toastFontSize,
