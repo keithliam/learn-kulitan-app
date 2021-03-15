@@ -188,7 +188,7 @@ class _HomePageState extends State<HomePage> {
 
     return Material(
       child: Scaffold(
-        resizeToAvoidBottomPadding: true,
+        resizeToAvoidBottomInset: true,
         body:  Container(
           color: _gameData.getColor('background'),
           child: SafeArea(
