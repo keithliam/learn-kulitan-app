@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../db/GameData.dart';
 
-class TextButton extends StatefulWidget {
-  const TextButton({
+class CustomTextButton extends StatefulWidget {
+  const CustomTextButton({
     @required this.text,
     @required this.onPressed,
     @required this.height,
@@ -19,10 +19,10 @@ class TextButton extends StatefulWidget {
   final Alignment alignment;
 
   @override
-  _TextButtonState createState() => _TextButtonState();
+  _CustomTextButtonState createState() => _CustomTextButtonState();
 }
 
-class _TextButtonState extends State<TextButton> {
+class _CustomTextButtonState extends State<CustomTextButton> {
   static final GameData _gameData = GameData();
 
   double _opacity = 1.0;
@@ -51,7 +51,8 @@ class _TextButtonState extends State<TextButton> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: FittedBox(
               fit: BoxFit.fitHeight,
-              child: Text(widget.text, style: _gameData.getStyle('textHeaderButton')),
+              child: Text(widget.text,
+                  style: _gameData.getStyle('textHeaderButton')),
             ),
           ),
         ),

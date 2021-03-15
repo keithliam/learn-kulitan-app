@@ -3,7 +3,7 @@ import 'dart:async';
 import '../../styles/theme.dart';
 import '../../components/buttons/CustomButton.dart';
 import '../../components/buttons/RoundedBackButton.dart';
-import '../../components/buttons/TextButton.dart';
+import '../../components/buttons/CustomTextButton.dart';
 import '../../components/buttons/CustomSwitch.dart';
 import '../../components/misc/StaticHeader.dart';
 import '../../components/misc/CircularProgressBar.dart';
@@ -234,7 +234,7 @@ class ReadingPageState extends State<ReadingPage> {
             ),
           ),
         ),
-        right: _isTutorial ? TextButton(
+        right: _isTutorial ? CustomTextButton(
           text: 'Skip',
           height: headerIconSize,
           color: _gameData.getColor('headerNavigation'),
